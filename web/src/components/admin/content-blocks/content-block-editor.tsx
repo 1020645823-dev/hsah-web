@@ -2,10 +2,11 @@
 
 import { useState } from "react";
 import type { ReactNode } from "react";
-import type { ContentBlock, TextBlockConfig } from "@/lib/admin-content-blocks";
+import type { ContentBlock, TextBlockConfig, StatCardBlockConfig } from "@/lib/admin-content-blocks";
 import { createDefaultBlock } from "@/lib/admin-content-blocks";
 import { BlockList } from "./block-list";
 import { TextBlockEditor } from "./text-block-editor";
+import { StatCardBlockEditor } from "./stat-card-block-editor";
 
 interface ContentBlockEditorProps {
   blocks: ContentBlock[];
@@ -59,7 +60,7 @@ export function ContentBlockEditor({ blocks, onChange }: ContentBlockEditorProps
     onChange(newBlocks.map((b, idx) => ({ ...b, order: idx })));
   };
 
-  const handleBlockConfigChange = (blockId: string, newConfig: TextBlockConfig) => {
+  const handleBlockConfigChange = (blockId: string, newConfig: TextBlockConfig | StatCardBlockConfig) => {
     const updated = blocks.map((b) =>
       b.id === blockId ? { ...b, config: newConfig } : b
     );
@@ -71,6 +72,14 @@ export function ContentBlockEditor({ blocks, onChange }: ContentBlockEditorProps
       return (
         <TextBlockEditor
           config={block.config as TextBlockConfig}
+          onChange={(newConfig) => handleBlockConfigChange(block.id, newConfig)}
+        />
+      );
+    }
+    if (block.type === "stat_card") {
+      return (
+        <StatCardBlockEditor
+          config={block.config as StatCardBlockConfig}
           onChange={(newConfig) => handleBlockConfigChange(block.id, newConfig)}
         />
       );
