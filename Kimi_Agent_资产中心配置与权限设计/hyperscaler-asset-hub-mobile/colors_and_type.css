@@ -1,0 +1,176 @@
+:root {
+  --hyper-bg: #0a0a0f;
+  --hyper-bg-elevated: #10131f;
+  --hyper-surface: rgba(18, 18, 26, 0.78);
+  --hyper-surface-strong: rgba(25, 25, 38, 0.92);
+  --hyper-surface-soft: rgba(255, 255, 255, 0.03);
+  --hyper-border: rgba(212, 218, 245, 0.12);
+  --hyper-border-strong: rgba(123, 63, 242, 0.55);
+  --hyper-text: #f0f0f5;
+  --hyper-text-secondary: #8b8ba3;
+  --hyper-text-tertiary: #5a5a72;
+  --hyper-indigo: #1c1967;
+  --hyper-purple: #7b3ff2;
+  --hyper-magenta: #c026d3;
+  --hyper-periwinkle: #d4daf5;
+  --hyper-success: #10b981;
+  --hyper-warning: #f59e0b;
+  --hyper-azure: #3ba1ff;
+  --hyper-aws: #ff9d2e;
+  --hyper-radius-sm: 6px;
+  --hyper-radius-md: 12px;
+  --hyper-radius-lg: 20px;
+  --hyper-radius-xl: 28px;
+  --hyper-radius-full: 9999px;
+  --hyper-shadow-card: 0 20px 60px rgba(10, 10, 15, 0.42);
+  --hyper-shadow-glow: 0 0 30px rgba(123, 63, 242, 0.24);
+  --hyper-backdrop: blur(24px) saturate(180%);
+  --hyper-gradient-bg:
+    radial-gradient(circle at 50% 10%, rgba(123, 63, 242, 0.28), transparent 32%),
+    radial-gradient(circle at 10% 30%, rgba(28, 25, 103, 0.46), transparent 42%),
+    radial-gradient(circle at 90% 80%, rgba(192, 38, 211, 0.16), transparent 28%),
+    linear-gradient(180deg, #090a0f 0%, #0b1020 42%, #090a0f 100%);
+  --hyper-gradient-hero: linear-gradient(135deg, #1c1967 0%, #3d348b 42%, #7b3ff2 100%);
+  --hyper-gradient-data: linear-gradient(90deg, #7b3ff2 0%, #c026d3 50%, #7b3ff2 100%);
+  --hyper-font-display: "Graphik", "Inter", "PingFang SC", "Microsoft YaHei", -apple-system, BlinkMacSystemFont, sans-serif;
+  --hyper-font-body: "Inter", "PingFang SC", "Microsoft YaHei", -apple-system, BlinkMacSystemFont, sans-serif;
+  --hyper-font-mono: "JetBrains Mono", "SFMono-Regular", "Fira Code", Consolas, monospace;
+  --hyper-space-1: 4px;
+  --hyper-space-2: 8px;
+  --hyper-space-3: 12px;
+  --hyper-space-4: 16px;
+  --hyper-space-5: 20px;
+  --hyper-space-6: 24px;
+  --hyper-space-8: 32px;
+  --hyper-space-10: 40px;
+  --hyper-space-12: 48px;
+  --hyper-space-16: 64px;
+}
+
+.dark {
+  --hyper-bg: #0a0a0f;
+  --hyper-bg-elevated: #10131f;
+  --hyper-surface: rgba(18, 18, 26, 0.78);
+  --hyper-surface-strong: rgba(25, 25, 38, 0.92);
+  --hyper-border: rgba(212, 218, 245, 0.12);
+  --hyper-text: #f0f0f5;
+  --hyper-text-secondary: #8b8ba3;
+  --hyper-text-tertiary: #5a5a72;
+}
+
+html,
+body {
+  font-family: var(--hyper-font-body);
+  background: var(--hyper-bg);
+  color: var(--hyper-text);
+}
+
+.hyper-display {
+  font-family: var(--hyper-font-display);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+}
+
+.hyper-h1 {
+  font-family: var(--hyper-font-display);
+  font-size: 32px;
+  line-height: 1.15;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.hyper-h2 {
+  font-family: var(--hyper-font-display);
+  font-size: 28px;
+  line-height: 1.2;
+  font-weight: 600;
+}
+
+.hyper-h3 {
+  font-family: var(--hyper-font-display);
+  font-size: 22px;
+  line-height: 1.28;
+  font-weight: 600;
+}
+
+.hyper-body {
+  font-size: 14px;
+  line-height: 1.6;
+  font-weight: 400;
+}
+
+.hyper-caption {
+  font-size: 12px;
+  line-height: 1.4;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+.hyper-overline {
+  font-size: 11px;
+  line-height: 1.2;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.hyper-data {
+  font-family: var(--hyper-font-display);
+  font-size: 32px;
+  line-height: 1;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+
+.hyper-card {
+  background: var(--hyper-surface);
+  border: 1px solid var(--hyper-border);
+  border-radius: var(--hyper-radius-lg);
+  backdrop-filter: var(--hyper-backdrop);
+  box-shadow: var(--hyper-shadow-card);
+}
+
+.hyper-card-glow {
+  border-color: rgba(123, 63, 242, 0.45);
+  box-shadow: var(--hyper-shadow-card), var(--hyper-shadow-glow);
+}
+
+.hyper-pill {
+  border-radius: var(--hyper-radius-full);
+  border: 1px solid var(--hyper-border);
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(12px);
+}
+
+.hyper-gradient-text {
+  background: linear-gradient(180deg, #f5f3ff 0%, #d4daf5 48%, #b794ff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.hyper-primary-btn {
+  border-radius: var(--hyper-radius-full);
+  background: linear-gradient(180deg, #8c5bff 0%, #7b3ff2 100%);
+  color: white;
+  border: 1px solid rgba(212, 218, 245, 0.18);
+  box-shadow: 0 0 18px rgba(123, 63, 242, 0.45);
+}
+
+.hyper-secondary-btn {
+  border-radius: var(--hyper-radius-full);
+  border: 1px solid rgba(212, 218, 245, 0.22);
+  color: var(--hyper-text);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.hyper-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.hyper-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(123, 63, 242, 0.45);
+  border-radius: 9999px;
+}

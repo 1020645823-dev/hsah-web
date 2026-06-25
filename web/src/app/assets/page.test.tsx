@@ -39,6 +39,12 @@ vi.mock("@/components/public-site-shell", () => ({
   PublicSectionHero: () => <div>mocked-public-section-hero</div>,
 }));
 
+vi.mock("@/components/error-alert", () => ({
+  ErrorAlert: ({ error }: { error: { userMessage: string } }) => (
+    <div data-testid="error-alert">{error.userMessage}</div>
+  ),
+}));
+
 describe("AssetsPage", () => {
   beforeEach(() => {
     mocks.fetchPublicAssets.mockReset();
@@ -55,10 +61,8 @@ describe("AssetsPage", () => {
       offset: 24,
     });
     mocks.fetchPublicAssets.mockResolvedValue({
-      items: [],
-      total: 0,
-      limit: 12,
-      offset: 24,
+      ok: true,
+      data: { items: [], total: 0, limit: 12, offset: 24 },
     });
 
     const element = await AssetsPage({
@@ -93,5 +97,34 @@ describe("AssetsPage", () => {
       ctaLabel: "Sign in",
     });
     expect(screen.getByText("mocked-assets-client")).toBeInTheDocument();
+  });
+
+  it("renders error alert when fetchPublicAssets returns an error", async () => {
+    mocks.parseAssetQueryFromSearchParams.mockReturnValue({
+      q: "agent",
+      limit: 12,
+      offset: 0,
+    });
+    mocks.fetchPublicAssets.mockResolvedValue({
+      ok: false,
+      error: {
+        category: "server",
+        status: 500,
+        message: "Internal Server Error",
+        userMessage: "服务器暂时不可用，请稍后重试。",
+        icon: () => null,
+        retryable: true,
+      },
+    });
+
+    const element = await AssetsPage({
+      searchParams: Promise.resolve({ q: "agent" }),
+    });
+
+    render(element);
+
+    expect(screen.getByTestId("error-alert")).toHaveTextContent(
+      "服务器暂时不可用，请稍后重试。"
+    );
   });
 });

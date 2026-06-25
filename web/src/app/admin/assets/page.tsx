@@ -15,12 +15,14 @@ import {
   restoreAsset,
   unpublishAsset,
 } from "@/lib/admin";
+import { parseApiError, type ApiErrorInfo } from "@/lib/api-errors";
 import { ConfirmDialog } from "@/components/admin/confirm-dialog";
 import { Pagination } from "@/components/admin/pagination";
 import { BatchActionBar } from "@/components/admin/batch-action-bar";
 import { Skeleton } from "@/components/skeleton";
 import { EmptyState } from "@/components/empty-state";
 import { PageHeader } from "@/components/product/page-header";
+import { ErrorAlert } from "@/components/error-alert";
 import { Package } from "lucide-react";
 
 type AssetRow = {
@@ -54,6 +56,7 @@ export default function AdminAssetsPage() {
   const [pageSize, setPageSize] = useState(10);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
+  const [error, setError] = useState<ApiErrorInfo | null>(null);
 
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [batchConfirmOpen, setBatchConfirmOpen] = useState(false);
@@ -66,6 +69,7 @@ export default function AdminAssetsPage() {
   const fetchAssets = useCallback(async () => {
     if (!token) return;
     setLoading(true);
+    setError(null);
     try {
       const result = await adminPaginatedRequest<AssetRow>(
         "/api/v1/admin/assets",
@@ -73,7 +77,7 @@ export default function AdminAssetsPage() {
         { limit: pageSize, offset },
       );
       if (!result.ok) {
-        setMessage({ type: "error", text: result.message });
+        setError(parseApiError(result.data, result.status));
         setRows([]);
         setTotal(0);
       } else {
@@ -86,10 +90,10 @@ export default function AdminAssetsPage() {
           setRows(fallback);
           setTotal(fallback.length);
         }
-        setMessage(null);
+        setError(null);
       }
     } catch {
-      setMessage({ type: "error", text: "获取资产列表失败，请检查网络连接。" });
+      setError(parseApiError(null, undefined));
       setRows([]);
       setTotal(0);
     } finally {
@@ -232,6 +236,14 @@ export default function AdminAssetsPage() {
           </Link>
         }
       />
+
+      {error && (
+        <ErrorAlert
+          error={error}
+          onRetry={error.retryable ? fetchAssets : undefined}
+          onDismiss={() => setError(null)}
+        />
+      )}
 
       {message && (
         <div

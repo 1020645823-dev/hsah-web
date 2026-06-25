@@ -87,16 +87,26 @@ export function PublicSectionHero({
   actions,
 }: SectionHeroProps) {
   return (
-    <GlassPanel className={cn("px-7 py-8 md:px-10 md:py-10", align === "center" && "text-center")}>
-      <div className={cn("space-y-4", align === "center" && "mx-auto max-w-3xl")}>
-        <div className="text-xs font-medium tracking-[0.18em] text-primary">{eyebrow}</div>
-        <h1 className="max-w-4xl text-4xl font-semibold leading-[1.02] tracking-[-0.03em] text-foreground md:text-6xl">
-          {title}
-        </h1>
-        <p className="max-w-3xl text-base leading-7 text-muted-foreground md:text-lg">{summary}</p>
-        {actions ? <div className="flex flex-wrap gap-3 pt-3">{actions}</div> : null}
+    <div className={cn("relative overflow-hidden rounded-[28px]", align === "center" && "text-center")}>
+      <div className="absolute inset-0 bg-[linear-gradient(135deg,#1c1967_0%,#3d348b_40%,#7b3ff2_100%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgb(91_82_246_/_25%),transparent_50%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgb(192_38_211_/_15%),transparent_50%)]" />
+      <div className="relative px-7 py-12 md:px-12 md:py-16">
+        <div className={cn("space-y-5", align === "center" && "mx-auto max-w-3xl")}>
+          <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/8 px-3.5 py-1.5 text-[11px] font-semibold tracking-[0.14em] text-white/85 uppercase backdrop-blur-sm">
+            <span className="inline-block size-1.5 rounded-full bg-[#6b6ef9]" />
+            {eyebrow}
+          </div>
+          <h1 className="max-w-4xl text-4xl font-bold leading-[1.08] tracking-[-0.03em] text-white md:text-6xl lg:text-7xl">
+            {title}
+          </h1>
+          <p className="max-w-2xl text-base leading-7 text-white/70 md:text-lg">
+            {summary}
+          </p>
+          {actions ? <div className="flex flex-wrap gap-3 pt-3">{actions}</div> : null}
+        </div>
       </div>
-    </GlassPanel>
+    </div>
   );
 }
 

@@ -19,6 +19,11 @@ describe("Home", () => {
       }),
     ).toBeInTheDocument();
     expect(
+      screen.getByRole("link", {
+        name: /See Platform Overview/i,
+      }),
+    ).toBeInTheDocument();
+    expect(
       screen.getByRole("heading", {
         name: /Featured assets/i,
       }),

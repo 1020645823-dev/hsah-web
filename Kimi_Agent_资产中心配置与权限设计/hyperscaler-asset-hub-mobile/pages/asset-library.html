@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>资产库</title>
+    <style id="theme-vars">
+:root {
+  --hyper-bg: #0a0a0f;
+  --hyper-bg-elevated: #10131f;
+  --hyper-surface: rgba(18, 18, 26, 0.78);
+  --hyper-surface-strong: rgba(25, 25, 38, 0.92);
+  --hyper-surface-soft: rgba(255, 255, 255, 0.03);
+  --hyper-border: rgba(212, 218, 245, 0.12);
+  --hyper-border-strong: rgba(123, 63, 242, 0.55);
+  --hyper-text: #f0f0f5;
+  --hyper-text-secondary: #8b8ba3;
+  --hyper-text-tertiary: #5a5a72;
+  --hyper-indigo: #1c1967;
+  --hyper-purple: #7b3ff2;
+  --hyper-magenta: #c026d3;
+  --hyper-periwinkle: #d4daf5;
+  --hyper-success: #10b981;
+  --hyper-warning: #f59e0b;
+  --hyper-azure: #3ba1ff;
+  --hyper-aws: #ff9d2e;
+  --hyper-radius-sm: 6px;
+  --hyper-radius-md: 12px;
+  --hyper-radius-lg: 20px;
+  --hyper-radius-xl: 28px;
+  --hyper-radius-full: 9999px;
+  --hyper-shadow-card: 0 20px 60px rgba(10, 10, 15, 0.42);
+  --hyper-shadow-glow: 0 0 30px rgba(123, 63, 242, 0.24);
+  --hyper-backdrop: blur(24px) saturate(180%);
+  --hyper-gradient-bg:
+    radial-gradient(circle at 50% 10%, rgba(123, 63, 242, 0.28), transparent 32%),
+    radial-gradient(circle at 10% 30%, rgba(28, 25, 103, 0.46), transparent 42%),
+    radial-gradient(circle at 90% 80%, rgba(192, 38, 211, 0.16), transparent 28%),
+    linear-gradient(180deg, #090a0f 0%, #0b1020 42%, #090a0f 100%);
+  --hyper-gradient-hero: linear-gradient(135deg, #1c1967 0%, #3d348b 42%, #7b3ff2 100%);
+  --hyper-gradient-data: linear-gradient(90deg, #7b3ff2 0%, #c026d3 50%, #7b3ff2 100%);
+  --hyper-font-display: "Graphik", "Inter", "PingFang SC", "Microsoft YaHei", -apple-system, BlinkMacSystemFont, sans-serif;
+  --hyper-font-body: "Inter", "PingFang SC", "Microsoft YaHei", -apple-system, BlinkMacSystemFont, sans-serif;
+  --hyper-font-mono: "JetBrains Mono", "SFMono-Regular", "Fira Code", Consolas, monospace;
+  --hyper-space-1: 4px;
+  --hyper-space-2: 8px;
+  --hyper-space-3: 12px;
+  --hyper-space-4: 16px;
+  --hyper-space-5: 20px;
+  --hyper-space-6: 24px;
+  --hyper-space-8: 32px;
+  --hyper-space-10: 40px;
+  --hyper-space-12: 48px;
+  --hyper-space-16: 64px;
+}
+
+.dark {
+  --hyper-bg: #0a0a0f;
+  --hyper-bg-elevated: #10131f;
+  --hyper-surface: rgba(18, 18, 26, 0.78);
+  --hyper-surface-strong: rgba(25, 25, 38, 0.92);
+  --hyper-border: rgba(212, 218, 245, 0.12);
+  --hyper-text: #f0f0f5;
+  --hyper-text-secondary: #8b8ba3;
+  --hyper-text-tertiary: #5a5a72;
+}
+
+html,
+body {
+  font-family: var(--hyper-font-body);
+  background: var(--hyper-bg);
+  color: var(--hyper-text);
+}
+
+.hyper-display {
+  font-family: var(--hyper-font-display);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+}
+
+.hyper-h1 {
+  font-family: var(--hyper-font-display);
+  font-size: 32px;
+  line-height: 1.15;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.hyper-h2 {
+  font-family: var(--hyper-font-display);
+  font-size: 28px;
+  line-height: 1.2;
+  font-weight: 600;
+}
+
+.hyper-h3 {
+  font-family: var(--hyper-font-display);
+  font-size: 22px;
+  line-height: 1.28;
+  font-weight: 600;
+}
+
+.hyper-body {
+  font-size: 14px;
+  line-height: 1.6;
+  font-weight: 400;
+}
+
+.hyper-caption {
+  font-size: 12px;
+  line-height: 1.4;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+.hyper-overline {
+  font-size: 11px;
+  line-height: 1.2;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.hyper-data {
+  font-family: var(--hyper-font-display);
+  font-size: 32px;
+  line-height: 1;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+
+.hyper-card {
+  background: var(--hyper-surface);
+  border: 1px solid var(--hyper-border);
+  border-radius: var(--hyper-radius-lg);
+  backdrop-filter: var(--hyper-backdrop);
+  box-shadow: var(--hyper-shadow-card);
+}
+
+.hyper-card-glow {
+  border-color: rgba(123, 63, 242, 0.45);
+  box-shadow: var(--hyper-shadow-card), var(--hyper-shadow-glow);
+}
+
+.hyper-pill {
+  border-radius: var(--hyper-radius-full);
+  border: 1px solid var(--hyper-border);
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(12px);
+}
+
+.hyper-gradient-text {
+  background: linear-gradient(180deg, #f5f3ff 0%, #d4daf5 48%, #b794ff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.hyper-primary-btn {
+  border-radius: var(--hyper-radius-full);
+  background: linear-gradient(180deg, #8c5bff 0%, #7b3ff2 100%);
+  color: white;
+  border: 1px solid rgba(212, 218, 245, 0.18);
+  box-shadow: 0 0 18px rgba(123, 63, 242, 0.45);
+}
+
+.hyper-secondary-btn {
+  border-radius: var(--hyper-radius-full);
+  border: 1px solid rgba(212, 218, 245, 0.22);
+  color: var(--hyper-text);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.hyper-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.hyper-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(123, 63, 242, 0.45);
+  border-radius: 9999px;
+}
+
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.3.1/dist/index.global.js"></script>
+    <script src="https://unpkg.com/lucide@1.8.0/dist/umd/lucide.min.js"></script>
+    <style type="text/tailwindcss">
+  @theme inline {
+    --color-border: var(--hyper-border);
+  }
+  @layer base {
+    body { background: var(--hyper-surface); color: var(--hyper-foreground); }
+    td, th { @apply break-words; word-break: break-all; word-break: auto-phrase; }
+    th { @apply whitespace-nowrap; }
+  }
+    </style>
+    <style>
+      .no-scrollbar::-webkit-scrollbar { display: none; }
+      .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+      [data-icon] {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        -webkit-mask-size: contain;
+        mask-size: contain;
+        -webkit-mask-repeat: no-repeat;
+        mask-repeat: no-repeat;
+        -webkit-mask-position: center;
+        mask-position: center;
+        background-color: currentColor;
+      }
+    </style>
+</head>
+<body>
+  <div class="min-h-screen bg-[var(--hyper-gradient-bg)] text-[var(--hyper-text)]">
+    <div class="relative mx-auto min-h-screen max-w-[420px] overflow-hidden bg-[#090A0F] shadow-[0_0_80px_rgba(12,10,30,0.8)]">
+      <div class="pointer-events-none absolute inset-0 opacity-90">
+        <div class="absolute inset-x-0 top-0 h-56 bg-[radial-gradient(circle_at_top,rgba(123,63,242,0.45),transparent_62%)]"></div>
+        <div class="absolute -left-16 top-44 h-64 w-64 rounded-full bg-[radial-gradient(circle,rgba(28,25,103,0.5),transparent_70%)] blur-3xl"></div>
+        <div class="absolute -right-20 bottom-24 h-64 w-64 rounded-full bg-[radial-gradient(circle,rgba(192,38,211,0.24),transparent_72%)] blur-3xl"></div>
+        <div class="absolute inset-0 bg-[linear-gradient(180deg,rgba(9,10,15,0.84)_0%,rgba(9,10,15,0.18)_20%,rgba(9,10,15,0.22)_72%,rgba(9,10,15,0.95)_100%)]"></div>
+      </div>
+
+      <div class="relative flex min-h-screen flex-col">
+        <div class="sticky top-0 z-30 border-b border-white/10 bg-[rgba(10,10,15,0.72)] px-5 pb-3 pt-4 backdrop-blur-xl">
+          <div class="flex items-center justify-between gap-3">
+            <div class="flex items-center gap-3">
+              <div class="flex h-11 w-11 items-center justify-center rounded-2xl border border-[rgba(123,63,242,0.35)] bg-[linear-gradient(180deg,rgba(123,63,242,0.24),rgba(123,63,242,0.08))] shadow-[0_0_18px_rgba(123,63,242,0.28)]">
+                <div class="grid h-6 w-6 grid-cols-2 gap-1">
+                  <span class="rounded-sm bg-[var(--hyper-purple)]"></span>
+                  <span class="rounded-sm bg-[var(--hyper-magenta)]"></span>
+                  <span class="rounded-sm bg-[var(--hyper-periwinkle)]"></span>
+                  <span class="rounded-sm bg-[var(--hyper-purple)]"></span>
+                </div>
+              </div>
+              <div>
+                <p class="text-[10px] uppercase tracking-[0.22em] text-[var(--hyper-text-tertiary)]">Hyperscaler</p>
+                <p class="text-[15px] font-semibold tracking-[-0.02em] text-white">Asset Hub</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-2">
+              <button class="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-[var(--hyper-text-secondary)] transition-[transform,border-color,background-color] duration-200 ease-out motion-reduce:transform-none motion-reduce:transition-none active:scale-95">
+                <span class="sr-only">Search</span>
+                <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <circle cx="11" cy="11" r="7"></circle>
+                  <path d="m20 20-3.5-3.5"></path>
+                </svg>
+              </button>
+              <button class="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-[var(--hyper-text-secondary)] transition-[transform,border-color,background-color] duration-200 ease-out motion-reduce:transform-none motion-reduce:transition-none active:scale-95">
+                <span class="sr-only">Menu</span>
+                <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+                  <path d="M4 7h16"></path>
+                  <path d="M4 12h16"></path>
+                  <path d="M4 17h10"></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <main class="relative flex-1 px-4 pb-8 pt-4">
+          <section class="hyper-card hyper-card-glow p-4">
+            <div class="flex items-start justify-between gap-3">
+              <a
+                href="home.html"
+                data-dom-id="back-home"
+                class="inline-flex h-10 shrink-0 items-center justify-center gap-2 rounded-full border border-[var(--hyper-border)] bg-[var(--hyper-surface-soft)] px-4 text-[13px] font-medium text-[var(--hyper-text)] transition-[transform,border-color,background-color] duration-200 ease-out motion-reduce:transform-none motion-reduce:transition-none active:translate-y-[1px]"
+              >
+                <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M15 18l-6-6 6-6"></path>
+                </svg>
+                <span class="whitespace-nowrap">首页</span>
+              </a>
+              <div class="min-w-0 text-right">
+                <p class="hyper-caption text-[var(--hyper-text-secondary)]">24 assets</p>
+                <p class="hyper-body font-medium text-[var(--hyper-periwinkle)]">6 curated</p>
+              </div>
+            </div>
+            <div class="mt-4 flex items-end justify-between gap-3">
+              <div class="min-w-0">
+                <h1
+                  class="hyper-h2 text-[var(--hyper-text)]"
+                  style="text-wrap: balance; word-break: keep-all; overflow-wrap: break-word;"
+                >
+                  资产库
+                </h1>
+                <p class="mt-2 hyper-body text-[var(--hyper-text-secondary)]">
+                  筛选、切换与预览保持同屏效率，像高端 AI 资产商城一样快速浏览。
+                </p>
+              </div>
+              <div class="hyper-pill flex min-w-[88px] shrink-0 flex-col items-center justify-center px-3 py-2 text-center">
+                <span class="hyper-caption text-[var(--hyper-text-secondary)]">Live</span>
+                <span class="hyper-data text-[22px] text-[var(--hyper-text)]">12</span>
+              </div>
+            </div>
+          </section>
+
+          <section class="mt-4">
+            <div class="hyper-scrollbar flex gap-2 overflow-x-auto pb-1">
+              <button class="hyper-pill inline-flex h-10 shrink-0 items-center justify-center whitespace-nowrap border-[var(--hyper-border-strong)] bg-[var(--hyper-surface-soft)] px-4 text-[13px] font-medium text-[var(--hyper-text)] shadow-[var(--hyper-shadow-glow)]">
+                Sort By: Newest
+              </button>
+              <button class="hyper-pill inline-flex h-10 shrink-0 items-center justify-center whitespace-nowrap px-4 text-[13px] font-medium text-[var(--hyper-text)]">
+                Filter: All
+              </button>
+              <button class="hyper-pill inline-flex h-10 shrink-0 items-center justify-center whitespace-nowrap px-4 text-[13px] font-medium text-[var(--hyper-text)]">
+                Industry: Any
+              </button>
+            </div>
+          </section>
+
+          <section class="mt-4">
+            <details open class="hyper-card p-4">
+              <summary class="flex cursor-pointer list-none items-center justify-between gap-3">
+                <div class="min-w-0">
+                  <p class="text-[15px] font-semibold tracking-[-0.02em] text-[var(--hyper-text)]">Cloud Provider</p>
+                  <p class="mt-1 hyper-caption text-[var(--hyper-text-secondary)]">Industry filters stay one swipe away.</p>
+                </div>
+                <span class="inline-flex h-9 w-9 items-center justify-center rounded-full border border-[var(--hyper-border)] bg-[var(--hyper-surface-soft)] text-[var(--hyper-text-secondary)]">
+                  <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="m7 10 5 5 5-5"></path>
+                  </svg>
+                </span>
+              </summary>
+              <div class="mt-4 space-y-4">
+                <div>
+                  <p class="hyper-caption text-[var(--hyper-text-secondary)]">Cloud Provider</p>
+                  <div class="mt-2 flex flex-wrap gap-2">
+                    <button class="inline-flex h-10 items-center justify-center whitespace-nowrap rounded-full border border-[var(--hyper-border)] bg-[var(--hyper-surface-soft)] px-4 text-[13px] font-medium text-[var(--hyper-text)]">
+                      AWS
+                    </button>
+                    <button class="inline-flex h-10 items-center justify-center whitespace-nowrap rounded-full border border-[var(--hyper-border)] bg-[var(--hyper-surface-soft)] px-4 text-[13px] font-medium text-[var(--hyper-text)]">
+                      Azure
+                    </button>
+                    <button class="inline-flex h-10 items-center justify-center whitespace-nowrap rounded-full border border-[var(--hyper-border)] bg-[var(--hyper-surface-soft)] px-4 text-[13px] font-medium text-[var(--hyper-text)]">
+                      GCP
+                    </button>
+                  </div>
+                </div>
+                <div class="border-t border-[var(--hyper-border)] pt-4">
+                  <p class="hyper-caption text-[var(--hyper-text-secondary)]">Industry</p>
+                  <div class="mt-2 flex flex-wrap gap-2">
+                    <button class="inline-flex h-10 items-center justify-center whitespace-nowrap rounded-full border border-[var(--hyper-border-strong)] bg-[var(--hyper-surface-soft)] px-4 text-[13px] font-medium text-[var(--hyper-text)] shadow-[var(--hyper-shadow-glow)]">
+                      Manufacturing
+                    </button>
+                    <button class="inline-flex h-10 items-center justify-center whitespace-nowrap rounded-full border border-[var(--hyper-border)] bg-[var(--hyper-surface-soft)] px-4 text-[13px] font-medium text-[var(--hyper-text)]">
+                      Technology
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </details>
+          </section>
+
+          <section class="mt-4">
+            <div class="hyper-card p-2">
+              <div class="grid grid-cols-2 gap-2">
+                <button class="inline-flex h-11 items-center justify-center rounded-full border border-[var(--hyper-border)] bg-transparent px-4 text-[13px] font-medium text-[var(--hyper-text-secondary)]">
+                  <span class="whitespace-nowrap">Grid View</span>
+                  <span class="ml-2 inline-flex h-6 min-w-6 items-center justify-center rounded-full border border-[var(--hyper-border)] px-2 text-[11px] text-[var(--hyper-text-secondary)]">24</span>
+                </button>
+                <button class="inline-flex h-11 items-center justify-center rounded-full border border-[var(--hyper-border-strong)] bg-[linear-gradient(180deg,rgba(123,63,242,0.22),rgba(123,63,242,0.08))] px-4 text-[13px] font-semibold text-[var(--hyper-text)] shadow-[var(--hyper-shadow-glow)]">
+                  <span class="whitespace-nowrap">List</span>
+                  <span class="ml-2 inline-flex h-6 min-w-6 items-center justify-center rounded-full border border-[var(--hyper-border)] bg-[var(--hyper-surface-soft)] px-2 text-[11px] text-[var(--hyper-text)]">24</span>
+                </button>
+              </div>
+            </div>
+          </section>
+
+          <section class="mt-4 space-y-4">
+            <a
+              href="asset-detail.html"
+              data-dom-id="open-asset-detail"
+              class="group block overflow-hidden rounded-[20px] border border-[var(--hyper-border-strong)] bg-[var(--hyper-surface)] shadow-[var(--hyper-shadow-card),var(--hyper-shadow-glow)] transition-[transform,border-color,box-shadow] duration-200 ease-out motion-reduce:transform-none motion-reduce:transition-none active:translate-y-[1px]"
+            >
+              <div class="relative overflow-hidden border-b border-[var(--hyper-border)] bg-[linear-gradient(135deg,var(--hyper-purple),var(--hyper-bg))] px-4 py-4">
+                <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_left,var(--hyper-magenta),transparent_38%),radial-gradient(circle_at_bottom_right,var(--hyper-periwinkle),transparent_44%)] opacity-40"></div>
+                <div class="absolute left-4 top-4 rounded-full border border-white/10 bg-[var(--hyper-surface-soft)] px-3 py-1 text-[11px] font-medium text-[var(--hyper-periwinkle)]">
+                  CanAI
+                </div>
+                <div class="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full border border-white/15 bg-[var(--hyper-surface-soft)] text-[12px] font-semibold text-white">
+                  AWS
+                </div>
+                <svg viewBox="0 0 320 140" class="relative mt-8 h-28 w-full text-white/70" fill="none" aria-hidden="true">
+                  <path d="M22 93c36-24 60-35 101-39 33-4 66 4 93 26 19 15 41 22 82 23" stroke="currentColor" stroke-opacity=".5" stroke-width="1.5"></path>
+                  <path d="M32 107c31-8 53-12 79-12 37 0 67 7 95 24 15 9 36 13 67 13" stroke="currentColor" stroke-opacity=".35" stroke-width="1.5"></path>
+                  <circle cx="75" cy="76" r="5" fill="currentColor"></circle>
+                  <circle cx="141" cy="58" r="4" fill="currentColor"></circle>
+                  <circle cx="193" cy="69" r="7" fill="currentColor" fill-opacity=".9"></circle>
+                  <circle cx="251" cy="89" r="5" fill="currentColor"></circle>
+                  <rect x="205" y="34" width="58" height="18" rx="9" fill="white" fill-opacity=".14"></rect>
+                  <path d="M218 43h32" stroke="white" stroke-opacity=".65" stroke-width="2" stroke-linecap="round"></path>
+                </svg>
+              </div>
+              <div class="space-y-4 px-4 py-4">
+                <div class="flex items-start justify-between gap-3">
+                  <div class="min-w-0">
+                    <div class="flex items-center gap-2">
+                      <h2 class="truncate text-[18px] font-semibold tracking-[-0.02em] text-[var(--hyper-text)]">AI Fraud Detection</h2>
+                      <span class="inline-flex h-6 items-center justify-center whitespace-nowrap rounded-full border border-[var(--hyper-border)] bg-[var(--hyper-surface-soft)] px-2 text-[11px] text-[var(--hyper-text-secondary)]">12.8k views</span>
+                    </div>
+                    <p class="mt-2 line-clamp-2 text-[14px] leading-6 text-[var(--hyper-text-secondary)]">
+                      实时识别异常交易路径，适合金融风控和数字支付场景，保留高亮预览与快速标签判读。
+                    </p>
+                  </div>
+                </div>
+                <div class="flex flex-wrap gap-2">
+                  <span class="inline-flex h-8 items-center justify-center whitespace-nowrap rounded-lg border border-[var(--hyper-border)] bg-[var(--hyper-surface-soft)] px-3 text-[12px] text-[var(--hyper-text)]">Technology</span>
+                  <span class="inline-flex h-8 items-center justify-center whitespace-nowrap rounded-lg border border-[var(--hyper-border)] bg-[var(--hyper-surface-soft)] px-3 text-[12px] text-[var(--hyper-text)]">AWS</span>
+                  <span class="inline-flex h-8 items-center justify-center whitespace-nowrap rounded-lg border border-[var(--hyper-border)] bg-[var(--hyper-surface-soft)] px-3 text-[12px] text-[var(--hyper-text)]">Python</span>
+                </div>
+                <div class="flex items-center justify-between gap-3">
+                  <div class="min-w-0">
+                    <p class="truncate text-[13px] text-[var(--hyper-text-secondary)]">Model score · 98.4%</p>
+                  </div>
+                  <span class="inline-flex h-10 items-center justify-center whitespace-nowrap rounded-full border border-[var(--hyper-border-strong)] bg-[linear-gradient(180deg,rgba(123,63,242,0.22),rgba(123,63,242,0.08))] px-4 text-[13px] font-semibold text-[var(--hyper-text)] transition-[transform] duration-200 ease-out motion-reduce:transform-none group-active:translate-x-[1px]">
+                    Preview
+                  </span>
+                </div>
+              </div>
+            </a>
+
+            <article class="overflow-hidden rounded-[20px] border border-[var(--hyper-border)] bg-[var(--hyper-surface)] shadow-[var(--hyper-shadow-card)]">
+              <div class="relative overflow-hidden border-b border-[var(--hyper-border)] bg-[linear-gradient(135deg,var(--hyper-azure),var(--hyper-bg))] px-4 py-4">
+                <div class="absolute inset-0 bg-[radial-gradient(circle_at_top,var(--hyper-periwinkle),transparent_34%),radial-gradient(circle_at_bottom_left,var(--hyper-purple),transparent_46%)] opacity-35"></div>
+                <div class="absolute left-4 top-4 rounded-full border border-white/10 bg-[var(--hyper-surface-soft)] px-3 py-1 text-[11px] font-medium text-[var(--hyper-periwinkle)]">
+                  Proflow
+                </div>
+                <div class="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full border border-white/15 bg-[var(--hyper-surface-soft)] text-[12px] font-semibold text-white">
+                  Azure
+                </div>
+                <svg viewBox="0 0 320 140" class="relative mt-8 h-28 w-full text-white/75" fill="none" aria-hidden="true">
+                  <rect x="26" y="32" width="118" height="72" rx="18" stroke="currentColor" stroke-opacity=".32"></rect>
+                  <rect x="165" y="48" width="130" height="42" rx="21" fill="currentColor" fill-opacity=".12"></rect>
+                  <path d="M65 68h42m-42 16h60m118-12h22" stroke="currentColor" stroke-opacity=".7" stroke-width="2" stroke-linecap="round"></path>
+                  <circle cx="190" cy="69" r="7" fill="currentColor"></circle>
+                  <circle cx="224" cy="69" r="7" fill="currentColor" fill-opacity=".55"></circle>
+                  <circle cx="258" cy="69" r="7" fill="currentColor" fill-opacity=".3"></circle>
+                </svg>
+              </div>
+              <div class="space-y-4 px-4 py-4">
+                <div class="flex items-center gap-2">
+                  <h2 class="truncate text-[18px] font-semibold tracking-[-0.02em] text-[var(--hyper-text)]">Clinical Trial Optimization</h2>
+                  <span class="inline-flex h-6 items-center justify-center whitespace-nowrap rounded-full border border-[var(--hyper-border)] bg-[var(--hyper-surface-soft)] px-2 text-[11px] text-[var(--hyper-text-secondary)]">9.6k views</span>
+                </div>
+                <p class="line-clamp-2 text-[14px] leading-6 text-[var(--hyper-text-secondary)]">
+                  压缩患者筛选和试验站点评估时间，让临床团队用更少步骤完成高价值判断。
+                </p>
+                <div class="flex flex-wrap gap-2">
+                  <span class="inline-flex h-8 items-center justify-center whitespace-nowrap rounded-lg border border-[var(--hyper-border)] bg-[var(--hyper-surface-soft)] px-3 text-[12px] text-[var(--hyper-text)]">Technology</span>
+                  <span class="inline-flex h-8 items-center justify-center whitespace-nowrap rounded-lg border border-[var(--hyper-border)] bg-[var(--hyper-surface-soft)] px-3 text-[12px] text-[var(--hyper-text)]">Azure</span>
+                </div>
+                <div class="flex items-center justify-between gap-3">
+                  <p class="truncate text-[13px] text-[var(--hyper-text-secondary)]">Workflow match · 42 scenarios</p>
+                  <button class="inline-flex h-10 items-center justify-center whitespace-nowrap rounded-full border border-[var(--hyper-border)] bg-[var(--hyper-surface-soft)] px-4 text-[13px] font-medium text-[var(--hyper-text)] transition-[transform,border-color] duration-200 ease-out motion-reduce:transform-none motion-reduce:transition-none active:translate-y-[1px]">
+                    Preview
+                  </button>
+                </div>
+              </div>
+            </article>
+
+            <article class="overflow-hidden rounded-[20px] border border-[var(--hyper-border)] bg-[var(--hyper-surface)] shadow-[var(--hyper-shadow-card)]">
+              <div class="relative overflow-hidden border-b border-[var(--hyper-border)] bg-[linear-gradient(135deg,var(--hyper-aws),var(--hyper-bg))] px-4 py-4">
+                <div class="absolute inset-0 bg-[radial-gradient(circle_at_right,var(--hyper-periwinkle),transparent_34%),radial-gradient(circle_at_left,var(--hyper-purple),transparent_46%)] opacity-30"></div>
+                <div class="absolute left-4 top-4 rounded-full border border-white/10 bg-[var(--hyper-surface-soft)] px-3 py-1 text-[11px] font-medium text-[var(--hyper-periwinkle)]">
+                  Bernock
+                </div>
+                <div class="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full border border-white/15 bg-[var(--hyper-surface-soft)] text-[12px] font-semibold text-white">
+                  AWS
+                </div>
+                <svg viewBox="0 0 320 140" class="relative mt-8 h-28 w-full text-white/75" fill="none" aria-hidden="true">
+                  <path d="M34 98c28-23 57-39 95-44 51-7 102 14 156 41" stroke="currentColor" stroke-opacity=".4" stroke-width="1.5"></path>
+                  <path d="M44 108h232" stroke="currentColor" stroke-opacity=".18" stroke-width="1.5"></path>
+                  <rect x="56" y="52" width="32" height="44" rx="12" fill="currentColor" fill-opacity=".18"></rect>
+                  <rect x="102" y="38" width="32" height="58" rx="12" fill="currentColor" fill-opacity=".36"></rect>
+                  <rect x="148" y="60" width="32" height="36" rx="12" fill="currentColor" fill-opacity=".22"></rect>
+                  <rect x="194" y="28" width="32" height="68" rx="12" fill="currentColor" fill-opacity=".58"></rect>
+                </svg>
+              </div>
+              <div class="space-y-4 px-4 py-4">
+                <div class="flex items-center gap-2">
+                  <h2 class="truncate text-[18px] font-semibold tracking-[-0.02em] text-[var(--hyper-text)]">Predictive Maintenance</h2>
+                  <span class="inline-flex h-6 items-center justify-center whitespace-nowrap rounded-full border border-[var(--hyper-border)] bg-[var(--hyper-surface-soft)] px-2 text-[11px] text-[var(--hyper-text-secondary)]">15.2k views</span>
+                </div>
+                <p class="line-clamp-2 text-[14px] leading-6 text-[var(--hyper-text-secondary)]">
+                  将设备工况、工单节奏与告警趋势汇成单张预测面板，适合 Manufacturing 运营场景。
+                </p>
+                <div class="flex flex-wrap gap-2">
+                  <span class="inline-flex h-8 items-center justify-center whitespace-nowrap rounded-lg border border-[var(--hyper-border)] bg-[var(--hyper-surface-soft)] px-3 text-[12px] text-[var(--hyper-text)]">Manufacturing</span>
+                  <span class="inline-flex h-8 items-center justify-center whitespace-nowrap rounded-lg border border-[var(--hyper-border)] bg-[var(--hyper-surface-soft)] px-3 text-[12px] text-[var(--hyper-text)]">AWS</span>
+                </div>
+                <div class="flex items-center justify-between gap-3">
+                  <p class="truncate text-[13px] text-[var(--hyper-text-secondary)]">Downtime risk · -31%</p>
+                  <button class="inline-flex h-10 items-center justify-center whitespace-nowrap rounded-full border border-[var(--hyper-border)] bg-[var(--hyper-surface-soft)] px-4 text-[13px] font-medium text-[var(--hyper-text)] transition-[transform,border-color] duration-200 ease-out motion-reduce:transform-none motion-reduce:transition-none active:translate-y-[1px]">
+                    Preview
+                  </button>
+                </div>
+              </div>
+            </article>
+
+            <article class="overflow-hidden rounded-[20px] border border-[var(--hyper-border)] bg-[var(--hyper-surface)] shadow-[var(--hyper-shadow-card)]">
+              <div class="relative overflow-hidden border-b border-[var(--hyper-border)] bg-[linear-gradient(135deg,var(--hyper-magenta),var(--hyper-bg))] px-4 py-4">
+                <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,var(--hyper-periwinkle),transparent_32%),radial-gradient(circle_at_bottom_left,var(--hyper-purple),transparent_46%)] opacity-32"></div>
+                <div class="absolute left-4 top-4 rounded-full border border-white/10 bg-[var(--hyper-surface-soft)] px-3 py-1 text-[11px] font-medium text-[var(--hyper-periwinkle)]">
+                  Python
+                </div>
+                <div class="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full border border-white/15 bg-[var(--hyper-surface-soft)] text-[12px] font-semibold text-white">
+                  GCP
+                </div>
+                <svg viewBox="0 0 320 140" class="relative mt-8 h-28 w-full text-white/75" fill="none" aria-hidden="true">
+                  <rect x="42" y="40" width="236" height="60" rx="18" stroke="currentColor" stroke-opacity=".3"></rect>
+                  <path d="M72 63h58m-58 16h126m52-16h12" stroke="currentColor" stroke-opacity=".72" stroke-width="2" stroke-linecap="round"></path>
+                  <rect x="210" y="54" width="42" height="28" rx="14" fill="currentColor" fill-opacity=".16"></rect>
+                  <path d="M84 112c12-10 24-15 36-15 15 0 27 5 37 15" stroke="currentColor" stroke-opacity=".32" stroke-width="1.5"></path>
+                </svg>
+              </div>
+              <div class="space-y-4 px-4 py-4">
+                <div class="flex items-center gap-2">
+                  <h2 class="truncate text-[18px] font-semibold tracking-[-0.02em] text-[var(--hyper-text)]">Natural Language Query</h2>
+                  <span class="inline-flex h-6 items-center justify-center whitespace-nowrap rounded-full border border-[var(--hyper-border)] bg-[var(--hyper-surface-soft)] px-2 text-[11px] text-[var(--hyper-text-secondary)]">7.3k views</span>
+                </div>
+                <p class="line-clamp-2 text-[14px] leading-6 text-[var(--hyper-text-secondary)]">
+                  让业务分析师直接用自然语言检索指标和运营事件，减少 SQL 门槛并保持答案可追溯。
+                </p>
+                <div class="flex flex-wrap gap-2">
+                  <span class="inline-flex h-8 items-center justify-center whitespace-nowrap rounded-lg border border-[var(--hyper-border)] bg-[var(--hyper-surface-soft)] px-3 text-[12px] text-[var(--hyper-text)]">Technology</span>
+                  <span class="inline-flex h-8 items-center justify-center whitespace-nowrap rounded-lg border border-[var(--hyper-border)] bg-[var(--hyper-surface-soft)] px-3 text-[12px] text-[var(--hyper-text)]">GCP</span>
+                  <span class="inline-flex h-8 items-center justify-center whitespace-nowrap rounded-lg border border-[var(--hyper-border)] bg-[var(--hyper-surface-soft)] px-3 text-[12px] text-[var(--hyper-text)]">Python</span>
+                </div>
+                <div class="flex items-center justify-between gap-3">
+                  <p class="truncate text-[13px] text-[var(--hyper-text-secondary)]">Query latency · 1.2s</p>
+                  <button class="inline-flex h-10 items-center justify-center whitespace-nowrap rounded-full border border-[var(--hyper-border)] bg-[var(--hyper-surface-soft)] px-4 text-[13px] font-medium text-[var(--hyper-text)] transition-[transform,border-color] duration-200 ease-out motion-reduce:transform-none motion-reduce:transition-none active:translate-y-[1px]">
+                    Preview
+                  </button>
+                </div>
+              </div>
+            </article>
+
+            <article class="overflow-hidden rounded-[20px] border border-[var(--hyper-border)] bg-[var(--hyper-surface)] shadow-[var(--hyper-shadow-card)]">
+              <div class="relative overflow-hidden border-b border-[var(--hyper-border)] bg-[linear-gradient(135deg,var(--hyper-purple),var(--hyper-bg))] px-4 py-4">
+                <div class="absolute inset-0 bg-[radial-gradient(circle_at_left,var(--hyper-periwinkle),transparent_34%),radial-gradient(circle_at_right,var(--hyper-magenta),transparent_44%)] opacity-34"></div>
+                <div class="absolute left-4 top-4 rounded-full border border-white/10 bg-[var(--hyper-surface-soft)] px-3 py-1 text-[11px] font-medium text-[var(--hyper-periwinkle)]">
+                  Proflow
+                </div>
+                <div class="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full border border-white/15 bg-[var(--hyper-surface-soft)] text-[12px] font-semibold text-white">
+                  Azure
+                </div>
+                <svg viewBox="0 0 320 140" class="relative mt-8 h-28 w-full text-white/75" fill="none" aria-hidden="true">
+                  <path d="M62 52h88v46H62z" stroke="currentColor" stroke-opacity=".28"></path>
+                  <path d="M170 42h88v66H170z" stroke="currentColor" stroke-opacity=".28"></path>
+                  <path d="M106 75h64m108-5-34 24-16-12-18 12" stroke="currentColor" stroke-opacity=".72" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                  <circle cx="211" cy="63" r="6" fill="currentColor" fill-opacity=".88"></circle>
+                </svg>
+              </div>
+              <div class="space-y-4 px-4 py-4">
+                <div class="flex items-center gap-2">
+                  <h2 class="truncate text-[18px] font-semibold tracking-[-0.02em] text-[var(--hyper-text)]">Automated Code Review</h2>
+                  <span class="inline-flex h-6 items-center justify-center whitespace-nowrap rounded-full border border-[var(--hyper-border)] bg-[var(--hyper-surface-soft)] px-2 text-[11px] text-[var(--hyper-text-secondary)]">18.1k views</span>
+                </div>
+                <p class="line-clamp-2 text-[14px] leading-6 text-[var(--hyper-text-secondary)]">
+                  对安全、风格和性能问题给出结构化建议，让工程团队在提交前就完成质量分流。
+                </p>
+                <div class="flex flex-wrap gap-2">
+                  <span class="inline-flex h-8 items-center justify-center whitespace-nowrap rounded-lg border border-[var(--hyper-border)] bg-[var(--hyper-surface-soft)] px-3 text-[12px] text-[var(--hyper-text)]">Technology</span>
+                  <span class="inline-flex h-8 items-center justify-center whitespace-nowrap rounded-lg border border-[var(--hyper-border)] bg-[var(--hyper-surface-soft)] px-3 text-[12px] text-[var(--hyper-text)]">Azure</span>
+                </div>
+                <div class="flex items-center justify-between gap-3">
+                  <p class="truncate text-[13px] text-[var(--hyper-text-secondary)]">Review coverage · 312 repos</p>
+                  <button class="inline-flex h-10 items-center justify-center whitespace-nowrap rounded-full border border-[var(--hyper-border)] bg-[var(--hyper-surface-soft)] px-4 text-[13px] font-medium text-[var(--hyper-text)] transition-[transform,border-color] duration-200 ease-out motion-reduce:transform-none motion-reduce:transition-none active:translate-y-[1px]">
+                    Preview
+                  </button>
+                </div>
+              </div>
+            </article>
+
+            <article class="overflow-hidden rounded-[20px] border border-[var(--hyper-border)] bg-[var(--hyper-surface)] shadow-[var(--hyper-shadow-card)]">
+              <div class="relative overflow-hidden border-b border-[var(--hyper-border)] bg-[linear-gradient(135deg,var(--hyper-aws),var(--hyper-indigo))] px-4 py-4">
+                <div class="absolute inset-0 bg-[radial-gradient(circle_at_top,var(--hyper-periwinkle),transparent_34%),radial-gradient(circle_at_bottom_right,var(--hyper-magenta),transparent_44%)] opacity-30"></div>
+                <div class="absolute left-4 top-4 rounded-full border border-white/10 bg-[var(--hyper-surface-soft)] px-3 py-1 text-[11px] font-medium text-[var(--hyper-periwinkle)]">
+                  CanAI
+                </div>
+                <div class="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full border border-white/15 bg-[var(--hyper-surface-soft)] text-[12px] font-semibold text-white">
+                  AWS
+                </div>
+                <svg viewBox="0 0 320 140" class="relative mt-8 h-28 w-full text-white/75" fill="none" aria-hidden="true">
+                  <path d="M42 95c20-23 42-37 74-43 44-9 86 12 120 29 22 11 41 17 51 19" stroke="currentColor" stroke-opacity=".42" stroke-width="1.5"></path>
+                  <path d="M72 82 116 64l24 20 44-30 34 21 38-17" stroke="currentColor" stroke-opacity=".72" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                  <circle cx="72" cy="82" r="5" fill="currentColor"></circle>
+                  <circle cx="140" cy="84" r="5" fill="currentColor"></circle>
+                  <circle cx="184" cy="54" r="5" fill="currentColor"></circle>
+                  <circle cx="218" cy="75" r="5" fill="currentColor"></circle>
+                  <circle cx="256" cy="58" r="5" fill="currentColor"></circle>
+                </svg>
+              </div>
+              <div class="space-y-4 px-4 py-4">
+                <div class="flex items-center gap-2">
+                  <h2 class="truncate text-[18px] font-semibold tracking-[-0.02em] text-[var(--hyper-text)]">Supply Chain Forecaster</h2>
+                  <span class="inline-flex h-6 items-center justify-center whitespace-nowrap rounded-full border border-[var(--hyper-border)] bg-[var(--hyper-surface-soft)] px-2 text-[11px] text-[var(--hyper-text-secondary)]">11.4k views</span>
+                </div>
+                <p class="line-clamp-2 text-[14px] leading-6 text-[var(--hyper-text-secondary)]">
+                  结合需求波动、库存与交付风险构建补货建议，帮助 Manufacturing 团队更快锁定异常点。
+                </p>
+                <div class="flex flex-wrap gap-2">
+                  <span class="inline-flex h-8 items-center justify-center whitespace-nowrap rounded-lg border border-[var(--hyper-border)] bg-[var(--hyper-surface-soft)] px-3 text-[12px] text-[var(--hyper-text)]">Manufacturing</span>
+                  <span class="inline-flex h-8 items-center justify-center whitespace-nowrap rounded-lg border border-[var(--hyper-border)] bg-[var(--hyper-surface-soft)] px-3 text-[12px] text-[var(--hyper-text)]">AWS</span>
+                </div>
+                <div class="flex items-center justify-between gap-3">
+                  <p class="truncate text-[13px] text-[var(--hyper-text-secondary)]">Forecast lift · +17%</p>
+                  <button class="inline-flex h-10 items-center justify-center whitespace-nowrap rounded-full border border-[var(--hyper-border)] bg-[var(--hyper-surface-soft)] px-4 text-[13px] font-medium text-[var(--hyper-text)] transition-[transform,border-color] duration-200 ease-out motion-reduce:transform-none motion-reduce:transition-none active:translate-y-[1px]">
+                    Preview
+                  </button>
+                </div>
+              </div>
+            </article>
+          </section>
+
+          <footer class="mt-6 border-t border-[var(--hyper-border)] px-2 pt-4 text-center">
+            <p class="text-[12px] leading-5 text-[var(--hyper-text-secondary)]">
+              Asset Hub library view · 6 featured assets · filter-led dense grid
+            </p>
+          </footer>
+        </main>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

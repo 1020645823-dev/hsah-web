@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { Blocks, List, LayoutGrid } from "lucide-react";
+import { List, LayoutGrid, ArrowUpRight, SearchX } from "lucide-react";
 import { useMemo, useState } from "react";
 
 import { EmptyState } from "@/components/empty-state";
@@ -18,6 +18,7 @@ import {
   type PublicAssetListResponse,
   type PublicAssetQuery,
 } from "@/lib/public-assets";
+import { AssetGridSkeleton, AssetListViewSkeleton } from "@/components/skeleton";
 
 type AssetsClientProps = {
   initialResponse: PublicAssetListResponse;
@@ -75,10 +76,56 @@ function toQuery(state: AssetFilterState): PublicAssetQuery {
   };
 }
 
+function AssetTypeBadge({ type }: { type: string }) {
+  return (
+    <span className="inline-flex items-center rounded-md bg-secondary/60 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wider text-secondary-foreground">
+      {type}
+    </span>
+  );
+}
+
+function StatusBadge({ status }: { status: string }) {
+  const isPublished = status === "published";
+  return (
+    <span
+      className={`inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-medium ${
+        isPublished
+          ? "bg-emerald-500/10 text-emerald-400 ring-1 ring-emerald-500/20"
+          : "bg-amber-500/10 text-amber-400 ring-1 ring-amber-500/20"
+      }`}
+    >
+      <span
+        className={`mr-1.5 inline-block h-1 w-1 rounded-full ${
+          isPublished ? "bg-emerald-400" : "bg-amber-400"
+        }`}
+      />
+      {status}
+    </span>
+  );
+}
+
+function CloudBadge({ provider }: { provider: string }) {
+  return (
+    <span className="inline-flex items-center rounded-full border border-border/60 bg-muted/40 px-2.5 py-1 text-xs font-medium text-muted-foreground transition-colors hover:bg-muted/60">
+      {provider.toUpperCase()}
+    </span>
+  );
+}
+
+function TechBadge({ technology }: { technology: string }) {
+  return (
+    <span className="inline-flex items-center rounded-full bg-primary/8 px-2.5 py-1 text-xs font-medium text-primary ring-1 ring-primary/15 transition-colors hover:bg-primary/12">
+      {technology}
+    </span>
+  );
+}
+
 export function AssetsClient({ initialResponse, initialQuery }: AssetsClientProps) {
   const router = useRouter();
   const pathname = usePathname();
   const [filters, setFilters] = useState<AssetFilterState>(() => toFilterState(initialQuery));
+
+  const [isLoading, setIsLoading] = useState(false);
 
   const totalPages = getAssetTotalPages(initialResponse.total, initialResponse.limit);
   const currentPage = getAssetPageFromOffset(initialResponse.offset, initialResponse.limit);
@@ -117,6 +164,7 @@ export function AssetsClient({ initialResponse, initialQuery }: AssetsClientProp
   );
 
   function navigate(nextState: AssetFilterState) {
+    setIsLoading(true);
     router.push(`${pathname}${buildAssetSearchQuery(toQuery(nextState))}`);
   }
 
@@ -328,53 +376,70 @@ export function AssetsClient({ initialResponse, initialQuery }: AssetsClientProp
         </label>
       </FilterToolbar>
 
-      {initialResponse.items.length === 0 ? (
+      {isLoading ? (
+        filters.view === "grid" ? (
+          <AssetGridSkeleton count={initialResponse.limit} />
+        ) : (
+          <AssetListViewSkeleton count={initialResponse.limit} />
+        )
+      ) : initialResponse.items.length === 0 ? (
         <div className="rounded-[28px] border border-border bg-card shadow-[var(--shadow-card)]">
           <EmptyState
-            icon={Blocks}
+            icon={SearchX}
             title="No assets matched the current filters."
-            description="Clear the active filters or return to featured assets."
+            description="Clear the active filters or return to featured assets to see all available content."
+            actions={[
+              {
+                label: "Clear filters",
+                onClick: clearFilters,
+                variant: "outline",
+              },
+              {
+                label: "Browse all",
+                onClick: () => router.push("/assets"),
+              },
+            ]}
           />
         </div>
       ) : filters.view === "grid" ? (
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {initialResponse.items.map((asset) => (
             <Link
               key={asset.id}
               href={`/assets/${asset.slug}`}
-              className="group rounded-[26px] border border-[rgb(212_218_245_/12%)] bg-[rgb(18_18_26_/72%)] p-6 shadow-[var(--shadow-card)] transition-transform duration-200 hover:-translate-y-1"
+              className="group relative flex flex-col rounded-2xl border border-border/60 bg-card p-6 shadow-[var(--shadow-card)] transition-all duration-300 ease-out hover:-translate-y-1 hover:border-border hover:shadow-[var(--shadow-card-hover)] hover:ring-1 hover:ring-primary/10"
             >
-              <div className="flex items-center justify-between gap-4">
-                <div className="text-xs tracking-[0.16em] text-[var(--color-text-tertiary)]">
-                  {asset.asset_type.toUpperCase()}
-                </div>
-                <div className="text-xs text-[var(--color-text-secondary)]">{asset.status.toUpperCase()}</div>
+              <div className="flex items-start justify-between gap-3">
+                <AssetTypeBadge type={asset.asset_type} />
+                <StatusBadge status={asset.status} />
               </div>
-              <div className="mt-5">
-                <div className="text-xl font-semibold text-[var(--color-text-primary)] transition-colors group-hover:text-white">
+
+              <div className="mt-4 flex-1">
+                <h3 className="text-lg font-semibold leading-snug text-card-foreground transition-colors group-hover:text-primary">
                   {asset.title}
-                </div>
-                <div className="mt-3 text-sm leading-6 text-[var(--color-text-secondary)]">
+                </h3>
+                <p className="mt-2 text-sm leading-relaxed text-muted-foreground line-clamp-3">
                   {asset.short_description}
-                </div>
+                </p>
               </div>
-              <div className="mt-5 flex flex-wrap gap-2">
+
+              <div className="mt-5 flex flex-wrap items-center gap-2">
                 {asset.cloud_providers.map((provider) => (
-                  <span
-                    key={provider}
-                    className="rounded-full border border-[rgb(212_218_245_/12%)] bg-[rgb(255_255_255_/4%)] px-2.5 py-1 text-xs text-[var(--color-periwinkle)]"
-                  >
-                    {provider.toUpperCase()}
-                  </span>
+                  <CloudBadge key={provider} provider={provider} />
                 ))}
                 {asset.technologies.slice(0, 2).map((technology) => (
-                  <span
-                    key={technology}
-                    className="rounded-full border border-[rgb(123_63_242_/35%)] bg-[rgb(123_63_242_/12%)] px-2.5 py-1 text-xs text-[var(--color-periwinkle)]"
-                  >
-                    {technology}
-                  </span>
+                  <TechBadge key={technology} technology={technology} />
                 ))}
+                {asset.technologies.length > 2 && (
+                  <span className="inline-flex items-center rounded-full bg-muted/40 px-2.5 py-1 text-xs font-medium text-muted-foreground">
+                    +{asset.technologies.length - 2}
+                  </span>
+                )}
+              </div>
+
+              <div className="mt-4 flex items-center gap-1.5 text-xs font-medium text-primary opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+                <span>View details</span>
+                <ArrowUpRight className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
               </div>
             </Link>
           ))}
@@ -385,15 +450,36 @@ export function AssetsClient({ initialResponse, initialQuery }: AssetsClientProp
             <Link
               key={asset.id}
               href={`/assets/${asset.slug}`}
-              className="flex items-center justify-between gap-4 rounded-2xl border border-[rgb(212_218_245_/12%)] bg-[rgb(18_18_26_/72%)] px-5 py-4 shadow-[var(--shadow-card)] transition-colors hover:bg-white/5"
+              className="group flex items-center gap-5 rounded-2xl border border-border/60 bg-card p-5 shadow-[var(--shadow-card)] transition-all duration-200 hover:border-border hover:bg-muted/30 hover:shadow-[var(--shadow-card-hover)]"
             >
-              <div className="min-w-0">
-                <div className="text-sm font-semibold text-[var(--color-text-primary)]">{asset.title}</div>
-                <div className="mt-1 text-xs text-[var(--color-text-secondary)]">{asset.short_description}</div>
+              <div className="flex min-w-0 flex-1 flex-col gap-2">
+                <div className="flex items-center gap-2.5">
+                  <h3 className="text-sm font-semibold text-card-foreground transition-colors group-hover:text-primary">
+                    {asset.title}
+                  </h3>
+                  <AssetTypeBadge type={asset.asset_type} />
+                </div>
+                <p className="text-xs leading-relaxed text-muted-foreground line-clamp-1">
+                  {asset.short_description}
+                </p>
+                <div className="flex flex-wrap items-center gap-1.5">
+                  {asset.cloud_providers.map((provider) => (
+                    <CloudBadge key={provider} provider={provider} />
+                  ))}
+                  {asset.technologies.slice(0, 2).map((technology) => (
+                    <TechBadge key={technology} technology={technology} />
+                  ))}
+                  {asset.technologies.length > 2 && (
+                    <span className="inline-flex items-center rounded-full bg-muted/40 px-2 py-0.5 text-[11px] font-medium text-muted-foreground">
+                      +{asset.technologies.length - 2}
+                    </span>
+                  )}
+                </div>
               </div>
+
               <div className="flex shrink-0 items-center gap-3">
-                <span className="text-xs text-[var(--color-text-tertiary)]">{asset.asset_type.toUpperCase()}</span>
-                <span className="text-xs text-[var(--color-text-secondary)]">{asset.status.toUpperCase()}</span>
+                <StatusBadge status={asset.status} />
+                <ArrowUpRight className="h-4 w-4 text-muted-foreground opacity-0 transition-all duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:opacity-100" />
               </div>
             </Link>
           ))}

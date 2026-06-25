@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>角色与权限</title>
+    <style id="theme-vars">
+:root {
+  --hyper-bg: #0a0a0f;
+  --hyper-bg-elevated: #10131f;
+  --hyper-surface: rgba(18, 18, 26, 0.78);
+  --hyper-surface-strong: rgba(25, 25, 38, 0.92);
+  --hyper-surface-soft: rgba(255, 255, 255, 0.03);
+  --hyper-border: rgba(212, 218, 245, 0.12);
+  --hyper-border-strong: rgba(123, 63, 242, 0.55);
+  --hyper-text: #f0f0f5;
+  --hyper-text-secondary: #8b8ba3;
+  --hyper-text-tertiary: #5a5a72;
+  --hyper-indigo: #1c1967;
+  --hyper-purple: #7b3ff2;
+  --hyper-magenta: #c026d3;
+  --hyper-periwinkle: #d4daf5;
+  --hyper-success: #10b981;
+  --hyper-warning: #f59e0b;
+  --hyper-azure: #3ba1ff;
+  --hyper-aws: #ff9d2e;
+  --hyper-radius-sm: 6px;
+  --hyper-radius-md: 12px;
+  --hyper-radius-lg: 20px;
+  --hyper-radius-xl: 28px;
+  --hyper-radius-full: 9999px;
+  --hyper-shadow-card: 0 20px 60px rgba(10, 10, 15, 0.42);
+  --hyper-shadow-glow: 0 0 30px rgba(123, 63, 242, 0.24);
+  --hyper-backdrop: blur(24px) saturate(180%);
+  --hyper-gradient-bg:
+    radial-gradient(circle at 50% 10%, rgba(123, 63, 242, 0.28), transparent 32%),
+    radial-gradient(circle at 10% 30%, rgba(28, 25, 103, 0.46), transparent 42%),
+    radial-gradient(circle at 90% 80%, rgba(192, 38, 211, 0.16), transparent 28%),
+    linear-gradient(180deg, #090a0f 0%, #0b1020 42%, #090a0f 100%);
+  --hyper-gradient-hero: linear-gradient(135deg, #1c1967 0%, #3d348b 42%, #7b3ff2 100%);
+  --hyper-gradient-data: linear-gradient(90deg, #7b3ff2 0%, #c026d3 50%, #7b3ff2 100%);
+  --hyper-font-display: "Graphik", "Inter", "PingFang SC", "Microsoft YaHei", -apple-system, BlinkMacSystemFont, sans-serif;
+  --hyper-font-body: "Inter", "PingFang SC", "Microsoft YaHei", -apple-system, BlinkMacSystemFont, sans-serif;
+  --hyper-font-mono: "JetBrains Mono", "SFMono-Regular", "Fira Code", Consolas, monospace;
+  --hyper-space-1: 4px;
+  --hyper-space-2: 8px;
+  --hyper-space-3: 12px;
+  --hyper-space-4: 16px;
+  --hyper-space-5: 20px;
+  --hyper-space-6: 24px;
+  --hyper-space-8: 32px;
+  --hyper-space-10: 40px;
+  --hyper-space-12: 48px;
+  --hyper-space-16: 64px;
+}
+
+.dark {
+  --hyper-bg: #0a0a0f;
+  --hyper-bg-elevated: #10131f;
+  --hyper-surface: rgba(18, 18, 26, 0.78);
+  --hyper-surface-strong: rgba(25, 25, 38, 0.92);
+  --hyper-border: rgba(212, 218, 245, 0.12);
+  --hyper-text: #f0f0f5;
+  --hyper-text-secondary: #8b8ba3;
+  --hyper-text-tertiary: #5a5a72;
+}
+
+html,
+body {
+  font-family: var(--hyper-font-body);
+  background: var(--hyper-bg);
+  color: var(--hyper-text);
+}
+
+.hyper-display {
+  font-family: var(--hyper-font-display);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+}
+
+.hyper-h1 {
+  font-family: var(--hyper-font-display);
+  font-size: 32px;
+  line-height: 1.15;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.hyper-h2 {
+  font-family: var(--hyper-font-display);
+  font-size: 28px;
+  line-height: 1.2;
+  font-weight: 600;
+}
+
+.hyper-h3 {
+  font-family: var(--hyper-font-display);
+  font-size: 22px;
+  line-height: 1.28;
+  font-weight: 600;
+}
+
+.hyper-body {
+  font-size: 14px;
+  line-height: 1.6;
+  font-weight: 400;
+}
+
+.hyper-caption {
+  font-size: 12px;
+  line-height: 1.4;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+.hyper-overline {
+  font-size: 11px;
+  line-height: 1.2;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.hyper-data {
+  font-family: var(--hyper-font-display);
+  font-size: 32px;
+  line-height: 1;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+
+.hyper-card {
+  background: var(--hyper-surface);
+  border: 1px solid var(--hyper-border);
+  border-radius: var(--hyper-radius-lg);
+  backdrop-filter: var(--hyper-backdrop);
+  box-shadow: var(--hyper-shadow-card);
+}
+
+.hyper-card-glow {
+  border-color: rgba(123, 63, 242, 0.45);
+  box-shadow: var(--hyper-shadow-card), var(--hyper-shadow-glow);
+}
+
+.hyper-pill {
+  border-radius: var(--hyper-radius-full);
+  border: 1px solid var(--hyper-border);
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(12px);
+}
+
+.hyper-gradient-text {
+  background: linear-gradient(180deg, #f5f3ff 0%, #d4daf5 48%, #b794ff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.hyper-primary-btn {
+  border-radius: var(--hyper-radius-full);
+  background: linear-gradient(180deg, #8c5bff 0%, #7b3ff2 100%);
+  color: white;
+  border: 1px solid rgba(212, 218, 245, 0.18);
+  box-shadow: 0 0 18px rgba(123, 63, 242, 0.45);
+}
+
+.hyper-secondary-btn {
+  border-radius: var(--hyper-radius-full);
+  border: 1px solid rgba(212, 218, 245, 0.22);
+  color: var(--hyper-text);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.hyper-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.hyper-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(123, 63, 242, 0.45);
+  border-radius: 9999px;
+}
+
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.3.1/dist/index.global.js"></script>
+    <script src="https://unpkg.com/lucide@1.8.0/dist/umd/lucide.min.js"></script>
+    <style type="text/tailwindcss">
+  @theme inline {
+    --color-border: var(--hyper-border);
+  }
+  @layer base {
+    body { background: var(--hyper-surface); color: var(--hyper-foreground); }
+    td, th { @apply break-words; word-break: break-all; word-break: auto-phrase; }
+    th { @apply whitespace-nowrap; }
+  }
+    </style>
+    <style>
+      .no-scrollbar::-webkit-scrollbar { display: none; }
+      .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+      [data-icon] {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        -webkit-mask-size: contain;
+        mask-size: contain;
+        -webkit-mask-repeat: no-repeat;
+        mask-repeat: no-repeat;
+        -webkit-mask-position: center;
+        mask-position: center;
+        background-color: currentColor;
+      }
+    </style>
+</head>
+<body class="min-h-screen antialiased">
+    <main class="min-h-screen p-4 md:p-6 xl:p-8">
+      <div class="shell-grid mx-auto grid max-w-[1640px] grid-cols-[280px_minmax(0,1fr)] gap-6">
+        <aside class="glass-card sticky top-6 flex h-[calc(100vh-48px)] flex-col rounded-[28px] p-5">
+          <div class="flex items-center gap-3 border-b border-white/8 pb-5">
+            <div class="flex h-12 w-12 items-center justify-center rounded-[18px] border border-[var(--hyper-border)] bg-[linear-gradient(180deg,rgba(123,63,242,0.30),rgba(123,63,242,0.08))]">
+              <i data-lucide="shield-check" class="h-6 w-6 text-[var(--hyper-purple)]"></i>
+            </div>
+            <div>
+              <p class="text-[11px] uppercase tracking-[0.22em] text-[var(--hyper-text-tertiary)]">Admin Control</p>
+              <p class="text-[18px] font-semibold tracking-[-0.02em] text-white">权限控制台</p>
+            </div>
+          </div>
+
+          <div class="mt-6 space-y-2">
+            <button type="button" class="interactive flex w-full items-center gap-3 rounded-[20px] border border-[var(--hyper-border)] px-4 py-3 text-left text-[14px] text-[var(--hyper-text-secondary)]">
+              <i data-lucide="layout-dashboard" class="h-4 w-4"></i>
+              <span>控制台总览</span>
+            </button>
+            <button type="button" data-dom-id="back-admin-assets" class="interactive flex w-full items-center gap-3 rounded-[20px] border border-[var(--hyper-border)] px-4 py-3 text-left text-[14px] text-[var(--hyper-text-secondary)]">
+              <i data-lucide="arrow-left-right" class="h-4 w-4"></i>
+              <span>返回资产管理</span>
+            </button>
+            <button type="button" class="interactive flex w-full items-center gap-3 rounded-[20px] border border-[var(--hyper-border-strong)] bg-[rgba(123,63,242,0.14)] px-4 py-3 text-left text-[14px] text-white shadow-[0_0_0_1px_rgba(123,63,242,0.18)]">
+              <i data-lucide="table-properties" class="h-4 w-4"></i>
+              <span>角色与权限</span>
+            </button>
+            <button type="button" class="interactive flex w-full items-center gap-3 rounded-[20px] border border-[var(--hyper-border)] px-4 py-3 text-left text-[14px] text-[var(--hyper-text-secondary)]">
+              <i data-lucide="badge-check" class="h-4 w-4"></i>
+              <span>审批流</span>
+            </button>
+            <button type="button" class="interactive flex w-full items-center gap-3 rounded-[20px] border border-[var(--hyper-border)] px-4 py-3 text-left text-[14px] text-[var(--hyper-text-secondary)]">
+              <i data-lucide="history" class="h-4 w-4"></i>
+              <span>审计日志</span>
+            </button>
+          </div>
+
+          <div class="mt-6 rounded-[24px] border border-[var(--hyper-border-strong)] bg-[linear-gradient(180deg,rgba(123,63,242,0.14),rgba(123,63,242,0.04))] p-4">
+            <p class="text-[11px] uppercase tracking-[0.22em] text-[var(--hyper-text-tertiary)]">治理提示</p>
+            <p class="mt-3 text-[24px] font-semibold tracking-[-0.03em] text-white">3 个高权限角色</p>
+            <p class="mt-2 text-[14px] leading-6 text-[var(--hyper-text-secondary)]">建议优先审查删除用户、发布资产、编辑策略等敏感能力的分配范围。</p>
+          </div>
+
+          <div class="mt-auto rounded-[24px] border border-white/8 bg-black/20 p-4">
+            <p class="text-[12px] uppercase tracking-[0.18em] text-[var(--hyper-text-tertiary)]">当前范围</p>
+            <p class="mt-3 text-[14px] font-medium text-white">CN-Prod / 企业后台</p>
+            <p class="mt-2 text-[13px] leading-6 text-[var(--hyper-text-secondary)]">策略修改会影响资产发布、成员管理与系统设置权限。</p>
+          </div>
+        </aside>
+
+        <section class="min-w-0 space-y-6">
+          <header class="glass-card rounded-[28px] px-5 py-4 md:px-6">
+            <div class="toolbar-grid grid grid-cols-[minmax(0,1fr)_320px_auto_auto] items-center gap-4">
+              <div class="min-w-0">
+                <p class="text-[11px] uppercase tracking-[0.22em] text-[var(--hyper-text-tertiary)]">Admin / Permissions</p>
+                <h1 class="mt-2 text-[32px] font-semibold tracking-[-0.04em] text-white">角色与权限管理</h1>
+              </div>
+              <label class="soft-pill flex h-12 items-center gap-3 rounded-full px-4">
+                <i data-lucide="search" class="h-4 w-4 text-[var(--hyper-text-secondary)]"></i>
+                <input type="text" placeholder="搜索角色、成员或权限动作" class="w-full bg-transparent text-[14px] text-white placeholder:text-[var(--hyper-text-tertiary)] focus:outline-none">
+              </label>
+              <div class="soft-pill inline-flex h-12 items-center gap-3 rounded-full px-4 text-[13px]">
+                <span class="h-2 w-2 rounded-full bg-[var(--hyper-success)] shadow-[0_0_12px_rgba(34,197,94,0.55)]"></span>
+                <span class="font-medium text-white">策略已同步</span>
+              </div>
+              <button type="button" class="interactive inline-flex h-12 items-center gap-2 rounded-full border border-[var(--hyper-border-strong)] bg-[linear-gradient(180deg,rgba(140,91,255,0.96),rgba(123,63,242,0.96))] px-5 text-[14px] font-semibold text-white shadow-[0_14px_28px_rgba(123,63,242,0.22)]">
+                <i data-lucide="save" class="h-4 w-4"></i>
+                <span>保存策略</span>
+              </button>
+            </div>
+          </header>
+
+          <div class="main-grid grid grid-cols-[320px_minmax(0,1fr)_320px] gap-6">
+            <section class="glass-card rounded-[28px] p-5">
+              <div class="flex items-center justify-between gap-3">
+                <div>
+                  <p class="text-[11px] uppercase tracking-[0.22em] text-[var(--hyper-text-tertiary)]">Roles</p>
+                  <h2 class="mt-2 text-[22px] font-semibold tracking-[-0.03em] text-white">角色列表</h2>
+                </div>
+                <span class="rounded-full border border-[var(--hyper-border)] px-3 py-1 text-[11px] uppercase tracking-[0.18em] text-[var(--hyper-text-tertiary)]">5 Roles</span>
+              </div>
+
+              <div class="roles-grid mt-5 grid gap-3">
+                <article class="role-card interactive rounded-[22px] border border-[var(--hyper-border)] p-4" data-active="true">
+                  <div class="flex items-start justify-between gap-3">
+                    <div>
+                      <p class="text-[16px] font-semibold text-white">Super Admin</p>
+                      <p class="mt-1 text-[13px] text-[var(--hyper-text-secondary)]">2 位成员 · 完整控制</p>
+                    </div>
+                    <div class="flex h-10 w-10 items-center justify-center rounded-[14px] border border-[var(--hyper-border)] bg-white/4 text-[var(--hyper-purple)]">
+                      <i data-lucide="shield" class="h-4 w-4"></i>
+                    </div>
+                  </div>
+                  <p class="mt-3 text-[13px] leading-6 text-[var(--hyper-text-secondary)]">拥有全部权限，允许管理用户、资产、角色和系统级策略。</p>
+                </article>
+                <article class="role-card interactive rounded-[22px] border border-[var(--hyper-border)] bg-white/[0.02] p-4" data-active="false">
+                  <div class="flex items-start justify-between gap-3">
+                    <div>
+                      <p class="text-[16px] font-semibold text-white">Admin</p>
+                      <p class="mt-1 text-[13px] text-[var(--hyper-text-secondary)]">6 位成员 · 运营管理</p>
+                    </div>
+                    <div class="flex h-10 w-10 items-center justify-center rounded-[14px] border border-[var(--hyper-border)] bg-white/4 text-[var(--hyper-text-secondary)]">
+                      <i data-lucide="user-cog" class="h-4 w-4"></i>
+                    </div>
+                  </div>
+                </article>
+                <article class="role-card interactive rounded-[22px] border border-[var(--hyper-border)] bg-white/[0.02] p-4" data-active="false">
+                  <div class="flex items-start justify-between gap-3">
+                    <div>
+                      <p class="text-[16px] font-semibold text-white">Asset Manager</p>
+                      <p class="mt-1 text-[13px] text-[var(--hyper-text-secondary)]">11 位成员 · 资产运营</p>
+                    </div>
+                    <div class="flex h-10 w-10 items-center justify-center rounded-[14px] border border-[var(--hyper-border)] bg-white/4 text-[var(--hyper-text-secondary)]">
+                      <i data-lucide="boxes" class="h-4 w-4"></i>
+                    </div>
+                  </div>
+                </article>
+                <article class="role-card interactive rounded-[22px] border border-[var(--hyper-border)] bg-white/[0.02] p-4" data-active="false">
+                  <div class="flex items-start justify-between gap-3">
+                    <div>
+                      <p class="text-[16px] font-semibold text-white">Editor</p>
+                      <p class="mt-1 text-[13px] text-[var(--hyper-text-secondary)]">9 位成员 · 内容编辑</p>
+                    </div>
+                    <div class="flex h-10 w-10 items-center justify-center rounded-[14px] border border-[var(--hyper-border)] bg-white/4 text-[var(--hyper-text-secondary)]">
+                      <i data-lucide="file-pen-line" class="h-4 w-4"></i>
+                    </div>
+                  </div>
+                </article>
+                <article class="role-card interactive rounded-[22px] border border-[var(--hyper-border)] bg-white/[0.02] p-4" data-active="false">
+                  <div class="flex items-start justify-between gap-3">
+                    <div>
+                      <p class="text-[16px] font-semibold text-white">Viewer</p>
+                      <p class="mt-1 text-[13px] text-[var(--hyper-text-secondary)]">23 位成员 · 只读</p>
+                    </div>
+                    <div class="flex h-10 w-10 items-center justify-center rounded-[14px] border border-[var(--hyper-border)] bg-white/4 text-[var(--hyper-text-secondary)]">
+                      <i data-lucide="eye" class="h-4 w-4"></i>
+                    </div>
+                  </div>
+                </article>
+              </div>
+            </section>
+
+            <section class="glass-card rounded-[28px] p-5 md:p-6">
+              <div class="flex flex-wrap items-center justify-between gap-4 border-b border-white/8 pb-5">
+                <div>
+                  <p class="text-[11px] uppercase tracking-[0.22em] text-[var(--hyper-text-tertiary)]">Permission Matrix</p>
+                  <h2 class="mt-2 text-[22px] font-semibold tracking-[-0.03em] text-white">控制矩阵</h2>
+                  <p class="mt-2 text-[14px] text-[var(--hyper-text-secondary)]">按业务域区分敏感能力，聚焦桌面端的高密度对照与快速调整。</p>
+                </div>
+                <div class="flex flex-wrap items-center gap-2">
+                  <button type="button" class="interactive rounded-full border border-[var(--hyper-border-strong)] bg-[rgba(123,63,242,0.14)] px-4 py-2 text-[13px] font-medium text-white">全部域</button>
+                  <button type="button" class="interactive soft-pill rounded-full px-4 py-2 text-[13px] text-[var(--hyper-text-secondary)]">用户</button>
+                  <button type="button" class="interactive soft-pill rounded-full px-4 py-2 text-[13px] text-[var(--hyper-text-secondary)]">资产</button>
+                  <button type="button" class="interactive soft-pill rounded-full px-4 py-2 text-[13px] text-[var(--hyper-text-secondary)]">系统</button>
+                </div>
+              </div>
+
+              <div class="matrix-scroll mt-5 overflow-x-auto">
+                <table class="w-full min-w-[860px] border-separate border-spacing-y-2 text-left">
+                  <thead>
+                    <tr class="text-[12px] uppercase tracking-[0.16em] text-[var(--hyper-text-tertiary)]">
+                      <th class="sticky left-0 z-20 rounded-[18px] bg-[rgba(10,14,24,0.96)] px-4 py-3">权限动作</th>
+                      <th class="px-3 py-3 text-center">Super Admin</th>
+                      <th class="px-3 py-3 text-center">Admin</th>
+                      <th class="px-3 py-3 text-center">Asset Manager</th>
+                      <th class="px-3 py-3 text-center">Editor</th>
+                      <th class="px-3 py-3 text-center">Viewer</th>
+                    </tr>
+                  </thead>
+                  <tbody class="text-[14px] text-[var(--hyper-text-secondary)]">
+                    <tr>
+                      <td class="sticky left-0 z-10 rounded-[18px] border border-white/8 bg-[rgba(10,14,24,0.96)] px-4 py-4">
+                        <p class="font-medium text-white">查看用户</p>
+                        <p class="mt-1 text-[12px] text-[var(--hyper-text-tertiary)]">读取成员资料与状态</p>
+                      </td>
+                      <td class="matrix-cell active rounded-[18px] border border-transparent px-3 py-4 text-center">允许</td>
+                      <td class="matrix-cell active rounded-[18px] border border-transparent px-3 py-4 text-center">允许</td>
+                      <td class="matrix-cell rounded-[18px] border border-white/6 bg-white/[0.02] px-3 py-4 text-center">—</td>
+                      <td class="matrix-cell rounded-[18px] border border-white/6 bg-white/[0.02] px-3 py-4 text-center">—</td>
+                      <td class="matrix-cell rounded-[18px] border border-white/6 bg-white/[0.02] px-3 py-4 text-center">—</td>
+                    </tr>
+                    <tr>
+                      <td class="sticky left-0 z-10 rounded-[18px] border border-white/8 bg-[rgba(10,14,24,0.96)] px-4 py-4">
+                        <p class="font-medium text-white">创建 / 编辑用户</p>
+                        <p class="mt-1 text-[12px] text-[var(--hyper-text-tertiary)]">新增成员、调整组织关系</p>
+                      </td>
+                      <td class="matrix-cell active rounded-[18px] border border-transparent px-3 py-4 text-center">允许</td>
+                      <td class="matrix-cell active rounded-[18px] border border-transparent px-3 py-4 text-center">允许</td>
+                      <td class="matrix-cell rounded-[18px] border border-white/6 bg-white/[0.02] px-3 py-4 text-center">—</td>
+                      <td class="matrix-cell rounded-[18px] border border-white/6 bg-white/[0.02] px-3 py-4 text-center">—</td>
+                      <td class="matrix-cell rounded-[18px] border border-white/6 bg-white/[0.02] px-3 py-4 text-center">—</td>
+                    </tr>
+                    <tr>
+                      <td class="sticky left-0 z-10 rounded-[18px] border border-white/8 bg-[rgba(10,14,24,0.96)] px-4 py-4">
+                        <p class="font-medium text-white">删除用户</p>
+                        <p class="mt-1 text-[12px] text-[var(--hyper-text-tertiary)]">高敏操作，触发双重确认</p>
+                      </td>
+                      <td class="matrix-cell active rounded-[18px] border border-transparent px-3 py-4 text-center">允许</td>
+                      <td class="matrix-cell rounded-[18px] border border-white/6 bg-white/[0.02] px-3 py-4 text-center">限制</td>
+                      <td class="matrix-cell rounded-[18px] border border-white/6 bg-white/[0.02] px-3 py-4 text-center">—</td>
+                      <td class="matrix-cell rounded-[18px] border border-white/6 bg-white/[0.02] px-3 py-4 text-center">—</td>
+                      <td class="matrix-cell rounded-[18px] border border-white/6 bg-white/[0.02] px-3 py-4 text-center">—</td>
+                    </tr>
+                    <tr>
+                      <td class="sticky left-0 z-10 rounded-[18px] border border-white/8 bg-[rgba(10,14,24,0.96)] px-4 py-4">
+                        <p class="font-medium text-white">查看资产</p>
+                        <p class="mt-1 text-[12px] text-[var(--hyper-text-tertiary)]">浏览资产详情与状态</p>
+                      </td>
+                      <td class="matrix-cell active rounded-[18px] border border-transparent px-3 py-4 text-center">允许</td>
+                      <td class="matrix-cell active rounded-[18px] border border-transparent px-3 py-4 text-center">允许</td>
+                      <td class="matrix-cell active rounded-[18px] border border-transparent px-3 py-4 text-center">允许</td>
+                      <td class="matrix-cell active rounded-[18px] border border-transparent px-3 py-4 text-center">允许</td>
+                      <td class="matrix-cell active rounded-[18px] border border-transparent px-3 py-4 text-center">允许</td>
+                    </tr>
+                    <tr>
+                      <td class="sticky left-0 z-10 rounded-[18px] border border-white/8 bg-[rgba(10,14,24,0.96)] px-4 py-4">
+                        <p class="font-medium text-white">编辑 / 发布资产</p>
+                        <p class="mt-1 text-[12px] text-[var(--hyper-text-tertiary)]">影响资产上线节奏</p>
+                      </td>
+                      <td class="matrix-cell active rounded-[18px] border border-transparent px-3 py-4 text-center">允许</td>
+                      <td class="matrix-cell active rounded-[18px] border border-transparent px-3 py-4 text-center">允许</td>
+                      <td class="matrix-cell active rounded-[18px] border border-transparent px-3 py-4 text-center">允许</td>
+                      <td class="matrix-cell rounded-[18px] border border-white/6 bg-white/[0.02] px-3 py-4 text-center">编辑</td>
+                      <td class="matrix-cell rounded-[18px] border border-white/6 bg-white/[0.02] px-3 py-4 text-center">—</td>
+                    </tr>
+                    <tr>
+                      <td class="sticky left-0 z-10 rounded-[18px] border border-white/8 bg-[rgba(10,14,24,0.96)] px-4 py-4">
+                        <p class="font-medium text-white">管理角色与策略</p>
+                        <p class="mt-1 text-[12px] text-[var(--hyper-text-tertiary)]">修改矩阵与审批范围</p>
+                      </td>
+                      <td class="matrix-cell active rounded-[18px] border border-transparent px-3 py-4 text-center">允许</td>
+                      <td class="matrix-cell rounded-[18px] border border-white/6 bg-white/[0.02] px-3 py-4 text-center">限制</td>
+                      <td class="matrix-cell rounded-[18px] border border-white/6 bg-white/[0.02] px-3 py-4 text-center">—</td>
+                      <td class="matrix-cell rounded-[18px] border border-white/6 bg-white/[0.02] px-3 py-4 text-center">—</td>
+                      <td class="matrix-cell rounded-[18px] border border-white/6 bg-white/[0.02] px-3 py-4 text-center">—</td>
+                    </tr>
+                    <tr>
+                      <td class="sticky left-0 z-10 rounded-[18px] border border-white/8 bg-[rgba(10,14,24,0.96)] px-4 py-4">
+                        <p class="font-medium text-white">编辑系统设置</p>
+                        <p class="mt-1 text-[12px] text-[var(--hyper-text-tertiary)]">影响环境与默认规则</p>
+                      </td>
+                      <td class="matrix-cell active rounded-[18px] border border-transparent px-3 py-4 text-center">允许</td>
+                      <td class="matrix-cell rounded-[18px] border border-white/6 bg-white/[0.02] px-3 py-4 text-center">—</td>
+                      <td class="matrix-cell rounded-[18px] border border-white/6 bg-white/[0.02] px-3 py-4 text-center">—</td>
+                      <td class="matrix-cell rounded-[18px] border border-white/6 bg-white/[0.02] px-3 py-4 text-center">—</td>
+                      <td class="matrix-cell rounded-[18px] border border-white/6 bg-white/[0.02] px-3 py-4 text-center">—</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+
+            <aside class="space-y-5">
+              <section class="glass-card rounded-[28px] p-5">
+                <p class="text-[11px] uppercase tracking-[0.22em] text-[var(--hyper-text-tertiary)]">Role Detail</p>
+                <h2 class="mt-2 text-[22px] font-semibold tracking-[-0.03em] text-white">Super Admin</h2>
+                <p class="mt-3 text-[14px] leading-6 text-[var(--hyper-text-secondary)]">负责系统级治理、权限审批、全局策略修改与应急恢复。</p>
+                <div class="mt-5 space-y-3">
+                  <div class="rounded-[20px] border border-white/8 bg-white/[0.02] p-4">
+                    <p class="text-[12px] uppercase tracking-[0.16em] text-[var(--hyper-text-tertiary)]">成员数量</p>
+                    <p class="mt-2 text-[28px] font-semibold tracking-[-0.03em] text-white">2</p>
+                  </div>
+                  <div class="rounded-[20px] border border-white/8 bg-white/[0.02] p-4">
+                    <p class="text-[12px] uppercase tracking-[0.16em] text-[var(--hyper-text-tertiary)]">敏感操作</p>
+                    <p class="mt-2 text-[14px] leading-6 text-[var(--hyper-text-secondary)]">删除用户、编辑设置、管理角色均开启二次确认与审计追踪。</p>
+                  </div>
+                </div>
+              </section>
+
+              <section class="glass-card rounded-[28px] p-5">
+                <div class="flex items-center justify-between gap-3">
+                  <h2 class="text-[18px] font-semibold tracking-[-0.03em] text-white">治理说明</h2>
+                  <span class="rounded-full border border-[var(--hyper-border)] px-3 py-1 text-[11px] uppercase tracking-[0.18em] text-[var(--hyper-text-tertiary)]">Audit</span>
+                </div>
+                <div class="mt-5 space-y-4 text-[14px] leading-6 text-[var(--hyper-text-secondary)]">
+                  <div class="rounded-[20px] border border-white/8 bg-white/[0.02] p-4">
+                    <p class="font-medium text-white">高权限隔离</p>
+                    <p class="mt-2">删除用户与编辑设置不应同时下放给普通 Admin，建议通过审批链路释放临时权限。</p>
+                  </div>
+                  <div class="rounded-[20px] border border-white/8 bg-white/[0.02] p-4">
+                    <p class="font-medium text-white">资产发布责任</p>
+                    <p class="mt-2">Asset Manager 可以发布资产，但跨云同步资产仍需 Super Admin 或 Admin 二次确认。</p>
+                  </div>
+                  <div class="rounded-[20px] border border-white/8 bg-white/[0.02] p-4">
+                    <p class="font-medium text-white">最近更新</p>
+                    <p class="mt-2">今天 11:20，完成“发布资产”动作的审批说明与审计日志联动配置。</p>
+                  </div>
+                </div>
+              </section>
+            </aside>
+          </div>
+        </section>
+      </div>
+    </main>
+    <script>lucide.createIcons();</script>
+
+    <style>
+      :root {
+        --hyper-bg: #07090f;
+        --hyper-panel: rgba(15, 19, 31, 0.82);
+        --hyper-panel-strong: rgba(17, 22, 36, 0.96);
+        --hyper-border: rgba(212, 218, 245, 0.12);
+        --hyper-border-strong: rgba(123, 63, 242, 0.52);
+        --hyper-text: #f5f7ff;
+        --hyper-text-secondary: #9da4c0;
+        --hyper-text-tertiary: #66708b;
+        --hyper-purple: #7b3ff2;
+        --hyper-magenta: #c026d3;
+        --hyper-success: #22c55e;
+        --hyper-warning: #f59e0b;
+        --hyper-info: #38bdf8;
+        --hyper-bg-layer:
+          radial-gradient(circle at 16% 16%, rgba(123, 63, 242, 0.22), transparent 24%),
+          radial-gradient(circle at 88% 18%, rgba(59, 161, 255, 0.08), transparent 20%),
+          radial-gradient(circle at 82% 82%, rgba(192, 38, 211, 0.12), transparent 20%),
+          linear-gradient(180deg, #07090f 0%, #09101b 48%, #07090f 100%);
+      }
+
+      * { box-sizing: border-box; }
+      html, body {
+        margin: 0;
+        min-height: 100%;
+        background: var(--hyper-bg);
+        color: var(--hyper-text);
+        font-family: "Inter", "PingFang SC", "Microsoft YaHei", -apple-system, BlinkMacSystemFont, sans-serif;
+      }
+
+      body {
+        background-image: var(--hyper-bg-layer);
+        background-attachment: fixed;
+      }
+
+      .glass-card {
+        background: linear-gradient(180deg, rgba(20, 26, 41, 0.84), rgba(12, 16, 27, 0.92));
+        border: 1px solid var(--hyper-border);
+        backdrop-filter: blur(22px) saturate(160%);
+        box-shadow: 0 24px 70px rgba(1, 4, 15, 0.42);
+      }
+
+      .soft-pill {
+        border: 1px solid var(--hyper-border);
+        background: rgba(255, 255, 255, 0.03);
+        backdrop-filter: blur(14px);
+      }
+
+      .interactive {
+        transition: transform 160ms cubic-bezier(.2,.8,.2,1), border-color 160ms cubic-bezier(.2,.8,.2,1), box-shadow 160ms cubic-bezier(.2,.8,.2,1), background-color 160ms cubic-bezier(.2,.8,.2,1);
+      }
+
+      .interactive:hover {
+        transform: translateY(-1px);
+        border-color: rgba(123, 63, 242, 0.45);
+      }
+
+      .interactive:active {
+        transform: translateY(0);
+      }
+
+      .role-card[data-active="true"] {
+        border-color: rgba(123, 63, 242, 0.5);
+        background: linear-gradient(180deg, rgba(123, 63, 242, 0.18), rgba(123, 63, 242, 0.08));
+        box-shadow: 0 0 0 1px rgba(123,63,242,0.18), 0 0 30px rgba(123,63,242,0.16);
+      }
+
+      .matrix-scroll::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+      }
+
+      .matrix-scroll::-webkit-scrollbar-thumb {
+        background: rgba(123, 63, 242, 0.38);
+        border-radius: 999px;
+      }
+
+      .matrix-cell.active {
+        background: rgba(123, 63, 242, 0.15);
+        border-color: rgba(123, 63, 242, 0.32);
+        color: white;
+        box-shadow: inset 0 0 0 1px rgba(123,63,242,0.18), 0 0 18px rgba(123,63,242,0.10);
+      }
+
+      @media (max-width: 1280px) {
+        .shell-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .main-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 900px) {
+        .toolbar-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .roles-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .interactive {
+          transition-duration: 0.01ms !important;
+        }
+
+        .interactive:hover,
+        .interactive:active {
+          transform: none;
+        }
+      }
+    </style>
+</body>
+</html>

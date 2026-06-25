@@ -1,0 +1,32 @@
+name: hsah
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: hsah-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: hsah
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "${POSTGRES_PORT:-5434}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init-scripts:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d hsah"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    networks:
+      - hsah-network
+
+volumes:
+  postgres_data:
+    driver: local
+
+networks:
+  hsah-network:
+    driver: bridge

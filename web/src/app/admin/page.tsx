@@ -6,7 +6,9 @@ import { ArrowRight, FileText, LayoutTemplate, Package, ShieldCheck, User } from
 
 import { PageHeader } from "@/components/product/page-header";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { ErrorAlert } from "@/components/error-alert";
 import { adminRequest, getStoredAdminToken } from "@/lib/admin";
+import { parseApiError, type ApiErrorInfo } from "@/lib/api-errors";
 import { adminNavigation } from "@/lib/admin-navigation";
 
 type Overview = { users: number; assets: number };
@@ -56,6 +58,7 @@ const recentDrafts = [
 export default function AdminPage() {
   const [token] = useState<string | null>(() => getStoredAdminToken());
   const [overview, setOverview] = useState<Overview | null>(null);
+  const [error, setError] = useState<ApiErrorInfo | null>(null);
 
   useEffect(() => {
     if (!token) return;
@@ -63,7 +66,18 @@ export default function AdminPage() {
     adminRequest<Overview>("/api/v1/admin/overview", token, { method: "GET" })
       .then((data) => {
         if (canceled) return;
-        setOverview(data.ok ? data.data : null);
+        if (!data.ok) {
+          setError(parseApiError(data.data, data.status));
+          setOverview(null);
+        } else {
+          setError(null);
+          setOverview(data.data);
+        }
+      })
+      .catch(() => {
+        if (canceled) return;
+        setError(parseApiError(null, undefined));
+        setOverview(null);
       });
     return () => {
       canceled = true;
@@ -112,6 +126,14 @@ export default function AdminPage() {
         title="Operations overview"
         summary="Monitor content health, recent work, and access-control surfaces from one workspace."
       />
+
+      {error && (
+        <ErrorAlert
+          error={error}
+          onRetry={error.retryable ? () => setError(null) : undefined}
+          onDismiss={() => setError(null)}
+        />
+      )}
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         {kpiCards.map((item) => {

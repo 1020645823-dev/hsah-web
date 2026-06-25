@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { ArrowRight, Search, ShieldCheck } from "lucide-react";
 
+import { ThemeToggle } from "@/components/theme-toggle";
+
 type AdminTopbarProps = {
   pageTitle: string;
   breadcrumb?: readonly {
@@ -55,6 +57,8 @@ export function AdminTopbar({ pageTitle, breadcrumb }: AdminTopbarProps) {
             Open library
             <ArrowRight className="h-4 w-4" />
           </Link>
+
+          <ThemeToggle />
         </div>
       </div>
     </header>

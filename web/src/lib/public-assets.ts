@@ -1,3 +1,5 @@
+import { parseApiError, type ApiErrorInfo } from "./api-errors";
+
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8000";
 
 export const DEFAULT_PUBLIC_ASSET_LIMIT = 12;
@@ -34,6 +36,10 @@ export type PublicAssetListResponse = {
   limit: number;
   offset: number;
 };
+
+export type PublicAssetFetchResult =
+  | { ok: true; data: PublicAssetListResponse }
+  | { ok: false; error: ApiErrorInfo };
 
 type SearchParamsInput = Record<string, string | string[] | undefined>;
 
@@ -91,15 +97,15 @@ export function buildAssetSearchQuery(query: PublicAssetQuery) {
   const normalized = normalizeQuery(query);
   const params = new URLSearchParams();
 
+  if (normalized.view && normalized.view !== "grid") params.set("view", normalized.view);
   if (normalized.q) params.set("q", normalized.q);
   if (normalized.cloud) params.set("cloud", normalized.cloud);
   if (normalized.industry) params.set("industry", normalized.industry);
   if (normalized.tech) params.set("tech", normalized.tech);
   if (normalized.assetType) params.set("asset_type", normalized.assetType);
   if (normalized.sort && normalized.sort !== "title") params.set("sort", normalized.sort);
-  if (normalized.view && normalized.view !== "grid") params.set("view", normalized.view);
-  params.set("limit", String(normalized.limit));
-  params.set("offset", String(normalized.offset));
+  if (normalized.limit !== DEFAULT_PUBLIC_ASSET_LIMIT) params.set("limit", String(normalized.limit));
+  if (normalized.offset !== 0) params.set("offset", String(normalized.offset));
 
   const queryString = params.toString();
   return queryString ? `?${queryString}` : "";
@@ -171,7 +177,7 @@ function normalizeListResponse(data: unknown, query: PublicAssetQuery): PublicAs
   return emptyResponse(query);
 }
 
-export async function fetchPublicAssets(query: PublicAssetQuery): Promise<PublicAssetListResponse> {
+export async function fetchPublicAssets(query: PublicAssetQuery): Promise<PublicAssetFetchResult> {
   const normalized = normalizeQuery(query);
 
   try {
@@ -179,12 +185,13 @@ export async function fetchPublicAssets(query: PublicAssetQuery): Promise<Public
       cache: "no-store",
     });
     if (!res.ok) {
-      return emptyResponse(normalized);
+      const data = await res.json().catch(() => null);
+      return { ok: false, error: parseApiError(data, res.status) };
     }
 
     const data = (await res.json()) as unknown;
-    return normalizeListResponse(data, normalized);
+    return { ok: true, data: normalizeListResponse(data, normalized) };
   } catch {
-    return emptyResponse(normalized);
+    return { ok: false, error: parseApiError(null, undefined) };
   }
 }

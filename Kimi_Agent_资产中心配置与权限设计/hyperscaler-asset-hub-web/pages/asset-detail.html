@@ -1,0 +1,1425 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asset Detail</title>
+    <style id="theme-vars">
+:root {
+  --hyper-bg: #0a0a0f;
+  --hyper-bg-elevated: #10131f;
+  --hyper-surface: rgba(18, 18, 26, 0.78);
+  --hyper-surface-strong: rgba(25, 25, 38, 0.92);
+  --hyper-surface-soft: rgba(255, 255, 255, 0.03);
+  --hyper-border: rgba(212, 218, 245, 0.12);
+  --hyper-border-strong: rgba(123, 63, 242, 0.55);
+  --hyper-text: #f0f0f5;
+  --hyper-text-secondary: #8b8ba3;
+  --hyper-text-tertiary: #5a5a72;
+  --hyper-indigo: #1c1967;
+  --hyper-purple: #7b3ff2;
+  --hyper-magenta: #c026d3;
+  --hyper-periwinkle: #d4daf5;
+  --hyper-success: #10b981;
+  --hyper-warning: #f59e0b;
+  --hyper-azure: #3ba1ff;
+  --hyper-aws: #ff9d2e;
+  --hyper-radius-sm: 6px;
+  --hyper-radius-md: 12px;
+  --hyper-radius-lg: 20px;
+  --hyper-radius-xl: 28px;
+  --hyper-radius-full: 9999px;
+  --hyper-shadow-card: 0 20px 60px rgba(10, 10, 15, 0.42);
+  --hyper-shadow-glow: 0 0 30px rgba(123, 63, 242, 0.24);
+  --hyper-backdrop: blur(24px) saturate(180%);
+  --hyper-gradient-bg:
+    radial-gradient(circle at 50% 10%, rgba(123, 63, 242, 0.28), transparent 32%),
+    radial-gradient(circle at 10% 30%, rgba(28, 25, 103, 0.46), transparent 42%),
+    radial-gradient(circle at 90% 80%, rgba(192, 38, 211, 0.16), transparent 28%),
+    linear-gradient(180deg, #090a0f 0%, #0b1020 42%, #090a0f 100%);
+  --hyper-gradient-hero: linear-gradient(135deg, #1c1967 0%, #3d348b 42%, #7b3ff2 100%);
+  --hyper-gradient-data: linear-gradient(90deg, #7b3ff2 0%, #c026d3 50%, #7b3ff2 100%);
+  --hyper-font-display: "Graphik", "Inter", "PingFang SC", "Microsoft YaHei", -apple-system, BlinkMacSystemFont, sans-serif;
+  --hyper-font-body: "Inter", "PingFang SC", "Microsoft YaHei", -apple-system, BlinkMacSystemFont, sans-serif;
+  --hyper-font-mono: "JetBrains Mono", "SFMono-Regular", "Fira Code", Consolas, monospace;
+  --hyper-space-1: 4px;
+  --hyper-space-2: 8px;
+  --hyper-space-3: 12px;
+  --hyper-space-4: 16px;
+  --hyper-space-5: 20px;
+  --hyper-space-6: 24px;
+  --hyper-space-8: 32px;
+  --hyper-space-10: 40px;
+  --hyper-space-12: 48px;
+  --hyper-space-16: 64px;
+}
+
+.dark {
+  --hyper-bg: #0a0a0f;
+  --hyper-bg-elevated: #10131f;
+  --hyper-surface: rgba(18, 18, 26, 0.78);
+  --hyper-surface-strong: rgba(25, 25, 38, 0.92);
+  --hyper-border: rgba(212, 218, 245, 0.12);
+  --hyper-text: #f0f0f5;
+  --hyper-text-secondary: #8b8ba3;
+  --hyper-text-tertiary: #5a5a72;
+}
+
+html,
+body {
+  font-family: var(--hyper-font-body);
+  background: var(--hyper-bg);
+  color: var(--hyper-text);
+}
+
+.hyper-display {
+  font-family: var(--hyper-font-display);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+}
+
+.hyper-h1 {
+  font-family: var(--hyper-font-display);
+  font-size: 32px;
+  line-height: 1.15;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.hyper-h2 {
+  font-family: var(--hyper-font-display);
+  font-size: 28px;
+  line-height: 1.2;
+  font-weight: 600;
+}
+
+.hyper-h3 {
+  font-family: var(--hyper-font-display);
+  font-size: 22px;
+  line-height: 1.28;
+  font-weight: 600;
+}
+
+.hyper-body {
+  font-size: 14px;
+  line-height: 1.6;
+  font-weight: 400;
+}
+
+.hyper-caption {
+  font-size: 12px;
+  line-height: 1.4;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+.hyper-overline {
+  font-size: 11px;
+  line-height: 1.2;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.hyper-data {
+  font-family: var(--hyper-font-display);
+  font-size: 32px;
+  line-height: 1;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+
+.hyper-card {
+  background: var(--hyper-surface);
+  border: 1px solid var(--hyper-border);
+  border-radius: var(--hyper-radius-lg);
+  backdrop-filter: var(--hyper-backdrop);
+  box-shadow: var(--hyper-shadow-card);
+}
+
+.hyper-card-glow {
+  border-color: rgba(123, 63, 242, 0.45);
+  box-shadow: var(--hyper-shadow-card), var(--hyper-shadow-glow);
+}
+
+.hyper-pill {
+  border-radius: var(--hyper-radius-full);
+  border: 1px solid var(--hyper-border);
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(12px);
+}
+
+.hyper-gradient-text {
+  background: linear-gradient(180deg, #f5f3ff 0%, #d4daf5 48%, #b794ff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.hyper-primary-btn {
+  border-radius: var(--hyper-radius-full);
+  background: linear-gradient(180deg, #8c5bff 0%, #7b3ff2 100%);
+  color: white;
+  border: 1px solid rgba(212, 218, 245, 0.18);
+  box-shadow: 0 0 18px rgba(123, 63, 242, 0.45);
+}
+
+.hyper-secondary-btn {
+  border-radius: var(--hyper-radius-full);
+  border: 1px solid rgba(212, 218, 245, 0.22);
+  color: var(--hyper-text);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.hyper-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.hyper-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(123, 63, 242, 0.45);
+  border-radius: 9999px;
+}
+
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.3.1/dist/index.global.js"></script>
+    <script src="https://unpkg.com/lucide@1.8.0/dist/umd/lucide.min.js"></script>
+    <style type="text/tailwindcss">
+  @theme inline {
+    --color-border: var(--hyper-border);
+  }
+  @layer base {
+    body { background: var(--hyper-surface); color: var(--hyper-foreground); }
+    td, th { @apply break-words; word-break: break-all; word-break: auto-phrase; }
+    th { @apply whitespace-nowrap; }
+  }
+    </style>
+    <style>
+      .no-scrollbar::-webkit-scrollbar { display: none; }
+      .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+      [data-icon] {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        -webkit-mask-size: contain;
+        mask-size: contain;
+        -webkit-mask-repeat: no-repeat;
+        mask-repeat: no-repeat;
+        -webkit-mask-position: center;
+        mask-position: center;
+        background-color: currentColor;
+      }
+    </style>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="side-nav" aria-label="Primary navigation">
+      <section class="brand-card">
+        <div style="display:flex;align-items:center;gap:14px;">
+          <div class="brand-mark" aria-hidden="true">
+            <div class="brand-mark-grid">
+              <span></span><span></span><span></span><span></span>
+            </div>
+          </div>
+          <div>
+            <p class="eyebrow">Hyperscaler</p>
+            <h2 class="brand-title">Asset Hub</h2>
+          </div>
+        </div>
+        <p class="brand-subtitle">Enterprise AI asset workspace for scenario storytelling, solution proof, and revenue conversion.</p>
+      </section>
+
+      <section class="nav-section">
+        <p class="eyebrow">Workspace</p>
+        <ul class="nav-list">
+          <li><a class="nav-link" href="#"><i data-lucide="layout-dashboard"></i><span>Dashboard</span></a></li>
+          <li><a class="nav-link active" href="#"><i data-lucide="library-big"></i><span>Asset Library</span></a></li>
+          <li><a class="nav-link" href="#"><i data-lucide="sparkles"></i><span>AI Playbooks</span></a></li>
+          <li><a class="nav-link" href="#"><i data-lucide="folders"></i><span>Collections</span></a></li>
+        </ul>
+      </section>
+
+      <section class="nav-section">
+        <p class="eyebrow">Decision Flow</p>
+        <ul class="nav-list">
+          <li><a class="nav-link active" href="#"><i data-lucide="monitor-play"></i><span>Asset Detail</span></a></li>
+          <li><a class="nav-link" href="#"><i data-lucide="calculator"></i><span>ROI Calculator</span></a></li>
+          <li><a class="nav-link" href="#"><i data-lucide="panel-right-open"></i><span>Admin Assets</span></a></li>
+        </ul>
+      </section>
+
+      <section class="nav-footer">
+        <p class="eyebrow">Narrative signal</p>
+        <strong>Financial Services</strong>
+        <p>Keep the asset positioned around auditable AI workflow preview, value signals, and stakeholder-ready summary.</p>
+      </section>
+    </aside>
+
+    <main class="workspace">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button id="back-library" data-dom-id="back-library" class="icon-button" type="button" aria-label="Back to library">
+            <i data-lucide="chevron-left"></i>
+          </button>
+          <div>
+            <p class="eyebrow">Asset Library / Cloud</p>
+            <strong style="display:block;font-size:16px;">Asset Detail</strong>
+          </div>
+        </div>
+        <div class="topbar-right">
+          <button class="ghost-button search-chip" type="button">
+            <i data-lucide="search"></i>
+            <span>Search assets, stories, demos</span>
+            <span>/</span>
+          </button>
+          <button class="icon-button" type="button" aria-label="Notifications">
+            <i data-lucide="bell"></i>
+          </button>
+          <button class="icon-button" type="button" aria-label="Settings">
+            <i data-lucide="sliders-horizontal"></i>
+          </button>
+        </div>
+      </header>
+
+      <div class="content">
+        <section class="page-heading">
+          <div>
+            <p class="eyebrow">Cloud demo asset</p>
+            <h1>Financial Services</h1>
+            <p>Cloud orchestration with live AI workflow preview. This desktop redesign keeps the original asset story, but restructures it into a high-density decision surface with hero media, summary rail, and deeper analysis modules.</p>
+          </div>
+          <div class="status-cluster">
+            <span class="pill" style="color:var(--hyper-warning);">AWS</span>
+            <span class="pill">Cloud</span>
+            <span class="pill live"><span class="dot"></span>Live</span>
+          </div>
+        </section>
+
+        <section class="hero-layout">
+          <article class="hero-card">
+            <div class="hero-media">
+              <img src="../assets/asset-detail-demo.jpg" alt="Cloud asset demo preview">
+            </div>
+            <div class="hero-top">
+              <div class="hero-badges">
+                <span class="pill">AI workflow preview</span>
+                <span class="pill">Auditable pipeline</span>
+                <span class="pill">Stakeholder narrative</span>
+              </div>
+              <span class="pill live"><span class="dot"></span>Ready for demo</span>
+            </div>
+
+            <button class="hero-play" type="button" aria-label="Play demo">
+              <i data-lucide="play"></i>
+            </button>
+
+            <div class="hero-bottom">
+              <div>
+                <p class="eyebrow" style="color:rgba(244,245,251,0.64);">Video / demo showcase</p>
+                <h2>Production-ready fraud detection story.</h2>
+              </div>
+              <p>Streaming fraud detection and risk assessment often stalls when regulators, analysts, and model operators work across disconnected cloud tools. This asset compresses that story into a clear demo narrative with explainable checkpoints, reusable workflows, and live orchestration visibility.</p>
+            </div>
+          </article>
+
+          <aside class="action-rail">
+            <section class="panel glow">
+              <div class="summary-head">
+                <div>
+                  <p class="eyebrow">Summary &amp; action</p>
+                  <h3>Value snapshot</h3>
+                  <p>Preserves the original business copy while rebalancing the CTA and summary for desktop decision-making.</p>
+                </div>
+                <span class="pill live"><span class="dot"></span>Moderate</span>
+              </div>
+
+              <div class="kv-grid">
+                <div class="kv-card">
+                  <span>Industry</span>
+                  <strong>Financial Services</strong>
+                </div>
+                <div class="kv-card">
+                  <span>Cloud</span>
+                  <strong>AWS</strong>
+                </div>
+                <div class="kv-card">
+                  <span>Readiness</span>
+                  <strong>Live preview</strong>
+                </div>
+                <div class="kv-card">
+                  <span>Complexity</span>
+                  <strong>Moderate</strong>
+                </div>
+              </div>
+
+              <a id="launch-roi-calculator" data-dom-id="launch-roi-calculator" class="cta-primary" href="#">
+                <span>Launch ROI Calculator</span>
+                <i data-lucide="arrow-right"></i>
+              </a>
+
+              <div class="cta-row">
+                <button class="ghost-button" type="button"><i data-lucide="download"></i><span>Download</span></button>
+                <button class="ghost-button" type="button"><i data-lucide="share-2"></i><span>Share</span></button>
+              </div>
+
+              <div class="support-row">
+                <div class="support-card">
+                  <strong>Key value summary</strong>
+                  <span>Launch a production-ready decision flow faster through policy-aware scoring, review routing, and a stronger stakeholder story.</span>
+                </div>
+                <div class="support-card">
+                  <strong>Primary audience</strong>
+                  <span>Regulators, fraud analysts, cloud architects, and model operators who need explainable, multi-team visibility.</span>
+                </div>
+              </div>
+            </section>
+
+            <section class="panel">
+              <p class="eyebrow">Quick actions</p>
+              <div class="mini-grid" style="margin-top:0;">
+                <button class="mini-action" type="button"><i data-lucide="workflow"></i><span>Open flow</span></button>
+                <button class="mini-action" type="button"><i data-lucide="bookmark"></i><span>Save asset</span></button>
+                <button class="mini-action" type="button"><i data-lucide="message-square-text"></i><span>Brief team</span></button>
+                <button class="mini-action" type="button"><i data-lucide="wand-sparkles"></i><span>Tailor pitch</span></button>
+              </div>
+            </section>
+          </aside>
+        </section>
+
+        <section class="metric-strip">
+          <article class="metric-card">
+            <div>
+              <p class="metric-label">Reduction</p>
+              <p class="metric-value mono">45%</p>
+            </div>
+            <p class="metric-note">Expected fraud loss reduction for enterprise demo cases.</p>
+          </article>
+          <article class="metric-card">
+            <div>
+              <p class="metric-label">Savings</p>
+              <p class="metric-value mono">$2.5M</p>
+            </div>
+            <p class="metric-note">Business-value anchor reused from the original asset narrative.</p>
+          </article>
+          <article class="metric-card">
+            <div>
+              <p class="metric-label">Launch window</p>
+              <p class="metric-value mono">8 wk</p>
+            </div>
+            <p class="metric-note">Faster time-to-value through reusable workflow templates and operator controls.</p>
+          </article>
+        </section>
+
+        <nav class="tab-bar" aria-label="Asset detail tabs">
+          <button class="tab-button active" type="button">Overview</button>
+          <button class="tab-button" type="button">Architecture</button>
+          <button class="tab-button" type="button">Demo Narrative</button>
+          <button class="tab-button" type="button">Deploy Guide</button>
+          <button class="tab-button" type="button">Stakeholder Notes</button>
+        </nav>
+
+        <section class="info-layout">
+          <div class="stack">
+            <article class="info-card">
+              <div class="section-head">
+                <div>
+                  <p class="section-caption">Business problem</p>
+                  <h3>Disconnected tooling slows fraud response.</h3>
+                </div>
+                <span class="pill">Cloud</span>
+              </div>
+              <p>Streaming fraud detection and risk assessment often stalls when regulators, analysts, and model operators work across disconnected cloud tools. The desktop version brings the core narrative, summary, and action path into one view so teams can compare fit, value, and next steps without losing context.</p>
+            </article>
+
+            <article class="info-card">
+              <div class="section-head">
+                <div>
+                  <p class="section-caption">Solution overview</p>
+                  <h3>Pre-built AWS asset with explainable controls.</h3>
+                </div>
+                <span class="pill">Overview</span>
+              </div>
+              <p>A pre-built AWS asset combines live feature pipelines, policy-aware scoring, and an auditable review layer so teams can launch a production-ready decision flow faster. Desktop structure shifts this from a linear read into a richer side-by-side evaluation model.</p>
+              <ul class="feature-list">
+                <li class="feature-item">
+                  <span class="bullet"><i data-lucide="check"></i></span>
+                  <div>
+                    <strong>Real-time anomaly detection</strong>
+                    <span>Streaming case prioritization and operational visibility in one decision surface.</span>
+                  </div>
+                </li>
+                <li class="feature-item">
+                  <span class="bullet"><i data-lucide="check"></i></span>
+                  <div>
+                    <strong>Compliance checkpoints</strong>
+                    <span>Explainable traces support regulatory review and sign-off conversations.</span>
+                  </div>
+                </li>
+                <li class="feature-item">
+                  <span class="bullet"><i data-lucide="check"></i></span>
+                  <div>
+                    <strong>Reusable workflow templates</strong>
+                    <span>Predictive scoring, operator controls, and handoff-ready templates accelerate rollout.</span>
+                  </div>
+                </li>
+              </ul>
+            </article>
+
+            <article class="info-card">
+              <div class="section-head">
+                <div>
+                  <p class="section-caption">Demo narrative</p>
+                  <h3>Decision path tuned for enterprise review.</h3>
+                </div>
+                <span class="pill">Journey</span>
+              </div>
+              <ol class="timeline">
+                <li>
+                  <span class="step-badge">01</span>
+                  <div>
+                    <strong>Frame the business risk</strong>
+                    <span>Lead with fraud exposure, fragmented decision systems, and audit pressure.</span>
+                  </div>
+                </li>
+                <li>
+                  <span class="step-badge">02</span>
+                  <div>
+                    <strong>Show the live orchestration flow</strong>
+                    <span>Use the media hero to anchor the demo while the summary rail carries fit, value, and CTA.</span>
+                  </div>
+                </li>
+                <li>
+                  <span class="step-badge">03</span>
+                  <div>
+                    <strong>Move to quantified value</strong>
+                    <span>Guide users into the ROI calculator for savings, payback, and admin handoff.</span>
+                  </div>
+                </li>
+              </ol>
+            </article>
+          </div>
+
+          <div class="stack">
+            <article class="info-card">
+              <div class="section-head">
+                <div>
+                  <p class="section-caption">Architecture lens</p>
+                  <h3>Operational layers</h3>
+                </div>
+                <span class="pill">Analysis</span>
+              </div>
+              <div class="arch-grid">
+                <div class="arch-node">
+                  <small>Ingest</small>
+                  <strong>Live feature pipelines</strong>
+                  <p>Unified event streams feed fraud signals, metadata, and risk context into a governed decision workflow.</p>
+                </div>
+                <div class="arch-node">
+                  <small>Decision</small>
+                  <strong>Policy-aware scoring</strong>
+                  <p>AI models, rule thresholds, and explainability controls operate inside a reviewable orchestration layer.</p>
+                </div>
+                <div class="arch-node">
+                  <small>Review</small>
+                  <strong>Auditable operator layer</strong>
+                  <p>Analysts can inspect triggers, route exceptions, and maintain traceability for compliance stakeholders.</p>
+                </div>
+              </div>
+            </article>
+
+            <article class="info-card">
+              <div class="section-head">
+                <div>
+                  <p class="section-caption">Business value</p>
+                  <h3>Signals that help close the conversation</h3>
+                </div>
+                <span class="pill live"><span class="dot"></span>Value</span>
+              </div>
+              <div class="value-highlight">
+                <p class="section-caption" style="margin-bottom:0;color:rgba(217,220,255,0.72);">Potential annual savings</p>
+                <strong class="mono">$2.5M</strong>
+                <p style="margin-top:10px;">Designed for fast stakeholder sign-off with measurable value signals that turn a technical demo into a business-ready launch narrative.</p>
+              </div>
+              <ul class="value-list">
+                <li>
+                  <span class="bullet"><i data-lucide="trending-up"></i></span>
+                  <div>
+                    <strong>Improved decision quality</strong>
+                    <span>Higher confidence scoring and clearer review paths improve operator throughput.</span>
+                  </div>
+                </li>
+                <li>
+                  <span class="bullet"><i data-lucide="clock-3"></i></span>
+                  <div>
+                    <strong>Weeks to value</strong>
+                    <span>Reusable templates shorten configuration time and speed executive proof.</span>
+                  </div>
+                </li>
+                <li>
+                  <span class="bullet"><i data-lucide="shield-check"></i></span>
+                  <div>
+                    <strong>Audit confidence</strong>
+                    <span>Explainable traces make the asset safer to position in regulated enterprise environments.</span>
+                  </div>
+                </li>
+              </ul>
+            </article>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    lucide.createIcons();
+  </script>
+
+    <style>
+    :root {
+      --hyper-bg: #080910;
+      --hyper-bg-elevated: #0d1020;
+      --hyper-panel: rgba(15, 18, 32, 0.78);
+      --hyper-panel-strong: rgba(18, 22, 38, 0.92);
+      --hyper-panel-soft: rgba(255, 255, 255, 0.035);
+      --hyper-border: rgba(212, 218, 245, 0.12);
+      --hyper-border-strong: rgba(123, 63, 242, 0.52);
+      --hyper-text: #f4f5fb;
+      --hyper-text-secondary: #98a0bf;
+      --hyper-text-tertiary: #66708f;
+      --hyper-purple: #7B3FF2;
+      --hyper-magenta: #C026D3;
+      --hyper-indigo: #1b1e40;
+      --hyper-periwinkle: #d9dcff;
+      --hyper-success: #10b981;
+      --hyper-warning: #ff9d2e;
+      --hyper-radius-lg: 24px;
+      --hyper-radius-xl: 32px;
+      --hyper-radius-pill: 999px;
+      --hyper-shadow-card: 0 24px 80px rgba(3, 5, 16, 0.44);
+      --hyper-shadow-glow: 0 0 40px rgba(123, 63, 242, 0.24);
+      --hyper-backdrop: blur(24px) saturate(160%);
+      --page-bg:
+        radial-gradient(circle at 14% 10%, rgba(123, 63, 242, 0.18), transparent 24%),
+        radial-gradient(circle at 84% 12%, rgba(28, 30, 64, 0.58), transparent 30%),
+        radial-gradient(circle at 82% 88%, rgba(192, 38, 211, 0.12), transparent 24%),
+        linear-gradient(180deg, #07080d 0%, #09101c 48%, #07080d 100%);
+      --shell-width: 1480px;
+      --nav-width: 272px;
+      --rail-width: 360px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      background: var(--hyper-bg);
+      color: var(--hyper-text);
+      font-family: "Inter", "Graphik", "PingFang SC", "Microsoft YaHei", sans-serif;
+    }
+
+    body {
+      background: var(--page-bg);
+      letter-spacing: -0.01em;
+    }
+
+    button, a, input {
+      font: inherit;
+      color: inherit;
+    }
+
+    a {
+      text-decoration: none;
+    }
+
+    .app-shell {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: var(--nav-width) minmax(0, 1fr);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0)),
+        rgba(8, 9, 16, 0.78);
+    }
+
+    .side-nav {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      padding: 24px;
+      border-right: 1px solid rgba(255, 255, 255, 0.06);
+      background:
+        linear-gradient(180deg, rgba(123, 63, 242, 0.08), rgba(123, 63, 242, 0)),
+        rgba(7, 8, 15, 0.82);
+      backdrop-filter: blur(20px);
+    }
+
+    .brand-card,
+    .nav-section,
+    .panel,
+    .metric-card,
+    .hero-card,
+    .info-card,
+    .tab-bar {
+      background: var(--hyper-panel);
+      border: 1px solid var(--hyper-border);
+      border-radius: var(--hyper-radius-lg);
+      box-shadow: var(--hyper-shadow-card);
+      backdrop-filter: var(--hyper-backdrop);
+    }
+
+    .brand-card {
+      padding: 18px;
+      margin-bottom: 18px;
+    }
+
+    .brand-mark {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      background:
+        linear-gradient(180deg, rgba(123,63,242,0.32), rgba(123,63,242,0.08));
+      border: 1px solid rgba(123, 63, 242, 0.36);
+      box-shadow: 0 0 24px rgba(123, 63, 242, 0.24);
+    }
+
+    .brand-mark-grid {
+      width: 18px;
+      height: 18px;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 3px;
+    }
+
+    .brand-mark-grid span {
+      border-radius: 4px;
+      background: var(--hyper-periwinkle);
+    }
+
+    .brand-mark-grid span:nth-child(2),
+    .brand-mark-grid span:nth-child(4) {
+      background: var(--hyper-purple);
+    }
+
+    .brand-mark-grid span:nth-child(3) {
+      background: var(--hyper-magenta);
+    }
+
+    .eyebrow {
+      margin: 0 0 6px;
+      font-size: 11px;
+      line-height: 1;
+      text-transform: uppercase;
+      letter-spacing: 0.22em;
+      color: var(--hyper-text-tertiary);
+    }
+
+    .brand-title {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 650;
+      letter-spacing: -0.03em;
+    }
+
+    .brand-subtitle {
+      margin: 8px 0 0;
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--hyper-text-secondary);
+    }
+
+    .nav-section {
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+
+    .nav-list {
+      display: grid;
+      gap: 8px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 14px;
+      border-radius: 18px;
+      color: var(--hyper-text-secondary);
+      border: 1px solid transparent;
+      transition: border-color 160ms ease, background 160ms ease, transform 160ms ease;
+    }
+
+    .nav-link.active,
+    .nav-link:hover {
+      color: var(--hyper-text);
+      border-color: rgba(123, 63, 242, 0.34);
+      background: rgba(123, 63, 242, 0.10);
+      box-shadow: inset 0 0 0 1px rgba(123, 63, 242, 0.08), 0 0 18px rgba(123, 63, 242, 0.12);
+      transform: translateX(2px);
+    }
+
+    .nav-footer {
+      padding: 18px;
+      border-radius: 22px;
+      background:
+        linear-gradient(180deg, rgba(123,63,242,0.16), rgba(123,63,242,0.06)),
+        rgba(18, 22, 38, 0.82);
+      border: 1px solid rgba(123, 63, 242, 0.28);
+    }
+
+    .nav-footer strong {
+      display: block;
+      margin-top: 10px;
+      font-size: 14px;
+    }
+
+    .nav-footer p {
+      margin: 6px 0 0;
+      color: var(--hyper-text-secondary);
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .workspace {
+      min-width: 0;
+      padding: 24px;
+    }
+
+    .topbar {
+      max-width: var(--shell-width);
+      margin: 0 auto 24px;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      border-radius: 24px;
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      background: rgba(10, 12, 22, 0.72);
+      backdrop-filter: blur(18px);
+    }
+
+    .topbar-left,
+    .topbar-right,
+    .inline-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .icon-button,
+    .ghost-button,
+    .tab-button,
+    .mini-action {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 44px;
+      border-radius: var(--hyper-radius-pill);
+      border: 1px solid var(--hyper-border);
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--hyper-text-secondary);
+      padding: 0 16px;
+      transition: transform 160ms ease, border-color 160ms ease, background 160ms ease, color 160ms ease, box-shadow 160ms ease;
+    }
+
+    .icon-button {
+      width: 44px;
+      padding: 0;
+    }
+
+    .icon-button:hover,
+    .ghost-button:hover,
+    .tab-button:hover,
+    .mini-action:hover,
+    .icon-button:focus-visible,
+    .ghost-button:focus-visible,
+    .tab-button:focus-visible,
+    .mini-action:focus-visible {
+      outline: none;
+      transform: translateY(-1px);
+      color: var(--hyper-text);
+      border-color: rgba(123, 63, 242, 0.42);
+      background: rgba(123, 63, 242, 0.10);
+      box-shadow: 0 0 20px rgba(123, 63, 242, 0.12);
+    }
+
+    .search-chip {
+      min-width: 300px;
+      justify-content: flex-start;
+    }
+
+    .search-chip span:last-child {
+      margin-left: auto;
+      color: var(--hyper-text-tertiary);
+      font-size: 12px;
+    }
+
+    .content {
+      max-width: var(--shell-width);
+      margin: 0 auto;
+      display: grid;
+      gap: 24px;
+    }
+
+    .page-heading {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 20px;
+    }
+
+    .page-heading h1 {
+      margin: 0;
+      font-size: clamp(34px, 3vw, 48px);
+      line-height: 1.02;
+      letter-spacing: -0.05em;
+    }
+
+    .page-heading p {
+      margin: 12px 0 0;
+      max-width: 840px;
+      color: var(--hyper-text-secondary);
+      font-size: 16px;
+      line-height: 1.75;
+    }
+
+    .status-cluster {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      border-radius: var(--hyper-radius-pill);
+      border: 1px solid var(--hyper-border);
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--hyper-text-secondary);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .pill.live {
+      border-color: rgba(16, 185, 129, 0.24);
+      color: #cffbe8;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: currentColor;
+      box-shadow: 0 0 14px currentColor;
+    }
+
+    .hero-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) var(--rail-width);
+      gap: 24px;
+      align-items: start;
+    }
+
+    .hero-card {
+      overflow: hidden;
+      position: relative;
+      padding: 24px;
+      min-height: 560px;
+      display: grid;
+      align-content: space-between;
+      background:
+        linear-gradient(180deg, rgba(8,10,20,0.18), rgba(8,10,20,0.68)),
+        rgba(10, 12, 20, 0.58);
+    }
+
+    .hero-media {
+      position: absolute;
+      inset: 0;
+    }
+
+    .hero-media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: saturate(1.04) contrast(1.02);
+    }
+
+    .hero-media::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(180deg, rgba(8, 10, 18, 0.22) 0%, rgba(8, 10, 18, 0.36) 36%, rgba(8, 10, 18, 0.88) 100%),
+        linear-gradient(90deg, rgba(123, 63, 242, 0.12), transparent 24%, transparent 70%, rgba(192, 38, 211, 0.10));
+    }
+
+    .hero-top,
+    .hero-bottom {
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 20px;
+    }
+
+    .hero-badges {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .hero-play {
+      align-self: center;
+      justify-self: center;
+      width: 96px;
+      height: 96px;
+      border-radius: 999px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      background: rgba(11, 13, 22, 0.42);
+      color: white;
+      box-shadow: 0 0 28px rgba(123, 63, 242, 0.24);
+      backdrop-filter: blur(16px);
+    }
+
+    .hero-bottom {
+      display: grid;
+      gap: 20px;
+    }
+
+    .hero-bottom h2 {
+      margin: 0;
+      max-width: 12ch;
+      font-size: clamp(36px, 3.8vw, 62px);
+      line-height: 0.98;
+      letter-spacing: -0.06em;
+    }
+
+    .hero-bottom p {
+      margin: 0;
+      max-width: 760px;
+      color: rgba(244, 245, 251, 0.82);
+      font-size: 16px;
+      line-height: 1.8;
+    }
+
+    .metric-strip {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .metric-card {
+      padding: 18px 20px;
+      min-height: 138px;
+      display: grid;
+      align-content: space-between;
+      background: rgba(12, 15, 26, 0.62);
+    }
+
+    .metric-label {
+      color: var(--hyper-text-secondary);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+    }
+
+    .metric-value {
+      margin: 10px 0 0;
+      font-size: 38px;
+      line-height: 0.92;
+      font-weight: 700;
+      letter-spacing: -0.05em;
+    }
+
+    .metric-note {
+      color: var(--hyper-text-secondary);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .action-rail {
+      position: sticky;
+      top: 24px;
+      display: grid;
+      gap: 18px;
+    }
+
+    .panel {
+      padding: 22px;
+    }
+
+    .panel.glow {
+      border-color: rgba(123, 63, 242, 0.44);
+      box-shadow: var(--hyper-shadow-card), var(--hyper-shadow-glow);
+    }
+
+    .summary-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: flex-start;
+      margin-bottom: 18px;
+    }
+
+    .summary-head h3,
+    .panel h3,
+    .info-card h3 {
+      margin: 0;
+      font-size: 20px;
+      letter-spacing: -0.03em;
+    }
+
+    .summary-head p,
+    .panel p,
+    .info-card p {
+      margin: 10px 0 0;
+      color: var(--hyper-text-secondary);
+      font-size: 14px;
+      line-height: 1.75;
+    }
+
+    .kv-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .kv-card {
+      padding: 16px;
+      border-radius: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .kv-card span {
+      display: block;
+      color: var(--hyper-text-tertiary);
+      font-size: 12px;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+
+    .kv-card strong {
+      font-size: 16px;
+      font-weight: 650;
+      line-height: 1.4;
+    }
+
+    .cta-primary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      min-height: 52px;
+      border-radius: var(--hyper-radius-pill);
+      border: 1px solid rgba(212, 218, 245, 0.18);
+      background: linear-gradient(180deg, #8d61ff 0%, var(--hyper-purple) 100%);
+      color: white;
+      box-shadow: 0 0 24px rgba(123, 63, 242, 0.34);
+      transition: transform 160ms ease, box-shadow 160ms ease, filter 160ms ease;
+    }
+
+    .cta-primary:hover,
+    .cta-primary:focus-visible {
+      outline: none;
+      transform: translateY(-1px);
+      filter: brightness(1.04);
+      box-shadow: 0 0 32px rgba(123, 63, 242, 0.42);
+    }
+
+    .cta-row {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .support-row {
+      display: grid;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .support-card {
+      padding: 16px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .support-card strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 14px;
+    }
+
+    .support-card span {
+      color: var(--hyper-text-secondary);
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    .tab-bar {
+      display: flex;
+      gap: 10px;
+      padding: 10px;
+      overflow: auto;
+    }
+
+    .tab-button {
+      white-space: nowrap;
+      padding: 0 18px;
+    }
+
+    .tab-button.active {
+      color: var(--hyper-text);
+      border-color: rgba(123, 63, 242, 0.44);
+      background: rgba(123, 63, 242, 0.14);
+      box-shadow: inset 0 0 0 1px rgba(123, 63, 242, 0.10), 0 0 22px rgba(123, 63, 242, 0.16);
+    }
+
+    .info-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.3fr) minmax(340px, 0.9fr);
+      gap: 24px;
+    }
+
+    .stack {
+      display: grid;
+      gap: 24px;
+    }
+
+    .info-card {
+      padding: 24px;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+
+    .section-head .pill {
+      flex-shrink: 0;
+    }
+
+    .feature-list,
+    .timeline,
+    .value-list {
+      display: grid;
+      gap: 12px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .feature-item,
+    .timeline li,
+    .value-list li {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 12px;
+      align-items: start;
+      padding: 14px 0;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .feature-item:first-child,
+    .timeline li:first-child,
+    .value-list li:first-child {
+      border-top: none;
+      padding-top: 0;
+    }
+
+    .bullet,
+    .step-badge {
+      width: 28px;
+      height: 28px;
+      border-radius: 999px;
+      display: grid;
+      place-items: center;
+      color: var(--hyper-periwinkle);
+      background: rgba(123, 63, 242, 0.14);
+      border: 1px solid rgba(123, 63, 242, 0.30);
+      flex-shrink: 0;
+    }
+
+    .step-badge {
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .feature-item strong,
+    .timeline strong,
+    .value-list strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 15px;
+    }
+
+    .feature-item span,
+    .timeline span,
+    .value-list span {
+      color: var(--hyper-text-secondary);
+      font-size: 14px;
+      line-height: 1.72;
+    }
+
+    .arch-grid {
+      display: grid;
+      gap: 12px;
+    }
+
+    .arch-node {
+      padding: 18px;
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .arch-node small {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--hyper-text-tertiary);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+    }
+
+    .arch-node strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 15px;
+    }
+
+    .arch-node p {
+      margin: 0;
+    }
+
+    .value-highlight {
+      padding: 20px;
+      border-radius: 22px;
+      border: 1px solid rgba(123, 63, 242, 0.30);
+      background:
+        linear-gradient(180deg, rgba(123, 63, 242, 0.18), rgba(123, 63, 242, 0.06)),
+        rgba(255, 255, 255, 0.03);
+    }
+
+    .value-highlight strong {
+      display: block;
+      margin-top: 10px;
+      font-size: 32px;
+      letter-spacing: -0.04em;
+    }
+
+    .mini-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .mini-action {
+      justify-content: flex-start;
+      min-height: 50px;
+      border-radius: 18px;
+      padding: 0 16px;
+    }
+
+    .section-caption {
+      margin: 0 0 8px;
+      color: var(--hyper-text-tertiary);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+    }
+
+    .mono {
+      font-variant-numeric: tabular-nums;
+      font-feature-settings: "tnum" 1;
+    }
+
+    @media (max-width: 1180px) {
+      .hero-layout,
+      .info-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .action-rail {
+        position: static;
+      }
+    }
+
+    @media (max-width: 980px) {
+      .app-shell {
+        grid-template-columns: 1fr;
+      }
+
+      .side-nav {
+        position: static;
+        height: auto;
+        border-right: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      }
+    }
+
+    @media (max-width: 720px) {
+      .workspace,
+      .side-nav {
+        padding: 16px;
+      }
+
+      .topbar,
+      .page-heading {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .topbar-right,
+      .metric-strip,
+      .kv-grid,
+      .cta-row,
+      .mini-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .topbar-right {
+        width: 100%;
+      }
+
+      .search-chip {
+        min-width: 0;
+        width: 100%;
+      }
+
+      .hero-card {
+        min-height: 480px;
+      }
+    }
+  </style>
+</body>
+</html>

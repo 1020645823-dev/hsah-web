@@ -1,0 +1,1486 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROI 计算器</title>
+    <style id="theme-vars">
+:root {
+  --hyper-bg: #0a0a0f;
+  --hyper-bg-elevated: #10131f;
+  --hyper-surface: rgba(18, 18, 26, 0.78);
+  --hyper-surface-strong: rgba(25, 25, 38, 0.92);
+  --hyper-surface-soft: rgba(255, 255, 255, 0.03);
+  --hyper-border: rgba(212, 218, 245, 0.12);
+  --hyper-border-strong: rgba(123, 63, 242, 0.55);
+  --hyper-text: #f0f0f5;
+  --hyper-text-secondary: #8b8ba3;
+  --hyper-text-tertiary: #5a5a72;
+  --hyper-indigo: #1c1967;
+  --hyper-purple: #7b3ff2;
+  --hyper-magenta: #c026d3;
+  --hyper-periwinkle: #d4daf5;
+  --hyper-success: #10b981;
+  --hyper-warning: #f59e0b;
+  --hyper-azure: #3ba1ff;
+  --hyper-aws: #ff9d2e;
+  --hyper-radius-sm: 6px;
+  --hyper-radius-md: 12px;
+  --hyper-radius-lg: 20px;
+  --hyper-radius-xl: 28px;
+  --hyper-radius-full: 9999px;
+  --hyper-shadow-card: 0 20px 60px rgba(10, 10, 15, 0.42);
+  --hyper-shadow-glow: 0 0 30px rgba(123, 63, 242, 0.24);
+  --hyper-backdrop: blur(24px) saturate(180%);
+  --hyper-gradient-bg:
+    radial-gradient(circle at 50% 10%, rgba(123, 63, 242, 0.28), transparent 32%),
+    radial-gradient(circle at 10% 30%, rgba(28, 25, 103, 0.46), transparent 42%),
+    radial-gradient(circle at 90% 80%, rgba(192, 38, 211, 0.16), transparent 28%),
+    linear-gradient(180deg, #090a0f 0%, #0b1020 42%, #090a0f 100%);
+  --hyper-gradient-hero: linear-gradient(135deg, #1c1967 0%, #3d348b 42%, #7b3ff2 100%);
+  --hyper-gradient-data: linear-gradient(90deg, #7b3ff2 0%, #c026d3 50%, #7b3ff2 100%);
+  --hyper-font-display: "Graphik", "Inter", "PingFang SC", "Microsoft YaHei", -apple-system, BlinkMacSystemFont, sans-serif;
+  --hyper-font-body: "Inter", "PingFang SC", "Microsoft YaHei", -apple-system, BlinkMacSystemFont, sans-serif;
+  --hyper-font-mono: "JetBrains Mono", "SFMono-Regular", "Fira Code", Consolas, monospace;
+  --hyper-space-1: 4px;
+  --hyper-space-2: 8px;
+  --hyper-space-3: 12px;
+  --hyper-space-4: 16px;
+  --hyper-space-5: 20px;
+  --hyper-space-6: 24px;
+  --hyper-space-8: 32px;
+  --hyper-space-10: 40px;
+  --hyper-space-12: 48px;
+  --hyper-space-16: 64px;
+}
+
+.dark {
+  --hyper-bg: #0a0a0f;
+  --hyper-bg-elevated: #10131f;
+  --hyper-surface: rgba(18, 18, 26, 0.78);
+  --hyper-surface-strong: rgba(25, 25, 38, 0.92);
+  --hyper-border: rgba(212, 218, 245, 0.12);
+  --hyper-text: #f0f0f5;
+  --hyper-text-secondary: #8b8ba3;
+  --hyper-text-tertiary: #5a5a72;
+}
+
+html,
+body {
+  font-family: var(--hyper-font-body);
+  background: var(--hyper-bg);
+  color: var(--hyper-text);
+}
+
+.hyper-display {
+  font-family: var(--hyper-font-display);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+}
+
+.hyper-h1 {
+  font-family: var(--hyper-font-display);
+  font-size: 32px;
+  line-height: 1.15;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.hyper-h2 {
+  font-family: var(--hyper-font-display);
+  font-size: 28px;
+  line-height: 1.2;
+  font-weight: 600;
+}
+
+.hyper-h3 {
+  font-family: var(--hyper-font-display);
+  font-size: 22px;
+  line-height: 1.28;
+  font-weight: 600;
+}
+
+.hyper-body {
+  font-size: 14px;
+  line-height: 1.6;
+  font-weight: 400;
+}
+
+.hyper-caption {
+  font-size: 12px;
+  line-height: 1.4;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+.hyper-overline {
+  font-size: 11px;
+  line-height: 1.2;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.hyper-data {
+  font-family: var(--hyper-font-display);
+  font-size: 32px;
+  line-height: 1;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+
+.hyper-card {
+  background: var(--hyper-surface);
+  border: 1px solid var(--hyper-border);
+  border-radius: var(--hyper-radius-lg);
+  backdrop-filter: var(--hyper-backdrop);
+  box-shadow: var(--hyper-shadow-card);
+}
+
+.hyper-card-glow {
+  border-color: rgba(123, 63, 242, 0.45);
+  box-shadow: var(--hyper-shadow-card), var(--hyper-shadow-glow);
+}
+
+.hyper-pill {
+  border-radius: var(--hyper-radius-full);
+  border: 1px solid var(--hyper-border);
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(12px);
+}
+
+.hyper-gradient-text {
+  background: linear-gradient(180deg, #f5f3ff 0%, #d4daf5 48%, #b794ff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.hyper-primary-btn {
+  border-radius: var(--hyper-radius-full);
+  background: linear-gradient(180deg, #8c5bff 0%, #7b3ff2 100%);
+  color: white;
+  border: 1px solid rgba(212, 218, 245, 0.18);
+  box-shadow: 0 0 18px rgba(123, 63, 242, 0.45);
+}
+
+.hyper-secondary-btn {
+  border-radius: var(--hyper-radius-full);
+  border: 1px solid rgba(212, 218, 245, 0.22);
+  color: var(--hyper-text);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.hyper-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.hyper-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(123, 63, 242, 0.45);
+  border-radius: 9999px;
+}
+
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.3.1/dist/index.global.js"></script>
+    <script src="https://unpkg.com/lucide@1.8.0/dist/umd/lucide.min.js"></script>
+    <style type="text/tailwindcss">
+  @theme inline {
+    --color-border: var(--hyper-border);
+  }
+  @layer base {
+    body { background: var(--hyper-surface); color: var(--hyper-foreground); }
+    td, th { @apply break-words; word-break: break-all; word-break: auto-phrase; }
+    th { @apply whitespace-nowrap; }
+  }
+    </style>
+    <style>
+      .no-scrollbar::-webkit-scrollbar { display: none; }
+      .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+      [data-icon] {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        -webkit-mask-size: contain;
+        mask-size: contain;
+        -webkit-mask-repeat: no-repeat;
+        mask-repeat: no-repeat;
+        -webkit-mask-position: center;
+        mask-position: center;
+        background-color: currentColor;
+      }
+    </style>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="side-nav" aria-label="Primary navigation">
+      <section class="brand-card">
+        <div style="display:flex;align-items:center;gap:14px;">
+          <div class="brand-mark" aria-hidden="true">
+            <div class="brand-mark-grid">
+              <span></span><span></span><span></span><span></span>
+            </div>
+          </div>
+          <div>
+            <p class="eyebrow">Hyperscaler</p>
+            <h2 class="brand-title">Asset Hub</h2>
+          </div>
+        </div>
+        <p class="brand-subtitle">Desktop ROI workspace for scenario sizing, assumption testing, and executive-ready business justification.</p>
+      </section>
+
+      <section class="nav-section">
+        <p class="eyebrow">Workspace</p>
+        <ul class="nav-list">
+          <li><a class="nav-link" href="#"><i data-lucide="layout-dashboard"></i><span>Dashboard</span></a></li>
+          <li><a class="nav-link" href="#"><i data-lucide="library-big"></i><span>Asset Library</span></a></li>
+          <li><a class="nav-link active" href="#"><i data-lucide="calculator"></i><span>ROI Calculator</span></a></li>
+          <li><a class="nav-link" href="#"><i data-lucide="panel-right-open"></i><span>Admin Assets</span></a></li>
+        </ul>
+      </section>
+
+      <section class="nav-section">
+        <p class="eyebrow">Analysis mode</p>
+        <ul class="nav-list">
+          <li><a class="nav-link active" href="#"><i data-lucide="sliders-horizontal"></i><span>Scenario Inputs</span></a></li>
+          <li><a class="nav-link" href="#"><i data-lucide="bar-chart-3"></i><span>Value Summary</span></a></li>
+          <li><a class="nav-link" href="#"><i data-lucide="file-text"></i><span>Business Case</span></a></li>
+        </ul>
+      </section>
+
+      <section class="nav-footer">
+        <p class="eyebrow">Current scenario</p>
+        <strong>Fraud Detection &amp; Prevention</strong>
+        <p>Left side focuses on parameters and assumptions; right side holds results, charts, and business gains for faster review.</p>
+      </section>
+    </aside>
+
+    <main class="workspace">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button id="back-detail" data-dom-id="back-detail" class="icon-button" type="button" aria-label="返回资产详情">
+            <i data-lucide="chevron-left"></i>
+          </button>
+          <div>
+            <p class="eyebrow">Asset Detail / ROI</p>
+            <strong style="display:block;font-size:16px;">Interactive ROI Calculator</strong>
+          </div>
+        </div>
+        <div class="topbar-right">
+          <button class="ghost-button search-chip" type="button">
+            <i data-lucide="search"></i>
+            <span>Search assumptions, benchmarks, scenarios</span>
+            <span>/</span>
+          </button>
+          <button class="icon-button" type="button" aria-label="Version history">
+            <i data-lucide="history"></i>
+          </button>
+          <button class="icon-button" type="button" aria-label="Share analysis">
+            <i data-lucide="share-2"></i>
+          </button>
+        </div>
+      </header>
+
+      <div class="content">
+        <section class="page-heading">
+          <div>
+            <p class="eyebrow">AI scenario</p>
+            <h1>Fraud Detection &amp; Prevention</h1>
+            <p>基于原有移动端业务流重构为桌面分析工具：左侧集中输入交易规模、欺诈率与效率参数，右侧持续展示 ROI 结果、对比图与收益摘要，形成更成熟的分析与决策节奏。</p>
+          </div>
+          <div class="status-cluster">
+            <span class="pill">Analysis tool</span>
+            <span class="pill">Enterprise desktop</span>
+            <span class="pill live"><span class="dot"></span>Live model</span>
+          </div>
+        </section>
+
+        <section class="hero-card">
+          <div class="hero-grid">
+            <div class="hero-copy">
+              <p class="eyebrow">Scenario framing</p>
+              <h2>Estimate AI impact before stakeholder review.</h2>
+              <p>Use the calculator to compare current loss exposure against an AI-assisted operating model. The desktop layout keeps assumptions, scenario selection, and quantified benefit visible at the same time.</p>
+            </div>
+            <div class="hero-kpis">
+              <div class="hero-kpi">
+                <span>Base fraud reduction</span>
+                <strong id="hero-reduction" class="mono">50%</strong>
+              </div>
+              <div class="hero-kpi">
+                <span>Potential savings</span>
+                <strong id="hero-savings" class="mono">$720K</strong>
+              </div>
+              <div class="hero-kpi">
+                <span>Payback period</span>
+                <strong id="hero-payback" class="mono">4.2 mo</strong>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="tool-layout">
+          <div class="tool-stack">
+            <article class="tool-card">
+              <div class="section-head">
+                <div>
+                  <p class="eyebrow">Scenario presets</p>
+                  <h3>Choose the operating context</h3>
+                  <p>保持原有业务氛围，但将选择动作提升为桌面级分析起点。</p>
+                </div>
+                <span class="pill">Preset</span>
+              </div>
+              <div class="scenario-row">
+                <button class="scenario-chip active" type="button"><i data-lucide="shield-alert"></i><span>Fraud detection</span></button>
+                <button class="scenario-chip" type="button"><i data-lucide="banknote-arrow-up"></i><span>Claims review</span></button>
+                <button class="scenario-chip" type="button"><i data-lucide="shield-check"></i><span>Risk screening</span></button>
+              </div>
+            </article>
+
+            <article class="tool-card">
+              <div class="section-head">
+                <div>
+                  <p class="eyebrow">Parameters</p>
+                  <h3>Business inputs</h3>
+                  <p>左侧用双栏字段组织参数，强化输入与结果之间的桌面对照关系。</p>
+                </div>
+                <span class="pill">Inputs</span>
+              </div>
+
+              <div class="input-grid">
+                <section class="field">
+                  <div class="field-top">
+                    <div>
+                      <strong>Annual Transaction Volume</strong>
+                      <span>Transactions processed per year</span>
+                    </div>
+                    <output id="volume-value" class="value-pill mono">$144M</output>
+                  </div>
+                  <input class="range" id="annual-volume" type="range" min="1" max="144" value="144" data-kind="moneyM" data-target="volume-value">
+                  <div class="range-labels"><span>$1M</span><span>$144M</span></div>
+                </section>
+
+                <section class="field">
+                  <div class="field-top">
+                    <div>
+                      <strong>Current Fraud Rate</strong>
+                      <span>Loss rate before AI controls</span>
+                    </div>
+                    <output id="fraud-value" class="value-pill mono">1%</output>
+                  </div>
+                  <input class="range" id="fraud-rate" type="range" min="0.1" max="1.5" step="0.1" value="1" data-kind="percent" data-target="fraud-value">
+                  <div class="range-labels"><span>0.1%</span><span>1.5%</span></div>
+                </section>
+
+                <section class="field">
+                  <div class="field-top">
+                    <div>
+                      <strong>Average Transaction Value</strong>
+                      <span>Average value per decision</span>
+                    </div>
+                    <output id="transaction-value" class="value-pill mono">$1000</output>
+                  </div>
+                  <input class="range" id="transaction-value-range" type="range" min="10" max="1000" step="10" value="1000" data-kind="currency" data-target="transaction-value">
+                  <div class="range-labels"><span>$10</span><span>$1000</span></div>
+                </section>
+
+                <section class="field">
+                  <div class="field-top">
+                    <div>
+                      <strong>Manual Review Cost</strong>
+                      <span>Current per-case operating overhead</span>
+                    </div>
+                    <output id="review-cost-value" class="value-pill mono">$38</output>
+                  </div>
+                  <input class="range" id="review-cost" type="range" min="10" max="80" step="1" value="38" data-kind="currency" data-target="review-cost-value">
+                  <div class="range-labels"><span>$10</span><span>$80</span></div>
+                </section>
+
+                <section class="field full">
+                  <div class="field-top">
+                    <div>
+                      <strong>AI Reduction Effectiveness</strong>
+                      <span>Expected fraud reduction after deploying AI</span>
+                    </div>
+                    <output id="reduction-value" class="value-pill mono">50%</output>
+                  </div>
+                  <input class="range" id="reduction-rate" type="range" min="20" max="75" step="1" value="50" data-kind="percentWhole" data-target="reduction-value">
+                  <div class="range-labels"><span>20%</span><span>75%</span></div>
+                </section>
+              </div>
+            </article>
+
+            <article class="tool-card">
+              <div class="section-head">
+                <div>
+                  <p class="eyebrow">Business assumptions</p>
+                  <h3>Context for the executive summary</h3>
+                  <p>将原本堆叠的说明拆成并列假设卡，便于桌面快速扫描。</p>
+                </div>
+                <span class="pill">Assumptions</span>
+              </div>
+              <div class="assumption-grid">
+                <div class="assumption-card">
+                  <span>Adoption</span>
+                  <strong>12 weeks</strong>
+                  <p>Assumes phased rollout across analysts, operations, and risk stakeholders.</p>
+                </div>
+                <div class="assumption-card">
+                  <span>Operating shift</span>
+                  <strong>Hybrid review</strong>
+                  <p>AI triages risk while operators validate priority exceptions and escalations.</p>
+                </div>
+                <div class="assumption-card">
+                  <span>Commercial model</span>
+                  <strong>$180K / year</strong>
+                  <p>Used as the reference subscription and enablement cost for payback calculation.</p>
+                </div>
+              </div>
+            </article>
+          </div>
+
+          <aside class="result-column">
+            <section class="result-panel">
+              <div class="section-head">
+                <div>
+                  <p class="eyebrow">Results</p>
+                  <h3>Estimated impact</h3>
+                  <p>右栏持续承载核心指标、图表与业务收益摘要，突出“分析工具”质感。</p>
+                </div>
+                <span class="pill live"><span class="dot"></span>Updated</span>
+              </div>
+
+              <div class="result-grid">
+                <div class="metric-box">
+                  <span>Current loss</span>
+                  <strong id="current-loss" class="mono">$1.44M</strong>
+                  <p>Annual estimated fraud exposure before AI support.</p>
+                </div>
+                <div class="metric-box">
+                  <span>With AI</span>
+                  <strong id="with-ai-loss" class="mono">$720K</strong>
+                  <p>Residual loss after applying AI reduction effectiveness.</p>
+                </div>
+                <div class="metric-box">
+                  <span>Annual savings</span>
+                  <strong id="annual-savings" class="mono">$720K</strong>
+                  <p>Business value combining loss reduction and review efficiency.</p>
+                </div>
+                <div class="metric-box">
+                  <span>Payback period</span>
+                  <strong id="payback-period" class="mono">4.2 mo</strong>
+                  <p>Time required to recover the assumed yearly investment.</p>
+                </div>
+              </div>
+
+              <div class="comparison-card" style="margin-top:18px;">
+                <div class="comparison-head">
+                  <span>Current exposure</span>
+                  <span id="current-bar-label" class="mono">$1.44M</span>
+                </div>
+                <div class="comparison-row">
+                  <div class="bar-track">
+                    <span class="bar-fill current" id="current-bar"></span>
+                  </div>
+                </div>
+                <div class="comparison-head" style="margin-top:16px;">
+                  <span>AI-assisted exposure</span>
+                  <span id="ai-bar-label" class="mono">$720K</span>
+                </div>
+                <div class="comparison-row">
+                  <div class="bar-track">
+                    <span class="bar-fill ai" id="ai-bar"></span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="cta-row">
+                <button id="open-admin-assets" data-dom-id="open-admin-assets" class="cta-primary" type="button">
+                  <span>资产管理</span>
+                  <i data-lucide="arrow-right"></i>
+                </button>
+                <button class="cta-secondary" type="button">
+                  <i data-lucide="file-down"></i>
+                  <span>导出摘要</span>
+                </button>
+              </div>
+            </section>
+
+            <section class="result-card">
+              <div class="section-head">
+                <div>
+                  <p class="eyebrow">Business gains</p>
+                  <h3>Why this matters</h3>
+                </div>
+                <span class="pill">Summary</span>
+              </div>
+              <ul class="summary-list">
+                <li>
+                  <span class="bullet"><i data-lucide="trending-up"></i></span>
+                  <div>
+                    <strong>Higher savings confidence</strong>
+                    <span>Result panel keeps quantified value and narrative notes in one desktop rail.</span>
+                  </div>
+                </li>
+                <li>
+                  <span class="bullet"><i data-lucide="clock-3"></i></span>
+                  <div>
+                    <strong>Faster review rhythm</strong>
+                    <span>Assumptions remain visible while adjusting sliders, reducing back-and-forth scanning.</span>
+                  </div>
+                </li>
+                <li>
+                  <span class="bullet"><i data-lucide="building-2"></i></span>
+                  <div>
+                    <strong>Enterprise-ready presentation</strong>
+                    <span>Desktop shell, side navigation, top toolbar, and sticky results make the page feel like a mature AI platform tool.</span>
+                  </div>
+                </li>
+              </ul>
+            </section>
+          </aside>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    (function () {
+      const formatCurrency = function (value) {
+        const abs = Math.abs(value);
+        if (abs >= 1000000) return '$' + (value / 1000000).toFixed(2).replace(/\.00$/, '') + 'M';
+        if (abs >= 1000) return '$' + Math.round(value / 1000) + 'K';
+        return '$' + Math.round(value);
+      };
+
+      const formatters = {
+        moneyM(value) {
+          return '$' + Math.round(value) + 'M';
+        },
+        percent(value) {
+          return Number(value).toFixed(1).replace('.0', '') + '%';
+        },
+        percentWhole(value) {
+          return Math.round(value) + '%';
+        },
+        currency(value) {
+          return '$' + Math.round(value);
+        }
+      };
+
+      const sliderInputs = Array.from(document.querySelectorAll('.range'));
+
+      const outputs = {
+        currentLoss: document.getElementById('current-loss'),
+        withAiLoss: document.getElementById('with-ai-loss'),
+        annualSavings: document.getElementById('annual-savings'),
+        paybackPeriod: document.getElementById('payback-period'),
+        currentBar: document.getElementById('current-bar'),
+        aiBar: document.getElementById('ai-bar'),
+        currentBarLabel: document.getElementById('current-bar-label'),
+        aiBarLabel: document.getElementById('ai-bar-label'),
+        heroSavings: document.getElementById('hero-savings'),
+        heroReduction: document.getElementById('hero-reduction'),
+        heroPayback: document.getElementById('hero-payback')
+      };
+
+      const syncSlider = function (input) {
+        const min = Number(input.min);
+        const max = Number(input.max);
+        const value = Number(input.value);
+        const progress = ((value - min) / (max - min)) * 100;
+        input.style.setProperty('--progress', progress + '%');
+        const target = document.getElementById(input.dataset.target);
+        const kind = input.dataset.kind;
+        if (target && formatters[kind]) {
+          target.textContent = formatters[kind](value);
+        }
+      };
+
+      const recalc = function () {
+        const annualVolumeM = Number(document.getElementById('annual-volume').value);
+        const fraudRate = Number(document.getElementById('fraud-rate').value) / 100;
+        const avgValue = Number(document.getElementById('transaction-value-range').value);
+        const reviewCost = Number(document.getElementById('review-cost').value);
+        const reductionRate = Number(document.getElementById('reduction-rate').value) / 100;
+
+        const transactionCount = (annualVolumeM * 1000000) / avgValue;
+        const fraudVolume = annualVolumeM * 1000000 * fraudRate;
+        const currentReviewCost = transactionCount * fraudRate * reviewCost;
+        const aiLoss = fraudVolume * (1 - reductionRate);
+        const aiReviewCost = currentReviewCost * 0.58;
+        const currentLossTotal = fraudVolume + currentReviewCost;
+        const aiLossTotal = aiLoss + aiReviewCost;
+        const annualSavings = Math.max(currentLossTotal - aiLossTotal, 0);
+        const paybackMonths = annualSavings > 0 ? (180000 / annualSavings) * 12 : 0;
+
+        outputs.currentLoss.textContent = formatCurrency(currentLossTotal);
+        outputs.withAiLoss.textContent = formatCurrency(aiLossTotal);
+        outputs.annualSavings.textContent = formatCurrency(annualSavings);
+        outputs.paybackPeriod.textContent = (paybackMonths ? paybackMonths.toFixed(1) : '0.0') + ' mo';
+
+        outputs.currentBarLabel.textContent = formatCurrency(currentLossTotal);
+        outputs.aiBarLabel.textContent = formatCurrency(aiLossTotal);
+        outputs.currentBar.style.width = '100%';
+        outputs.aiBar.style.width = Math.max((aiLossTotal / currentLossTotal) * 100, 6) + '%';
+
+        outputs.heroSavings.textContent = formatCurrency(annualSavings);
+        outputs.heroReduction.textContent = Math.round(reductionRate * 100) + '%';
+        outputs.heroPayback.textContent = (paybackMonths ? paybackMonths.toFixed(1) : '0.0') + ' mo';
+      };
+
+      sliderInputs.forEach(function (input) {
+        syncSlider(input);
+        input.addEventListener('input', function () {
+          syncSlider(input);
+          recalc();
+        });
+      });
+
+      recalc();
+      lucide.createIcons();
+    })();
+  </script>
+
+    <style>
+    :root {
+      --hyper-bg: #080910;
+      --hyper-panel: rgba(15, 18, 32, 0.78);
+      --hyper-panel-strong: rgba(18, 22, 38, 0.92);
+      --hyper-panel-soft: rgba(255, 255, 255, 0.04);
+      --hyper-border: rgba(212, 218, 245, 0.12);
+      --hyper-border-strong: rgba(123, 63, 242, 0.54);
+      --hyper-text: #f4f5fb;
+      --hyper-text-secondary: #98a0bf;
+      --hyper-text-tertiary: #66708f;
+      --hyper-purple: #7B3FF2;
+      --hyper-magenta: #C026D3;
+      --hyper-periwinkle: #d9dcff;
+      --hyper-success: #10b981;
+      --hyper-warning: #ff9d2e;
+      --hyper-radius-lg: 24px;
+      --hyper-radius-xl: 32px;
+      --hyper-radius-pill: 999px;
+      --hyper-shadow-card: 0 24px 80px rgba(3, 5, 16, 0.44);
+      --hyper-shadow-glow: 0 0 40px rgba(123, 63, 242, 0.24);
+      --page-bg:
+        radial-gradient(circle at 14% 10%, rgba(123, 63, 242, 0.18), transparent 24%),
+        radial-gradient(circle at 84% 12%, rgba(28, 30, 64, 0.58), transparent 30%),
+        radial-gradient(circle at 82% 88%, rgba(192, 38, 211, 0.12), transparent 24%),
+        linear-gradient(180deg, #07080d 0%, #09101c 48%, #07080d 100%);
+      --nav-width: 272px;
+      --shell-width: 1480px;
+      --result-width: 420px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      background: var(--hyper-bg);
+      color: var(--hyper-text);
+      font-family: "Inter", "Graphik", "PingFang SC", "Microsoft YaHei", sans-serif;
+    }
+
+    body {
+      background: var(--page-bg);
+      letter-spacing: -0.01em;
+    }
+
+    button, input, select {
+      font: inherit;
+      color: inherit;
+    }
+
+    .app-shell {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: var(--nav-width) minmax(0, 1fr);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0)),
+        rgba(8, 9, 16, 0.78);
+    }
+
+    .side-nav {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      padding: 24px;
+      border-right: 1px solid rgba(255, 255, 255, 0.06);
+      background:
+        linear-gradient(180deg, rgba(123, 63, 242, 0.08), rgba(123, 63, 242, 0)),
+        rgba(7, 8, 15, 0.82);
+      backdrop-filter: blur(20px);
+    }
+
+    .card,
+    .brand-card,
+    .nav-section,
+    .topbar,
+    .hero-card,
+    .tool-card,
+    .result-panel,
+    .result-card {
+      background: var(--hyper-panel);
+      border: 1px solid var(--hyper-border);
+      border-radius: var(--hyper-radius-lg);
+      box-shadow: var(--hyper-shadow-card);
+      backdrop-filter: blur(24px) saturate(160%);
+    }
+
+    .brand-card {
+      padding: 18px;
+      margin-bottom: 18px;
+    }
+
+    .brand-mark {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(180deg, rgba(123,63,242,0.32), rgba(123,63,242,0.08));
+      border: 1px solid rgba(123, 63, 242, 0.36);
+      box-shadow: 0 0 24px rgba(123, 63, 242, 0.24);
+    }
+
+    .brand-mark-grid {
+      width: 18px;
+      height: 18px;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 3px;
+    }
+
+    .brand-mark-grid span {
+      border-radius: 4px;
+      background: var(--hyper-periwinkle);
+    }
+
+    .brand-mark-grid span:nth-child(2),
+    .brand-mark-grid span:nth-child(4) {
+      background: var(--hyper-purple);
+    }
+
+    .brand-mark-grid span:nth-child(3) {
+      background: var(--hyper-magenta);
+    }
+
+    .eyebrow {
+      margin: 0 0 6px;
+      font-size: 11px;
+      line-height: 1;
+      text-transform: uppercase;
+      letter-spacing: 0.22em;
+      color: var(--hyper-text-tertiary);
+    }
+
+    .brand-title {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 650;
+      letter-spacing: -0.03em;
+    }
+
+    .brand-subtitle {
+      margin: 8px 0 0;
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--hyper-text-secondary);
+    }
+
+    .nav-section {
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+
+    .nav-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 8px;
+    }
+
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 14px;
+      border-radius: 18px;
+      color: var(--hyper-text-secondary);
+      border: 1px solid transparent;
+      transition: transform 160ms ease, border-color 160ms ease, background 160ms ease, color 160ms ease;
+      text-decoration: none;
+    }
+
+    .nav-link.active,
+    .nav-link:hover {
+      color: var(--hyper-text);
+      border-color: rgba(123, 63, 242, 0.34);
+      background: rgba(123, 63, 242, 0.10);
+      box-shadow: inset 0 0 0 1px rgba(123, 63, 242, 0.08), 0 0 18px rgba(123, 63, 242, 0.12);
+      transform: translateX(2px);
+    }
+
+    .nav-footer {
+      padding: 18px;
+      border-radius: 22px;
+      background:
+        linear-gradient(180deg, rgba(123,63,242,0.16), rgba(123,63,242,0.06)),
+        rgba(18, 22, 38, 0.82);
+      border: 1px solid rgba(123, 63, 242, 0.28);
+    }
+
+    .nav-footer strong {
+      display: block;
+      margin-top: 10px;
+      font-size: 14px;
+    }
+
+    .nav-footer p {
+      margin: 6px 0 0;
+      color: var(--hyper-text-secondary);
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .workspace {
+      min-width: 0;
+      padding: 24px;
+    }
+
+    .topbar {
+      max-width: var(--shell-width);
+      margin: 0 auto 24px;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      background: rgba(10, 12, 22, 0.72);
+    }
+
+    .topbar-left,
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .icon-button,
+    .ghost-button,
+    .scenario-chip,
+    .cta-secondary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 44px;
+      border-radius: var(--hyper-radius-pill);
+      border: 1px solid var(--hyper-border);
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--hyper-text-secondary);
+      padding: 0 16px;
+      transition: transform 160ms ease, border-color 160ms ease, background 160ms ease, color 160ms ease, box-shadow 160ms ease;
+    }
+
+    .icon-button {
+      width: 44px;
+      padding: 0;
+    }
+
+    .icon-button:hover,
+    .ghost-button:hover,
+    .scenario-chip:hover,
+    .cta-secondary:hover,
+    .icon-button:focus-visible,
+    .ghost-button:focus-visible,
+    .scenario-chip:focus-visible,
+    .cta-secondary:focus-visible {
+      outline: none;
+      transform: translateY(-1px);
+      color: var(--hyper-text);
+      border-color: rgba(123, 63, 242, 0.42);
+      background: rgba(123, 63, 242, 0.10);
+      box-shadow: 0 0 20px rgba(123, 63, 242, 0.12);
+    }
+
+    .search-chip {
+      min-width: 300px;
+      justify-content: flex-start;
+    }
+
+    .search-chip span:last-child {
+      margin-left: auto;
+      color: var(--hyper-text-tertiary);
+      font-size: 12px;
+    }
+
+    .content {
+      max-width: var(--shell-width);
+      margin: 0 auto;
+      display: grid;
+      gap: 24px;
+    }
+
+    .page-heading {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 20px;
+    }
+
+    .page-heading h1 {
+      margin: 0;
+      font-size: clamp(34px, 3vw, 48px);
+      line-height: 1.02;
+      letter-spacing: -0.05em;
+    }
+
+    .page-heading p {
+      margin: 12px 0 0;
+      max-width: 860px;
+      color: var(--hyper-text-secondary);
+      font-size: 16px;
+      line-height: 1.75;
+    }
+
+    .status-cluster {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      border-radius: var(--hyper-radius-pill);
+      border: 1px solid var(--hyper-border);
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--hyper-text-secondary);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .pill.live {
+      border-color: rgba(16, 185, 129, 0.24);
+      color: #cffbe8;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: currentColor;
+      box-shadow: 0 0 14px currentColor;
+    }
+
+    .tool-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) var(--result-width);
+      gap: 24px;
+      align-items: start;
+    }
+
+    .hero-card {
+      padding: 24px;
+      background:
+        radial-gradient(circle at 82% 20%, rgba(123, 63, 242, 0.20), transparent 26%),
+        linear-gradient(180deg, rgba(123, 63, 242, 0.10), rgba(123, 63, 242, 0.04)),
+        rgba(15, 18, 32, 0.78);
+      border-color: rgba(123, 63, 242, 0.30);
+      box-shadow: var(--hyper-shadow-card), var(--hyper-shadow-glow);
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 280px;
+      gap: 18px;
+      align-items: start;
+    }
+
+    .hero-copy h2 {
+      margin: 0;
+      font-size: clamp(34px, 3.8vw, 54px);
+      line-height: 0.98;
+      letter-spacing: -0.06em;
+      max-width: 11ch;
+    }
+
+    .hero-copy p {
+      margin: 14px 0 0;
+      color: var(--hyper-text-secondary);
+      font-size: 15px;
+      line-height: 1.8;
+      max-width: 760px;
+    }
+
+    .hero-kpis {
+      display: grid;
+      gap: 12px;
+    }
+
+    .hero-kpi {
+      padding: 16px 18px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .hero-kpi span {
+      display: block;
+      color: var(--hyper-text-tertiary);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+    }
+
+    .hero-kpi strong {
+      display: block;
+      margin-top: 10px;
+      font-size: 30px;
+      line-height: 0.96;
+      letter-spacing: -0.05em;
+    }
+
+    .tool-stack {
+      display: grid;
+      gap: 24px;
+    }
+
+    .tool-card,
+    .result-panel,
+    .result-card {
+      padding: 22px;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .section-head h3 {
+      margin: 0;
+      font-size: 21px;
+      letter-spacing: -0.03em;
+    }
+
+    .section-head p {
+      margin: 10px 0 0;
+      color: var(--hyper-text-secondary);
+      font-size: 14px;
+      line-height: 1.72;
+    }
+
+    .scenario-row,
+    .input-grid,
+    .assumption-grid,
+    .result-grid {
+      display: grid;
+      gap: 12px;
+    }
+
+    .scenario-row {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .scenario-chip {
+      justify-content: flex-start;
+      min-height: 52px;
+      border-radius: 18px;
+      padding: 0 16px;
+    }
+
+    .scenario-chip.active {
+      color: var(--hyper-text);
+      border-color: rgba(123, 63, 242, 0.46);
+      background: rgba(123, 63, 242, 0.12);
+      box-shadow: inset 0 0 0 1px rgba(123, 63, 242, 0.10), 0 0 24px rgba(123, 63, 242, 0.14);
+    }
+
+    .input-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .field {
+      padding: 18px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .field.full {
+      grid-column: 1 / -1;
+    }
+
+    .field-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .field-top strong {
+      display: block;
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .field-top span {
+      display: block;
+      margin-top: 6px;
+      color: var(--hyper-text-secondary);
+      font-size: 13px;
+    }
+
+    .value-pill {
+      min-width: 92px;
+      min-height: 36px;
+      padding: 0 14px;
+      border-radius: var(--hyper-radius-pill);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(123, 63, 242, 0.30);
+      background: rgba(123, 63, 242, 0.10);
+      color: var(--hyper-periwinkle);
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .range {
+      --progress: 50%;
+      width: 100%;
+      height: 6px;
+      appearance: none;
+      border-radius: 999px;
+      outline: none;
+      background:
+        linear-gradient(
+          90deg,
+          var(--hyper-purple) 0,
+          var(--hyper-purple) var(--progress),
+          rgba(103, 112, 143, 0.38) var(--progress),
+          rgba(103, 112, 143, 0.38) 100%
+        );
+    }
+
+    .range::-webkit-slider-thumb {
+      appearance: none;
+      width: 22px;
+      height: 22px;
+      border-radius: 999px;
+      border: 1px solid rgba(217,220,255,0.28);
+      background:
+        radial-gradient(circle at 35% 35%, rgba(255,255,255,0.84) 0 18%, transparent 19%),
+        linear-gradient(180deg, rgba(192,38,211,0.62), rgba(123,63,242,1));
+      box-shadow: 0 0 20px rgba(123, 63, 242, 0.36);
+      cursor: pointer;
+    }
+
+    .range::-moz-range-thumb {
+      width: 22px;
+      height: 22px;
+      border-radius: 999px;
+      border: 1px solid rgba(217,220,255,0.28);
+      background: linear-gradient(180deg, rgba(192,38,211,0.62), rgba(123,63,242,1));
+      box-shadow: 0 0 20px rgba(123, 63, 242, 0.36);
+      cursor: pointer;
+    }
+
+    .range:focus-visible {
+      outline: 2px solid var(--hyper-purple);
+      outline-offset: 8px;
+    }
+
+    .range-labels {
+      margin-top: 12px;
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      color: var(--hyper-text-secondary);
+      font-size: 12px;
+    }
+
+    .assumption-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .assumption-card {
+      padding: 16px;
+      border-radius: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .assumption-card span {
+      display: block;
+      color: var(--hyper-text-tertiary);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+    }
+
+    .assumption-card strong {
+      display: block;
+      margin: 10px 0 6px;
+      font-size: 18px;
+      letter-spacing: -0.03em;
+    }
+
+    .assumption-card p {
+      margin: 0;
+      color: var(--hyper-text-secondary);
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    .result-column {
+      position: sticky;
+      top: 24px;
+      display: grid;
+      gap: 18px;
+    }
+
+    .result-panel {
+      border-color: rgba(123, 63, 242, 0.40);
+      box-shadow: var(--hyper-shadow-card), var(--hyper-shadow-glow);
+      background:
+        linear-gradient(180deg, rgba(123,63,242,0.14), rgba(123,63,242,0.04)),
+        rgba(15, 18, 32, 0.78);
+    }
+
+    .result-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .metric-box {
+      padding: 16px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .metric-box span {
+      display: block;
+      color: var(--hyper-text-tertiary);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+    }
+
+    .metric-box strong {
+      display: block;
+      margin-top: 10px;
+      font-size: 30px;
+      line-height: 0.95;
+      letter-spacing: -0.05em;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .metric-box p {
+      margin: 10px 0 0;
+      color: var(--hyper-text-secondary);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .comparison-card {
+      padding: 18px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .comparison-row {
+      display: grid;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .comparison-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      color: var(--hyper-text-secondary);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+
+    .bar-track {
+      position: relative;
+      height: 12px;
+      border-radius: 999px;
+      overflow: hidden;
+      background: rgba(103, 112, 143, 0.28);
+    }
+
+    .bar-fill {
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: 50%;
+      border-radius: inherit;
+    }
+
+    .bar-fill.current {
+      background: linear-gradient(90deg, rgba(192,38,211,0.72), rgba(123,63,242,0.92));
+    }
+
+    .bar-fill.ai {
+      background: linear-gradient(90deg, rgba(217,220,255,0.88), rgba(123,63,242,0.92));
+    }
+
+    .summary-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 12px;
+    }
+
+    .summary-list li {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 12px;
+      align-items: start;
+      padding: 14px 0;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .summary-list li:first-child {
+      border-top: none;
+      padding-top: 0;
+    }
+
+    .bullet {
+      width: 28px;
+      height: 28px;
+      border-radius: 999px;
+      display: grid;
+      place-items: center;
+      color: var(--hyper-periwinkle);
+      background: rgba(123, 63, 242, 0.14);
+      border: 1px solid rgba(123, 63, 242, 0.30);
+    }
+
+    .summary-list strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 15px;
+    }
+
+    .summary-list span {
+      color: var(--hyper-text-secondary);
+      font-size: 14px;
+      line-height: 1.72;
+    }
+
+    .cta-primary {
+      width: 100%;
+      min-height: 54px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      border-radius: var(--hyper-radius-pill);
+      border: 1px solid rgba(212, 218, 245, 0.18);
+      background: linear-gradient(180deg, #8d61ff 0%, var(--hyper-purple) 100%);
+      color: white;
+      box-shadow: 0 0 24px rgba(123, 63, 242, 0.34);
+      transition: transform 160ms ease, box-shadow 160ms ease, filter 160ms ease;
+    }
+
+    .cta-primary:hover,
+    .cta-primary:focus-visible {
+      outline: none;
+      transform: translateY(-1px);
+      filter: brightness(1.04);
+      box-shadow: 0 0 32px rgba(123, 63, 242, 0.42);
+    }
+
+    .cta-row {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .mono {
+      font-variant-numeric: tabular-nums;
+      font-feature-settings: "tnum" 1;
+    }
+
+    @media (max-width: 1180px) {
+      .tool-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .result-column {
+        position: static;
+      }
+    }
+
+    @media (max-width: 980px) {
+      .app-shell {
+        grid-template-columns: 1fr;
+      }
+
+      .side-nav {
+        position: static;
+        height: auto;
+        border-right: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      }
+    }
+
+    @media (max-width: 760px) {
+      .workspace,
+      .side-nav {
+        padding: 16px;
+      }
+
+      .topbar,
+      .page-heading,
+      .hero-grid {
+        flex-direction: column;
+        grid-template-columns: 1fr;
+      }
+
+      .topbar {
+        align-items: stretch;
+      }
+
+      .topbar-right {
+        width: 100%;
+      }
+
+      .search-chip {
+        min-width: 0;
+        width: 100%;
+      }
+
+      .scenario-row,
+      .input-grid,
+      .assumption-grid,
+      .result-grid,
+      .cta-row {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</body>
+</html>

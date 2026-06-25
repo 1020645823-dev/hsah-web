@@ -1,0 +1,156 @@
+{
+  "root": {
+    "nodeId": "gen-project-shell",
+    "kind": "project-shell",
+    "pageIds": [
+      "page-home",
+      "page-asset-library",
+      "page-asset-detail",
+      "page-roi-calculator",
+      "page-admin-asset-management",
+      "page-admin-permissions"
+    ],
+    "output": "partials/project-shell.html",
+    "sharedRegions": [
+      "mobile app frame",
+      "global header",
+      "background glow system",
+      "spacing rhythm",
+      "primary CTA treatment"
+    ],
+    "privateRegions": [],
+    "mutableSlots": [
+      "pageTitle",
+      "activeNavItem"
+    ],
+    "status": "generated",
+    "children": [
+      {
+        "nodeId": "gen-page-home",
+        "kind": "page-leaf",
+        "pageIds": [
+          "page-home"
+        ],
+        "output": "pages/home.html",
+        "sharedRegions": [],
+        "privateRegions": [
+          "hero",
+          "stats cards",
+          "feature list",
+          "bottom navigation"
+        ],
+        "mutableSlots": [
+          "pageTitle",
+          "activeNavItem"
+        ],
+        "status": "generated",
+        "children": []
+      },
+      {
+        "nodeId": "gen-page-asset-library",
+        "kind": "page-leaf",
+        "pageIds": [
+          "page-asset-library"
+        ],
+        "output": "pages/asset-library.html",
+        "sharedRegions": [],
+        "privateRegions": [
+          "filter toolbar",
+          "filter chips",
+          "asset cards",
+          "view toggle"
+        ],
+        "mutableSlots": [
+          "pageTitle",
+          "activeNavItem"
+        ],
+        "status": "generated",
+        "children": []
+      },
+      {
+        "nodeId": "gen-page-asset-detail",
+        "kind": "page-leaf",
+        "pageIds": [
+          "page-asset-detail"
+        ],
+        "output": "pages/asset-detail.html",
+        "sharedRegions": [],
+        "privateRegions": [
+          "video hero",
+          "quick info",
+          "tab strip",
+          "overview panel",
+          "value metrics"
+        ],
+        "mutableSlots": [
+          "pageTitle",
+          "activeNavItem"
+        ],
+        "status": "generated",
+        "children": []
+      },
+      {
+        "nodeId": "gen-page-roi-calculator",
+        "kind": "page-leaf",
+        "pageIds": [
+          "page-roi-calculator"
+        ],
+        "output": "pages/roi-calculator.html",
+        "sharedRegions": [],
+        "privateRegions": [
+          "scenario hero",
+          "roi sliders",
+          "impact panel",
+          "results summary"
+        ],
+        "mutableSlots": [
+          "pageTitle",
+          "activeNavItem"
+        ],
+        "status": "generated",
+        "children": []
+      },
+      {
+        "nodeId": "gen-page-admin-asset-management",
+        "kind": "page-leaf",
+        "pageIds": [
+          "page-admin-asset-management"
+        ],
+        "output": "pages/admin-asset-management.html",
+        "sharedRegions": [],
+        "privateRegions": [
+          "admin metric cards",
+          "search bar",
+          "table rows",
+          "pagination"
+        ],
+        "mutableSlots": [
+          "pageTitle",
+          "activeNavItem"
+        ],
+        "status": "generated",
+        "children": []
+      },
+      {
+        "nodeId": "gen-page-admin-permissions",
+        "kind": "page-leaf",
+        "pageIds": [
+          "page-admin-permissions"
+        ],
+        "output": "pages/admin-permissions.html",
+        "sharedRegions": [],
+        "privateRegions": [
+          "role cards",
+          "permission matrix",
+          "save footer"
+        ],
+        "mutableSlots": [
+          "pageTitle",
+          "activeNavItem"
+        ],
+        "status": "generated",
+        "children": []
+      }
+    ]
+  }
+}

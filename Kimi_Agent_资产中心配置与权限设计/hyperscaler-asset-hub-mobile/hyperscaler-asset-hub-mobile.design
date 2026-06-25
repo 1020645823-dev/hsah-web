@@ -1,0 +1,249 @@
+{
+  "data": [
+    {
+      "id": "page-home",
+      "title": "首页",
+      "type": "page",
+      "version": 1,
+      "createdAt": 1761240000000,
+      "canvasData": {
+        "x": 0,
+        "y": 0,
+        "group": 0
+      },
+      "devMetadata": {
+        "htmlSrc": "pages/home.html",
+        "interactions": [
+          {
+            "domId": "cta-explore-assets",
+            "targetPageId": "page-asset-library",
+            "transitionLabel": "Explore Solutions"
+          },
+          {
+            "domId": "nav-platform",
+            "targetPageId": "page-asset-library",
+            "hideEdge": true,
+            "transitionLabel": "Platform"
+          },
+          {
+            "domId": "nav-case-studies",
+            "targetPageId": "page-asset-detail",
+            "hideEdge": true,
+            "transitionLabel": "Case Studies"
+          }
+        ]
+      }
+    },
+    {
+      "id": "page-asset-library",
+      "title": "资产库",
+      "type": "page",
+      "version": 1,
+      "createdAt": 1761240000001,
+      "canvasData": {
+        "x": 420,
+        "y": 0,
+        "group": 0
+      },
+      "devMetadata": {
+        "htmlSrc": "pages/asset-library.html",
+        "interactions": [
+          {
+            "domId": "open-asset-detail",
+            "targetPageId": "page-asset-detail",
+            "transitionLabel": "Open asset"
+          },
+          {
+            "domId": "back-home",
+            "targetPageId": "page-home",
+            "hideEdge": true,
+            "transitionLabel": "返回"
+          }
+        ]
+      }
+    },
+    {
+      "id": "page-asset-detail",
+      "title": "资产详情",
+      "type": "page",
+      "version": 1,
+      "createdAt": 1761240000002,
+      "canvasData": {
+        "x": 840,
+        "y": 0,
+        "group": 0
+      },
+      "devMetadata": {
+        "htmlSrc": "pages/asset-detail.html",
+        "interactions": [
+          {
+            "domId": "launch-roi-calculator",
+            "targetPageId": "page-roi-calculator",
+            "transitionLabel": "Launch Demo"
+          },
+          {
+            "domId": "back-library",
+            "targetPageId": "page-asset-library",
+            "hideEdge": true,
+            "transitionLabel": "返回"
+          }
+        ]
+      }
+    },
+    {
+      "id": "page-roi-calculator",
+      "title": "ROI 计算器",
+      "type": "page",
+      "version": 1,
+      "createdAt": 1761240000003,
+      "canvasData": {
+        "x": 1260,
+        "y": 0,
+        "group": 0
+      },
+      "devMetadata": {
+        "htmlSrc": "pages/roi-calculator.html",
+        "interactions": [
+          {
+            "domId": "open-admin-assets",
+            "targetPageId": "page-admin-asset-management",
+            "transitionLabel": "资产管理"
+          },
+          {
+            "domId": "back-detail",
+            "targetPageId": "page-asset-detail",
+            "hideEdge": true,
+            "transitionLabel": "返回"
+          }
+        ]
+      }
+    },
+    {
+      "id": "page-admin-asset-management",
+      "title": "资产管理",
+      "type": "page",
+      "version": 1,
+      "createdAt": 1761240000004,
+      "canvasData": {
+        "x": 1680,
+        "y": 0,
+        "group": 0
+      },
+      "devMetadata": {
+        "htmlSrc": "pages/admin-asset-management.html",
+        "interactions": [
+          {
+            "domId": "open-permissions",
+            "targetPageId": "page-admin-permissions",
+            "transitionLabel": "Roles & Permissions"
+          },
+          {
+            "domId": "back-roi",
+            "targetPageId": "page-roi-calculator",
+            "hideEdge": true,
+            "transitionLabel": "返回"
+          }
+        ]
+      }
+    },
+    {
+      "id": "page-admin-permissions",
+      "title": "权限管理",
+      "type": "page",
+      "version": 1,
+      "createdAt": 1761240000005,
+      "canvasData": {
+        "x": 2100,
+        "y": 0,
+        "group": 0
+      },
+      "devMetadata": {
+        "htmlSrc": "pages/admin-permissions.html",
+        "interactions": [
+          {
+            "domId": "back-admin-assets",
+            "targetPageId": "page-admin-asset-management",
+            "hideEdge": true,
+            "transitionLabel": "返回"
+          }
+        ]
+      }
+    },
+    {
+      "id": "image-001",
+      "title": "演示预览图",
+      "type": "image",
+      "version": 1,
+      "createdAt": 1761240001001,
+      "canvasData": {
+        "x": 0,
+        "y": 2079
+      },
+      "devMetadata": {
+        "imageSrc": "assets/asset-detail-demo.jpg"
+      }
+    },
+    {
+      "id": "image-002",
+      "title": "资产缩略图",
+      "type": "image",
+      "version": 1,
+      "createdAt": 1761240001002,
+      "canvasData": {
+        "x": 420,
+        "y": 2079
+      },
+      "devMetadata": {
+        "imageSrc": "assets/admin-asset-thumb.jpg"
+      }
+    },
+    {
+      "id": "image-003",
+      "title": "负责人头像一",
+      "type": "image",
+      "version": 1,
+      "createdAt": 1761240001003,
+      "canvasData": {
+        "x": 840,
+        "y": 2079
+      },
+      "devMetadata": {
+        "imageSrc": "assets/avatar-owner-1.jpg"
+      }
+    },
+    {
+      "id": "image-004",
+      "title": "负责人头像二",
+      "type": "image",
+      "version": 1,
+      "createdAt": 1761240001004,
+      "canvasData": {
+        "x": 1260,
+        "y": 2079
+      },
+      "devMetadata": {
+        "imageSrc": "assets/avatar-owner-2.jpg"
+      }
+    },
+    {
+      "id": "image-005",
+      "title": "负责人头像三",
+      "type": "image",
+      "version": 1,
+      "createdAt": 1761240001005,
+      "canvasData": {
+        "x": 1680,
+        "y": 2079
+      },
+      "devMetadata": {
+        "imageSrc": "assets/avatar-owner-3.jpg"
+      }
+    }
+  ],
+  "config": {
+    "autoLayout": true,
+    "deviceType": "mobile",
+    "projectName": "Hyperscaler Asset Hub 移动端设计",
+    "designLibrary": null
+  }
+}

@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roles &amp; Permissions</title>
+    <style id="theme-vars">
+:root {
+  --hyper-bg: #0a0a0f;
+  --hyper-bg-elevated: #10131f;
+  --hyper-surface: rgba(18, 18, 26, 0.78);
+  --hyper-surface-strong: rgba(25, 25, 38, 0.92);
+  --hyper-surface-soft: rgba(255, 255, 255, 0.03);
+  --hyper-border: rgba(212, 218, 245, 0.12);
+  --hyper-border-strong: rgba(123, 63, 242, 0.55);
+  --hyper-text: #f0f0f5;
+  --hyper-text-secondary: #8b8ba3;
+  --hyper-text-tertiary: #5a5a72;
+  --hyper-indigo: #1c1967;
+  --hyper-purple: #7b3ff2;
+  --hyper-magenta: #c026d3;
+  --hyper-periwinkle: #d4daf5;
+  --hyper-success: #10b981;
+  --hyper-warning: #f59e0b;
+  --hyper-azure: #3ba1ff;
+  --hyper-aws: #ff9d2e;
+  --hyper-radius-sm: 6px;
+  --hyper-radius-md: 12px;
+  --hyper-radius-lg: 20px;
+  --hyper-radius-xl: 28px;
+  --hyper-radius-full: 9999px;
+  --hyper-shadow-card: 0 20px 60px rgba(10, 10, 15, 0.42);
+  --hyper-shadow-glow: 0 0 30px rgba(123, 63, 242, 0.24);
+  --hyper-backdrop: blur(24px) saturate(180%);
+  --hyper-gradient-bg:
+    radial-gradient(circle at 50% 10%, rgba(123, 63, 242, 0.28), transparent 32%),
+    radial-gradient(circle at 10% 30%, rgba(28, 25, 103, 0.46), transparent 42%),
+    radial-gradient(circle at 90% 80%, rgba(192, 38, 211, 0.16), transparent 28%),
+    linear-gradient(180deg, #090a0f 0%, #0b1020 42%, #090a0f 100%);
+  --hyper-gradient-hero: linear-gradient(135deg, #1c1967 0%, #3d348b 42%, #7b3ff2 100%);
+  --hyper-gradient-data: linear-gradient(90deg, #7b3ff2 0%, #c026d3 50%, #7b3ff2 100%);
+  --hyper-font-display: "Graphik", "Inter", "PingFang SC", "Microsoft YaHei", -apple-system, BlinkMacSystemFont, sans-serif;
+  --hyper-font-body: "Inter", "PingFang SC", "Microsoft YaHei", -apple-system, BlinkMacSystemFont, sans-serif;
+  --hyper-font-mono: "JetBrains Mono", "SFMono-Regular", "Fira Code", Consolas, monospace;
+  --hyper-space-1: 4px;
+  --hyper-space-2: 8px;
+  --hyper-space-3: 12px;
+  --hyper-space-4: 16px;
+  --hyper-space-5: 20px;
+  --hyper-space-6: 24px;
+  --hyper-space-8: 32px;
+  --hyper-space-10: 40px;
+  --hyper-space-12: 48px;
+  --hyper-space-16: 64px;
+}
+
+.dark {
+  --hyper-bg: #0a0a0f;
+  --hyper-bg-elevated: #10131f;
+  --hyper-surface: rgba(18, 18, 26, 0.78);
+  --hyper-surface-strong: rgba(25, 25, 38, 0.92);
+  --hyper-border: rgba(212, 218, 245, 0.12);
+  --hyper-text: #f0f0f5;
+  --hyper-text-secondary: #8b8ba3;
+  --hyper-text-tertiary: #5a5a72;
+}
+
+html,
+body {
+  font-family: var(--hyper-font-body);
+  background: var(--hyper-bg);
+  color: var(--hyper-text);
+}
+
+.hyper-display {
+  font-family: var(--hyper-font-display);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+}
+
+.hyper-h1 {
+  font-family: var(--hyper-font-display);
+  font-size: 32px;
+  line-height: 1.15;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.hyper-h2 {
+  font-family: var(--hyper-font-display);
+  font-size: 28px;
+  line-height: 1.2;
+  font-weight: 600;
+}
+
+.hyper-h3 {
+  font-family: var(--hyper-font-display);
+  font-size: 22px;
+  line-height: 1.28;
+  font-weight: 600;
+}
+
+.hyper-body {
+  font-size: 14px;
+  line-height: 1.6;
+  font-weight: 400;
+}
+
+.hyper-caption {
+  font-size: 12px;
+  line-height: 1.4;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+.hyper-overline {
+  font-size: 11px;
+  line-height: 1.2;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.hyper-data {
+  font-family: var(--hyper-font-display);
+  font-size: 32px;
+  line-height: 1;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+
+.hyper-card {
+  background: var(--hyper-surface);
+  border: 1px solid var(--hyper-border);
+  border-radius: var(--hyper-radius-lg);
+  backdrop-filter: var(--hyper-backdrop);
+  box-shadow: var(--hyper-shadow-card);
+}
+
+.hyper-card-glow {
+  border-color: rgba(123, 63, 242, 0.45);
+  box-shadow: var(--hyper-shadow-card), var(--hyper-shadow-glow);
+}
+
+.hyper-pill {
+  border-radius: var(--hyper-radius-full);
+  border: 1px solid var(--hyper-border);
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(12px);
+}
+
+.hyper-gradient-text {
+  background: linear-gradient(180deg, #f5f3ff 0%, #d4daf5 48%, #b794ff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.hyper-primary-btn {
+  border-radius: var(--hyper-radius-full);
+  background: linear-gradient(180deg, #8c5bff 0%, #7b3ff2 100%);
+  color: white;
+  border: 1px solid rgba(212, 218, 245, 0.18);
+  box-shadow: 0 0 18px rgba(123, 63, 242, 0.45);
+}
+
+.hyper-secondary-btn {
+  border-radius: var(--hyper-radius-full);
+  border: 1px solid rgba(212, 218, 245, 0.22);
+  color: var(--hyper-text);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.hyper-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.hyper-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(123, 63, 242, 0.45);
+  border-radius: 9999px;
+}
+
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.3.1/dist/index.global.js"></script>
+    <script src="https://unpkg.com/lucide@1.8.0/dist/umd/lucide.min.js"></script>
+    <style type="text/tailwindcss">
+  @theme inline {
+    --color-border: var(--hyper-border);
+  }
+  @layer base {
+    body { background: var(--hyper-surface); color: var(--hyper-text); }
+    td, th { @apply break-words; word-break: break-all; word-break: auto-phrase; }
+    th { @apply whitespace-nowrap; }
+  }
+    </style>
+    <style>
+      .no-scrollbar::-webkit-scrollbar { display: none; }
+      .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+      [data-icon] {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        -webkit-mask-size: contain;
+        mask-size: contain;
+        -webkit-mask-repeat: no-repeat;
+        mask-repeat: no-repeat;
+        -webkit-mask-position: center;
+        mask-position: center;
+        background-color: currentColor;
+      }
+    </style>
+</head>
+<body class="min-h-screen font-sans antialiased">
+    <main>
+      <div class="min-h-screen bg-[var(--hyper-gradient-bg)] text-[var(--hyper-text)]">
+        <div class="relative mx-auto min-h-screen max-w-[420px] overflow-hidden bg-[var(--hyper-bg)] shadow-[0_0_80px_rgba(12,10,30,0.8)] sm:max-w-[480px] md:max-w-[560px]">
+          <div class="pointer-events-none absolute inset-0 opacity-90">
+            <div class="absolute inset-x-0 top-0 h-56 bg-[radial-gradient(circle_at_top,rgba(123,63,242,0.42),transparent_62%)]"></div>
+            <div class="absolute -left-16 top-44 h-64 w-64 rounded-full bg-[radial-gradient(circle,rgba(28,25,103,0.52),transparent_70%)] blur-3xl"></div>
+            <div class="absolute -right-20 bottom-28 h-64 w-64 rounded-full bg-[radial-gradient(circle,rgba(192,38,211,0.2),transparent_72%)] blur-3xl"></div>
+            <div class="absolute inset-0 bg-[linear-gradient(180deg,rgba(9,10,15,0.84)_0%,rgba(9,10,15,0.18)_18%,rgba(9,10,15,0.28)_70%,rgba(9,10,15,0.96)_100%)]"></div>
+          </div>
+
+          <div class="relative flex min-h-screen flex-col">
+            <header class="sticky top-0 z-30 border-b border-white/10 bg-[rgba(10,10,15,0.76)] px-4 pb-4 pt-4 backdrop-blur-xl">
+              <div class="flex items-center gap-3">
+                <button data-dom-id="back-admin-assets" type="button" class="nav-pill inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-[20px] border border-[var(--hyper-border)] bg-[rgba(255,255,255,0.04)] text-[var(--hyper-periwinkle)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--hyper-purple)]" aria-label="Back">
+                  <i data-lucide="chevron-left" class="h-5 w-5"></i>
+                </button>
+                <div class="min-w-0 flex-1">
+                  <p class="truncate text-[10px] font-medium uppercase tracking-[0.22em] text-[var(--hyper-text-tertiary)]">Asset Hub</p>
+                  <p class="truncate text-[15px] font-semibold tracking-[-0.02em] text-white">Admin Controls</p>
+                </div>
+                <div class="inline-flex h-11 w-11 items-center justify-center rounded-[20px] border border-[var(--hyper-border)] bg-[rgba(255,255,255,0.04)] text-[var(--hyper-periwinkle)]">
+                  <i data-lucide="shield-check" class="h-5 w-5"></i>
+                </div>
+              </div>
+
+              <div class="mt-4 flex gap-3 overflow-x-auto no-scrollbar pb-1" aria-label="Admin navigation">
+                <button type="button" class="nav-pill inline-flex h-11 shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-[20px] border border-[var(--hyper-border)] bg-[rgba(255,255,255,0.04)] px-4 text-[13px] font-medium text-[var(--hyper-text-secondary)]">
+                  <i data-lucide="layout-dashboard" class="h-4 w-4"></i>
+                  <span>Dashboard</span>
+                </button>
+                <button type="button" class="nav-pill inline-flex h-11 shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-[20px] border border-[var(--hyper-border)] bg-[rgba(255,255,255,0.04)] px-4 text-[13px] font-medium text-[var(--hyper-text-secondary)]">
+                  <i data-lucide="users" class="h-4 w-4"></i>
+                  <span>Users</span>
+                </button>
+                <button type="button" class="nav-pill inline-flex h-11 shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-[20px] border border-[var(--hyper-border)] bg-[rgba(255,255,255,0.04)] px-4 text-[13px] font-medium text-[var(--hyper-text-secondary)]">
+                  <i data-lucide="box" class="h-4 w-4"></i>
+                  <span>Assets</span>
+                </button>
+                <button type="button" aria-current="page" class="nav-pill relative inline-flex h-11 shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-[20px] border border-[var(--hyper-border-strong)] bg-[rgba(123,63,242,0.14)] px-5 text-[13px] font-semibold text-white shadow-[0_0_20px_rgba(123,63,242,0.24)]">
+                  <span class="absolute inset-y-2 left-0 w-[3px] rounded-r-full bg-[var(--hyper-purple)]"></span>
+                  <i data-lucide="square-check" class="h-4 w-4"></i>
+                  <span>Roles</span>
+                </button>
+                <button type="button" class="nav-pill inline-flex h-11 shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-[20px] border border-[var(--hyper-border)] bg-[rgba(255,255,255,0.04)] px-4 text-[13px] font-medium text-[var(--hyper-text-secondary)]">
+                  <i data-lucide="settings" class="h-4 w-4"></i>
+                  <span>Settings</span>
+                </button>
+              </div>
+            </header>
+
+            <section class="flex-1 px-4 pb-36 pt-6">
+              <section>
+                <h1 class="hyper-h1 max-w-[250px] text-white" style="text-wrap: balance; word-break: keep-all; overflow-wrap: break-word;">Roles &amp; Permissions</h1>
+              </section>
+
+              <section class="mt-5" aria-label="Role cards">
+                <div class="flex gap-3 overflow-x-auto no-scrollbar pb-2">
+                  <article class="role-card shrink-0 rounded-[28px] border border-[var(--hyper-border-strong)] bg-[var(--hyper-surface-strong)] p-4 text-left shadow-[var(--hyper-shadow-card)]" style="width: 170px; box-shadow: var(--hyper-shadow-card), var(--hyper-shadow-glow);">
+                    <div class="inline-flex h-10 w-10 items-center justify-center rounded-[20px] bg-[rgba(123,63,242,0.16)] text-[var(--hyper-periwinkle)]">
+                      <i data-lucide="shield" class="h-5 w-5"></i>
+                    </div>
+                    <div class="mt-5 space-y-2">
+                      <h2 class="text-[16px] font-semibold tracking-[-0.02em] text-white">Super Admin</h2>
+                      <p class="text-[13px] font-medium text-[var(--hyper-text-secondary)]">2 users</p>
+                    </div>
+                  </article>
+
+                  <article class="role-card shrink-0 rounded-[28px] border border-[var(--hyper-border)] bg-[rgba(255,255,255,0.035)] p-4 text-left shadow-[var(--hyper-shadow-card)]" style="width: 170px;">
+                    <div class="inline-flex h-10 w-10 items-center justify-center rounded-[20px] bg-[rgba(255,255,255,0.05)] text-[var(--hyper-text-secondary)]">
+                      <i data-lucide="user-cog" class="h-5 w-5"></i>
+                    </div>
+                    <div class="mt-5 space-y-2">
+                      <h2 class="text-[16px] font-semibold tracking-[-0.02em] text-white">Admin</h2>
+                      <p class="line-clamp-2 text-[13px] leading-5 text-[var(--hyper-text-secondary)]">Manage users &amp; assets</p>
+                    </div>
+                  </article>
+
+                  <article class="role-card shrink-0 rounded-[28px] border border-[var(--hyper-border)] bg-[rgba(255,255,255,0.035)] p-4 text-left shadow-[var(--hyper-shadow-card)]" style="width: 170px;">
+                    <div class="inline-flex h-10 w-10 items-center justify-center rounded-[20px] bg-[rgba(255,255,255,0.05)] text-[var(--hyper-text-secondary)]">
+                      <i data-lucide="boxes" class="h-5 w-5"></i>
+                    </div>
+                    <div class="mt-5 space-y-2">
+                      <h2 class="text-[16px] font-semibold tracking-[-0.02em] text-white">Asset Manager</h2>
+                      <p class="line-clamp-2 text-[13px] leading-5 text-[var(--hyper-text-secondary)]">Manage assets</p>
+                    </div>
+                  </article>
+
+                  <article class="role-card shrink-0 rounded-[28px] border border-[var(--hyper-border)] bg-[rgba(255,255,255,0.035)] p-4 text-left shadow-[var(--hyper-shadow-card)]" style="width: 170px;">
+                    <div class="inline-flex h-10 w-10 items-center justify-center rounded-[20px] bg-[rgba(255,255,255,0.05)] text-[var(--hyper-text-secondary)]">
+                      <i data-lucide="file-pen-line" class="h-5 w-5"></i>
+                    </div>
+                    <div class="mt-5 space-y-2">
+                      <h2 class="text-[16px] font-semibold tracking-[-0.02em] text-white">Editor</h2>
+                      <p class="line-clamp-2 text-[13px] leading-5 text-[var(--hyper-text-secondary)]">Create &amp; edit content</p>
+                    </div>
+                  </article>
+
+                  <article class="role-card shrink-0 rounded-[28px] border border-[var(--hyper-border)] bg-[rgba(255,255,255,0.035)] p-4 text-left shadow-[var(--hyper-shadow-card)]" style="width: 170px;">
+                    <div class="inline-flex h-10 w-10 items-center justify-center rounded-[20px] bg-[rgba(255,255,255,0.05)] text-[var(--hyper-text-secondary)]">
+                      <i data-lucide="eye" class="h-5 w-5"></i>
+                    </div>
+                    <div class="mt-5 space-y-2">
+                      <h2 class="text-[16px] font-semibold tracking-[-0.02em] text-white">Viewer</h2>
+                      <p class="line-clamp-2 text-[13px] leading-5 text-[var(--hyper-text-secondary)]">View only</p>
+                    </div>
+                  </article>
+                </div>
+              </section>
+
+              <section class="mt-6 rounded-[28px] border border-[var(--hyper-border)] bg-[var(--hyper-surface)] p-4 shadow-[var(--hyper-shadow-card)]" aria-label="Permission matrix">
+                <div class="flex items-center justify-between gap-3">
+                  <h2 class="text-[18px] font-semibold tracking-[-0.02em] text-white">Permissions</h2>
+                  <div class="inline-flex items-center justify-center rounded-[16px] border border-[var(--hyper-border)] bg-[rgba(255,255,255,0.04)] px-3 py-2 text-[11px] font-medium uppercase tracking-[0.14em] text-[var(--hyper-text-tertiary)]">
+                    Matrix
+                  </div>
+                </div>
+
+                <div class="relative mt-4">
+                  <div class="pointer-events-none absolute inset-y-0 left-0 z-20 w-6 bg-[linear-gradient(90deg,rgba(10,10,15,0.7),transparent)]"></div>
+                  <div class="pointer-events-none absolute inset-y-0 right-0 z-20 w-6 bg-[linear-gradient(270deg,rgba(10,10,15,0.75),transparent)]"></div>
+                  <div class="matrix-scroll hyper-scrollbar overflow-x-auto pb-1">
+                    <table class="permission-table w-full min-w-[760px] border-separate border-spacing-0 text-left">
+                      <thead>
+                        <tr>
+                          <th class="sticky left-0 z-20 min-w-[150px] bg-[var(--hyper-bg-elevated)] px-4 pb-4 pt-1 text-[13px] font-semibold text-white">Permissions</th>
+                          <th class="min-w-[110px] px-3 pb-4 pt-1 text-center text-[12px] font-semibold tracking-[-0.01em] text-[var(--hyper-periwinkle)]">Super Admin</th>
+                          <th class="min-w-[110px] px-3 pb-4 pt-1 text-center text-[12px] font-semibold tracking-[-0.01em] text-white">Admin</th>
+                          <th class="min-w-[126px] px-3 pb-4 pt-1 text-center text-[12px] font-semibold tracking-[-0.01em] text-white">Asset Manager</th>
+                          <th class="min-w-[102px] px-3 pb-4 pt-1 text-center text-[12px] font-semibold tracking-[-0.01em] text-white">Editor</th>
+                          <th class="min-w-[102px] px-3 pb-4 pt-1 text-center text-[12px] font-semibold tracking-[-0.01em] text-white">Viewer</th>
+                        </tr>
+                      </thead>
+                      <tbody class="text-[13px] text-[var(--hyper-text-secondary)]">
+                        <tr>
+                          <td class="sticky left-0 z-10 bg-[var(--hyper-bg-elevated)] px-4 py-4 font-medium text-white">View Users</td>
+                          <td class="px-3 py-4 text-center"><span class="permission-check inline-flex h-7 w-7 items-center justify-center rounded-[10px] bg-[var(--hyper-purple)] text-white"><i data-lucide="check" class="h-4 w-4"></i></span></td>
+                          <td class="px-3 py-4 text-center"><span class="permission-check inline-flex h-7 w-7 items-center justify-center rounded-[10px] bg-[var(--hyper-purple)] text-white"><i data-lucide="check" class="h-4 w-4"></i></span></td>
+                          <td class="px-3 py-4 text-center"><span class="text-[18px] leading-none text-[var(--hyper-text-tertiary)]">—</span></td>
+                          <td class="px-3 py-4 text-center"><span class="text-[18px] leading-none text-[var(--hyper-text-tertiary)]">—</span></td>
+                          <td class="px-3 py-4 text-center"><span class="text-[18px] leading-none text-[var(--hyper-text-tertiary)]">—</span></td>
+                        </tr>
+                        <tr>
+                          <td class="sticky left-0 z-10 bg-[var(--hyper-bg-elevated)] px-4 py-4 font-medium text-white">Create Users</td>
+                          <td class="px-3 py-4 text-center"><span class="permission-check inline-flex h-7 w-7 items-center justify-center rounded-[10px] bg-[var(--hyper-purple)] text-white"><i data-lucide="check" class="h-4 w-4"></i></span></td>
+                          <td class="px-3 py-4 text-center"><span class="permission-check inline-flex h-7 w-7 items-center justify-center rounded-[10px] bg-[var(--hyper-purple)] text-white"><i data-lucide="check" class="h-4 w-4"></i></span></td>
+                          <td class="px-3 py-4 text-center"><span class="text-[18px] leading-none text-[var(--hyper-text-tertiary)]">—</span></td>
+                          <td class="px-3 py-4 text-center"><span class="text-[18px] leading-none text-[var(--hyper-text-tertiary)]">—</span></td>
+                          <td class="px-3 py-4 text-center"><span class="text-[18px] leading-none text-[var(--hyper-text-tertiary)]">—</span></td>
+                        </tr>
+                        <tr>
+                          <td class="sticky left-0 z-10 bg-[var(--hyper-bg-elevated)] px-4 py-4 font-medium text-white">Edit Users</td>
+                          <td class="px-3 py-4 text-center"><span class="permission-check inline-flex h-7 w-7 items-center justify-center rounded-[10px] bg-[var(--hyper-purple)] text-white"><i data-lucide="check" class="h-4 w-4"></i></span></td>
+                          <td class="px-3 py-4 text-center"><span class="permission-check inline-flex h-7 w-7 items-center justify-center rounded-[10px] bg-[var(--hyper-purple)] text-white"><i data-lucide="check" class="h-4 w-4"></i></span></td>
+                          <td class="px-3 py-4 text-center"><span class="text-[18px] leading-none text-[var(--hyper-text-tertiary)]">—</span></td>
+                          <td class="px-3 py-4 text-center"><span class="text-[18px] leading-none text-[var(--hyper-text-tertiary)]">—</span></td>
+                          <td class="px-3 py-4 text-center"><span class="text-[18px] leading-none text-[var(--hyper-text-tertiary)]">—</span></td>
+                        </tr>
+                        <tr>
+                          <td class="sticky left-0 z-10 bg-[var(--hyper-bg-elevated)] px-4 py-4 font-medium text-white">Delete Users</td>
+                          <td class="px-3 py-4 text-center"><span class="permission-check inline-flex h-7 w-7 items-center justify-center rounded-[10px] bg-[var(--hyper-purple)] text-white"><i data-lucide="check" class="h-4 w-4"></i></span></td>
+                          <td class="px-3 py-4 text-center"><span class="text-[18px] leading-none text-[var(--hyper-text-tertiary)]">—</span></td>
+                          <td class="px-3 py-4 text-center"><span class="text-[18px] leading-none text-[var(--hyper-text-tertiary)]">—</span></td>
+                          <td class="px-3 py-4 text-center"><span class="text-[18px] leading-none text-[var(--hyper-text-tertiary)]">—</span></td>
+                          <td class="px-3 py-4 text-center"><span class="text-[18px] leading-none text-[var(--hyper-text-tertiary)]">—</span></td>
+                        </tr>
+                        <tr>
+                          <td class="sticky left-0 z-10 bg-[var(--hyper-bg-elevated)] px-4 py-4 font-medium text-white">View Assets</td>
+                          <td class="px-3 py-4 text-center"><span class="permission-check inline-flex h-7 w-7 items-center justify-center rounded-[10px] bg-[var(--hyper-purple)] text-white"><i data-lucide="check" class="h-4 w-4"></i></span></td>
+                          <td class="px-3 py-4 text-center"><span class="permission-check inline-flex h-7 w-7 items-center justify-center rounded-[10px] bg-[var(--hyper-purple)] text-white"><i data-lucide="check" class="h-4 w-4"></i></span></td>
+                          <td class="px-3 py-4 text-center"><span class="permission-check inline-flex h-7 w-7 items-center justify-center rounded-[10px] bg-[var(--hyper-purple)] text-white"><i data-lucide="check" class="h-4 w-4"></i></span></td>
+                          <td class="px-3 py-4 text-center"><span class="permission-check inline-flex h-7 w-7 items-center justify-center rounded-[10px] bg-[var(--hyper-purple)] text-white"><i data-lucide="check" class="h-4 w-4"></i></span></td>
+                          <td class="px-3 py-4 text-center"><span class="permission-check inline-flex h-7 w-7 items-center justify-center rounded-[10px] bg-[var(--hyper-purple)] text-white"><i data-lucide="check" class="h-4 w-4"></i></span></td>
+                        </tr>
+                        <tr>
+                          <td class="sticky left-0 z-10 bg-[var(--hyper-bg-elevated)] px-4 py-4 font-medium text-white">Publish Assets</td>
+                          <td class="px-3 py-4 text-center"><span class="permission-check inline-flex h-7 w-7 items-center justify-center rounded-[10px] bg-[var(--hyper-purple)] text-white"><i data-lucide="check" class="h-4 w-4"></i></span></td>
+                          <td class="px-3 py-4 text-center"><span class="permission-check inline-flex h-7 w-7 items-center justify-center rounded-[10px] bg-[var(--hyper-purple)] text-white"><i data-lucide="check" class="h-4 w-4"></i></span></td>
+                          <td class="px-3 py-4 text-center"><span class="permission-check inline-flex h-7 w-7 items-center justify-center rounded-[10px] bg-[var(--hyper-purple)] text-white"><i data-lucide="check" class="h-4 w-4"></i></span></td>
+                          <td class="px-3 py-4 text-center"><span class="permission-check inline-flex h-7 w-7 items-center justify-center rounded-[10px] bg-[var(--hyper-purple)] text-white"><i data-lucide="check" class="h-4 w-4"></i></span></td>
+                          <td class="px-3 py-4 text-center"><span class="text-[18px] leading-none text-[var(--hyper-text-tertiary)]">—</span></td>
+                        </tr>
+                        <tr>
+                          <td class="sticky left-0 z-10 bg-[var(--hyper-bg-elevated)] px-4 py-4 font-medium text-white">View Roles</td>
+                          <td class="px-3 py-4 text-center"><span class="permission-check inline-flex h-7 w-7 items-center justify-center rounded-[10px] bg-[var(--hyper-purple)] text-white"><i data-lucide="check" class="h-4 w-4"></i></span></td>
+                          <td class="px-3 py-4 text-center"><span class="permission-check inline-flex h-7 w-7 items-center justify-center rounded-[10px] bg-[var(--hyper-purple)] text-white"><i data-lucide="check" class="h-4 w-4"></i></span></td>
+                          <td class="px-3 py-4 text-center"><span class="text-[18px] leading-none text-[var(--hyper-text-tertiary)]">—</span></td>
+                          <td class="px-3 py-4 text-center"><span class="text-[18px] leading-none text-[var(--hyper-text-tertiary)]">—</span></td>
+                          <td class="px-3 py-4 text-center"><span class="text-[18px] leading-none text-[var(--hyper-text-tertiary)]">—</span></td>
+                        </tr>
+                        <tr>
+                          <td class="sticky left-0 z-10 bg-[var(--hyper-bg-elevated)] px-4 py-4 font-medium text-white">Edit Settings</td>
+                          <td class="px-3 py-4 text-center"><span class="permission-check inline-flex h-7 w-7 items-center justify-center rounded-[10px] bg-[var(--hyper-purple)] text-white"><i data-lucide="check" class="h-4 w-4"></i></span></td>
+                          <td class="px-3 py-4 text-center"><span class="text-[18px] leading-none text-[var(--hyper-text-tertiary)]">—</span></td>
+                          <td class="px-3 py-4 text-center"><span class="text-[18px] leading-none text-[var(--hyper-text-tertiary)]">—</span></td>
+                          <td class="px-3 py-4 text-center"><span class="text-[18px] leading-none text-[var(--hyper-text-tertiary)]">—</span></td>
+                          <td class="px-3 py-4 text-center"><span class="text-[18px] leading-none text-[var(--hyper-text-tertiary)]">—</span></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </section>
+            </section>
+
+            <footer class="sticky bottom-0 z-30 border-t border-white/10 bg-[rgba(10,10,15,0.86)] px-4 pb-[calc(16px+env(safe-area-inset-bottom,0px))] pt-4 backdrop-blur-xl">
+              <button type="button" class="save-button hyper-primary-btn inline-flex w-full items-center justify-center gap-2 whitespace-nowrap px-6 py-4 text-[15px] font-semibold tracking-[-0.01em] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--hyper-periwinkle)]">
+                <i data-lucide="save" class="h-4 w-4"></i>
+                <span>Save Changes</span>
+              </button>
+            </footer>
+          </div>
+        </div>
+      </div>
+    </main>
+    <style>
+      .nav-pill,
+      .role-card,
+      .save-button,
+      .permission-check {
+        transition-property: transform, border-color, background-color, box-shadow, opacity;
+        transition-duration: 160ms;
+        transition-timing-function: cubic-bezier(.2,.8,.2,1);
+      }
+
+      .nav-pill:hover,
+      .role-card:hover,
+      .save-button:hover {
+        transform: translateY(-1px);
+      }
+
+      .nav-pill:active,
+      .role-card:active,
+      .save-button:active {
+        transform: translateY(0);
+      }
+
+      .permission-table th,
+      .permission-table td {
+        border-bottom: 1px solid var(--hyper-border);
+      }
+
+      .permission-table tbody tr:last-child td {
+        border-bottom: none;
+      }
+
+      .permission-check {
+        box-shadow: 0 0 18px rgba(123, 63, 242, 0.36);
+      }
+
+      .matrix-scroll {
+        scrollbar-width: thin;
+        scrollbar-color: rgba(123, 63, 242, 0.5) transparent;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .nav-pill,
+        .role-card,
+        .save-button,
+        .permission-check {
+          transition-duration: 0.01ms;
+        }
+
+        .nav-pill:hover,
+        .role-card:hover,
+        .save-button:hover,
+        .nav-pill:active,
+        .role-card:active,
+        .save-button:active {
+          transform: none;
+        }
+      }
+    </style>
+    <script>lucide.createIcons();</script>
+</body>
+</html>

@@ -9,6 +9,10 @@ vi.mock("@/components/query-provider", () => ({
   QueryProvider: ({ children }: { children: React.ReactNode }) => children,
 }));
 
+vi.mock("@/components/theme-provider", () => ({
+  ThemeProvider: ({ children }: { children: React.ReactNode }) => children,
+}));
+
 import RootLayout from "./layout";
 
 describe("RootLayout", () => {

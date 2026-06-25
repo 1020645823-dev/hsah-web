@@ -1,0 +1,117 @@
+<h2>Asset Editor — 数据模型与表单组件</h2>
+<p class="subtitle">Draft 状态管理 + 校验规则 + 分组字段映射</p>
+
+<div class="mockup">
+  <div class="mockup-header">数据流：Draft → Validate → Payload → API</div>
+  <div class="mockup-body" style="padding: 24px;">
+    <div style="display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;">
+      
+      <div style="flex: 1; min-width: 200px; border: 1px solid rgba(138,133,245,0.3); border-radius: 12px; padding: 16px; background: rgba(138,133,245,0.05);">
+        <div style="font-size: 11px; color: #8a85f5; letter-spacing: 0.1em; margin-bottom: 8px;">STEP 1</div>
+        <div style="font-size: 14px; color: #eee; font-weight: 600; margin-bottom: 8px;">AssetEditorDraft</div>
+        <div style="font-size: 12px; color: #aaa; line-height: 1.6;">
+          <code style="color: #8a85f5;">slug</code>: string<br/>
+          <code style="color: #8a85f5;">title</code>: string<br/>
+          <code style="color: #8a85f5;">subtitle</code>: string<br/>
+          <code style="color: #8a85f5;">shortDescription</code>: string<br/>
+          <code style="color: #8a85f5;">cloudProviders</code>: string[]<br/>
+          <code style="color: #8a85f5;">industries</code>: string[]<br/>
+          <code style="color: #8a85f5;">technologies</code>: string[]<br/>
+          <code style="color: #8a85f5;">assetType</code>: string<br/>
+          <code style="color: #8a85f5;">status</code>: string<br/>
+          <code style="color: #8a85f5;">visibility</code>: string<br/>
+          <code style="color: #8a85f5;">allowedRoles</code>: string[]<br/>
+          <code style="color: #8a85f5;">allowedUsers</code>: string[]
+        </div>
+      </div>
+
+      <div style="font-size: 20px; color: #8a85f5;">→</div>
+
+      <div style="flex: 1; min-width: 200px; border: 1px solid rgba(234,179,8,0.3); border-radius: 12px; padding: 16px; background: rgba(234,179,8,0.05);">
+        <div style="font-size: 11px; color: #eab308; letter-spacing: 0.1em; margin-bottom: 8px;">STEP 2</div>
+        <div style="font-size: 14px; color: #eee; font-weight: 600; margin-bottom: 8px;">validateDraft()</div>
+        <div style="font-size: 12px; color: #aaa; line-height: 1.6;">
+          <span style="color: #ef4444;">✗</span> slug 为空<br/>
+          <span style="color: #ef4444;">✗</span> title 为空<br/>
+          <span style="color: #ef4444;">✗</span> shortDescription 为空<br/>
+          <span style="color: #22c55e;">✓</span> assetType 枚举合法<br/>
+          <span style="color: #22c55e;">✓</span> status 枚举合法<br/>
+          <span style="color: #22c55e;">✓</span> visibility 枚举合法<br/>
+          <span style="color: #22c55e;">✓</span> 数组字段去重去空
+        </div>
+      </div>
+
+      <div style="font-size: 20px; color: #8a85f5;">→</div>
+
+      <div style="flex: 1; min-width: 200px; border: 1px solid rgba(34,197,94,0.3); border-radius: 12px; padding: 16px; background: rgba(34,197,94,0.05);">
+        <div style="font-size: 11px; color: #22c55e; letter-spacing: 0.1em; margin-bottom: 8px;">STEP 3</div>
+        <div style="font-size: 14px; color: #eee; font-weight: 600; margin-bottom: 8px;">buildPayload()</div>
+        <div style="font-size: 12px; color: #aaa; line-height: 1.6;">
+          <code style="color: #22c55e;">{</code><br/>
+          &nbsp;&nbsp;<code>slug</code>: "cloud-01",<br/>
+          &nbsp;&nbsp;<code>title</code>: "Cloud...",<br/>
+          &nbsp;&nbsp;<code>cloud_providers</code>: [...],<br/>
+          &nbsp;&nbsp;<code>asset_type</code>: "solution",<br/>
+          &nbsp;&nbsp;<code>content_blocks</code>: [] <span style="color: #888;">// Phase 1 留空</span><br/>
+          <code style="color: #22c55e;">}</code>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div style="margin-top: 24px;">
+  <h3 style="font-size: 16px; color: #eee; margin-bottom: 12px;">分组字段映射（表单 Card → Draft 字段）</h3>
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+    
+    <div style="border: 1px solid rgba(212,218,245,0.12); border-radius: 12px; padding: 16px;">
+      <div style="font-size: 12px; color: #8a85f5; letter-spacing: 0.1em; margin-bottom: 8px;">CARD 1: BASIC INFO</div>
+      <div style="font-size: 13px; color: #ccc; line-height: 1.8;">
+        <code>slug</code> → Input (必填)<br/>
+        <code>title</code> → Input (必填)<br/>
+        <code>subtitle</code> → Input (可选)<br/>
+        <code>shortDescription</code> → Textarea (必填)
+      </div>
+    </div>
+
+    <div style="border: 1px solid rgba(212,218,245,0.12); border-radius: 12px; padding: 16px;">
+      <div style="font-size: 12px; color: #8a85f5; letter-spacing: 0.1em; margin-bottom: 8px;">CARD 2: TAGS</div>
+      <div style="font-size: 13px; color: #ccc; line-height: 1.8;">
+        <code>cloudProviders</code> → TagInput<br/>
+        <code>industries</code> → TagInput<br/>
+        <code>technologies</code> → TagInput
+      </div>
+      <div style="margin-top: 8px; font-size: 11px; color: #888;">输入逗号分隔，实时渲染 Chip</div>
+    </div>
+
+    <div style="border: 1px solid rgba(212,218,245,0.12); border-radius: 12px; padding: 16px;">
+      <div style="font-size: 12px; color: #8a85f5; letter-spacing: 0.1em; margin-bottom: 8px;">CARD 3: TYPE & STATUS</div>
+      <div style="font-size: 13px; color: #ccc; line-height: 1.8;">
+        <code>assetType</code> → Select (枚举)<br/>
+        <code>status</code> → Select (枚举)
+      </div>
+    </div>
+
+    <div style="border: 1px solid rgba(212,218,245,0.12); border-radius: 12px; padding: 16px;">
+      <div style="font-size: 12px; color: #8a85f5; letter-spacing: 0.1em; margin-bottom: 8px;">CARD 4: ACCESS CONTROL</div>
+      <div style="font-size: 13px; color: #ccc; line-height: 1.8;">
+        <code>visibility</code> → Select (枚举)<br/>
+        <code>allowedRoles</code> → TagInput (从 Roles 拉建议)<br/>
+        <code>allowedUsers</code> → TagInput (从 Users 拉建议)
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div style="margin-top: 24px; padding: 16px; border: 1px solid rgba(234,179,8,0.2); border-radius: 12px; background: rgba(234,179,8,0.05);">
+  <div style="font-size: 13px; color: #eab308; margin-bottom: 8px;"><strong>关键决策：TagInput 组件</strong></div>
+  <div style="font-size: 13px; color: #ccc; line-height: 1.6;">
+    分类标签、角色、用户等多值字段统一用 <strong>TagInput</strong> 组件：<br/>
+    • 输入框支持逗号/空格/回车分隔<br/>
+    • 实时渲染 Chip 预览<br/>
+    • 可选下拉建议（Roles/Users 从 API 拉取）<br/>
+    • 去重去空，输出干净的 string[]
+  </div>
+</div>

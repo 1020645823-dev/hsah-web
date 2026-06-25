@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROI 计算器</title>
+    <style id="theme-vars">
+:root {
+  --hyper-bg: #0a0a0f;
+  --hyper-bg-elevated: #10131f;
+  --hyper-surface: rgba(18, 18, 26, 0.78);
+  --hyper-surface-strong: rgba(25, 25, 38, 0.92);
+  --hyper-surface-soft: rgba(255, 255, 255, 0.03);
+  --hyper-border: rgba(212, 218, 245, 0.12);
+  --hyper-border-strong: rgba(123, 63, 242, 0.55);
+  --hyper-text: #f0f0f5;
+  --hyper-text-secondary: #8b8ba3;
+  --hyper-text-tertiary: #5a5a72;
+  --hyper-indigo: #1c1967;
+  --hyper-purple: #7b3ff2;
+  --hyper-magenta: #c026d3;
+  --hyper-periwinkle: #d4daf5;
+  --hyper-success: #10b981;
+  --hyper-warning: #f59e0b;
+  --hyper-azure: #3ba1ff;
+  --hyper-aws: #ff9d2e;
+  --hyper-radius-sm: 6px;
+  --hyper-radius-md: 12px;
+  --hyper-radius-lg: 20px;
+  --hyper-radius-xl: 28px;
+  --hyper-radius-full: 9999px;
+  --hyper-shadow-card: 0 20px 60px rgba(10, 10, 15, 0.42);
+  --hyper-shadow-glow: 0 0 30px rgba(123, 63, 242, 0.24);
+  --hyper-backdrop: blur(24px) saturate(180%);
+  --hyper-gradient-bg:
+    radial-gradient(circle at 50% 10%, rgba(123, 63, 242, 0.28), transparent 32%),
+    radial-gradient(circle at 10% 30%, rgba(28, 25, 103, 0.46), transparent 42%),
+    radial-gradient(circle at 90% 80%, rgba(192, 38, 211, 0.16), transparent 28%),
+    linear-gradient(180deg, #090a0f 0%, #0b1020 42%, #090a0f 100%);
+  --hyper-gradient-hero: linear-gradient(135deg, #1c1967 0%, #3d348b 42%, #7b3ff2 100%);
+  --hyper-gradient-data: linear-gradient(90deg, #7b3ff2 0%, #c026d3 50%, #7b3ff2 100%);
+  --hyper-font-display: "Graphik", "Inter", "PingFang SC", "Microsoft YaHei", -apple-system, BlinkMacSystemFont, sans-serif;
+  --hyper-font-body: "Inter", "PingFang SC", "Microsoft YaHei", -apple-system, BlinkMacSystemFont, sans-serif;
+  --hyper-font-mono: "JetBrains Mono", "SFMono-Regular", "Fira Code", Consolas, monospace;
+  --hyper-space-1: 4px;
+  --hyper-space-2: 8px;
+  --hyper-space-3: 12px;
+  --hyper-space-4: 16px;
+  --hyper-space-5: 20px;
+  --hyper-space-6: 24px;
+  --hyper-space-8: 32px;
+  --hyper-space-10: 40px;
+  --hyper-space-12: 48px;
+  --hyper-space-16: 64px;
+}
+
+.dark {
+  --hyper-bg: #0a0a0f;
+  --hyper-bg-elevated: #10131f;
+  --hyper-surface: rgba(18, 18, 26, 0.78);
+  --hyper-surface-strong: rgba(25, 25, 38, 0.92);
+  --hyper-border: rgba(212, 218, 245, 0.12);
+  --hyper-text: #f0f0f5;
+  --hyper-text-secondary: #8b8ba3;
+  --hyper-text-tertiary: #5a5a72;
+}
+
+html,
+body {
+  font-family: var(--hyper-font-body);
+  background: var(--hyper-bg);
+  color: var(--hyper-text);
+}
+
+.hyper-display {
+  font-family: var(--hyper-font-display);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+}
+
+.hyper-h1 {
+  font-family: var(--hyper-font-display);
+  font-size: 32px;
+  line-height: 1.15;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.hyper-h2 {
+  font-family: var(--hyper-font-display);
+  font-size: 28px;
+  line-height: 1.2;
+  font-weight: 600;
+}
+
+.hyper-h3 {
+  font-family: var(--hyper-font-display);
+  font-size: 22px;
+  line-height: 1.28;
+  font-weight: 600;
+}
+
+.hyper-body {
+  font-size: 14px;
+  line-height: 1.6;
+  font-weight: 400;
+}
+
+.hyper-caption {
+  font-size: 12px;
+  line-height: 1.4;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+.hyper-overline {
+  font-size: 11px;
+  line-height: 1.2;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.hyper-data {
+  font-family: var(--hyper-font-display);
+  font-size: 32px;
+  line-height: 1;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+
+.hyper-card {
+  background: var(--hyper-surface);
+  border: 1px solid var(--hyper-border);
+  border-radius: var(--hyper-radius-lg);
+  backdrop-filter: var(--hyper-backdrop);
+  box-shadow: var(--hyper-shadow-card);
+}
+
+.hyper-card-glow {
+  border-color: rgba(123, 63, 242, 0.45);
+  box-shadow: var(--hyper-shadow-card), var(--hyper-shadow-glow);
+}
+
+.hyper-pill {
+  border-radius: var(--hyper-radius-full);
+  border: 1px solid var(--hyper-border);
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(12px);
+}
+
+.hyper-gradient-text {
+  background: linear-gradient(180deg, #f5f3ff 0%, #d4daf5 48%, #b794ff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.hyper-primary-btn {
+  border-radius: var(--hyper-radius-full);
+  background: linear-gradient(180deg, #8c5bff 0%, #7b3ff2 100%);
+  color: white;
+  border: 1px solid rgba(212, 218, 245, 0.18);
+  box-shadow: 0 0 18px rgba(123, 63, 242, 0.45);
+}
+
+.hyper-secondary-btn {
+  border-radius: var(--hyper-radius-full);
+  border: 1px solid rgba(212, 218, 245, 0.22);
+  color: var(--hyper-text);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.hyper-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.hyper-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(123, 63, 242, 0.45);
+  border-radius: 9999px;
+}
+
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.3.1/dist/index.global.js"></script>
+    <script src="https://unpkg.com/lucide@1.8.0/dist/umd/lucide.min.js"></script>
+    <style type="text/tailwindcss">
+  @theme inline {
+    --color-border: var(--hyper-border);
+  }
+  @layer base {
+    body { background: var(--hyper-surface); color: var(--hyper-foreground); }
+    td, th { @apply break-words; word-break: break-all; word-break: auto-phrase; }
+    th { @apply whitespace-nowrap; }
+  }
+    </style>
+    <style>
+      .no-scrollbar::-webkit-scrollbar { display: none; }
+      .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+      [data-icon] {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        -webkit-mask-size: contain;
+        mask-size: contain;
+        -webkit-mask-repeat: no-repeat;
+        mask-repeat: no-repeat;
+        -webkit-mask-position: center;
+        mask-position: center;
+        background-color: currentColor;
+      }
+    </style>
+</head>
+<body class="min-h-screen font-sans antialiased">
+  <div class="min-h-screen bg-[var(--hyper-gradient-bg)] text-[var(--hyper-text)]">
+    <div class="relative mx-auto min-h-screen max-w-[420px] overflow-hidden bg-[#090A0F] shadow-[0_0_80px_rgba(12,10,30,0.8)]">
+      <div class="pointer-events-none absolute inset-0 opacity-90">
+        <div class="absolute inset-x-0 top-0 h-56 bg-[radial-gradient(circle_at_top,rgba(123,63,242,0.45),transparent_62%)]"></div>
+        <div class="absolute -left-16 top-44 h-64 w-64 rounded-full bg-[radial-gradient(circle,rgba(28,25,103,0.5),transparent_70%)] blur-3xl"></div>
+        <div class="absolute -right-20 bottom-24 h-64 w-64 rounded-full bg-[radial-gradient(circle,rgba(192,38,211,0.24),transparent_72%)] blur-3xl"></div>
+        <div class="absolute inset-0 bg-[linear-gradient(180deg,rgba(9,10,15,0.84)_0%,rgba(9,10,15,0.18)_20%,rgba(9,10,15,0.22)_72%,rgba(9,10,15,0.95)_100%)]"></div>
+      </div>
+
+      <div class="relative flex min-h-screen flex-col">
+        <div class="sticky top-0 z-30 border-b border-white/10 bg-[rgba(10,10,15,0.72)] px-5 pb-3 pt-4 backdrop-blur-xl">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <div class="flex h-11 w-11 items-center justify-center rounded-2xl border border-[rgba(123,63,242,0.35)] bg-[linear-gradient(180deg,rgba(123,63,242,0.24),rgba(123,63,242,0.08))] shadow-[0_0_18px_rgba(123,63,242,0.28)]">
+                <div class="grid h-6 w-6 grid-cols-2 gap-1">
+                  <span class="rounded-sm bg-[var(--hyper-purple)]"></span>
+                  <span class="rounded-sm bg-[var(--hyper-magenta)]"></span>
+                  <span class="rounded-sm bg-[var(--hyper-periwinkle)]"></span>
+                  <span class="rounded-sm bg-[var(--hyper-purple)]"></span>
+                </div>
+              </div>
+              <div>
+                <p class="text-[10px] uppercase tracking-[0.22em] text-[var(--hyper-text-tertiary)]">Hyperscaler</p>
+                <p class="text-[15px] font-semibold tracking-[-0.02em] text-white">Asset Hub</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-2">
+              <button class="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-[var(--hyper-text-secondary)] transition-transform duration-150 ease-out hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--hyper-purple)]">
+                <span class="sr-only">Search</span>
+                <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <circle cx="11" cy="11" r="7"></circle>
+                  <path d="m20 20-3.5-3.5"></path>
+                </svg>
+              </button>
+              <button class="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-[var(--hyper-text-secondary)] transition-transform duration-150 ease-out hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--hyper-purple)]">
+                <span class="sr-only">Menu</span>
+                <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+                  <path d="M4 7h16"></path>
+                  <path d="M4 12h16"></path>
+                  <path d="M4 17h10"></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <main class="relative flex-1 px-4 pb-8 pt-4">
+          <section class="flex flex-col gap-4">
+            <div class="flex items-center justify-between gap-3">
+              <button
+                type="button"
+                data-dom-id="back-detail"
+                class="inline-flex h-11 w-11 items-center justify-center rounded-full border border-[var(--hyper-border)] bg-[var(--hyper-surface-soft)] text-[var(--hyper-text)] transition-transform duration-150 ease-out hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--hyper-purple)]"
+                aria-label="返回资产详情"
+              >
+                <i data-lucide="chevron-left" class="h-4 w-4"></i>
+              </button>
+              <div class="inline-flex items-center justify-center gap-2 rounded-full border border-[color-mix(in_srgb,var(--hyper-purple)_55%,transparent)] bg-[color-mix(in_srgb,var(--hyper-surface)_82%,transparent)] px-3 py-2 text-[11px] font-semibold tracking-[0.18em] text-[var(--hyper-periwinkle)]">
+                <span class="roi-brand-mark" aria-hidden="true"></span>
+                <span class="whitespace-nowrap">AURORA AI</span>
+              </div>
+            </div>
+
+            <article class="hyper-card hyper-card-glow roi-hero relative overflow-hidden p-5">
+              <div class="roi-hex-grid" aria-hidden="true">
+                <span class="roi-hex roi-hex-a"></span>
+                <span class="roi-hex roi-hex-b"></span>
+                <span class="roi-hex roi-hex-c"></span>
+              </div>
+              <div class="relative flex flex-col gap-5">
+                <h1 class="max-w-[11ch] text-[30px] font-semibold leading-[1.16] tracking-[-0.03em] text-white" style="text-wrap: balance; word-break: keep-all; overflow-wrap: break-word;">
+                  AI Scenario: Fraud Detection &amp; Prevention
+                </h1>
+                <div class="roi-divider h-px w-full"></div>
+              </div>
+            </article>
+
+            <article class="hyper-card relative overflow-hidden p-5">
+              <div class="absolute inset-x-5 top-0 h-px bg-[linear-gradient(90deg,transparent,var(--hyper-purple),transparent)]"></div>
+              <div class="flex items-center justify-between gap-3">
+                <h2 class="text-[22px] font-semibold leading-[1.2] tracking-[-0.02em] text-white" style="text-wrap: balance; word-break: keep-all; overflow-wrap: break-word;">
+                  Interactive ROI Calculator
+                </h2>
+                <div class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-[color-mix(in_srgb,var(--hyper-purple)_38%,transparent)] bg-[color-mix(in_srgb,var(--hyper-purple)_16%,transparent)] text-[var(--hyper-periwinkle)]">
+                  <i data-lucide="sliders-horizontal" class="h-4 w-4"></i>
+                </div>
+              </div>
+
+              <div class="mt-5 flex flex-col gap-5">
+                <div class="flex flex-col gap-2">
+                  <div class="flex items-center justify-between gap-3">
+                    <p class="truncate text-[13px] font-medium text-[var(--hyper-text)]">Annual Transaction Volume</p>
+                    <output id="volume-value" class="roi-value-pill">144M</output>
+                  </div>
+                  <input class="roi-range" type="range" min="1" max="144" value="144" data-kind="moneyM" data-target="volume-value" aria-label="Annual Transaction Volume">
+                  <div class="flex items-center justify-between gap-2 text-[12px] text-[var(--hyper-text-secondary)]">
+                    <span class="whitespace-nowrap">$1M</span>
+                    <span class="whitespace-nowrap">$144M</span>
+                  </div>
+                </div>
+
+                <div class="flex flex-col gap-2">
+                  <div class="flex items-center justify-between gap-3">
+                    <p class="truncate text-[13px] font-medium text-[var(--hyper-text)]">Current Fraud Rate</p>
+                    <output id="fraud-value" class="roi-value-pill">1%</output>
+                  </div>
+                  <input class="roi-range" type="range" min="0.1" max="1" step="0.1" value="1" data-kind="percent" data-target="fraud-value" aria-label="Current Fraud Rate">
+                  <div class="flex items-center justify-between gap-2 text-[12px] text-[var(--hyper-text-secondary)]">
+                    <span class="whitespace-nowrap">0.1%</span>
+                    <span class="whitespace-nowrap">1%</span>
+                  </div>
+                </div>
+
+                <div class="flex flex-col gap-2">
+                  <div class="flex items-center justify-between gap-3">
+                    <p class="truncate text-[13px] font-medium text-[var(--hyper-text)]">Average Transaction Value</p>
+                    <output id="transaction-value" class="roi-value-pill">1000</output>
+                  </div>
+                  <input class="roi-range" type="range" min="10" max="1000" step="10" value="1000" data-kind="plain" data-target="transaction-value" aria-label="Average Transaction Value">
+                  <div class="flex items-center justify-between gap-2 text-[12px] text-[var(--hyper-text-secondary)]">
+                    <span class="whitespace-nowrap">$10</span>
+                    <span class="whitespace-nowrap">$1000</span>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <article class="hyper-card hyper-card-glow relative overflow-hidden p-5">
+              <div class="absolute inset-x-0 top-0 h-14 bg-[radial-gradient(circle_at_top,rgba(123,63,242,0.28),transparent_70%)]"></div>
+              <div class="relative flex flex-col gap-5">
+                <div class="flex items-center justify-between gap-3">
+                  <h2 class="text-[22px] font-semibold leading-[1.2] tracking-[-0.02em] text-white" style="text-wrap: balance; word-break: keep-all; overflow-wrap: break-word;">
+                    Estimated Impact
+                  </h2>
+                  <div class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-[color-mix(in_srgb,var(--hyper-purple)_38%,transparent)] bg-[color-mix(in_srgb,var(--hyper-surface-soft)_92%,transparent)] text-[var(--hyper-periwinkle)]">
+                    <i data-lucide="bar-chart-3" class="h-4 w-4"></i>
+                  </div>
+                </div>
+
+                <div class="flex flex-col gap-4">
+                  <div class="flex flex-col gap-3 rounded-[var(--hyper-radius-md)] border border-[color-mix(in_srgb,var(--hyper-border)_100%,transparent)] bg-[color-mix(in_srgb,var(--hyper-surface-soft)_82%,transparent)] p-4">
+                    <div class="flex items-center justify-between gap-3 text-[12px] text-[var(--hyper-text-secondary)]">
+                      <span class="whitespace-nowrap">Current Loss</span>
+                      <span class="whitespace-nowrap">With AI</span>
+                    </div>
+                    <div class="flex flex-col gap-3">
+                      <div class="impact-track" aria-label="Current Loss comparison bar">
+                        <span class="impact-fill impact-fill-current"></span>
+                      </div>
+                      <div class="impact-track" aria-label="With AI comparison bar">
+                        <span class="impact-fill impact-fill-ai"></span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="rounded-[var(--hyper-radius-md)] border border-[color-mix(in_srgb,var(--hyper-purple)_58%,transparent)] bg-[linear-gradient(180deg,color-mix(in_srgb,var(--hyper-purple)_20%,transparent),color-mix(in_srgb,var(--hyper-surface)_96%,transparent))] p-4 shadow-[0_0_24px_rgba(123,63,242,0.22)]">
+                    <p class="text-[18px] font-semibold leading-[1.35] tracking-[-0.01em] text-white">
+                      Potential Annual Savings: $720,000
+                    </p>
+                    <div class="mt-4 grid grid-cols-2 gap-3">
+                      <div class="flex flex-col gap-1">
+                        <span class="text-[12px] text-[var(--hyper-text-secondary)]">Fraud Reduction</span>
+                        <span class="text-[28px] font-semibold leading-none tracking-[-0.03em] text-[var(--hyper-periwinkle)]">50%</span>
+                      </div>
+                      <div class="flex flex-col gap-1">
+                        <span class="text-[12px] text-[var(--hyper-text-secondary)]">Payback Period</span>
+                        <span class="text-[24px] font-semibold leading-none tracking-[-0.03em] text-white">4.2 months</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  data-dom-id="open-admin-assets"
+                  class="roi-cta hyper-primary-btn inline-flex h-12 items-center justify-center gap-2 whitespace-nowrap px-5 text-[15px] font-semibold transition-transform duration-150 ease-out hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--hyper-periwinkle)]"
+                >
+                  <span>资产管理</span>
+                  <i data-lucide="arrow-right" class="h-4 w-4"></i>
+                </button>
+              </div>
+            </article>
+          </section>
+
+          <footer class="px-1 pb-1 pt-5 text-center text-[11px] tracking-[0.08em] text-[var(--hyper-text-tertiary)]">
+            AURORA AI · Fraud model
+          </footer>
+        </main>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    .roi-brand-mark {
+      width: 18px;
+      height: 18px;
+      position: relative;
+      display: inline-block;
+    }
+
+    .roi-brand-mark::before,
+    .roi-brand-mark::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 30% 30%, var(--hyper-periwinkle) 0 18%, transparent 19%),
+        radial-gradient(circle at 70% 30%, var(--hyper-purple) 0 18%, transparent 19%),
+        radial-gradient(circle at 30% 70%, var(--hyper-purple) 0 18%, transparent 19%),
+        radial-gradient(circle at 70% 70%, var(--hyper-magenta) 0 18%, transparent 19%);
+      transform: rotate(45deg);
+    }
+
+    .roi-hero {
+      background:
+        radial-gradient(circle at 60% 20%, color-mix(in srgb, var(--hyper-purple) 14%, transparent), transparent 38%),
+        linear-gradient(180deg, color-mix(in srgb, var(--hyper-surface) 96%, transparent), color-mix(in srgb, var(--hyper-surface) 90%, transparent));
+    }
+
+    .roi-hex-grid {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.55;
+    }
+
+    .roi-hex {
+      position: absolute;
+      border: 1px solid color-mix(in srgb, var(--hyper-periwinkle) 16%, transparent);
+      clip-path: polygon(25% 6%, 75% 6%, 100% 50%, 75% 94%, 25% 94%, 0 50%);
+      background: linear-gradient(180deg, color-mix(in srgb, var(--hyper-purple) 10%, transparent), transparent);
+    }
+
+    .roi-hex-a {
+      top: 20px;
+      right: -20px;
+      width: 132px;
+      height: 146px;
+    }
+
+    .roi-hex-b {
+      right: 64px;
+      bottom: -36px;
+      width: 112px;
+      height: 124px;
+    }
+
+    .roi-hex-c {
+      left: -22px;
+      bottom: 28px;
+      width: 86px;
+      height: 96px;
+    }
+
+    .roi-divider {
+      background: linear-gradient(90deg, transparent, var(--hyper-purple), color-mix(in srgb, var(--hyper-magenta) 60%, var(--hyper-purple)), transparent);
+      box-shadow: 0 0 16px color-mix(in srgb, var(--hyper-purple) 28%, transparent);
+    }
+
+    .roi-value-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 64px;
+      height: 32px;
+      padding: 0 12px;
+      border-radius: var(--hyper-radius-full);
+      border: 1px solid color-mix(in srgb, var(--hyper-purple) 34%, transparent);
+      background: color-mix(in srgb, var(--hyper-surface-soft) 90%, transparent);
+      color: var(--hyper-periwinkle);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .roi-range {
+      --progress: 100%;
+      width: 100%;
+      height: 6px;
+      appearance: none;
+      border-radius: 999px;
+      background:
+        linear-gradient(
+          90deg,
+          color-mix(in srgb, var(--hyper-purple) 88%, var(--hyper-magenta) 12%) 0,
+          color-mix(in srgb, var(--hyper-purple) 88%, var(--hyper-magenta) 12%) var(--progress),
+          color-mix(in srgb, var(--hyper-text-tertiary) 60%, transparent) var(--progress),
+          color-mix(in srgb, var(--hyper-text-tertiary) 60%, transparent) 100%
+        );
+      outline: none;
+    }
+
+    .roi-range::-webkit-slider-thumb {
+      appearance: none;
+      width: 22px;
+      height: 22px;
+      border-radius: 999px;
+      border: 1px solid color-mix(in srgb, var(--hyper-periwinkle) 34%, transparent);
+      background:
+        radial-gradient(circle at 35% 35%, color-mix(in srgb, white 72%, var(--hyper-periwinkle) 28%) 0 16%, transparent 17%),
+        linear-gradient(180deg, color-mix(in srgb, var(--hyper-magenta) 44%, var(--hyper-purple) 56%), var(--hyper-purple));
+      box-shadow: 0 0 16px color-mix(in srgb, var(--hyper-purple) 44%, transparent);
+      cursor: pointer;
+      transition: transform 160ms cubic-bezier(.2,.8,.2,1), box-shadow 160ms cubic-bezier(.2,.8,.2,1);
+    }
+
+    .roi-range::-webkit-slider-thumb:active {
+      transform: scale(0.98);
+      box-shadow: 0 0 20px color-mix(in srgb, var(--hyper-magenta) 42%, transparent);
+    }
+
+    .roi-range::-moz-range-thumb {
+      width: 22px;
+      height: 22px;
+      border-radius: 999px;
+      border: 1px solid color-mix(in srgb, var(--hyper-periwinkle) 34%, transparent);
+      background: linear-gradient(180deg, color-mix(in srgb, var(--hyper-magenta) 44%, var(--hyper-purple) 56%), var(--hyper-purple));
+      box-shadow: 0 0 16px color-mix(in srgb, var(--hyper-purple) 44%, transparent);
+      cursor: pointer;
+      transition: transform 160ms cubic-bezier(.2,.8,.2,1), box-shadow 160ms cubic-bezier(.2,.8,.2,1);
+    }
+
+    .roi-range:focus-visible {
+      outline: 2px solid var(--hyper-purple);
+      outline-offset: 6px;
+    }
+
+    .impact-track {
+      height: 10px;
+      width: 100%;
+      overflow: hidden;
+      border-radius: 999px;
+      background: color-mix(in srgb, var(--hyper-text-tertiary) 48%, transparent);
+    }
+
+    .impact-fill {
+      display: block;
+      height: 100%;
+      border-radius: inherit;
+      animation: impact-reveal 420ms cubic-bezier(.3,0,0,1) both;
+    }
+
+    .impact-fill-current {
+      width: 100%;
+      background: linear-gradient(90deg, color-mix(in srgb, var(--hyper-purple) 78%, var(--hyper-magenta) 22%), color-mix(in srgb, var(--hyper-magenta) 64%, var(--hyper-purple) 36%));
+    }
+
+    .impact-fill-ai {
+      width: 50%;
+      background: linear-gradient(90deg, color-mix(in srgb, var(--hyper-periwinkle) 82%, var(--hyper-purple) 18%), var(--hyper-purple));
+    }
+
+    .roi-cta i {
+      transition: transform 150ms cubic-bezier(.2,.8,.2,1);
+    }
+
+    .roi-cta:hover i,
+    .roi-cta:focus-visible i {
+      transform: translateX(2px);
+    }
+
+    @keyframes impact-reveal {
+      from {
+        width: 0;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .roi-range::-webkit-slider-thumb,
+      .roi-range::-moz-range-thumb,
+      .roi-cta,
+      .roi-cta i,
+      .impact-fill,
+      .sticky button {
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+      }
+    }
+  </style>
+
+  <script>
+    (function () {
+      const formatters = {
+        moneyM(value) {
+          return '$' + Math.round(value) + 'M';
+        },
+        percent(value) {
+          return Number(value).toFixed(1).replace('.0', '') + '%';
+        },
+        plain(value) {
+          return String(Math.round(value));
+        }
+      };
+
+      document.querySelectorAll('.roi-range').forEach(function (input) {
+        const output = document.getElementById(input.dataset.target);
+        const kind = input.dataset.kind || 'plain';
+
+        const sync = function () {
+          const min = Number(input.min);
+          const max = Number(input.max);
+          const value = Number(input.value);
+          const progress = ((value - min) / (max - min)) * 100;
+          input.style.setProperty('--progress', progress + '%');
+          if (output) {
+            output.textContent = formatters[kind](value);
+          }
+        };
+
+        input.addEventListener('input', sync);
+        sync();
+      });
+
+      lucide.createIcons();
+    })();
+  </script>
+</body>
+</html>

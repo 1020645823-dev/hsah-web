@@ -6,7 +6,6 @@ import { ArrowRight, ShieldCheck, Sparkles, Workflow } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { login, register } from "@/lib/api";
@@ -43,7 +42,11 @@ function LoginPageContent() {
   async function handleLogin() {
     setSubmitting(true);
     setError(null);
-    const res = await login(email.trim(), password, step === "totp" ? totp.trim() : undefined);
+    const res = await login(
+      email.trim(),
+      password,
+      step === "totp" ? totp.trim() : undefined,
+    );
     setSubmitting(false);
 
     if (!res.ok) {
@@ -73,20 +76,23 @@ function LoginPageContent() {
   }
 
   return (
-    <div className="grid min-h-dvh bg-background lg:grid-cols-[1.1fr_0.9fr]">
-      <section className="hidden bg-[rgb(9_11_20)] px-10 py-12 text-white lg:flex lg:flex-col lg:justify-between">
-        <div className="space-y-8">
-          <div className="space-y-4">
-            <p className="text-xs font-medium tracking-[0.18em] text-white/80">
-              HYPERSCALER ASSET HUB
+    <div className="grid min-h-dvh bg-background lg:grid-cols-[1.15fr_0.85fr]">
+      <section className="hidden bg-[rgb(9_11_20)] px-12 py-14 text-white lg:flex lg:flex-col lg:justify-between">
+        <div className="space-y-10">
+          <div className="space-y-5">
+            <p className="text-[11px] font-semibold tracking-[0.2em] text-white/70 uppercase">
+              Hyperscaler Asset Hub
             </p>
-            <h2 className="max-w-2xl font-heading text-4xl font-semibold tracking-tight">
-              Explore the public content platform, then move into operational workspaces.
+            <h2 className="max-w-2xl font-heading text-[2.75rem] font-semibold leading-[1.15] tracking-tight">
+              Explore the public content platform, then move into operational
+              workspaces.
             </h2>
-            <p className="max-w-xl text-base leading-7 text-white/85">
-              Access saved assets, profiles, and admin operations from one identity entry point.
+            <p className="max-w-lg text-[15px] leading-[1.7] text-white/70">
+              Access saved assets, profiles, and admin operations from one
+              identity entry point.
             </p>
           </div>
+
           <div className="grid gap-4">
             <FeatureBullet
               icon={Sparkles}
@@ -105,8 +111,9 @@ function LoginPageContent() {
             />
           </div>
         </div>
-        <div className="flex items-center justify-between rounded-2xl border border-white/12 bg-white/6 px-5 py-4 text-sm text-white/85">
-          <span>Need a quick look first?</span>
+
+        <div className="mt-10 flex items-center justify-between rounded-2xl border border-white/10 bg-white/[0.04] px-6 py-5 text-sm text-white/80 backdrop-blur-sm">
+          <span className="text-white/60">Need a quick look first?</span>
           <Link
             href="/assets"
             className="inline-flex items-center gap-2 font-medium text-white transition-colors hover:text-white/80"
@@ -117,32 +124,31 @@ function LoginPageContent() {
         </div>
       </section>
 
-      <section className="flex items-center justify-center px-6 py-10 lg:px-10">
-        <Card className="w-full max-w-md border-border bg-card shadow-[var(--shadow-card)]">
-          <CardHeader className="space-y-4">
-            <div className="space-y-2">
-              <p className="text-xs font-medium tracking-[0.18em] text-primary">
-                IDENTITY GATEWAY
-              </p>
-              <h1 className="font-heading text-3xl font-semibold tracking-tight text-foreground">
-                Sign in
-              </h1>
-              <p className="text-sm leading-6 text-foreground/80">
-                {step === "password"
-                  ? "Access saved assets, profiles, and admin operations."
-                  : "Enter the 6-digit code from your authenticator to continue."}
-              </p>
-            </div>
+      <section className="flex items-center justify-center px-6 py-10 lg:px-12">
+        <div className="w-full max-w-[400px] space-y-8">
+          <div className="space-y-3">
+            <p className="text-[11px] font-semibold tracking-[0.2em] text-primary uppercase">
+              Identity Gateway
+            </p>
+            <h1 className="font-heading text-[2rem] font-semibold leading-tight tracking-tight text-foreground">
+              Sign in
+            </h1>
+            <p className="text-[15px] leading-[1.6] text-foreground/70">
+              {step === "password"
+                ? "Access saved assets, profiles, and admin operations."
+                : "Enter the 6-digit code from your authenticator to continue."}
+            </p>
+          </div>
 
-            {cameFromAdmin ? (
-              <div className="rounded-xl border border-border bg-muted/70 px-4 py-3 text-sm text-foreground/80">
-                Sign in to continue to the admin workspace you requested.
-              </div>
-            ) : null}
-          </CardHeader>
-          <CardContent className="space-y-5">
-            <div className="space-y-2">
-              <Label htmlFor="email" className="text-foreground/80">
+          {cameFromAdmin ? (
+            <div className="rounded-xl border border-border/80 bg-muted/60 px-5 py-3.5 text-sm text-foreground/80">
+              Sign in to continue to the admin workspace you requested.
+            </div>
+          ) : null}
+
+          <div className="space-y-5">
+            <div className="space-y-2.5">
+              <Label htmlFor="email" className="text-[13px] font-medium text-foreground/80">
                 Email
               </Label>
               <Input
@@ -151,10 +157,11 @@ function LoginPageContent() {
                 onChange={(e) => setEmail(e.target.value)}
                 autoComplete="email"
                 placeholder="name@company.com"
+                className="h-11 rounded-xl border-border/80 bg-background px-4 text-[15px] shadow-sm transition-all duration-200 focus-visible:border-primary/60 focus-visible:ring-2 focus-visible:ring-primary/15 focus-visible:shadow-[0_0_0_4px_hsl(var(--primary)/8%)]"
               />
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="password" className="text-foreground/80">
+            <div className="space-y-2.5">
+              <Label htmlFor="password" className="text-[13px] font-medium text-foreground/80">
                 Password
               </Label>
               <Input
@@ -164,11 +171,12 @@ function LoginPageContent() {
                 onChange={(e) => setPassword(e.target.value)}
                 autoComplete="current-password"
                 placeholder="••••••••"
+                className="h-11 rounded-xl border-border/80 bg-background px-4 text-[15px] shadow-sm transition-all duration-200 focus-visible:border-primary/60 focus-visible:ring-2 focus-visible:ring-primary/15 focus-visible:shadow-[0_0_0_4px_hsl(var(--primary)/8%)]"
               />
             </div>
             {step === "totp" ? (
-              <div className="space-y-2">
-                <Label htmlFor="totp" className="text-foreground/80">
+              <div className="space-y-2.5">
+                <Label htmlFor="totp" className="text-[13px] font-medium text-foreground/80">
                   2FA Code
                 </Label>
                 <Input
@@ -177,39 +185,44 @@ function LoginPageContent() {
                   value={totp}
                   onChange={(e) => setTotp(e.target.value)}
                   placeholder="123456"
+                  className="h-11 rounded-xl border-border/80 bg-background px-4 text-[15px] shadow-sm transition-all duration-200 focus-visible:border-primary/60 focus-visible:ring-2 focus-visible:ring-primary/15 focus-visible:shadow-[0_0_0_4px_hsl(var(--primary)/8%)]"
                 />
               </div>
             ) : null}
 
             {error ? (
-              <div className="rounded-xl border border-destructive/20 bg-destructive/10 px-3 py-2 text-sm text-destructive">
+              <div className="rounded-xl border border-destructive/15 bg-destructive/8 px-4 py-3 text-sm text-destructive">
                 {error}
               </div>
             ) : null}
-          </CardContent>
-          <CardFooter className="flex flex-col gap-3">
+          </div>
+
+          <div className="flex flex-col gap-3">
             <Button
-              className="w-full"
+              className="h-11 w-full rounded-xl text-[15px] font-semibold shadow-sm transition-all duration-200 hover:shadow-md active:translate-y-px"
               onClick={handleLogin}
               disabled={!canSubmit || submitting}
             >
               {step === "totp" ? "Verify & Sign in" : "Sign in"}
             </Button>
             <Button
-              className="w-full"
+              className="h-11 w-full rounded-xl text-[15px] font-medium transition-all duration-200"
               variant="outline"
               onClick={handleCreateAccount}
               disabled={!email.trim() || !password || submitting}
             >
               Create account (dev)
             </Button>
-            <div className="w-full text-center text-sm text-foreground/70">
-              <Link href="/assets" className="font-medium text-foreground transition-colors hover:text-primary">
+            <div className="w-full pt-1 text-center text-sm text-foreground/60">
+              <Link
+                href="/assets"
+                className="font-medium text-foreground transition-colors hover:text-primary"
+              >
                 Return to public library
               </Link>
             </div>
-          </CardFooter>
-        </Card>
+          </div>
+        </div>
       </section>
     </div>
   );
@@ -240,13 +253,13 @@ function FeatureBullet({
   description: string;
 }) {
   return (
-    <div className="flex gap-4 rounded-2xl border border-white/10 bg-white/5 p-5">
-      <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-white/10">
-        <Icon className="size-5 text-white" />
+    <div className="flex gap-4 rounded-2xl border border-white/[0.08] bg-white/[0.03] p-5 backdrop-blur-sm transition-colors duration-200 hover:bg-white/[0.06]">
+      <div className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-white/[0.08]">
+        <Icon className="size-5 text-white/90" />
       </div>
       <div className="space-y-1">
-        <p className="text-sm font-medium text-white">{title}</p>
-        <p className="text-sm leading-6 text-white/80">{description}</p>
+        <p className="text-sm font-semibold text-white">{title}</p>
+        <p className="text-sm leading-[1.6] text-white/65">{description}</p>
       </div>
     </div>
   );

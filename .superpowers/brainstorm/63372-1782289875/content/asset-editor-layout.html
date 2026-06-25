@@ -1,0 +1,137 @@
+<h2>Asset Editor — 单页分组表单布局</h2>
+<p class="subtitle">4 个逻辑分组，每组用 Card 分隔，底部统一 Save/Cancel</p>
+
+<div class="mockup">
+  <div class="mockup-header">ADMIN / ASSETS / Edit: cloud-platform-01</div>
+  <div class="mockup-body" style="padding: 24px; display: flex; flex-direction: column; gap: 20px;">
+
+    <!-- Back link -->
+    <div style="font-size: 13px; color: #8888aa;">← Back to Assets</div>
+
+    <!-- Section 1: Basic Info -->
+    <div style="border: 1px solid rgba(212,218,245,0.12); border-radius: 16px; padding: 20px; background: rgba(18,18,26,0.7);">
+      <div style="font-size: 11px; letter-spacing: 0.14em; color: #8888aa; margin-bottom: 4px;">BASIC INFORMATION</div>
+      <div style="font-size: 16px; font-weight: 600; color: #eee; margin-bottom: 16px;">基本信息</div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+        <div>
+          <label style="font-size: 12px; color: #aaa; display: block; margin-bottom: 4px;">Slug *</label>
+          <input style="width: 100%; padding: 8px 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(212,218,245,0.12); border-radius: 8px; color: #eee; font-size: 14px;" value="cloud-platform-01" />
+        </div>
+        <div>
+          <label style="font-size: 12px; color: #aaa; display: block; margin-bottom: 4px;">Title *</label>
+          <input style="width: 100%; padding: 8px 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(212,218,245,0.12); border-radius: 8px; color: #eee; font-size: 14px;" value="Cloud Platform Solution" />
+        </div>
+        <div>
+          <label style="font-size: 12px; color: #aaa; display: block; margin-bottom: 4px;">Subtitle</label>
+          <input style="width: 100%; padding: 8px 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(212,218,245,0.12); border-radius: 8px; color: #eee; font-size: 14px;" value="Enterprise-grade cloud infrastructure" />
+        </div>
+        <div style="grid-column: 1 / -1;">
+          <label style="font-size: 12px; color: #aaa; display: block; margin-bottom: 4px;">Short Description *</label>
+          <textarea style="width: 100%; padding: 8px 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(212,218,245,0.12); border-radius: 8px; color: #eee; font-size: 14px; min-height: 60px; resize: vertical;">A comprehensive cloud platform solution for enterprise workloads...</textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 2: Classification Tags -->
+    <div style="border: 1px solid rgba(212,218,245,0.12); border-radius: 16px; padding: 20px; background: rgba(18,18,26,0.7);">
+      <div style="font-size: 11px; letter-spacing: 0.14em; color: #8888aa; margin-bottom: 4px;">CLASSIFICATION TAGS</div>
+      <div style="font-size: 16px; font-weight: 600; color: #eee; margin-bottom: 16px;">分类标签</div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px;">
+        <div>
+          <label style="font-size: 12px; color: #aaa; display: block; margin-bottom: 4px;">Cloud Providers</label>
+          <input style="width: 100%; padding: 8px 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(212,218,245,0.12); border-radius: 8px; color: #eee; font-size: 14px;" value="aws, azure, gcp" />
+          <div style="margin-top: 6px; display: flex; gap: 4px; flex-wrap: wrap;">
+            <span style="padding: 2px 8px; background: rgba(138,133,245,0.15); border-radius: 12px; font-size: 12px; color: #8a85f5;">aws</span>
+            <span style="padding: 2px 8px; background: rgba(138,133,245,0.15); border-radius: 12px; font-size: 12px; color: #8a85f5;">azure</span>
+            <span style="padding: 2px 8px; background: rgba(138,133,245,0.15); border-radius: 12px; font-size: 12px; color: #8a85f5;">gcp</span>
+          </div>
+        </div>
+        <div>
+          <label style="font-size: 12px; color: #aaa; display: block; margin-bottom: 4px;">Industries</label>
+          <input style="width: 100%; padding: 8px 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(212,218,245,0.12); border-radius: 8px; color: #eee; font-size: 14px;" value="fintech, healthcare" />
+          <div style="margin-top: 6px; display: flex; gap: 4px; flex-wrap: wrap;">
+            <span style="padding: 2px 8px; background: rgba(138,133,245,0.15); border-radius: 12px; font-size: 12px; color: #8a85f5;">fintech</span>
+            <span style="padding: 2px 8px; background: rgba(138,133,245,0.15); border-radius: 12px; font-size: 12px; color: #8a85f5;">healthcare</span>
+          </div>
+        </div>
+        <div>
+          <label style="font-size: 12px; color: #aaa; display: block; margin-bottom: 4px;">Technologies</label>
+          <input style="width: 100%; padding: 8px 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(212,218,245,0.12); border-radius: 8px; color: #eee; font-size: 14px;" value="kubernetes, terraform" />
+          <div style="margin-top: 6px; display: flex; gap: 4px; flex-wrap: wrap;">
+            <span style="padding: 2px 8px; background: rgba(138,133,245,0.15); border-radius: 12px; font-size: 12px; color: #8a85f5;">kubernetes</span>
+            <span style="padding: 2px 8px; background: rgba(138,133,245,0.15); border-radius: 12px; font-size: 12px; color: #8a85f5;">terraform</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 3: Type & Status -->
+    <div style="border: 1px solid rgba(212,218,245,0.12); border-radius: 16px; padding: 20px; background: rgba(18,18,26,0.7);">
+      <div style="font-size: 11px; letter-spacing: 0.14em; color: #8888aa; margin-bottom: 4px;">TYPE & STATUS</div>
+      <div style="font-size: 16px; font-weight: 600; color: #eee; margin-bottom: 16px;">类型与状态</div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+        <div>
+          <label style="font-size: 12px; color: #aaa; display: block; margin-bottom: 4px;">Asset Type</label>
+          <select style="width: 100%; padding: 8px 12px; background: rgba(18,18,26,0.9); border: 1px solid rgba(212,218,245,0.12); border-radius: 8px; color: #eee; font-size: 14px;">
+            <option selected>solution</option>
+            <option>whitepaper</option>
+            <option>demo</option>
+            <option>reference-architecture</option>
+          </select>
+        </div>
+        <div>
+          <label style="font-size: 12px; color: #aaa; display: block; margin-bottom: 4px;">Status</label>
+          <select style="width: 100%; padding: 8px 12px; background: rgba(18,18,26,0.9); border: 1px solid rgba(212,218,245,0.12); border-radius: 8px; color: #eee; font-size: 14px;">
+            <option>draft</option>
+            <option selected>published</option>
+            <option>archived</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 4: Access Control -->
+    <div style="border: 1px solid rgba(212,218,245,0.12); border-radius: 16px; padding: 20px; background: rgba(18,18,26,0.7);">
+      <div style="font-size: 11px; letter-spacing: 0.14em; color: #8888aa; margin-bottom: 4px;">ACCESS CONTROL</div>
+      <div style="font-size: 16px; font-weight: 600; color: #eee; margin-bottom: 16px;">访问控制</div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px;">
+        <div>
+          <label style="font-size: 12px; color: #aaa; display: block; margin-bottom: 4px;">Visibility</label>
+          <select style="width: 100%; padding: 8px 12px; background: rgba(18,18,26,0.9); border: 1px solid rgba(212,218,245,0.12); border-radius: 8px; color: #eee; font-size: 14px;">
+            <option selected>public</option>
+            <option>restricted</option>
+            <option>internal</option>
+          </select>
+        </div>
+        <div>
+          <label style="font-size: 12px; color: #aaa; display: block; margin-bottom: 4px;">Allowed Roles</label>
+          <input style="width: 100%; padding: 8px 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(212,218,245,0.12); border-radius: 8px; color: #eee; font-size: 14px;" value="admin, editor" />
+        </div>
+        <div>
+          <label style="font-size: 12px; color: #aaa; display: block; margin-bottom: 4px;">Allowed Users</label>
+          <input style="width: 100%; padding: 8px 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(212,218,245,0.12); border-radius: 8px; color: #eee; font-size: 14px;" value="alice@example.com" />
+        </div>
+      </div>
+      <div style="margin-top: 12px; font-size: 12px; color: #8888aa;">💡 当 visibility = public 时，allowed_roles / allowed_users 不影响公共访问</div>
+    </div>
+
+    <!-- Action Bar -->
+    <div style="display: flex; justify-content: flex-end; gap: 12px; padding-top: 8px;">
+      <button style="padding: 10px 24px; border: 1px solid rgba(212,218,245,0.12); border-radius: 10px; background: transparent; color: #aaa; font-size: 14px; cursor: pointer;">Cancel</button>
+      <button style="padding: 10px 24px; border: none; border-radius: 10px; background: #7c3aed; color: #fff; font-size: 14px; font-weight: 600; cursor: pointer;">Save Changes</button>
+    </div>
+
+  </div>
+</div>
+
+<div style="margin-top: 24px; padding: 16px; border: 1px solid rgba(138,133,245,0.2); border-radius: 12px; background: rgba(138,133,245,0.05);">
+  <div style="font-size: 13px; color: #aaa; margin-bottom: 8px;"><strong style="color: #8a85f5;">设计说明</strong></div>
+  <ul style="font-size: 13px; color: #ccc; line-height: 1.8; padding-left: 16px; margin: 0;">
+    <li>4 个 Card 分组，每组职责清晰</li>
+    <li>分类标签用逗号分隔输入 + Chip 预览</li>
+    <li>Allowed Roles 从已有 Roles 列表拉取建议</li>
+    <li>Asset Type / Status / Visibility 用下拉选择</li>
+    <li>Save 按钮：有变更时启用，无变更时禁用</li>
+    <li>content_blocks 编辑留给 Phase 2（不在本页面展示）</li>
+  </ul>
+</div>

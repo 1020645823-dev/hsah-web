@@ -1,0 +1,515 @@
+{
+  "project": {
+    "name": "Hyperscaler Asset Hub 移动端设计",
+    "path": "/Users/weiwei.g.zhang/Documents/hsah/Kimi_Agent_资产中心配置与权限设计/hyperscaler-asset-hub-mobile",
+    "operation": "create",
+    "deviceType": "mobile",
+    "language": "zh-CN",
+    "dashboardMode": false,
+    "replicationMode": null,
+    "sourceUrl": null,
+    "visualSpecExcerpt": null,
+    "styleDefinitionBrief": "Accenture 风格的深空黑与靛紫霓虹体系，玻璃拟态卡片、发光描边、精密几何图形与高密度企业级内容在移动端单列重排后依然保持未来感与权威感。",
+    "designRead": "企业级 AI 资产平台 / 客户决策者与管理员 / 未来科技感 / 高信息密度 / 避免通用 SaaS 卡片模板",
+    "designDials": {
+      "layoutVariance": 2,
+      "motionIntensity": 2,
+      "visualDensity": 4
+    },
+    "styleContinuityAnchors": {
+      "colorSystem": "以深黑和深靛蓝为底，唯一主品牌高亮为 Electric Purple，少量 Accent Magenta 只用于辉光与渐变尾部；成功态为绿色、预警态为橙色、云厂商可用 AWS 橙与 Azure 蓝。",
+      "shapeSystem": "主容器大圆角 20-28px，小控件 6-12px；大量胶囊按钮、胶囊筛选器、圆形 icon 按钮与柔和描边。",
+      "typographySystem": "标题使用 Graphik/Inter 与中文系统无衬线混排，粗体高对比；正文 14-16px，数字指标使用更粗更大的显示级比例。",
+      "spacingSystem": "基于 8px 网格，移动端统一采用 16/20/24/32px 的层级间距，卡片内边距偏紧凑以维持信息密度。",
+      "componentLanguage": "玻璃拟态卡片、渐变描边、发光 CTA、标签徽章、细边线表格或卡片化列表、暗色输入与分段切换器。",
+      "surfaceAndDepth": "静态层以半透明深色面板和细描边区分，关键选中态或 CTA 才出现紫色外发光。",
+      "imageryAndIconography": "抽象粒子流、AI 网络纹理、云厂商徽标色点缀、小尺寸头像、线性图标与播放按钮叠加。",
+      "interactionTone": "克制但明确的激活反馈，主要通过紫色下划线、描边增强、按钮发光与轻微位移实现。"
+    },
+    "sharedProjectShellContract": {
+      "navigationShell": "统一移动端顶栏：左侧品牌标识，右侧搜索与菜单按钮；页面底部或内部导航使用胶囊或图标分区维持 App 感。",
+      "primaryColorSystem": "主品牌色统一使用 #7B3FF2，卡片 glow 可混入 #C026D3，但不改变主 CTA 色。",
+      "typographySystem": "所有页面共用一套标题/正文/数字层级，不做逐页字体实验。",
+      "radiusScale": "6 / 12 / 20 / 28 / full 的层级圆角系统。",
+      "surfaceDepthModel": "背景为多层 radial glow，内容区为半透明深色卡片，激活元素增加紫色描边与外发光。",
+      "ctaStyle": "主要 CTA 为高亮紫色胶囊按钮，次级 CTA 为透明描边按钮，按钮标签保持短促有力。",
+      "alignmentRules": "移动端一律单列主内容，双列表格改为堆叠信息卡，工具栏控件左右对齐清晰。"
+    },
+    "generationTree": {
+      "root": {
+        "nodeId": "gen-project-shell",
+        "kind": "project-shell",
+        "pageIds": [
+          "page-home",
+          "page-asset-library",
+          "page-asset-detail",
+          "page-roi-calculator",
+          "page-admin-asset-management",
+          "page-admin-permissions"
+        ],
+        "output": "partials/project-shell.html",
+        "sharedRegions": [
+          "mobile app frame",
+          "global header",
+          "background glow system",
+          "spacing rhythm",
+          "primary CTA treatment"
+        ],
+        "privateRegions": [],
+        "mutableSlots": [
+          "pageTitle",
+          "activeNavItem"
+        ],
+        "status": "generated",
+        "children": [
+          {
+            "nodeId": "gen-page-home",
+            "kind": "page-leaf",
+            "pageIds": [
+              "page-home"
+            ],
+            "output": "pages/home.html",
+            "sharedRegions": [],
+            "privateRegions": [
+              "hero",
+              "stats cards",
+              "feature list",
+              "bottom navigation"
+            ],
+            "mutableSlots": [
+              "pageTitle",
+              "activeNavItem"
+            ],
+            "status": "generated",
+            "children": []
+          },
+          {
+            "nodeId": "gen-page-asset-library",
+            "kind": "page-leaf",
+            "pageIds": [
+              "page-asset-library"
+            ],
+            "output": "pages/asset-library.html",
+            "sharedRegions": [],
+            "privateRegions": [
+              "filter toolbar",
+              "asset cards",
+              "view toggle"
+            ],
+            "mutableSlots": [
+              "pageTitle",
+              "activeNavItem"
+            ],
+            "status": "generated",
+            "children": []
+          },
+          {
+            "nodeId": "gen-page-asset-detail",
+            "kind": "page-leaf",
+            "pageIds": [
+              "page-asset-detail"
+            ],
+            "output": "pages/asset-detail.html",
+            "sharedRegions": [],
+            "privateRegions": [
+              "video hero",
+              "quick info",
+              "tab strip",
+              "overview panel"
+            ],
+            "mutableSlots": [
+              "pageTitle",
+              "activeNavItem"
+            ],
+            "status": "generated",
+            "children": []
+          },
+          {
+            "nodeId": "gen-page-roi-calculator",
+            "kind": "page-leaf",
+            "pageIds": [
+              "page-roi-calculator"
+            ],
+            "output": "pages/roi-calculator.html",
+            "sharedRegions": [],
+            "privateRegions": [
+              "scenario hero",
+              "sliders",
+              "impact panel"
+            ],
+            "mutableSlots": [
+              "pageTitle",
+              "activeNavItem"
+            ],
+            "status": "generated",
+            "children": []
+          },
+          {
+            "nodeId": "gen-page-admin-asset-management",
+            "kind": "page-leaf",
+            "pageIds": [
+              "page-admin-asset-management"
+            ],
+            "output": "pages/admin-asset-management.html",
+            "sharedRegions": [],
+            "privateRegions": [
+              "admin stats",
+              "toolbar",
+              "asset rows",
+              "pagination"
+            ],
+            "mutableSlots": [
+              "pageTitle",
+              "activeNavItem"
+            ],
+            "status": "generated",
+            "children": []
+          },
+          {
+            "nodeId": "gen-page-admin-permissions",
+            "kind": "page-leaf",
+            "pageIds": [
+              "page-admin-permissions"
+            ],
+            "output": "pages/admin-permissions.html",
+            "sharedRegions": [],
+            "privateRegions": [
+              "role cards",
+              "permission matrix",
+              "save bar"
+            ],
+            "mutableSlots": [
+              "pageTitle",
+              "activeNavItem"
+            ],
+            "status": "generated",
+            "children": []
+          }
+        ]
+      }
+    }
+  },
+  "designSource": {
+    "operatingMode": "free-explore",
+    "libraryIdentity": {
+      "name": null,
+      "id": null,
+      "version": null,
+      "scope": null,
+      "path": null,
+      "versionSource": null
+    },
+    "cssFilePath": "/Users/weiwei.g.zhang/Documents/hsah/Kimi_Agent_资产中心配置与权限设计/hyperscaler-asset-hub-mobile/colors_and_type.css",
+    "brandPrefix": "hyper",
+    "themeMode": "dark",
+    "designDecisionSummary": "基于项目设计规范与参考截图，将桌面端页面重构为移动端单列布局，保留原稿的深色霓虹紫、玻璃拟态、高密度信息组织与 CTA / 标签 / 指标样式。",
+    "forbiddenInventedComponents": [],
+    "allowedComponents": [],
+    "styleConstraints": {
+      "radiusMax": 28,
+      "spacingBase": 8,
+      "fontSizeBody": 14,
+      "fontSizeMin": 11,
+      "controlHeightDefault": 40,
+      "controlHeightLarge": 48,
+      "staticShadowAlphaMax": 0.18
+    },
+    "productContext": {
+      "kitType": "enterprise-ai-design-system",
+      "productType": "Hyperscaler AI asset hub and admin console"
+    },
+    "actualTokenNameReference": [
+      { "semanticPurpose": "页面背景", "tokenName": "hyper-bg" },
+      { "semanticPurpose": "深色面板背景", "tokenName": "hyper-surface" },
+      { "semanticPurpose": "主边框", "tokenName": "hyper-border" },
+      { "semanticPurpose": "主文字", "tokenName": "hyper-text" },
+      { "semanticPurpose": "次文字", "tokenName": "hyper-text-secondary" },
+      { "semanticPurpose": "品牌主色", "tokenName": "hyper-purple" },
+      { "semanticPurpose": "强调辉光", "tokenName": "hyper-magenta" },
+      { "semanticPurpose": "标题高亮", "tokenName": "hyper-periwinkle" },
+      { "semanticPurpose": "成功态", "tokenName": "hyper-success" },
+      { "semanticPurpose": "预警态", "tokenName": "hyper-warning" },
+      { "semanticPurpose": "AWS 标签", "tokenName": "hyper-aws" },
+      { "semanticPurpose": "Azure 标签", "tokenName": "hyper-azure" }
+    ]
+  },
+  "pages": [
+    {
+      "nodeId": "page-home",
+      "slug": "home",
+      "title": "首页",
+      "htmlSrc": "pages/home.html",
+      "pageIndex": 1,
+      "stateGroupId": null,
+      "stateRole": null,
+      "baseStatePageId": null,
+      "sharedShellContract": [],
+      "mutableRegions": [],
+      "derivedFromHtmlSrc": null,
+      "derivationType": "original",
+      "sourcePageId": null,
+      "sourceHtmlSrc": null,
+      "pageType": "showcase",
+      "businessScenario": "平台首页与主价值展示",
+      "visualNorthStar": "像一张未来感产品海报压缩进移动端首屏，品牌标题、发光统计与 CTA 都需要强烈抓眼。",
+      "compositionPattern": "hero-led stacked narrative",
+      "continuityAnchors": ["紫色发光 CTA", "玻璃拟态统计卡", "深空背景与粒子感纹理"],
+      "libraryRestraintMode": false,
+      "componentPlan": [],
+      "imagePlan": [],
+      "chartsRequired": false,
+      "miniProgramStyle": false,
+      "qualityRisks": ["标题与统计卡在移动端拥挤", "需要避免丢失粒子网络氛围"]
+    },
+    {
+      "nodeId": "page-asset-library",
+      "slug": "asset-library",
+      "title": "资产库",
+      "htmlSrc": "pages/asset-library.html",
+      "pageIndex": 2,
+      "stateGroupId": null,
+      "stateRole": null,
+      "baseStatePageId": null,
+      "sharedShellContract": [],
+      "mutableRegions": [],
+      "derivedFromHtmlSrc": null,
+      "derivationType": "original",
+      "sourcePageId": null,
+      "sourceHtmlSrc": null,
+      "pageType": "information-dense",
+      "businessScenario": "资产浏览、筛选与列表切换",
+      "visualNorthStar": "移动端也要保持强过滤能力与卡片浏览效率，像高端 AI 资产商城。",
+      "compositionPattern": "filter-led dense grid",
+      "continuityAnchors": ["胶囊筛选器", "紫色激活描边", "渐变预览卡"],
+      "libraryRestraintMode": false,
+      "componentPlan": [],
+      "imagePlan": [],
+      "chartsRequired": false,
+      "miniProgramStyle": false,
+      "qualityRisks": ["筛选器过多造成首屏拥堵", "卡片信息层级混乱"]
+    },
+    {
+      "nodeId": "page-asset-detail",
+      "slug": "asset-detail",
+      "title": "资产详情",
+      "htmlSrc": "pages/asset-detail.html",
+      "pageIndex": 3,
+      "stateGroupId": null,
+      "stateRole": null,
+      "baseStatePageId": null,
+      "sharedShellContract": [],
+      "mutableRegions": [],
+      "derivedFromHtmlSrc": null,
+      "derivationType": "original",
+      "sourcePageId": null,
+      "sourceHtmlSrc": null,
+      "pageType": "information-dense",
+      "businessScenario": "单个资产详情、视频预览、快速信息与价值说明",
+      "visualNorthStar": "像一张可操作的产品详情剧场海报，顶部演示图与关键业务价值需要最先被看见。",
+      "compositionPattern": "media-first detail stack",
+      "continuityAnchors": ["16:9 预览区", "侧栏信息转为摘要卡", "Tab 激活下划线"],
+      "libraryRestraintMode": false,
+      "componentPlan": [],
+      "imagePlan": ["asset-detail-demo.jpg"],
+      "chartsRequired": false,
+      "miniProgramStyle": false,
+      "qualityRisks": ["信息过多导致滚动长度失控", "侧栏转移动端后失去重点"]
+    },
+    {
+      "nodeId": "page-roi-calculator",
+      "slug": "roi-calculator",
+      "title": "ROI 计算器",
+      "htmlSrc": "pages/roi-calculator.html",
+      "pageIndex": 4,
+      "stateGroupId": null,
+      "stateRole": null,
+      "baseStatePageId": null,
+      "sharedShellContract": [],
+      "mutableRegions": [],
+      "derivedFromHtmlSrc": null,
+      "derivationType": "original",
+      "sourcePageId": null,
+      "sourceHtmlSrc": null,
+      "pageType": "task-driven",
+      "businessScenario": "场景 ROI 计算、参数调节与价值结果展示",
+      "visualNorthStar": "让交互式滑杆像高端分析工具，结果卡需要强烈传达商业价值。",
+      "compositionPattern": "dual-panel calculator adapted to stack",
+      "continuityAnchors": ["发光分隔线", "实时结果大卡", "科技感导航条"],
+      "libraryRestraintMode": false,
+      "componentPlan": [],
+      "imagePlan": [],
+      "chartsRequired": false,
+      "miniProgramStyle": false,
+      "qualityRisks": ["滑杆过长导致布局破碎", "结果区层级不够突出"]
+    },
+    {
+      "nodeId": "page-admin-asset-management",
+      "slug": "admin-asset-management",
+      "title": "资产管理",
+      "htmlSrc": "pages/admin-asset-management.html",
+      "pageIndex": 5,
+      "stateGroupId": null,
+      "stateRole": null,
+      "baseStatePageId": null,
+      "sharedShellContract": [],
+      "mutableRegions": [],
+      "derivedFromHtmlSrc": null,
+      "derivationType": "original",
+      "sourcePageId": null,
+      "sourceHtmlSrc": null,
+      "pageType": "information-dense",
+      "businessScenario": "后台资产列表、状态统计与管理操作",
+      "visualNorthStar": "像一块精密控制面板，指标概览和表格操作都要保持专业与紧凑。",
+      "compositionPattern": "stats-plus-card-table stack",
+      "continuityAnchors": ["高亮侧导航语义转为顶部分区", "数字统计卡", "深色表格卡"],
+      "libraryRestraintMode": false,
+      "componentPlan": [],
+      "imagePlan": ["admin-asset-thumb.jpg", "avatar-owner-1.jpg", "avatar-owner-2.jpg", "avatar-owner-3.jpg"],
+      "chartsRequired": false,
+      "miniProgramStyle": false,
+      "qualityRisks": ["表格转卡片后信息丢失", "筛选与分页位置不清晰"]
+    },
+    {
+      "nodeId": "page-admin-permissions",
+      "slug": "admin-permissions",
+      "title": "权限管理",
+      "htmlSrc": "pages/admin-permissions.html",
+      "pageIndex": 6,
+      "stateGroupId": null,
+      "stateRole": null,
+      "baseStatePageId": null,
+      "sharedShellContract": [],
+      "mutableRegions": [],
+      "derivedFromHtmlSrc": null,
+      "derivationType": "original",
+      "sourcePageId": null,
+      "sourceHtmlSrc": null,
+      "pageType": "information-dense",
+      "businessScenario": "RBAC 角色卡片与权限矩阵配置",
+      "visualNorthStar": "保留桌面端权限矩阵的秩序感，在移动端通过卡片和横向矩阵兼容的方式呈现控制力。",
+      "compositionPattern": "role-strip plus matrix stack",
+      "continuityAnchors": ["角色高亮描边", "紫色勾选框", "保存按钮贴底强调"],
+      "libraryRestraintMode": false,
+      "componentPlan": [],
+      "imagePlan": [],
+      "chartsRequired": false,
+      "miniProgramStyle": false,
+      "qualityRisks": ["矩阵列过多导致横向挤压", "角色卡片与表格断裂"]
+    }
+  ],
+  "assets": [
+    {
+      "filename": "asset-detail-demo.jpg",
+      "role": "supporting-content",
+      "owningPage": "asset-detail",
+      "semanticDescription": "蓝紫色 AI 粒子流视频预览画面",
+      "status": "generated"
+    },
+    {
+      "filename": "admin-asset-thumb.jpg",
+      "role": "supporting-content",
+      "owningPage": "admin-asset-management",
+      "semanticDescription": "蓝色发光 AI 模型缩略图",
+      "status": "generated"
+    },
+    {
+      "filename": "avatar-owner-1.jpg",
+      "role": "supporting-content",
+      "owningPage": "admin-asset-management",
+      "semanticDescription": "深色背景商务女性头像一",
+      "status": "generated"
+    },
+    {
+      "filename": "avatar-owner-2.jpg",
+      "role": "supporting-content",
+      "owningPage": "admin-asset-management",
+      "semanticDescription": "深色背景商务女性头像二",
+      "status": "generated"
+    },
+    {
+      "filename": "avatar-owner-3.jpg",
+      "role": "supporting-content",
+      "owningPage": "admin-asset-management",
+      "semanticDescription": "深色背景商务女性头像三",
+      "status": "generated"
+    }
+  ],
+  "wiringPlan": [
+    {
+      "sourceNodeId": "page-home",
+      "domId": "cta-explore-assets",
+      "targetPageId": "page-asset-library"
+    },
+    {
+      "sourceNodeId": "page-asset-library",
+      "domId": "open-asset-detail",
+      "targetPageId": "page-asset-detail"
+    },
+    {
+      "sourceNodeId": "page-asset-detail",
+      "domId": "launch-roi-calculator",
+      "targetPageId": "page-roi-calculator"
+    },
+    {
+      "sourceNodeId": "page-roi-calculator",
+      "domId": "open-admin-assets",
+      "targetPageId": "page-admin-asset-management"
+    },
+    {
+      "sourceNodeId": "page-admin-asset-management",
+      "domId": "open-permissions",
+      "targetPageId": "page-admin-permissions"
+    }
+  ],
+  "hiddenInteractionPlan": [
+    {
+      "sourceNodeId": "page-home",
+      "domId": "nav-platform",
+      "targetPageId": "page-asset-library",
+      "hideEdge": true,
+      "reason": "top nav"
+    },
+    {
+      "sourceNodeId": "page-home",
+      "domId": "nav-case-studies",
+      "targetPageId": "page-asset-detail",
+      "hideEdge": true,
+      "reason": "top nav"
+    },
+    {
+      "sourceNodeId": "page-asset-library",
+      "domId": "back-home",
+      "targetPageId": "page-home",
+      "hideEdge": true,
+      "reason": "return"
+    },
+    {
+      "sourceNodeId": "page-asset-detail",
+      "domId": "back-library",
+      "targetPageId": "page-asset-library",
+      "hideEdge": true,
+      "reason": "return"
+    },
+    {
+      "sourceNodeId": "page-roi-calculator",
+      "domId": "back-detail",
+      "targetPageId": "page-asset-detail",
+      "hideEdge": true,
+      "reason": "return"
+    },
+    {
+      "sourceNodeId": "page-admin-asset-management",
+      "domId": "back-roi",
+      "targetPageId": "page-roi-calculator",
+      "hideEdge": true,
+      "reason": "return"
+    },
+    {
+      "sourceNodeId": "page-admin-permissions",
+      "domId": "back-admin-assets",
+      "targetPageId": "page-admin-asset-management",
+      "hideEdge": true,
+      "reason": "return"
+    }
+  ]
+}
