@@ -8,7 +8,7 @@ import {
   parseAssetToDraft,
   areDraftsEqual,
 } from "./admin-asset-editor";
-import type { ContentBlock } from "./admin-content-blocks";
+
 
 const validDraft: AssetEditorDraft = {
   slug: "test-asset",
@@ -23,6 +23,7 @@ const validDraft: AssetEditorDraft = {
   visibility: "public",
   allowedRoles: ["admin"],
   allowedUsers: ["user1"],
+  contentSchemaVersion: 2,
   contentBlocks: [],
 };
 
@@ -140,6 +141,7 @@ describe("buildPayload", () => {
       visibility: "public",
       allowed_roles: ["admin"],
       allowed_users: ["user1"],
+      content_schema_version: 2,
       content_blocks: [],
     });
   });
@@ -190,30 +192,44 @@ describe("buildPayload", () => {
         {
           id: "block-1",
           type: "text",
+          version: 2,
           order: 0,
           visible: true,
-          config: { markdown: "# Hello" },
+          config: { markdown: "# Hello", html: "" },
         },
         {
           id: "block-2",
           type: "stat_card",
+          version: 2,
           order: 1,
           visible: true,
-          config: { items: [{ label: "Users", value: "1000" }] },
+          config: {
+            title: "KPIs",
+            stats: [{ label: "Users", value: "1000", description: "" }],
+          },
         },
       ],
     };
     const payload = buildPayload(draftWithBlocks);
     expect(payload.content_blocks).toHaveLength(2);
     expect(payload.content_blocks[0]).toEqual({
-      block_type: "text",
-      block_id: "block-1",
-      config: { markdown: "# Hello" },
+      id: "block-1",
+      type: "text",
+      version: 2,
+      order: 0,
+      visible: true,
+      config: { markdown: "# Hello", html: "" },
     });
     expect(payload.content_blocks[1]).toEqual({
-      block_type: "stat_card",
-      block_id: "block-2",
-      config: { items: [{ label: "Users", value: "1000" }] },
+      id: "block-2",
+      type: "stat_card",
+      version: 2,
+      order: 1,
+      visible: true,
+      config: {
+        title: "KPIs",
+        stats: [{ label: "Users", value: "1000", description: "" }],
+      },
     });
   });
 
@@ -224,22 +240,24 @@ describe("buildPayload", () => {
         {
           id: "block-1",
           type: "text",
+          version: 2,
           order: 0,
           visible: true,
-          config: { markdown: "# Visible" },
+          config: { markdown: "# Visible", html: "" },
         },
         {
           id: "block-2",
           type: "text",
+          version: 2,
           order: 1,
           visible: false,
-          config: { markdown: "# Hidden" },
+          config: { markdown: "# Hidden", html: "" },
         },
       ],
     };
     const payload = buildPayload(draftWithBlocks);
     expect(payload.content_blocks).toHaveLength(1);
-    expect(payload.content_blocks[0].block_id).toBe("block-1");
+    expect(payload.content_blocks[0].id).toBe("block-1");
   });
   test("sets subtitle to null when empty", () => {
     const payload = buildPayload({ ...validDraft, subtitle: "" });
@@ -277,6 +295,7 @@ describe("parseAssetToDraft", () => {
       visibility: "public",
       allowedRoles: ["admin"],
       allowedUsers: ["user1"],
+      contentSchemaVersion: 2,
       contentBlocks: [],
     });
   });
@@ -292,6 +311,7 @@ describe("parseAssetToDraft", () => {
     expect(draft.assetType).toBe(INITIAL_DRAFT.assetType);
     expect(draft.status).toBe(INITIAL_DRAFT.status);
     expect(draft.visibility).toBe(INITIAL_DRAFT.visibility);
+    expect(draft.contentSchemaVersion).toBe(INITIAL_DRAFT.contentSchemaVersion);
   });
 
   test("handles missing arrays", () => {
@@ -309,34 +329,50 @@ describe("parseAssetToDraft", () => {
     const asset = {
       slug: "test-asset",
       title: "Test Asset",
+      content_schema_version: 2,
       content_blocks: [
         {
-          block_type: "text",
-          block_id: "blk-1",
-          config: { markdown: "# Hello World" },
+          id: "blk-1",
+          type: "text",
+          version: 2,
+          order: 0,
+          visible: true,
+          config: { markdown: "# Hello World", html: "" },
         },
         {
-          block_type: "stat_card",
-          block_id: "blk-2",
-          config: { items: [{ label: "Users", value: "1000" }] },
+          id: "blk-2",
+          type: "stat_card",
+          version: 2,
+          order: 1,
+          visible: true,
+          config: {
+            title: "KPIs",
+            stats: [{ label: "Users", value: "1000", description: "" }],
+          },
         },
       ],
     };
     const draft = parseAssetToDraft(asset);
+    expect(draft.contentSchemaVersion).toBe(2);
     expect(draft.contentBlocks).toHaveLength(2);
     expect(draft.contentBlocks[0]).toEqual({
       id: "blk-1",
       type: "text",
+      version: 2,
       order: 0,
       visible: true,
-      config: { markdown: "# Hello World" },
+      config: { markdown: "# Hello World", html: "" },
     });
     expect(draft.contentBlocks[1]).toEqual({
       id: "blk-2",
       type: "stat_card",
+      version: 2,
       order: 1,
       visible: true,
-      config: { items: [{ label: "Users", value: "1000" }] },
+      config: {
+        title: "KPIs",
+        stats: [{ label: "Users", value: "1000", description: "" }],
+      },
     });
   });
 
@@ -364,13 +400,81 @@ describe("parseAssetToDraft", () => {
       slug: "test-asset",
       title: "Test Asset",
       content_blocks: [
-        { block_type: "unknown_type", block_id: "blk-x", config: {} },
-        { block_type: "text", block_id: "blk-y", config: { markdown: "ok" } },
+        { id: "blk-x", type: "unknown_type", version: 2, order: 0, visible: true, config: {} },
+        {
+          id: "blk-y",
+          type: "text",
+          version: 2,
+          order: 1,
+          visible: true,
+          config: { markdown: "ok", html: "" },
+        },
       ],
     };
     const draft = parseAssetToDraft(asset);
     expect(draft.contentBlocks).toHaveLength(1);
     expect(draft.contentBlocks[0].id).toBe("blk-y");
+  });
+
+  test("parses latest versioned content blocks into the draft", () => {
+    const draft = parseAssetToDraft({
+      slug: "demo",
+      title: "Demo",
+      short_description: "desc",
+      asset_type: "solution",
+      status: "draft",
+      visibility: "public",
+      content_schema_version: 2,
+      content_blocks: [
+        {
+          id: "text-1",
+          type: "text",
+          version: 2,
+          order: 0,
+          visible: true,
+          config: { markdown: "Hello", html: "" },
+        },
+      ],
+    });
+
+    expect(draft.contentSchemaVersion).toBe(2);
+    expect(draft.contentBlocks[0]).toEqual({
+      id: "text-1",
+      type: "text",
+      version: 2,
+      order: 0,
+      visible: true,
+      config: { markdown: "Hello", html: "" },
+    });
+  });
+});
+
+describe("buildPayload versioned blocks", () => {
+  test("builds payload with content schema version and full block wrapper", () => {
+    const payload = buildPayload({
+      ...INITIAL_DRAFT,
+      contentSchemaVersion: 2,
+      contentBlocks: [
+        {
+          id: "callout-1",
+          type: "callout",
+          version: 2,
+          order: 0,
+          visible: true,
+          config: { title: "Heads up", content: "Test", tone: "info" },
+        },
+      ],
+    });
+
+    expect(payload.content_schema_version).toBe(2);
+    expect(payload.content_blocks[0]).toEqual({
+      id: "callout-1",
+      type: "callout",
+      version: 2,
+      order: 0,
+      visible: true,
+      config: { title: "Heads up", content: "Test", tone: "info" },
+    });
   });
 });
 

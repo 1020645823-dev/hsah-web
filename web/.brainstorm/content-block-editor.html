@@ -1,0 +1,377 @@
+<div class="mockup">
+  <div class="mockup-header">
+    <div class="mock-controls">
+      <div class="mock-control mock-control-close"></div>
+      <div class="mock-control mock-control-min"></div>
+      <div class="mock-control mock-control-max"></div>
+    </div>
+    <div class="mock-title">内容块编辑器</div>
+  </div>
+  <div class="mockup-body">
+    <!-- Block List -->
+    <div class="block-list">
+      <!-- Block Item 1: Text Block -->
+      <div class="block-item block-item-editing">
+        <div class="block-drag-handle">⋮⋮</div>
+        <div class="block-content">
+          <div class="block-header">
+            <div class="block-type">Text</div>
+            <div class="block-actions">
+              <button class="action-btn">↑</button>
+              <button class="action-btn">↓</button>
+              <button class="action-btn">👁</button>
+              <button class="action-btn">✕</button>
+            </div>
+          </div>
+          <div class="block-editor">
+            <div class="editor-row">
+              <div class="editor-left">
+                <label>Markdown 内容</label>
+                <textarea placeholder="输入 Markdown 文本...">## 解决方案概述
+
+这是一个**企业级**的云原生解决方案，提供：
+
+- 高可用性架构
+- 自动扩缩容
+- 多区域部署</textarea>
+              </div>
+              <div class="editor-right">
+                <label>预览</label>
+                <div class="preview-content">
+                  <h2>解决方案概述</h2>
+                  <p>这是一个<strong>企业级</strong>的云原生解决方案，提供：</p>
+                  <ul>
+                    <li>高可用性架构</li>
+                    <li>自动扩缩容</li>
+                    <li>多区域部署</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Block Item 2: Stat Card Block -->
+      <div class="block-item">
+        <div class="block-drag-handle">⋮⋮</div>
+        <div class="block-content">
+          <div class="block-header">
+            <div class="block-type">Stat Card</div>
+            <div class="block-actions">
+              <button class="action-btn">↑</button>
+              <button class="action-btn">↓</button>
+              <button class="action-btn">👁</button>
+              <button class="action-btn">✕</button>
+            </div>
+          </div>
+          <div class="block-preview">
+            <div class="stat-preview">
+              <div class="stat-item">
+                <div class="stat-value">99.9%</div>
+                <div class="stat-label">可用性</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-value">50ms</div>
+                <div class="stat-label">响应时间</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-value">10M+</div>
+                <div class="stat-label">用户数</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Block Item 3: Hidden Block -->
+      <div class="block-item block-item-hidden">
+        <div class="block-drag-handle">⋮⋮</div>
+        <div class="block-content">
+          <div class="block-header">
+            <div class="block-type">Text</div>
+            <div class="block-actions">
+              <button class="action-btn">↑</button>
+              <button class="action-btn">↓</button>
+              <button class="action-btn action-btn-hidden">👁‍🗨</button>
+              <button class="action-btn">✕</button>
+            </div>
+          </div>
+          <div class="block-preview block-preview-hidden">
+            <div class="hidden-indicator">已隐藏</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add Block Button -->
+    <button class="add-block-btn">+ 添加内容块</button>
+  </div>
+</div>
+
+<div class="design-notes">
+  <div class="note-title">设计要点</div>
+  <ul class="note-list">
+    <li><strong>拖拽手柄</strong>：左侧 6 点图标，hover 时高亮</li>
+    <li><strong>Block 类型标签</strong>：左上角显示类型（Text / Stat Card）</li>
+    <li><strong>操作按钮</strong>：右上角 ↑↓ 排序、👁 可见性、✕ 删除</li>
+    <li><strong>编辑状态</strong>：展开的 block 显示紫色边框</li>
+    <li><strong>预览模式</strong>：未编辑的 block 显示缩略预览</li>
+    <li><strong>隐藏状态</strong>：灰色背景 + "已隐藏" 提示</li>
+    <li><strong>添加按钮</strong>：虚线边框，hover 时显示类型选择</li>
+  </ul>
+</div>
+
+<style>
+.block-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.block-item {
+  display: flex;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  transition: all 0.2s;
+}
+
+.block-item:hover {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.block-item-editing {
+  border-color: #7c3aed;
+  background: rgba(124, 58, 237, 0.05);
+}
+
+.block-item-hidden {
+  opacity: 0.6;
+}
+
+.block-drag-handle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  color: rgba(255, 255, 255, 0.3);
+  cursor: grab;
+  user-select: none;
+  font-size: 14px;
+  letter-spacing: -2px;
+}
+
+.block-drag-handle:hover {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.block-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.block-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.block-type {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.block-actions {
+  display: flex;
+  gap: 4px;
+}
+
+.action-btn {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  border-radius: 4px;
+  color: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+
+.action-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.action-btn-hidden {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.block-editor {
+  padding: 16px;
+}
+
+.editor-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.editor-left, .editor-right {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.editor-left label, .editor-right label {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.editor-left textarea {
+  width: 100%;
+  min-height: 200px;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  color: rgba(255, 255, 255, 0.9);
+  font-family: 'SF Mono', Monaco, monospace;
+  font-size: 13px;
+  line-height: 1.6;
+  resize: vertical;
+}
+
+.preview-content {
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.preview-content h2 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.preview-content p {
+  margin-bottom: 12px;
+}
+
+.preview-content ul {
+  list-style: disc;
+  padding-left: 20px;
+}
+
+.preview-content li {
+  margin-bottom: 4px;
+}
+
+.block-preview {
+  padding: 16px;
+}
+
+.stat-preview {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.stat-item {
+  text-align: center;
+  padding: 16px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
+}
+
+.stat-value {
+  font-size: 24px;
+  font-weight: 600;
+  color: #a78bfa;
+  margin-bottom: 4px;
+}
+
+.stat-label {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.block-preview-hidden {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 60px;
+}
+
+.hidden-indicator {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.4);
+  font-style: italic;
+}
+
+.add-block-btn {
+  width: 100%;
+  padding: 16px;
+  background: transparent;
+  border: 2px dashed rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: 12px;
+}
+
+.add-block-btn:hover {
+  border-color: rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.design-notes {
+  margin-top: 24px;
+  padding: 16px;
+  background: rgba(124, 58, 237, 0.1);
+  border: 1px solid rgba(124, 58, 237, 0.2);
+  border-radius: 8px;
+}
+
+.note-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #a78bfa;
+  margin-bottom: 12px;
+}
+
+.note-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.note-list li {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.8;
+  padding-left: 16px;
+  position: relative;
+}
+
+.note-list li::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: #a78bfa;
+}
+</style>

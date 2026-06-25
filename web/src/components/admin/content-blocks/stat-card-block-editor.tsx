@@ -1,18 +1,21 @@
 "use client";
 
 import type { StatCardBlockConfig, StatCardItem } from "@/lib/admin-content-blocks";
+import { getFieldError, type BlockFieldError } from "@/lib/content-block-errors";
 import { X, Plus } from "lucide-react";
 
 interface StatCardBlockEditorProps {
   config: StatCardBlockConfig;
   onChange: (config: StatCardBlockConfig) => void;
+  errors?: BlockFieldError[];
 }
 
-export function StatCardBlockEditor({ config, onChange }: StatCardBlockEditorProps) {
-  const items = config.items;
+export function StatCardBlockEditor({ config, onChange, errors }: StatCardBlockEditorProps) {
+  const items = config.items ?? config.stats ?? [];
+  const listError = getFieldError(errors, "config.stats");
 
   const handleAddItem = () => {
-    onChange({ items: [...items, { label: "", value: "" }] });
+    onChange({ items: [...items, { label: "", value: "", description: "" }] });
   };
 
   const handleDeleteItem = (index: number) => {
@@ -29,6 +32,11 @@ export function StatCardBlockEditor({ config, onChange }: StatCardBlockEditorPro
 
   return (
     <div className="space-y-3">
+      {listError && (
+        <div className="rounded-lg border border-red-500/30 bg-red-500/10 px-3 py-2 text-xs text-red-200">
+          {listError}
+        </div>
+      )}
       {items.length === 0 && (
         <div
           className="text-center py-6 text-sm text-[var(--color-text-secondary)] italic"
@@ -49,36 +57,44 @@ export function StatCardBlockEditor({ config, onChange }: StatCardBlockEditorPro
 
       <div className="space-y-2">
         {items.map((item, index) => (
-          <div
-            key={index}
-            className="flex items-center gap-2"
-            data-testid={`stat-card-item-${index}`}
-          >
-            <input
-              className="flex-1 rounded-lg border border-[rgb(212_218_245_/12%)] bg-[rgb(255_255_255_/5%)] px-3 py-2 text-sm text-[var(--color-text-primary)] placeholder:text-[var(--color-text-secondary)] focus:border-[var(--color-electric-purple)] focus:outline-none"
-              type="text"
-              value={item.label}
-              onChange={(e) => handleItemChange(index, "label", e.target.value)}
-              placeholder="标签"
-              data-testid={`stat-card-item-label-${index}`}
-            />
-            <input
-              className="flex-1 rounded-lg border border-[rgb(212_218_245_/12%)] bg-[rgb(255_255_255_/5%)] px-3 py-2 text-sm text-[var(--color-text-primary)] placeholder:text-[var(--color-text-secondary)] focus:border-[var(--color-electric-purple)] focus:outline-none"
-              type="text"
-              value={item.value}
-              onChange={(e) => handleItemChange(index, "value", e.target.value)}
-              placeholder="数值"
-              data-testid={`stat-card-item-value-${index}`}
-            />
-            <button
-              type="button"
-              onClick={() => handleDeleteItem(index)}
-              className="shrink-0 rounded-lg p-2 text-[var(--color-text-secondary)] hover:bg-[rgb(255_255_255_/5%)] hover:text-red-400 transition-colors"
-              data-testid={`stat-card-item-delete-${index}`}
-              aria-label={`删除第 ${index + 1} 项`}
-            >
-              <X className="h-4 w-4" />
-            </button>
+          <div key={index} className="space-y-1" data-testid={`stat-card-item-${index}`}>
+            <div className="flex items-center gap-2">
+              <input
+                className="flex-1 rounded-lg border border-[rgb(212_218_245_/12%)] bg-[rgb(255_255_255_/5%)] px-3 py-2 text-sm text-[var(--color-text-primary)] placeholder:text-[var(--color-text-secondary)] focus:border-[var(--color-electric-purple)] focus:outline-none"
+                type="text"
+                value={item.label}
+                onChange={(e) => handleItemChange(index, "label", e.target.value)}
+                placeholder="标签"
+                data-testid={`stat-card-item-label-${index}`}
+              />
+              <input
+                className="flex-1 rounded-lg border border-[rgb(212_218_245_/12%)] bg-[rgb(255_255_255_/5%)] px-3 py-2 text-sm text-[var(--color-text-primary)] placeholder:text-[var(--color-text-secondary)] focus:border-[var(--color-electric-purple)] focus:outline-none"
+                type="text"
+                value={item.value}
+                onChange={(e) => handleItemChange(index, "value", e.target.value)}
+                placeholder="数值"
+                data-testid={`stat-card-item-value-${index}`}
+              />
+              <button
+                type="button"
+                onClick={() => handleDeleteItem(index)}
+                className="shrink-0 rounded-lg p-2 text-[var(--color-text-secondary)] hover:bg-[rgb(255_255_255_/5%)] hover:text-red-400 transition-colors"
+                data-testid={`stat-card-item-delete-${index}`}
+                aria-label={`删除第 ${index + 1} 项`}
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+            {getFieldError(errors, `config.stats.${index}.label`) && (
+              <p className="text-xs text-red-400">
+                {getFieldError(errors, `config.stats.${index}.label`)}
+              </p>
+            )}
+            {getFieldError(errors, `config.stats.${index}.value`) && (
+              <p className="text-xs text-red-400">
+                {getFieldError(errors, `config.stats.${index}.value`)}
+              </p>
+            )}
           </div>
         ))}
       </div>

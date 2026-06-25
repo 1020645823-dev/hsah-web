@@ -2,10 +2,13 @@
 
 import { useMemo } from "react";
 import type { TextBlockConfig } from "@/lib/admin-content-blocks";
+import { getFieldError, type BlockFieldError } from "@/lib/content-block-errors";
+import { TiptapEditor } from "./tiptap-editor";
 
 interface TextBlockEditorProps {
   config: TextBlockConfig;
   onChange: (config: TextBlockConfig) => void;
+  errors?: BlockFieldError[];
 }
 
 function escapeHtml(text: string): string {
@@ -71,29 +74,30 @@ export function parseMarkdown(markdown: string): string {
   return htmlLines.join("\n");
 }
 
-export function TextBlockEditor({ config, onChange }: TextBlockEditorProps) {
-  const previewHtml = useMemo(
-    () => parseMarkdown(config.markdown),
-    [config.markdown],
-  );
+export function TextBlockEditor({ config, onChange, errors }: TextBlockEditorProps) {
+  const previewHtml = useMemo(() => {
+    if (config.html) return config.html;
+    return parseMarkdown(config.markdown);
+  }, [config.html, config.markdown]);
+  const editorError = getFieldError(errors, ["config.html", "config.markdown"]);
 
-  const handleChange = (value: string) => {
-    onChange({ ...config, markdown: value });
+  const handleChange = (html: string) => {
+    onChange({ ...config, html });
   };
 
   return (
     <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
       <div className="space-y-2">
         <label className="text-xs font-medium text-[var(--color-text-secondary)]">
-          Markdown
+          富文本编辑
         </label>
-        <textarea
-          className="w-full rounded-lg border border-[rgb(212_218_245_/12%)] bg-[rgb(255_255_255_/5%)] px-3 py-2 text-sm text-[var(--color-text-primary)] placeholder:text-[var(--color-text-secondary)] focus:border-[var(--color-electric-purple)] focus:outline-none min-h-[200px] resize-y font-mono"
-          value={config.markdown}
-          onChange={(e) => handleChange(e.target.value)}
-          placeholder="输入 Markdown 内容..."
-          data-testid="text-block-editor-textarea"
+        <TiptapEditor
+          content={config.html || parseMarkdown(config.markdown)}
+          onChange={handleChange}
         />
+        {editorError && (
+          <p className="text-xs text-red-400">{editorError}</p>
+        )}
       </div>
       <div className="space-y-2">
         <label className="text-xs font-medium text-[var(--color-text-secondary)]">
@@ -103,7 +107,7 @@ export function TextBlockEditor({ config, onChange }: TextBlockEditorProps) {
           className="w-full rounded-lg border border-[rgb(212_218_245_/12%)] bg-[rgb(255_255_255_/5%)] px-4 py-3 text-sm text-[var(--color-text-primary)] min-h-[200px] overflow-auto"
           data-testid="text-block-editor-preview"
         >
-          {config.markdown ? (
+          {previewHtml ? (
             <div
               className="prose-invert space-y-1 [&_h1]:text-xl [&_h1]:font-semibold [&_h2]:text-lg [&_h2]:font-semibold [&_h3]:text-base [&_h3]:font-medium [&_ul]:list-disc [&_ul]:pl-5 [&_li]:my-0.5"
               dangerouslySetInnerHTML={{ __html: previewHtml }}

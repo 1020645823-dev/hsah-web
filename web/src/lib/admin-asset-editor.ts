@@ -1,4 +1,16 @@
-import type { ContentBlock } from "@/lib/admin-content-blocks";
+import {
+  type ContentBlock,
+  validateBlock,
+  LATEST_CONTENT_BLOCK_VERSION,
+} from "./admin-content-blocks";
+
+export type BlockSearchResult = {
+  asset_id: number;
+  asset_name: string;
+  asset_slug: string;
+  block: ContentBlock;
+  matched_field: string;
+};
 
 export type AssetEditorDraft = {
   slug: string;
@@ -13,6 +25,7 @@ export type AssetEditorDraft = {
   visibility: string;
   allowedRoles: string[];
   allowedUsers: string[];
+  contentSchemaVersion: number;
   contentBlocks: ContentBlock[];
 };
 
@@ -29,6 +42,7 @@ export const INITIAL_DRAFT: AssetEditorDraft = {
   visibility: "public",
   allowedRoles: [],
   allowedUsers: [],
+  contentSchemaVersion: LATEST_CONTENT_BLOCK_VERSION,
   contentBlocks: [],
 };
 
@@ -101,14 +115,11 @@ export function buildPayload(draft: AssetEditorDraft) {
     visibility: draft.visibility,
     allowed_roles: dedupeStrs(draft.allowedRoles),
     allowed_users: dedupeStrs(draft.allowedUsers),
+    content_schema_version: draft.contentSchemaVersion,
     content_blocks: draft.contentBlocks
       .filter(block => block.visible)
       .sort((a, b) => a.order - b.order)
-      .map(block => ({
-        block_type: block.type,
-        block_id: block.id,
-        config: block.config,
-      })),
+      .map(block => validateBlock(block)),
   };
 }
 
@@ -129,6 +140,10 @@ export function parseAssetToDraft(asset: Record<string, unknown>): AssetEditorDr
     visibility: str(asset.visibility) || INITIAL_DRAFT.visibility,
     allowedRoles: strArr(asset.allowed_roles),
     allowedUsers: strArr(asset.allowed_users),
+    contentSchemaVersion:
+      typeof asset.content_schema_version === "number" && Number.isInteger(asset.content_schema_version)
+        ? asset.content_schema_version
+        : INITIAL_DRAFT.contentSchemaVersion,
     contentBlocks: parseContentBlocks(asset.content_blocks),
   };
 }
@@ -136,23 +151,40 @@ export function parseAssetToDraft(asset: Record<string, unknown>): AssetEditorDr
 function parseContentBlocks(raw: unknown): ContentBlock[] {
   if (!Array.isArray(raw)) return [];
   return raw
-    .map((item, index) => {
+    .map((item) => {
       if (typeof item !== "object" || item === null) return null;
       const block = item as Record<string, unknown>;
-      const blockType = block.block_type;
-      if (blockType !== "text" && blockType !== "stat_card") return null;
-      const config = typeof block.config === "object" && block.config !== null
-        ? (block.config as ContentBlock["config"])
-        : blockType === "text" ? { markdown: "" } : { items: [] };
-      return {
-        id: typeof block.block_id === "string" ? block.block_id : crypto.randomUUID(),
-        type: blockType,
-        order: index,
-        visible: true,
-        config,
-      } as ContentBlock;
+      if (
+        block.type !== "text" &&
+        block.type !== "stat_card" &&
+        block.type !== "image" &&
+        block.type !== "code_snippet" &&
+        block.type !== "callout"
+      ) {
+        return null;
+      }
+      try {
+        return validateBlock(item);
+      } catch {
+        return null;
+      }
     })
     .filter((b): b is ContentBlock => b !== null);
+}
+
+export async function searchBlocks(
+  token: string,
+  keyword: string,
+  type?: string
+): Promise<BlockSearchResult[]> {
+  const params = new URLSearchParams();
+  params.set("q", keyword);
+  if (type) params.set("type", type);
+  const res = await fetch(`/api/v1/admin/assets/search-blocks?${params.toString()}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (!res.ok) throw new Error("Search failed");
+  return res.json();
 }
 
 export function areDraftsEqual(a: AssetEditorDraft, b: AssetEditorDraft): boolean {

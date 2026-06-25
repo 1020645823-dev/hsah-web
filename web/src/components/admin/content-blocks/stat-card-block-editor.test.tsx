@@ -77,7 +77,7 @@ describe("StatCardBlockEditor", () => {
         items: [
           { label: "用户数", value: "1000" },
           { label: "收入", value: "¥50万" },
-          { label: "", value: "" },
+          { label: "", value: "", description: "" },
         ],
       });
     });
@@ -87,7 +87,7 @@ describe("StatCardBlockEditor", () => {
       render(<StatCardBlockEditor config={emptyConfig} onChange={onChange} />);
       fireEvent.click(screen.getByTestId("stat-card-add-item"));
       expect(onChange).toHaveBeenCalledWith({
-        items: [{ label: "", value: "" }],
+        items: [{ label: "", value: "", description: "" }],
       });
     });
   });

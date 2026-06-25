@@ -16,7 +16,8 @@ import {
   ASSET_STATUS_OPTIONS,
   ASSET_VISIBILITY_OPTIONS,
 } from "@/lib/admin-asset-editor";
-import { adminRequest } from "@/lib/admin";
+import { adminRequest, parseContentBlockValidationErrors } from "@/lib/admin";
+import type { BlockFieldError } from "@/lib/content-block-errors";
 
 type AssetEditorFormProps = {
   mode: "create" | "edit";
@@ -52,6 +53,7 @@ export function AssetEditorForm({ mode, assetId, token }: AssetEditorFormProps) 
   const [draft, setDraft] = useState<AssetEditorDraft>(INITIAL_DRAFT);
   const [initialDraft, setInitialDraft] = useState<AssetEditorDraft>(INITIAL_DRAFT);
   const [errors, setErrors] = useState<Partial<Record<keyof AssetEditorDraft, string>>>({});
+  const [blockErrors, setBlockErrors] = useState<BlockFieldError[]>([]);
   const [submitError, setSubmitError] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [loading, setLoading] = useState(mode === "edit");
@@ -73,6 +75,7 @@ export function AssetEditorForm({ mode, assetId, token }: AssetEditorFormProps) 
         const parsed = parseAssetToDraft(res.data);
         setDraft(parsed);
         setInitialDraft(parsed);
+        setBlockErrors([]);
       } else {
         setLoadError(res.message);
       }
@@ -106,6 +109,9 @@ export function AssetEditorForm({ mode, assetId, token }: AssetEditorFormProps) 
 
   function updateField<K extends keyof AssetEditorDraft>(key: K, value: AssetEditorDraft[K]) {
     setDraft((prev) => ({ ...prev, [key]: value }));
+    if (key === "contentBlocks") {
+      setBlockErrors([]);
+    }
     setErrors((prev) => {
       if (!prev[key]) return prev;
       const next = { ...prev };
@@ -117,6 +123,7 @@ export function AssetEditorForm({ mode, assetId, token }: AssetEditorFormProps) 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setSubmitError("");
+    setBlockErrors([]);
     const { valid, errors: validationErrors } = validateDraft(draft);
     setErrors(validationErrors);
     if (!valid) return;
@@ -136,6 +143,7 @@ export function AssetEditorForm({ mode, assetId, token }: AssetEditorFormProps) 
 
     setSubmitting(false);
     if (!res.ok) {
+      setBlockErrors(parseContentBlockValidationErrors(res.data));
       setSubmitError((res as { message: string }).message);
       return;
     }
@@ -318,6 +326,7 @@ export function AssetEditorForm({ mode, assetId, token }: AssetEditorFormProps) 
         <ContentBlockEditor
           blocks={draft.contentBlocks}
           onChange={(blocks: ContentBlock[]) => updateField("contentBlocks", blocks)}
+          errors={blockErrors}
         />
       </div>
 
