@@ -3,10 +3,12 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   DEFAULT_PUBLIC_ASSET_LIMIT,
   buildAssetSearchQuery,
+  fetchPublicAssetDetail,
   fetchPublicAssets,
   getAssetOffsetForPage,
   getAssetPageFromOffset,
   parseAssetQueryFromSearchParams,
+  type PublicAssetDetail,
   type PublicAssetSummary,
 } from "./public-assets";
 
@@ -21,6 +23,31 @@ const assetFixture: PublicAssetSummary = {
   technologies: ["ai"],
   asset_type: "solution",
   status: "published",
+};
+
+const assetDetailFixture: PublicAssetDetail = {
+  ...assetFixture,
+  visibility: "public",
+  content_blocks: [
+    {
+      id: "shared-1",
+      type: "text",
+      version: 2,
+      order: 0,
+      visible: true,
+      audience: "shared",
+      config: { markdown: "Shared overview", html: "" },
+    },
+  ],
+  shared_fields: {
+    introduction: "Shared overview",
+    use_cases: ["customer onboarding"],
+  },
+  sales_fields: {
+    value_summary: "Sales framing",
+  },
+  delivery_fields: null,
+  delivery_access: "signin_required",
 };
 
 describe("public-assets helpers", () => {
@@ -150,6 +177,65 @@ describe("public-assets helpers", () => {
       expect(result.error.category).toBe("network");
       expect(result.error.userMessage).toBe("网络连接异常，请检查网络后重试。");
       expect(result.error.retryable).toBe(true);
+    }
+  });
+
+  it("fetches a public asset detail without auth headers by default", async () => {
+    vi.mocked(global.fetch).mockResolvedValue({
+      ok: true,
+      json: async () => assetDetailFixture,
+    } as Response);
+
+    const result = await fetchPublicAssetDetail("agent-hub");
+
+    expect(global.fetch).toHaveBeenCalledWith("http://localhost:8000/api/v1/assets/agent-hub", {
+      cache: "no-store",
+      headers: undefined,
+    });
+    expect(result.ok).toBe(true);
+    if (result.ok) {
+      expect(result.data.delivery_access).toBe("signin_required");
+      expect(result.data.shared_fields.introduction).toBe("Shared overview");
+    }
+  });
+
+  it("attaches bearer auth when fetching a delivery-upgraded asset detail", async () => {
+    vi.mocked(global.fetch).mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        ...assetDetailFixture,
+        delivery_access: "granted",
+        delivery_fields: {
+          implementation_summary: "Delivery checklist",
+        },
+        content_blocks: [
+          ...assetDetailFixture.content_blocks,
+          {
+            id: "delivery-1",
+            type: "text",
+            version: 2,
+            order: 1,
+            visible: true,
+            audience: "delivery",
+            config: { markdown: "Delivery runbook", html: "" },
+          },
+        ],
+      }),
+    } as Response);
+
+    const result = await fetchPublicAssetDetail("agent-hub", "token-123");
+
+    expect(global.fetch).toHaveBeenCalledWith("http://localhost:8000/api/v1/assets/agent-hub", {
+      cache: "no-store",
+      headers: { Authorization: "Bearer token-123" },
+    });
+    expect(result.ok).toBe(true);
+    if (result.ok) {
+      expect(result.data.delivery_access).toBe("granted");
+      expect(result.data.delivery_fields).toEqual({
+        implementation_summary: "Delivery checklist",
+      });
+      expect(result.data.content_blocks).toHaveLength(2);
     }
   });
 });

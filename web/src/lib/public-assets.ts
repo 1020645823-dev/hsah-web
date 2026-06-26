@@ -30,6 +30,36 @@ export type PublicAssetSummary = {
   status: string;
 };
 
+export type PublicAssetDetail = PublicAssetSummary & {
+  visibility: string;
+  content_blocks: Array<Record<string, unknown>>;
+  shared_fields: {
+    introduction?: string;
+    use_cases?: string[];
+    demo_video_url?: string | null;
+    live_demo_url?: string | null;
+    videos?: Array<{
+      id: string;
+      title: string;
+      video_url: string;
+      poster_url?: string | null;
+      description?: string;
+      is_primary?: boolean;
+    }>;
+  };
+  sales_fields: {
+    value_summary?: string;
+    differentiators?: string[];
+    outcomes?: string[];
+  };
+  delivery_fields: {
+    implementation_summary?: string;
+    prerequisites?: string[];
+    rollout_steps?: string[];
+  } | null;
+  delivery_access?: "granted" | "signin_required" | "request_access" | null;
+};
+
 export type PublicAssetListResponse = {
   items: PublicAssetSummary[];
   total: number;
@@ -39,6 +69,10 @@ export type PublicAssetListResponse = {
 
 export type PublicAssetFetchResult =
   | { ok: true; data: PublicAssetListResponse }
+  | { ok: false; error: ApiErrorInfo };
+
+export type PublicAssetDetailFetchResult =
+  | { ok: true; data: PublicAssetDetail }
   | { ok: false; error: ApiErrorInfo };
 
 type SearchParamsInput = Record<string, string | string[] | undefined>;
@@ -191,6 +225,29 @@ export async function fetchPublicAssets(query: PublicAssetQuery): Promise<Public
 
     const data = (await res.json()) as unknown;
     return { ok: true, data: normalizeListResponse(data, normalized) };
+  } catch {
+    return { ok: false, error: parseApiError(null, undefined) };
+  }
+}
+
+export async function fetchPublicAssetDetail(
+  slug: string,
+  token?: string | null,
+): Promise<PublicAssetDetailFetchResult> {
+  const headers = token ? { Authorization: `Bearer ${token}` } : undefined;
+
+  try {
+    const res = await fetch(`${API_BASE_URL}/api/v1/assets/${slug}`, {
+      cache: "no-store",
+      headers,
+    });
+    if (!res.ok) {
+      const data = await res.json().catch(() => null);
+      return { ok: false, error: parseApiError(data, res.status) };
+    }
+
+    const data = (await res.json()) as PublicAssetDetail;
+    return { ok: true, data };
   } catch {
     return { ok: false, error: parseApiError(null, undefined) };
   }
