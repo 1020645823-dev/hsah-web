@@ -20,6 +20,42 @@ SAMPLE_ASSET = {
     "visibility": "public",
     "allowed_roles": [],
     "allowed_users": [],
+    "shared_fields": {
+        "introduction": "A productized reference asset that helps client teams evaluate, demo, and deliver a governed AI agent runtime on Kubernetes.",
+        "use_cases": ["customer-service copilots", "field-ops assistants", "knowledge-grounded agents"],
+        "demo_video_url": "https://example.com/videos/agentic-service-mesh-demo.mp4",
+        "live_demo_url": "https://example.com/demos/agentic-service-mesh",
+        "videos": [
+            {
+                "id": "overview-video",
+                "title": "Agentic Service Mesh Overview",
+                "video_url": "https://example.com/videos/agentic-service-mesh-demo.mp4",
+                "poster_url": "https://example.com/images/agentic-service-mesh-poster.jpg",
+                "description": "A 5-minute walkthrough of the reference architecture, including mesh routing, policy guardrails, and observability.",
+                "is_primary": True,
+            },
+            {
+                "id": "deep-dive-video",
+                "title": "Deployment Deep Dive",
+                "video_url": "https://example.com/videos/agentic-service-mesh-deployment.mp4",
+                "poster_url": None,
+                "description": "Step-by-step deployment guide for provisioning the agent runtime across EKS, AKS, and GKE.",
+                "is_primary": False,
+            },
+        ],
+    },
+    "sales_fields": {
+        "value_summary": "Position a reusable, enterprise-safe agent platform with strong governance, observability, and multi-cloud portability.",
+        "differentiators": ["mesh-native policy control", "portable hyperscaler blueprint", "delivery-ready accelerators"],
+        "outcomes": ["faster stakeholder alignment", "shorter solution validation cycle"],
+    },
+    "delivery_fields": {
+        "implementation_summary": "Provide delivery teams with a concrete rollout guide covering identity, policy, observability, and release gates.",
+        "prerequisites": ["Kubernetes 1.29+", "service mesh baseline", "centralized secrets manager"],
+        "rollout_steps": ["Provision shared runtime", "Bind approved tools", "Enable policy guardrails", "Run readiness checks"],
+    },
+    "delivery_allowed_roles": ["delivery-engineer", "platform-lead"],
+    "delivery_allowed_users": [],
     "content_schema_version": 2,
     "content_blocks": [
         {
@@ -28,6 +64,7 @@ SAMPLE_ASSET = {
             "version": 2,
             "order": 1,
             "visible": True,
+            "audience": "shared",
             "config": {
                 "markdown": "This reference architecture demonstrates a production-ready agentic service mesh for AI delivery teams. It combines Kubernetes-native deployment patterns, identity-aware mesh routing, policy enforcement, and end-to-end telemetry so reusable agents can move safely from pilot to enterprise operations.",
                 "html": "",
@@ -39,6 +76,7 @@ SAMPLE_ASSET = {
             "version": 2,
             "order": 2,
             "visible": True,
+            "audience": "sales",
             "config": {
                 "title": "Expected impact",
                 "stats": [
@@ -66,6 +104,7 @@ SAMPLE_ASSET = {
             "version": 2,
             "order": 3,
             "visible": True,
+            "audience": "shared",
             "config": {
                 "title": "Architecture pattern",
                 "content": "Use the mesh as the control plane between agents, tools, data services, and model endpoints. Every request is authenticated, authorized, traced, and checked against policy before it reaches sensitive systems.",
@@ -78,6 +117,7 @@ SAMPLE_ASSET = {
             "version": 2,
             "order": 4,
             "visible": True,
+            "audience": "delivery",
             "config": {
                 "language": "yaml",
                 "title": "Mesh authorization policy",
@@ -90,6 +130,7 @@ SAMPLE_ASSET = {
             "version": 2,
             "order": 5,
             "visible": True,
+            "audience": "delivery",
             "config": {
                 "markdown": "### Delivery checklist\n\n- Validate cluster baseline and network policy prerequisites.\n- Configure workload identity for agent runtimes and approved tools.\n- Apply mesh authorization and telemetry policies.\n- Connect audit events to the enterprise SIEM.\n- Run red-team prompts before publishing reusable agent workflows.",
                 "html": "",
