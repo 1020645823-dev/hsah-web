@@ -4,7 +4,9 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { TagInput } from "./tag-input";
 import { ContentBlockEditor } from "./content-blocks/content-block-editor";
+import { AssetVideoManager } from "./asset-video-manager";
 import type { ContentBlock } from "@/lib/admin-content-blocks";
+import type { AssetVideoDraft } from "@/lib/admin-asset-editor";
 import {
   AssetEditorDraft,
   INITIAL_DRAFT,
@@ -317,6 +319,171 @@ export function AssetEditorForm({ mode, assetId, token }: AssetEditorFormProps) 
               placeholder="输入用户，回车添加"
             />
             <FieldError message={errors.allowedUsers} />
+          </div>
+        </div>
+      </div>
+
+      <div className={cardClass}>
+        <h3 className="mb-4 text-base font-semibold text-[var(--color-text-primary)]">Shared Detail</h3>
+        <div className="space-y-4">
+          <div>
+            <Label>介绍文字</Label>
+            <textarea
+              className={inputClass}
+              rows={4}
+              value={draft.sharedFields.introduction}
+              onChange={(e) =>
+                updateField("sharedFields", {
+                  ...draft.sharedFields,
+                  introduction: e.target.value,
+                })}
+              placeholder="面向客户和交付团队共享的资产介绍"
+            />
+          </div>
+          <div>
+            <Label>适用业务</Label>
+            <TagInput
+              value={draft.sharedFields.useCases}
+              onChange={(v) =>
+                updateField("sharedFields", {
+                  ...draft.sharedFields,
+                  useCases: v as string[],
+                })}
+              placeholder="输入适用业务，回车添加"
+            />
+          </div>
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <div>
+              <Label>Live Demo 链接</Label>
+              <input
+                className={inputClass}
+                value={draft.sharedFields.liveDemoUrl}
+                onChange={(e) =>
+                  updateField("sharedFields", {
+                    ...draft.sharedFields,
+                    liveDemoUrl: e.target.value,
+                  })}
+                placeholder="https://example.com/live"
+              />
+            </div>
+          </div>
+          <div>
+            <Label>视频内容管理</Label>
+            <div className="mt-2">
+              <AssetVideoManager
+                videos={draft.sharedFields.videos}
+                onChange={(videos: AssetVideoDraft[]) =>
+                  updateField("sharedFields", {
+                    ...draft.sharedFields,
+                    videos,
+                  })}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className={cardClass}>
+        <h3 className="mb-4 text-base font-semibold text-[var(--color-text-primary)]">Sales Detail</h3>
+        <div className="space-y-4">
+          <div>
+            <Label>价值概述</Label>
+            <textarea
+              className={inputClass}
+              rows={4}
+              value={draft.salesFields.valueSummary}
+              onChange={(e) =>
+                updateField("salesFields", {
+                  ...draft.salesFields,
+                  valueSummary: e.target.value,
+                })}
+              placeholder="面向售前展示的价值概述"
+            />
+          </div>
+          <div>
+            <Label>差异化亮点</Label>
+            <TagInput
+              value={draft.salesFields.differentiators}
+              onChange={(v) =>
+                updateField("salesFields", {
+                  ...draft.salesFields,
+                  differentiators: v as string[],
+                })}
+              placeholder="输入亮点，回车添加"
+            />
+          </div>
+          <div>
+            <Label>业务结果</Label>
+            <TagInput
+              value={draft.salesFields.outcomes}
+              onChange={(v) =>
+                updateField("salesFields", {
+                  ...draft.salesFields,
+                  outcomes: v as string[],
+                })}
+              placeholder="输入结果，回车添加"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div className={cardClass}>
+        <h3 className="mb-4 text-base font-semibold text-[var(--color-text-primary)]">Delivery Detail</h3>
+        <div className="space-y-4">
+          <div>
+            <Label>实施说明</Label>
+            <textarea
+              className={inputClass}
+              rows={4}
+              value={draft.deliveryFields.implementationSummary}
+              onChange={(e) =>
+                updateField("deliveryFields", {
+                  ...draft.deliveryFields,
+                  implementationSummary: e.target.value,
+                })}
+              placeholder="面向交付团队的实施说明"
+            />
+          </div>
+          <div>
+            <Label>前置条件</Label>
+            <TagInput
+              value={draft.deliveryFields.prerequisites}
+              onChange={(v) =>
+                updateField("deliveryFields", {
+                  ...draft.deliveryFields,
+                  prerequisites: v as string[],
+                })}
+              placeholder="输入前置条件，回车添加"
+            />
+          </div>
+          <div>
+            <Label>落地步骤</Label>
+            <TagInput
+              value={draft.deliveryFields.rolloutSteps}
+              onChange={(v) =>
+                updateField("deliveryFields", {
+                  ...draft.deliveryFields,
+                  rolloutSteps: v as string[],
+                })}
+              placeholder="输入落地步骤，回车添加"
+            />
+          </div>
+          <div>
+            <Label>Delivery 允许角色</Label>
+            <TagInput
+              value={draft.deliveryAllowedRoles}
+              onChange={(v) => updateField("deliveryAllowedRoles", v as string[])}
+              suggestions={roleSuggestions}
+              placeholder="输入 Delivery 角色，回车添加"
+            />
+          </div>
+          <div>
+            <Label>Delivery 允许用户</Label>
+            <TagInput
+              value={draft.deliveryAllowedUsers}
+              onChange={(v) => updateField("deliveryAllowedUsers", v as string[])}
+              placeholder="输入 Delivery 用户邮箱，回车添加"
+            />
           </div>
         </div>
       </div>

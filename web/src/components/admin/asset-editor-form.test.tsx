@@ -25,6 +25,10 @@ vi.mock("./content-blocks/content-block-editor", () => ({
   ),
 }));
 
+vi.mock("./asset-video-manager", () => ({
+  AssetVideoManager: () => <div data-testid="mock-asset-video-manager" />,
+}));
+
 describe("AssetEditorForm", () => {
   beforeEach(() => {
     vi.resetAllMocks();
@@ -44,6 +48,24 @@ describe("AssetEditorForm", () => {
             asset_type: "solution",
             status: "draft",
             visibility: "public",
+            shared_fields: {
+              introduction: "Shared overview",
+              use_cases: ["customer onboarding"],
+              demo_video_url: "https://example.com/demo.mp4",
+              live_demo_url: "https://example.com/live",
+            },
+            sales_fields: {
+              value_summary: "Sales framing",
+              differentiators: ["accelerator"],
+              outcomes: ["shorter presales"],
+            },
+            delivery_fields: {
+              implementation_summary: "Delivery checklist",
+              prerequisites: ["Kubernetes"],
+              rollout_steps: ["Provision cluster"],
+            },
+            delivery_allowed_roles: ["delivery-engineer"],
+            delivery_allowed_users: ["owner@example.com"],
             content_schema_version: 2,
             content_blocks: [
               {
@@ -113,5 +135,14 @@ describe("AssetEditorForm", () => {
       expect(screen.getByText("Alt text is required")).toBeInTheDocument();
     });
     expect(push).not.toHaveBeenCalled();
+  });
+
+  it("loads shared, sales, and delivery detail fields into the form", async () => {
+    render(<AssetEditorForm mode="edit" assetId="asset-1" token="token-123" />);
+
+    expect(await screen.findByDisplayValue("Shared overview")).toBeInTheDocument();
+    expect(screen.getAllByTestId("mock-asset-video-manager").length).toBeGreaterThan(0);
+    expect(screen.getAllByDisplayValue("Sales framing").length).toBeGreaterThan(0);
+    expect(screen.getAllByDisplayValue("Delivery checklist").length).toBeGreaterThan(0);
   });
 });
