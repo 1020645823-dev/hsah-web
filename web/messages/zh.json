@@ -1,4 +1,8 @@
 {
+  "Meta": {
+    "siteTitle": "Hyperscaler Asset Hub",
+    "siteDescription": "探索面向场景的 AI 演示、可复用架构，以及 AWS、Azure 和 Google Cloud 的超大规模云资产。"
+  },
   "Common": {
     "signIn": "登录",
     "exploreAssets": "探索资产",

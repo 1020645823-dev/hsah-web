@@ -13,14 +13,26 @@ vi.mock("@/components/theme-provider", () => ({
   ThemeProvider: ({ children }: { children: React.ReactNode }) => children,
 }));
 
+vi.mock("next-intl", () => ({
+  hasLocale: (locales: readonly string[], locale: string) => locales.includes(locale),
+  NextIntlClientProvider: ({ children }: { children: React.ReactNode }) =>
+    children,
+}));
+
+vi.mock("next/navigation", () => ({
+  notFound: vi.fn(),
+}));
+
 import RootLayout from "./layout";
 
 describe("RootLayout", () => {
-  it("applies product layout classes at the html and body level", () => {
-    const tree = RootLayout({
+  it("applies product layout classes at the html and body level", async () => {
+    const tree = await RootLayout({
       children: <div>content</div>,
+      params: Promise.resolve({ locale: "en" }),
     });
 
+    expect(tree.props.lang).toBe("en");
     expect(tree.props.className).toContain("--font-sans");
     expect(tree.props.className).toContain("--font-mono");
     expect(tree.props.className).toContain("h-full");

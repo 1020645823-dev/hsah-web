@@ -1,4 +1,8 @@
 {
+  "Meta": {
+    "siteTitle": "Hyperscaler Asset Hub",
+    "siteDescription": "Explore scenario-driven AI demos, reusable architectures, and hyperscaler assets across AWS, Azure, and Google Cloud."
+  },
   "Common": {
     "signIn": "Sign in",
     "exploreAssets": "Explore assets",
