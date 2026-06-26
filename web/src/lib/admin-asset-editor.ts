@@ -12,6 +12,15 @@ export type BlockSearchResult = {
   matched_field: string;
 };
 
+export type AssetVideoDraft = {
+  id: string;
+  title: string;
+  videoUrl: string;
+  posterUrl: string;
+  description: string;
+  isPrimary: boolean;
+};
+
 export type AssetEditorDraft = {
   slug: string;
   title: string;
@@ -25,6 +34,25 @@ export type AssetEditorDraft = {
   visibility: string;
   allowedRoles: string[];
   allowedUsers: string[];
+  sharedFields: {
+    introduction: string;
+    useCases: string[];
+    demoVideoUrl: string;
+    liveDemoUrl: string;
+    videos: AssetVideoDraft[];
+  };
+  salesFields: {
+    valueSummary: string;
+    differentiators: string[];
+    outcomes: string[];
+  };
+  deliveryFields: {
+    implementationSummary: string;
+    prerequisites: string[];
+    rolloutSteps: string[];
+  };
+  deliveryAllowedRoles: string[];
+  deliveryAllowedUsers: string[];
   contentSchemaVersion: number;
   contentBlocks: ContentBlock[];
 };
@@ -42,6 +70,25 @@ export const INITIAL_DRAFT: AssetEditorDraft = {
   visibility: "public",
   allowedRoles: [],
   allowedUsers: [],
+  sharedFields: {
+    introduction: "",
+    useCases: [],
+    demoVideoUrl: "",
+    liveDemoUrl: "",
+    videos: [],
+  },
+  salesFields: {
+    valueSummary: "",
+    differentiators: [],
+    outcomes: [],
+  },
+  deliveryFields: {
+    implementationSummary: "",
+    prerequisites: [],
+    rolloutSteps: [],
+  },
+  deliveryAllowedRoles: [],
+  deliveryAllowedUsers: [],
   contentSchemaVersion: LATEST_CONTENT_BLOCK_VERSION,
   contentBlocks: [],
 };
@@ -115,6 +162,32 @@ export function buildPayload(draft: AssetEditorDraft) {
     visibility: draft.visibility,
     allowed_roles: dedupeStrs(draft.allowedRoles),
     allowed_users: dedupeStrs(draft.allowedUsers),
+    shared_fields: {
+      introduction: draft.sharedFields.introduction.trim(),
+      use_cases: dedupeStrs(draft.sharedFields.useCases),
+      demo_video_url: draft.sharedFields.demoVideoUrl.trim() || null,
+      live_demo_url: draft.sharedFields.liveDemoUrl.trim() || null,
+      videos: draft.sharedFields.videos.map((v) => ({
+        id: v.id,
+        title: v.title.trim(),
+        video_url: v.videoUrl.trim(),
+        poster_url: v.posterUrl.trim() || null,
+        description: v.description.trim(),
+        is_primary: v.isPrimary,
+      })),
+    },
+    sales_fields: {
+      value_summary: draft.salesFields.valueSummary.trim(),
+      differentiators: dedupeStrs(draft.salesFields.differentiators),
+      outcomes: dedupeStrs(draft.salesFields.outcomes),
+    },
+    delivery_fields: {
+      implementation_summary: draft.deliveryFields.implementationSummary.trim(),
+      prerequisites: dedupeStrs(draft.deliveryFields.prerequisites),
+      rollout_steps: dedupeStrs(draft.deliveryFields.rolloutSteps),
+    },
+    delivery_allowed_roles: dedupeStrs(draft.deliveryAllowedRoles),
+    delivery_allowed_users: dedupeStrs(draft.deliveryAllowedUsers),
     content_schema_version: draft.contentSchemaVersion,
     content_blocks: draft.contentBlocks
       .filter(block => block.visible)
@@ -126,6 +199,10 @@ export function buildPayload(draft: AssetEditorDraft) {
 export function parseAssetToDraft(asset: Record<string, unknown>): AssetEditorDraft {
   const strArr = (v: unknown): string[] => (Array.isArray(v) ? v.map(String) : []);
   const str = (v: unknown): string => (typeof v === "string" ? v : "");
+  const record = (v: unknown): Record<string, unknown> => (typeof v === "object" && v !== null && !Array.isArray(v) ? v as Record<string, unknown> : {});
+  const sharedFields = record(asset.shared_fields);
+  const salesFields = record(asset.sales_fields);
+  const deliveryFields = record(asset.delivery_fields);
 
   return {
     slug: str(asset.slug),
@@ -140,6 +217,34 @@ export function parseAssetToDraft(asset: Record<string, unknown>): AssetEditorDr
     visibility: str(asset.visibility) || INITIAL_DRAFT.visibility,
     allowedRoles: strArr(asset.allowed_roles),
     allowedUsers: strArr(asset.allowed_users),
+    sharedFields: {
+      introduction: str(sharedFields.introduction),
+      useCases: strArr(sharedFields.use_cases),
+      demoVideoUrl: str(sharedFields.demo_video_url),
+      liveDemoUrl: str(sharedFields.live_demo_url),
+      videos: Array.isArray(sharedFields.videos)
+        ? (sharedFields.videos as Array<Record<string, unknown>>).map((v) => ({
+            id: typeof v.id === "string" ? v.id : crypto.randomUUID(),
+            title: typeof v.title === "string" ? v.title : "",
+            videoUrl: typeof v.video_url === "string" ? v.video_url : "",
+            posterUrl: typeof v.poster_url === "string" ? v.poster_url : "",
+            description: typeof v.description === "string" ? v.description : "",
+            isPrimary: Boolean(v.is_primary),
+          }))
+        : [],
+    },
+    salesFields: {
+      valueSummary: str(salesFields.value_summary),
+      differentiators: strArr(salesFields.differentiators),
+      outcomes: strArr(salesFields.outcomes),
+    },
+    deliveryFields: {
+      implementationSummary: str(deliveryFields.implementation_summary),
+      prerequisites: strArr(deliveryFields.prerequisites),
+      rolloutSteps: strArr(deliveryFields.rollout_steps),
+    },
+    deliveryAllowedRoles: strArr(asset.delivery_allowed_roles),
+    deliveryAllowedUsers: strArr(asset.delivery_allowed_users),
     contentSchemaVersion:
       typeof asset.content_schema_version === "number" && Number.isInteger(asset.content_schema_version)
         ? asset.content_schema_version
@@ -194,7 +299,7 @@ export function areDraftsEqual(a: AssetEditorDraft, b: AssetEditorDraft): boolea
     const vb = b[key];
     if (Array.isArray(va) && Array.isArray(vb)) {
       if (va.length !== vb.length) return false;
-      if (key === "contentBlocks") {
+      if (key === "contentBlocks" || key === "videos") {
         return JSON.stringify(va) === JSON.stringify(vb);
       }
       return va.every((item, i) => item === vb[i]);

@@ -23,6 +23,25 @@ const validDraft: AssetEditorDraft = {
   visibility: "public",
   allowedRoles: ["admin"],
   allowedUsers: ["user1"],
+  sharedFields: {
+    introduction: "Shared overview",
+    useCases: ["customer onboarding"],
+    demoVideoUrl: "https://example.com/demo.mp4",
+    liveDemoUrl: "https://example.com/live",
+    videos: [],
+  },
+  salesFields: {
+    valueSummary: "Sales framing",
+    differentiators: ["accelerator"],
+    outcomes: ["faster presales"],
+  },
+  deliveryFields: {
+    implementationSummary: "Delivery runbook",
+    prerequisites: ["Kubernetes"],
+    rolloutSteps: ["Provision cluster"],
+  },
+  deliveryAllowedRoles: ["delivery-engineer"],
+  deliveryAllowedUsers: ["owner@example.com"],
   contentSchemaVersion: 2,
   contentBlocks: [],
 };
@@ -141,6 +160,25 @@ describe("buildPayload", () => {
       visibility: "public",
       allowed_roles: ["admin"],
       allowed_users: ["user1"],
+      shared_fields: {
+        introduction: "Shared overview",
+        use_cases: ["customer onboarding"],
+        demo_video_url: "https://example.com/demo.mp4",
+        live_demo_url: "https://example.com/live",
+        videos: [],
+      },
+      sales_fields: {
+        value_summary: "Sales framing",
+        differentiators: ["accelerator"],
+        outcomes: ["faster presales"],
+      },
+      delivery_fields: {
+        implementation_summary: "Delivery runbook",
+        prerequisites: ["Kubernetes"],
+        rollout_steps: ["Provision cluster"],
+      },
+      delivery_allowed_roles: ["delivery-engineer"],
+      delivery_allowed_users: ["owner@example.com"],
       content_schema_version: 2,
       content_blocks: [],
     });
@@ -280,6 +318,24 @@ describe("parseAssetToDraft", () => {
       visibility: "public",
       allowed_roles: ["admin"],
       allowed_users: ["user1"],
+      shared_fields: {
+        introduction: "Shared overview",
+        use_cases: ["customer onboarding"],
+        demo_video_url: "https://example.com/demo.mp4",
+        live_demo_url: "https://example.com/live",
+      },
+      sales_fields: {
+        value_summary: "Sales framing",
+        differentiators: ["accelerator"],
+        outcomes: ["faster presales"],
+      },
+      delivery_fields: {
+        implementation_summary: "Delivery runbook",
+        prerequisites: ["Kubernetes"],
+        rollout_steps: ["Provision cluster"],
+      },
+      delivery_allowed_roles: ["delivery-engineer"],
+      delivery_allowed_users: ["owner@example.com"],
     };
     const draft = parseAssetToDraft(asset);
     expect(draft).toEqual({
@@ -295,6 +351,25 @@ describe("parseAssetToDraft", () => {
       visibility: "public",
       allowedRoles: ["admin"],
       allowedUsers: ["user1"],
+      sharedFields: {
+        introduction: "Shared overview",
+        useCases: ["customer onboarding"],
+        demoVideoUrl: "https://example.com/demo.mp4",
+        liveDemoUrl: "https://example.com/live",
+        videos: [],
+      },
+      salesFields: {
+        valueSummary: "Sales framing",
+        differentiators: ["accelerator"],
+        outcomes: ["faster presales"],
+      },
+      deliveryFields: {
+        implementationSummary: "Delivery runbook",
+        prerequisites: ["Kubernetes"],
+        rolloutSteps: ["Provision cluster"],
+      },
+      deliveryAllowedRoles: ["delivery-engineer"],
+      deliveryAllowedUsers: ["owner@example.com"],
       contentSchemaVersion: 2,
       contentBlocks: [],
     });
@@ -496,5 +571,91 @@ describe("areDraftsEqual", () => {
   test("returns false for different array values", () => {
     const different = { ...validDraft, cloudProviders: ["gcp"] };
     expect(areDraftsEqual(validDraft, different)).toBe(false);
+  });
+});
+
+describe("asset videos in draft", () => {
+  test("buildPayload includes videos in shared_fields", () => {
+    const draft: AssetEditorDraft = {
+      ...INITIAL_DRAFT,
+      slug: "test-slug",
+      title: "Test",
+      shortDescription: "desc",
+      sharedFields: {
+        ...INITIAL_DRAFT.sharedFields,
+        videos: [
+          {
+            id: "v1",
+            title: "Overview",
+            videoUrl: "https://example.com/v.mp4",
+            posterUrl: "https://example.com/poster.jpg",
+            description: "desc text",
+            isPrimary: true,
+          },
+        ],
+      },
+    };
+    const payload = buildPayload(draft);
+    expect(payload.shared_fields.videos).toHaveLength(1);
+    expect(payload.shared_fields.videos[0].id).toBe("v1");
+    expect(payload.shared_fields.videos[0].is_primary).toBe(true);
+  });
+
+  test("parseAssetToDraft maps shared_fields.videos correctly", () => {
+    const raw = {
+      slug: "s",
+      title: "t",
+      short_description: "d",
+      asset_type: "solution",
+      status: "draft",
+      visibility: "public",
+      shared_fields: {
+        videos: [
+          {
+            id: "v1",
+            title: "V",
+            video_url: "https://example.com/v.mp4",
+            poster_url: null,
+            description: "",
+            is_primary: true,
+          },
+        ],
+      },
+    };
+    const draft = parseAssetToDraft(raw);
+    expect(draft.sharedFields.videos).toHaveLength(1);
+    expect(draft.sharedFields.videos[0].videoUrl).toBe("https://example.com/v.mp4");
+    expect(draft.sharedFields.videos[0].isPrimary).toBe(true);
+  });
+
+  test("parseAssetToDraft defaults videos to empty array when missing", () => {
+    const raw = {
+      slug: "s",
+      title: "t",
+      short_description: "d",
+      asset_type: "solution",
+      status: "draft",
+      visibility: "public",
+    };
+    const draft = parseAssetToDraft(raw);
+    expect(draft.sharedFields.videos).toEqual([]);
+  });
+
+  test("areDraftsEqual detects video list changes", () => {
+    const a: AssetEditorDraft = {
+      ...INITIAL_DRAFT,
+      sharedFields: {
+        ...INITIAL_DRAFT.sharedFields,
+        videos: [{ id: "v1", title: "T", videoUrl: "https://example.com/v.mp4", posterUrl: "", description: "", isPrimary: true }],
+      },
+    };
+    const b: AssetEditorDraft = {
+      ...INITIAL_DRAFT,
+      sharedFields: {
+        ...INITIAL_DRAFT.sharedFields,
+        videos: [],
+      },
+    };
+    expect(areDraftsEqual(a, b)).toBe(false);
   });
 });
