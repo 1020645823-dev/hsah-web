@@ -299,10 +299,13 @@ export function areDraftsEqual(a: AssetEditorDraft, b: AssetEditorDraft): boolea
     const vb = b[key];
     if (Array.isArray(va) && Array.isArray(vb)) {
       if (va.length !== vb.length) return false;
-      if (key === "contentBlocks" || key === "videos") {
+      if (key === "contentBlocks") {
         return JSON.stringify(va) === JSON.stringify(vb);
       }
       return va.every((item, i) => item === vb[i]);
+    }
+    if (typeof va === "object" && va !== null && typeof vb === "object" && vb !== null) {
+      return JSON.stringify(va) === JSON.stringify(vb);
     }
     return va === vb;
   });
