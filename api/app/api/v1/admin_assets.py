@@ -8,10 +8,31 @@ from app.api.v1.auth import get_current_user
 from app.core.db import get_db
 from app.models.asset import Asset
 from app.models.user import User
-from app.schemas.asset import AssetCreateRequest, BlockSearchResponse
+from app.schemas.asset import (
+    AssetCreateRequest,
+    BlockSearchResponse,
+    DeliveryAssetFields,
+    SalesAssetFields,
+    SharedAssetFields,
+)
 from app.services.content_blocks import ContentBlockValidationError, normalize_blocks
 
 router = APIRouter(prefix="/admin/assets", tags=["admin-assets"])
+
+
+def _validate_and_normalize_videos(shared_fields: dict) -> dict:
+    videos = shared_fields.get("videos") or []
+    if not videos:
+        return shared_fields
+    primaries = [v for v in videos if v.get("is_primary")]
+    if len(primaries) > 1:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail={"code": "multiple_primary_videos", "message": "Only one video can be marked as primary"},
+        )
+    if len(primaries) == 0:
+        videos[0]["is_primary"] = True
+    return shared_fields
 
 
 # ---------------------------------------------------------------------------
@@ -178,6 +199,20 @@ def _to_detail(asset: Asset) -> dict:
         "content_schema_version": normalized.asset_schema_version,
         "content_blocks": normalized.blocks,
         "visibility": asset.visibility,
+        "shared_fields": SharedAssetFields.model_validate(asset.shared_fields or {}).model_dump(
+            exclude_defaults=True,
+            exclude_none=True,
+        ),
+        "sales_fields": SalesAssetFields.model_validate(asset.sales_fields or {}).model_dump(
+            exclude_defaults=True,
+            exclude_none=True,
+        ),
+        "delivery_fields": DeliveryAssetFields.model_validate(asset.delivery_fields or {}).model_dump(
+            exclude_defaults=True,
+            exclude_none=True,
+        ),
+        "delivery_allowed_roles": asset.delivery_allowed_roles,
+        "delivery_allowed_users": asset.delivery_allowed_users,
         "allowed_roles": asset.allowed_roles,
         "allowed_users": asset.allowed_users,
     }
@@ -314,6 +349,9 @@ def create_asset(
             },
         ) from exc
 
+    normalized_shared = _validate_and_normalize_videos(payload.shared_fields.model_dump())
+    payload.shared_fields = SharedAssetFields(**normalized_shared)
+
     asset_data = payload.model_dump()
     asset_data["content_schema_version"] = normalized.asset_schema_version
     asset_data["content_blocks"] = normalized.blocks
@@ -407,6 +445,9 @@ def update_asset(
                 "errors": exc.errors,
             },
         ) from exc
+
+    normalized_shared = _validate_and_normalize_videos(payload.shared_fields.model_dump())
+    payload.shared_fields = SharedAssetFields(**normalized_shared)
 
     payload_data = payload.model_dump()
     payload_data["content_schema_version"] = normalized.asset_schema_version

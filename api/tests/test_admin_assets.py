@@ -76,6 +76,54 @@ def test_create_asset_success() -> None:
     assert "id" in body
 
 
+def test_create_asset_persists_detail_fields_and_delivery_audience() -> None:
+    client = TestClient(app)
+    token = _get_token(client)
+    headers = {"Authorization": f"Bearer {token}"}
+
+    payload = _asset_payload()
+    payload["shared_fields"] = {
+        "introduction": "Shared overview for both sales and delivery teams.",
+        "use_cases": ["customer onboarding", "agent operations"],
+        "demo_video_url": "https://example.com/demo.mp4",
+        "live_demo_url": "https://example.com/live",
+    }
+    payload["sales_fields"] = {
+        "value_summary": "Business-ready accelerators for hyperscaler deals.",
+        "differentiators": ["reusable playbooks", "packaged architecture"],
+        "outcomes": ["shorter presales cycle"],
+    }
+    payload["delivery_fields"] = {
+        "implementation_summary": "Deployment checklist for project teams.",
+        "prerequisites": ["Kubernetes", "Secrets manager"],
+        "rollout_steps": ["Provision cluster", "Connect LLM gateway"],
+    }
+    payload["delivery_allowed_roles"] = ["delivery-engineer"]
+    payload["delivery_allowed_users"] = ["lead@example.com"]
+    payload["content_blocks"] = [
+        {
+            "id": "delivery-text-1",
+            "type": "text",
+            "version": 2,
+            "order": 0,
+            "visible": True,
+            "audience": "delivery",
+            "config": {"markdown": "Delivery-only notes", "html": ""},
+        }
+    ]
+
+    res = client.post("/api/v1/admin/assets", json=payload, headers=headers)
+
+    assert res.status_code == 201
+    body = res.json()
+    assert body["shared_fields"] == payload["shared_fields"]
+    assert body["sales_fields"] == payload["sales_fields"]
+    assert body["delivery_fields"] == payload["delivery_fields"]
+    assert body["delivery_allowed_roles"] == ["delivery-engineer"]
+    assert body["delivery_allowed_users"] == ["lead@example.com"]
+    assert body["content_blocks"][0]["audience"] == "delivery"
+
+
 def test_create_asset_slug_conflict() -> None:
     client = TestClient(app)
     token = _get_token(client)
@@ -246,6 +294,45 @@ def test_update_asset_writes_latest_content_schema_and_block_versions() -> None:
     ]
 
 
+def test_update_asset_persists_delivery_access_lists() -> None:
+    client = TestClient(app)
+    token = _get_token(client)
+    headers = {"Authorization": f"Bearer {token}"}
+
+    create_res = client.post("/api/v1/admin/assets", json=_asset_payload(), headers=headers)
+    assert create_res.status_code == 201
+    asset_id = create_res.json()["id"]
+
+    payload = _asset_payload(slug=f"delivery-access-{uuid.uuid4().hex[:8]}")
+    payload["shared_fields"] = {"introduction": "Updated intro"}
+    payload["sales_fields"] = {"value_summary": "Updated sales narrative"}
+    payload["delivery_fields"] = {"implementation_summary": "Updated delivery narrative"}
+    payload["delivery_allowed_roles"] = ["delivery-engineer", "platform-lead"]
+    payload["delivery_allowed_users"] = ["owner@example.com"]
+    payload["content_blocks"] = [
+        {
+            "id": "shared-text-1",
+            "type": "text",
+            "version": 2,
+            "order": 0,
+            "visible": True,
+            "audience": "shared",
+            "config": {"markdown": "Shared notes", "html": ""},
+        }
+    ]
+
+    res = client.put(f"/api/v1/admin/assets/{asset_id}", json=payload, headers=headers)
+
+    assert res.status_code == 200
+    body = res.json()
+    assert body["delivery_allowed_roles"] == ["delivery-engineer", "platform-lead"]
+    assert body["delivery_allowed_users"] == ["owner@example.com"]
+    assert body["shared_fields"] == {"introduction": "Updated intro"}
+    assert body["sales_fields"] == {"value_summary": "Updated sales narrative"}
+    assert body["delivery_fields"] == {"implementation_summary": "Updated delivery narrative"}
+    assert body["content_blocks"][0]["audience"] == "shared"
+
+
 # ---------------------------------------------------------------------------
 # Search blocks tests
 # ---------------------------------------------------------------------------
@@ -380,3 +467,66 @@ def test_search_blocks_with_type_filter() -> None:
     assert body["total"] >= 1
     for r in body["results"]:
         assert r["block"]["type"] == "stat_card"
+
+
+# ---------------------------------------------------------------------------
+# Video validation tests
+# ---------------------------------------------------------------------------
+
+
+def test_create_asset_with_multiple_primary_videos_returns_422():
+    """同一 asset 不允许有多个主视频。"""
+    client = TestClient(app)
+    token = _get_token(client)
+    headers = {"Authorization": f"Bearer {token}"}
+
+    resp = client.post(
+        "/api/v1/admin/assets",
+        json={
+            "slug": "multi-primary-test",
+            "title": "Multi Primary",
+            "short_description": "desc",
+            "asset_type": "solution",
+            "status": "draft",
+            "visibility": "public",
+            "shared_fields": {
+                "videos": [
+                    {"id": "v1", "title": "A", "video_url": "https://example.com/a.mp4", "is_primary": True},
+                    {"id": "v2", "title": "B", "video_url": "https://example.com/b.mp4", "is_primary": True},
+                ],
+            },
+        },
+        headers=headers,
+    )
+    assert resp.status_code == 422
+
+
+def test_create_asset_with_videos_auto_sets_primary():
+    """当提交的视频列表无主视频时，服务端自动将第一条设为主视频。"""
+    client = TestClient(app)
+    token = _get_token(client)
+    headers = {"Authorization": f"Bearer {token}"}
+
+    resp = client.post(
+        "/api/v1/admin/assets",
+        json={
+            "slug": "auto-primary-test",
+            "title": "Auto Primary",
+            "short_description": "desc",
+            "asset_type": "solution",
+            "status": "draft",
+            "visibility": "public",
+            "shared_fields": {
+                "videos": [
+                    {"id": "v1", "title": "A", "video_url": "https://example.com/a.mp4", "is_primary": False},
+                    {"id": "v2", "title": "B", "video_url": "https://example.com/b.mp4", "is_primary": False},
+                ],
+            },
+        },
+        headers=headers,
+    )
+    assert resp.status_code in (200, 201)
+    videos = resp.json()["shared_fields"]["videos"]
+    primaries = [v for v in videos if v.get("is_primary", False)]
+    assert len(primaries) == 1
+    assert primaries[0]["id"] == "v1"
