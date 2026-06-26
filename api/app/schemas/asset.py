@@ -1,4 +1,35 @@
+from typing import Literal
+
 from pydantic import BaseModel, Field
+
+
+class AssetVideoItem(BaseModel):
+    id: str
+    title: str = Field(..., min_length=1, max_length=160)
+    video_url: str = Field(..., min_length=1, max_length=1000)
+    poster_url: str | None = Field(None, max_length=1000)
+    description: str = Field(default="", max_length=500)
+    is_primary: bool = False
+
+
+class SharedAssetFields(BaseModel):
+    introduction: str = ""
+    use_cases: list[str] = Field(default_factory=list)
+    demo_video_url: str | None = None
+    live_demo_url: str | None = None
+    videos: list[AssetVideoItem] = Field(default_factory=list)
+
+
+class SalesAssetFields(BaseModel):
+    value_summary: str = ""
+    differentiators: list[str] = Field(default_factory=list)
+    outcomes: list[str] = Field(default_factory=list)
+
+
+class DeliveryAssetFields(BaseModel):
+    implementation_summary: str = ""
+    prerequisites: list[str] = Field(default_factory=list)
+    rollout_steps: list[str] = Field(default_factory=list)
 
 
 class AssetSummary(BaseModel):
@@ -29,12 +60,21 @@ class AssetCreateRequest(BaseModel):
     allowed_users: list[str] = []
     content_schema_version: int = 1
     content_blocks: list[dict] = []
+    shared_fields: SharedAssetFields = Field(default_factory=SharedAssetFields)
+    sales_fields: SalesAssetFields = Field(default_factory=SalesAssetFields)
+    delivery_fields: DeliveryAssetFields = Field(default_factory=DeliveryAssetFields)
+    delivery_allowed_roles: list[str] = Field(default_factory=list)
+    delivery_allowed_users: list[str] = Field(default_factory=list)
 
 
 class AssetDetail(AssetSummary):
     content_schema_version: int
     content_blocks: list[dict]
     visibility: str
+    shared_fields: dict
+    sales_fields: dict
+    delivery_fields: dict | None = None
+    delivery_access: Literal["granted", "signin_required", "request_access"] | None = None
 
 
 class BlockSearchResult(BaseModel):
