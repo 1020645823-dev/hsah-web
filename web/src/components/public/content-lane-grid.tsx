@@ -19,7 +19,7 @@ export function ContentLaneGrid() {
           <Link
             key={lane.href}
             href={lane.href}
-            className="group rounded-3xl border border-border bg-card/90 p-6 shadow-sm transition-transform duration-150 hover:-translate-y-1"
+            className="group rounded-2xl border border-border bg-card p-6 shadow-[var(--shadow-card)] transition-colors duration-150 hover:border-primary/30"
           >
             <p className="text-xs font-medium tracking-[0.18em] text-primary">{lane.audience}</p>
             <h3 className="mt-4 text-xl font-semibold text-foreground">{lane.title}</h3>

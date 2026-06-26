@@ -13,6 +13,11 @@ import { ADMIN_TOKEN_STORAGE_KEY } from "@/lib/admin";
 
 type Step = "password" | "totp";
 
+type LoginContext = {
+  isAdminWorkspace: boolean;
+  targetPath: string | null;
+};
+
 export default function LoginPage() {
   return (
     <Suspense fallback={<LoginPageFallback />}>
@@ -31,7 +36,7 @@ function LoginPageContent() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const nextHref = getSafeNextHref(searchParams.get("next"));
-  const cameFromAdmin = nextHref.startsWith("/admin");
+  const loginContext = useMemo(() => buildLoginContext(nextHref), [nextHref]);
 
   const canSubmit = useMemo(() => {
     if (!email.trim() || !password) return false;
@@ -140,9 +145,42 @@ function LoginPageContent() {
             </p>
           </div>
 
-          {cameFromAdmin ? (
-            <div className="rounded-xl border border-border/80 bg-muted/60 px-5 py-3.5 text-sm text-foreground/80">
-              Sign in to continue to the admin workspace you requested.
+          {loginContext.isAdminWorkspace ? (
+            <div className="rounded-2xl border border-primary/15 bg-primary/5 px-5 py-4 text-sm text-foreground/80 shadow-sm">
+              <div className="flex items-start gap-3">
+                <div className="mt-0.5 flex size-9 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
+                  <ShieldCheck className="size-4" />
+                </div>
+                <div className="space-y-2">
+                  <p className="font-medium text-foreground">Admin workspace sign-in</p>
+                  <p className="leading-6 text-foreground/70">
+                    You were sent here from the admin workspace and will return to the
+                    exact page after sign-in.
+                  </p>
+                  <dl className="grid gap-2 text-[13px] text-foreground/70 sm:grid-cols-2">
+                    <div className="rounded-xl bg-background/80 px-3 py-2.5">
+                      <dt className="text-[11px] font-semibold tracking-[0.16em] text-foreground/45 uppercase">
+                        Workspace
+                      </dt>
+                      <dd className="mt-1 font-medium text-foreground">
+                        Admin workspace
+                      </dd>
+                    </div>
+                    <div className="rounded-xl bg-background/80 px-3 py-2.5">
+                      <dt className="text-[11px] font-semibold tracking-[0.16em] text-foreground/45 uppercase">
+                        Target path
+                      </dt>
+                      <dd className="mt-1 font-mono text-[12px] text-foreground">
+                        {loginContext.targetPath ?? "/admin"}
+                      </dd>
+                    </div>
+                  </dl>
+                  <p className="text-[13px] leading-6 text-foreground/60">
+                    Return route: the public library remains your discovery surface for
+                    assets, profiles, and reference content.
+                  </p>
+                </div>
+              </div>
             </div>
           ) : null}
 
@@ -243,6 +281,21 @@ function LoginPageFallback() {
   );
 }
 
+function buildLoginContext(nextHref: string): LoginContext {
+  const isAdminWorkspace = nextHref.startsWith("/admin");
+  if (!isAdminWorkspace) {
+    return {
+      isAdminWorkspace: false,
+      targetPath: null,
+    };
+  }
+
+  return {
+    isAdminWorkspace: true,
+    targetPath: nextHref,
+  };
+}
+
 function FeatureBullet({
   icon: Icon,
   title,
@@ -266,7 +319,7 @@ function FeatureBullet({
 }
 
 function getSafeNextHref(next: string | null) {
-  if (!next) return "/profile";
-  if (!next.startsWith("/") || next.startsWith("//")) return "/profile";
+  if (!next) return "/admin";
+  if (!next.startsWith("/") || next.startsWith("//")) return "/admin";
   return next;
 }

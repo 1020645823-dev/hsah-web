@@ -23,8 +23,8 @@ export function ThemeToggle({ className, variant = "icon" }: ThemeToggleProps) {
     return (
       <div
         className={cn(
-          "inline-flex items-center justify-center",
-          variant === "icon" ? "size-9 rounded-lg" : "h-9 rounded-lg px-3",
+          "inline-flex min-h-11 items-center justify-center",
+          variant === "icon" ? "size-11 rounded-lg" : "rounded-lg px-3 py-2",
           className,
         )}
         aria-hidden="true"
@@ -44,10 +44,10 @@ export function ThemeToggle({ className, variant = "icon" }: ThemeToggleProps) {
       onClick={() => setTheme(nextTheme)}
       aria-label={label}
       className={cn(
-        "inline-flex items-center justify-center gap-2 rounded-lg border border-border/70 transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-        variant === "icon" && "size-9 hover:bg-muted",
-        variant === "ghost" && "h-9 px-3 hover:bg-muted text-muted-foreground hover:text-foreground",
-        variant === "default" && "h-9 px-3 bg-primary text-primary-foreground hover:bg-primary/90",
+        "inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border border-border/70 transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+        variant === "icon" && "size-11 hover:bg-muted",
+        variant === "ghost" && "px-3 py-2 hover:bg-muted text-muted-foreground hover:text-foreground",
+        variant === "default" && "px-3 py-2 bg-primary text-primary-foreground hover:bg-primary/90",
         className,
       )}
     >

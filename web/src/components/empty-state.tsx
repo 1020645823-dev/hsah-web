@@ -44,6 +44,7 @@ export function EmptyState({ icon: Icon, title, description, action, actions }: 
               type="button"
               variant={a.variant ?? "default"}
               onClick={a.onClick}
+              className="min-h-11"
             >
               {a.label}
             </Button>

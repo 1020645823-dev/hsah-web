@@ -212,8 +212,6 @@ export function AssetsClient({ initialResponse, initialQuery }: AssetsClientProp
     navigate(nextState);
   }
 
-  const showViewToggle = initialResponse.items.length > 0;
-
   return (
     <div className="space-y-8">
       <PageHeader
@@ -223,7 +221,7 @@ export function AssetsClient({ initialResponse, initialQuery }: AssetsClientProp
         actions={
           <button
             type="button"
-            className="inline-flex h-10 items-center rounded-lg border border-border px-4 text-sm text-muted-foreground transition-colors hover:border-primary/40 hover:text-foreground"
+              className="inline-flex h-11 items-center rounded-lg border border-border px-4 text-sm text-muted-foreground transition-colors hover:border-primary/40 hover:text-foreground"
           >
             Saved filters
           </button>
@@ -232,12 +230,24 @@ export function AssetsClient({ initialResponse, initialQuery }: AssetsClientProp
 
       <FilterToolbar
         resultsLabel={`${initialResponse.total} results`}
+        persistentControl={
+          <label className="space-y-2 text-sm text-foreground/70">
+            <span>Search assets</span>
+            <input
+              aria-label="Search assets"
+              value={filters.q}
+              onChange={(event) => updateField("q", event.target.value)}
+              placeholder="Search by title or description"
+              className="h-11 w-full rounded-xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-foreground/50 outline-none transition-colors focus:border-primary"
+            />
+          </label>
+        }
         secondaryAction={
           hasActiveAssetFilters(filters) ? (
             <button
               type="button"
               onClick={clearFilters}
-              className="h-10 rounded-lg border border-border px-4 text-sm text-foreground transition-colors hover:bg-muted"
+              className="h-11 rounded-lg border border-border px-4 text-sm text-foreground transition-colors hover:bg-muted"
             >
               Clear filters
             </button>
@@ -247,21 +257,20 @@ export function AssetsClient({ initialResponse, initialQuery }: AssetsClientProp
           <button
             type="button"
             onClick={applyFilters}
-            className="inline-flex h-10 items-center rounded-lg bg-primary px-4 text-sm font-medium text-primary-foreground transition-colors hover:opacity-90"
+            className="inline-flex h-11 items-center rounded-lg bg-primary px-4 text-sm font-medium text-primary-foreground transition-colors hover:opacity-90"
           >
             Apply filters
           </button>
         }
         extraControls={
-          showViewToggle ? (
-            <div className="flex items-center gap-3">
-              <label className="flex items-center gap-2 text-sm text-muted-foreground">
+          <div className="flex flex-wrap items-center gap-3">
+              <label className="flex min-w-0 flex-1 items-center gap-2 text-sm text-muted-foreground sm:flex-none">
                 <span>Sort by</span>
                 <select
                   aria-label="Sort by"
                   value={filters.sort}
                   onChange={(event) => changeSort(event.target.value as AssetFilterState["sort"])}
-                  className="h-10 rounded-lg border border-border bg-background px-3 text-sm text-foreground outline-none transition-colors focus:border-primary"
+                  className="h-11 min-w-0 flex-1 rounded-lg border border-border bg-background px-3 text-sm text-foreground outline-none transition-colors focus:border-primary sm:flex-none"
                 >
                   {SORT_OPTIONS.map((option) => (
                     <option key={option.value} value={option.value}>
@@ -275,7 +284,7 @@ export function AssetsClient({ initialResponse, initialQuery }: AssetsClientProp
                   type="button"
                   aria-label="Grid view"
                   onClick={() => changeView("grid")}
-                  className={`inline-flex h-8 w-8 items-center justify-center rounded-md transition-colors ${
+                  className={`inline-flex size-11 items-center justify-center rounded-md transition-colors sm:size-8 ${
                     filters.view === "grid" ? "bg-muted text-foreground" : "text-muted-foreground hover:text-foreground"
                   }`}
                 >
@@ -285,7 +294,7 @@ export function AssetsClient({ initialResponse, initialQuery }: AssetsClientProp
                   type="button"
                   aria-label="List view"
                   onClick={() => changeView("list")}
-                  className={`inline-flex h-8 w-8 items-center justify-center rounded-md transition-colors ${
+                  className={`inline-flex size-11 items-center justify-center rounded-md transition-colors sm:size-8 ${
                     filters.view === "list" ? "bg-muted text-foreground" : "text-muted-foreground hover:text-foreground"
                   }`}
                 >
@@ -293,20 +302,8 @@ export function AssetsClient({ initialResponse, initialQuery }: AssetsClientProp
                 </button>
               </div>
             </div>
-          ) : undefined
         }
       >
-        <label className="space-y-2 text-sm text-foreground/70">
-          <span>Search assets</span>
-          <input
-            aria-label="Search assets"
-            value={filters.q}
-            onChange={(event) => updateField("q", event.target.value)}
-            placeholder="Search by title or description"
-            className="h-11 w-full rounded-xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-foreground/50 outline-none transition-colors focus:border-primary"
-          />
-        </label>
-
         <label className="space-y-2 text-sm text-foreground/70">
           <span>Cloud</span>
           <select
@@ -486,8 +483,8 @@ export function AssetsClient({ initialResponse, initialQuery }: AssetsClientProp
         </div>
       )}
 
-      <div className="flex flex-wrap items-center justify-between gap-4 rounded-[28px] border border-[rgb(212_218_245_/12%)] bg-[rgb(18_18_26_/72%)] px-5 py-4 shadow-[var(--shadow-card)] backdrop-blur-[24px]">
-        <div className="text-sm text-[var(--color-text-secondary)]">
+      <div className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-border bg-card px-5 py-4 shadow-[var(--shadow-card)]">
+        <div className="text-sm text-muted-foreground">
           Page {currentPage} of {totalPages}
         </div>
         <div className="flex items-center gap-3">
@@ -496,7 +493,7 @@ export function AssetsClient({ initialResponse, initialQuery }: AssetsClientProp
             aria-label="Previous page"
             onClick={() => goToPage(currentPage - 1)}
             disabled={currentPage <= 1}
-            className="h-10 rounded-full border border-[rgb(212_218_245_/12%)] px-4 text-sm text-[var(--color-text-primary)] transition-colors hover:bg-white/5 disabled:cursor-not-allowed disabled:opacity-40"
+            className="h-11 rounded-md border border-border px-4 text-sm text-foreground transition-colors hover:bg-muted disabled:cursor-not-allowed disabled:opacity-40"
           >
             Previous
           </button>
@@ -505,7 +502,7 @@ export function AssetsClient({ initialResponse, initialQuery }: AssetsClientProp
             aria-label="Next page"
             onClick={() => goToPage(currentPage + 1)}
             disabled={currentPage >= totalPages}
-            className="h-10 rounded-full border border-[rgb(212_218_245_/12%)] px-4 text-sm text-[var(--color-text-primary)] transition-colors hover:bg-white/5 disabled:cursor-not-allowed disabled:opacity-40"
+            className="h-11 rounded-md border border-border px-4 text-sm text-foreground transition-colors hover:bg-muted disabled:cursor-not-allowed disabled:opacity-40"
           >
             Next
           </button>

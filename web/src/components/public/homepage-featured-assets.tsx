@@ -21,22 +21,22 @@ export function HomepageFeaturedAssets() {
           <Link
             key={asset.href}
             href={asset.href}
-            className="group rounded-3xl border border-border bg-[linear-gradient(180deg,rgba(15,16,33,0.98),rgba(23,26,52,0.96))] p-6 text-white shadow-sm transition-transform duration-150 hover:-translate-y-1"
+            className="group rounded-2xl border border-border bg-card p-6 text-foreground shadow-[var(--shadow-card)] transition-colors duration-150 hover:border-primary/30"
           >
-            <div className="flex flex-wrap items-center gap-3 text-xs tracking-[0.18em] text-white/60">
+            <div className="flex flex-wrap items-center gap-3 text-xs tracking-[0.18em] text-muted-foreground">
               <span>{asset.eyebrow}</span>
               <span>{asset.audience}</span>
             </div>
             <h3 className="mt-4 text-2xl font-semibold tracking-tight">{asset.title}</h3>
-            <p className="mt-3 max-w-2xl text-sm leading-6 text-white/72">{asset.summary}</p>
+            <p className="mt-3 max-w-2xl text-sm leading-6 text-muted-foreground">{asset.summary}</p>
             <div className="mt-4 flex flex-wrap gap-2">
               {asset.tags.map((tag) => (
-                <span key={tag} className="rounded-full border border-white/15 bg-white/5 px-3 py-1 text-xs text-white/78">
+                <span key={tag} className="rounded-md border border-border bg-secondary px-3 py-1 text-xs text-secondary-foreground">
                   {tag}
                 </span>
               ))}
             </div>
-            <span className="mt-6 inline-flex items-center gap-2 text-sm font-medium text-white">
+            <span className="mt-6 inline-flex items-center gap-2 text-sm font-medium text-foreground">
               View asset details
               <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
             </span>

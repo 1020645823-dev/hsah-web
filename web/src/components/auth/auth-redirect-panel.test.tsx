@@ -10,12 +10,18 @@ describe("AuthRedirectPanel", () => {
       <AuthRedirectPanel message="You need to sign in before accessing admin routes." />,
     );
 
-    expect(screen.getByText("AUTHENTICATION")).toBeInTheDocument();
+    expect(screen.getByText("Authentication")).toBeInTheDocument();
     expect(
       screen.getByRole("heading", { name: "Redirecting to sign in" }),
     ).toBeInTheDocument();
     expect(
       screen.getByText("You need to sign in before accessing admin routes."),
     ).toBeInTheDocument();
+    expect(screen.getByText("Workspace context")).toBeInTheDocument();
+    expect(screen.getByText("Library return path")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Go to public library" })).toHaveAttribute(
+      "href",
+      "/assets",
+    );
   });
 });

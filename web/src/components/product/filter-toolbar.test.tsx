@@ -1,10 +1,14 @@
-import { render, screen, fireEvent } from "@testing-library/react";
+import { cleanup, render, screen, fireEvent } from "@testing-library/react";
 import "@testing-library/jest-dom/vitest";
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it } from "vitest";
 
 import { FilterToolbar } from "./filter-toolbar";
 
 describe("FilterToolbar", () => {
+  afterEach(() => {
+    cleanup();
+  });
+
   it("renders a sticky toolbar shell with results and action slots", () => {
     render(
       <FilterToolbar
@@ -18,8 +22,8 @@ describe("FilterToolbar", () => {
 
     expect(screen.getByLabelText("Search assets")).toBeInTheDocument();
     expect(screen.getAllByText("12 results").length).toBeGreaterThanOrEqual(1);
-    expect(screen.getByRole("button", { name: "Reset" })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Apply filters" })).toBeInTheDocument();
+    expect(screen.getAllByRole("button", { name: "Reset" }).length).toBeGreaterThanOrEqual(1);
+    expect(screen.getAllByRole("button", { name: "Apply filters" }).length).toBeGreaterThanOrEqual(1);
   });
 
   it("renders a mobile filter toggle button", () => {
@@ -64,6 +68,50 @@ describe("FilterToolbar", () => {
       </FilterToolbar>,
     );
 
-    expect(screen.getByRole("button", { name: "Export" })).toBeInTheDocument();
+    expect(screen.getAllByRole("button", { name: "Export" }).length).toBeGreaterThanOrEqual(1);
+  });
+
+  it("keeps the search control outside the collapsible filter panel", () => {
+    render(
+      <FilterToolbar
+        resultsLabel="8 results"
+        persistentControl={<input aria-label="Search assets" />}
+      >
+        <select aria-label="Cloud" />
+      </FilterToolbar>,
+    );
+
+    const panel = document.getElementById("filter-panel");
+    const search = screen.getByLabelText("Search assets");
+
+    expect(panel).toBeInTheDocument();
+    expect(panel).not.toContainElement(search);
+    expect(search).toBeInTheDocument();
+  });
+
+  it("renders mobile panel actions with apply clear sort and view controls", () => {
+    render(
+      <FilterToolbar
+        resultsLabel="8 results"
+        persistentControl={<input aria-label="Search assets" />}
+        primaryAction={<button type="button">Apply filters</button>}
+        secondaryAction={<button type="button">Clear filters</button>}
+        extraControls={
+          <div>
+            <select aria-label="Sort by" />
+            <button type="button">Grid view</button>
+          </div>
+        }
+      >
+        <select aria-label="Cloud" />
+      </FilterToolbar>,
+    );
+
+    const panel = document.getElementById("filter-panel");
+
+    expect(panel).toContainElement(screen.getAllByRole("button", { name: "Apply filters" })[0]);
+    expect(panel).toContainElement(screen.getAllByRole("button", { name: "Clear filters" })[0]);
+    expect(panel).toContainElement(screen.getAllByLabelText("Sort by")[0]);
+    expect(panel).toContainElement(screen.getAllByRole("button", { name: "Grid view" })[0]);
   });
 });

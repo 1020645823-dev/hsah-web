@@ -17,10 +17,10 @@ export function PublicHeader({ ctaHref, ctaLabel }: PublicHeaderProps) {
   const isActive = (href: string) => pathname === href || (href !== "/" && pathname?.startsWith(`${href}/`));
 
   return (
-    <header className="sticky top-0 z-30 border-b border-border/70 bg-background/88 backdrop-blur">
+    <header className="sticky top-0 z-30 border-b border-border bg-card/95 backdrop-blur">
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-6 px-6 py-4 md:px-8">
         <Link href="/" className="flex items-center gap-3 text-foreground">
-          <span className="flex size-10 items-center justify-center rounded-xl border border-border/70 bg-muted/40">
+          <span className="flex size-10 items-center justify-center rounded-lg border border-border bg-muted/45">
             <Blocks className="size-4" />
           </span>
           <span className="space-y-0.5">
@@ -59,7 +59,7 @@ export function PublicHeader({ ctaHref, ctaLabel }: PublicHeaderProps) {
           </Link>
           <Link
             href={ctaHref}
-            className="inline-flex h-10 items-center rounded-lg bg-primary px-4 text-sm font-medium text-primary-foreground shadow-sm shadow-primary/20 transition-transform hover:-translate-y-0.5"
+            className="inline-flex h-10 items-center rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
           >
             {ctaLabel}
           </Link>

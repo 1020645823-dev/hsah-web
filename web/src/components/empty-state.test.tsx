@@ -24,6 +24,7 @@ describe("EmptyState", () => {
     expect(screen.getByText("Get started by creating a new user.")).toBeInTheDocument();
     const button = screen.getByText("Create User");
     expect(button).toBeInTheDocument();
+    expect(button.closest("button")).toHaveClass("min-h-11");
 
     fireEvent.click(button);
     expect(handleClick).toHaveBeenCalledTimes(1);

@@ -45,7 +45,7 @@ describe("AssetsClient", () => {
       screen.getByText("Search reusable demos, architectures, and implementation references."),
     ).toBeInTheDocument();
     expect(screen.getByLabelText("Search assets")).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Apply filters" })).toBeInTheDocument();
+    expect(screen.getAllByRole("button", { name: "Apply filters" }).length).toBeGreaterThanOrEqual(1);
     expect(
       screen.getByText("No assets matched the current filters."),
     ).toBeInTheDocument();
@@ -89,7 +89,7 @@ describe("AssetsClient", () => {
     fireEvent.change(screen.getByLabelText("Asset type"), {
       target: { value: "solution" },
     });
-    fireEvent.click(screen.getByRole("button", { name: "Apply filters" }));
+    fireEvent.click(screen.getAllByRole("button", { name: "Apply filters" })[0]);
 
     expect(push).toHaveBeenCalledWith("/assets?q=agent&cloud=aws&asset_type=solution");
   });
@@ -138,7 +138,7 @@ describe("AssetsClient", () => {
     );
 
     const clearButtons = screen.getAllByRole("button", { name: "Clear filters" });
-    expect(clearButtons).toHaveLength(2);
+    expect(clearButtons).toHaveLength(3);
 
     fireEvent.click(clearButtons[0]);
 
@@ -171,8 +171,8 @@ describe("AssetsClient", () => {
       />,
     );
 
-    expect(screen.getByLabelText("Sort by")).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "List view" })).toBeInTheDocument();
+    expect(screen.getAllByLabelText("Sort by").length).toBeGreaterThanOrEqual(1);
+    expect(screen.getAllByRole("button", { name: "List view" }).length).toBeGreaterThanOrEqual(1);
   });
 
   it("switches view mode and pushes updated query", () => {
@@ -201,7 +201,7 @@ describe("AssetsClient", () => {
       />,
     );
 
-    fireEvent.click(screen.getByRole("button", { name: "List view" }));
+    fireEvent.click(screen.getAllByRole("button", { name: "List view" })[0]);
 
     expect(push).toHaveBeenCalledWith("/assets?view=list");
   });

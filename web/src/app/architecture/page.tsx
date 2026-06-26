@@ -20,13 +20,13 @@ export default function ArchitecturePage() {
             <>
               <Link
                 href="/insights"
-                className="inline-flex h-11 items-center justify-center rounded-full bg-[var(--color-electric-purple)] px-6 text-sm font-medium text-white"
+                className="inline-flex h-11 items-center justify-center rounded-md bg-primary px-6 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
               >
                 Read Insights
               </Link>
               <Link
                 href="/about"
-                className="inline-flex h-11 items-center justify-center rounded-full border border-[rgb(212_218_245_/20%)] px-6 text-sm font-medium text-[var(--color-text-primary)]"
+                className="inline-flex h-11 items-center justify-center rounded-md border border-border bg-background px-6 text-sm font-medium text-foreground transition-colors hover:bg-muted"
               >
                 Learn About the Hub
               </Link>

@@ -21,14 +21,14 @@ export default function Home() {
             <>
               <Link
                 href="/assets"
-                className="group inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-white px-7 text-sm font-semibold text-[#1c1967] shadow-lg shadow-black/15 transition-all duration-200 hover:gap-3 hover:bg-white/95 hover:shadow-xl hover:shadow-black/20"
+                className="group inline-flex h-12 items-center justify-center gap-2 rounded-md bg-primary px-7 text-sm font-semibold text-primary-foreground transition-all duration-200 hover:gap-3 hover:bg-primary/90"
               >
                 Explore Asset Library
                 <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
               </Link>
               <Link
                 href="/about"
-                className="inline-flex h-12 items-center justify-center rounded-xl border border-white/25 bg-white/8 px-7 text-sm font-medium text-white backdrop-blur-sm transition-all duration-200 hover:bg-white/15 hover:border-white/35"
+                className="inline-flex h-12 items-center justify-center rounded-md border border-border bg-background px-7 text-sm font-medium text-foreground transition-all duration-200 hover:bg-muted"
               >
                 See Platform Overview
               </Link>
@@ -49,7 +49,7 @@ export default function Home() {
 
         <HomepageFeaturedAssets />
 
-        <div className="rounded-[28px] border border-border bg-card p-7 shadow-[var(--shadow-card)] md:p-8">
+        <div className="rounded-2xl border border-border bg-card p-7 shadow-[var(--shadow-card)] md:p-8">
           <div className="grid gap-6 md:grid-cols-[1.3fr_0.9fr] md:items-center">
             <div>
               <div className="text-xs font-medium tracking-[0.18em] text-primary">PLATFORM VALUE</div>
@@ -64,14 +64,14 @@ export default function Home() {
             <div className="flex flex-col gap-3">
               <Link
                 href="/assets"
-                className="group inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-primary px-6 text-sm font-medium text-primary-foreground transition-all duration-150 hover:gap-3 hover:bg-primary/90"
+                className="group inline-flex h-11 items-center justify-center gap-2 rounded-md bg-primary px-6 text-sm font-medium text-primary-foreground transition-all duration-150 hover:gap-3 hover:bg-primary/90"
               >
                 Go to Asset Library
                 <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
               </Link>
               <Link
                 href="/scenarios"
-                className="inline-flex h-11 items-center justify-center rounded-xl border border-border px-6 text-sm font-medium text-foreground transition-colors hover:bg-muted"
+                className="inline-flex h-11 items-center justify-center rounded-md border border-border px-6 text-sm font-medium text-foreground transition-colors hover:bg-muted"
               >
                 Browse Scenarios
               </Link>
