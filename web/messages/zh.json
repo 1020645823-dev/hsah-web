@@ -5,7 +5,965 @@
   },
   "Common": {
     "signIn": "登录",
+    "signOut": "退出登录",
     "exploreAssets": "探索资产",
-    "backToAssets": "返回资产库"
+    "exploreAssetLibrary": "探索资产库",
+    "backToAssets": "返回资产库",
+    "learnMore": "了解更多",
+    "readMore": "继续阅读",
+    "viewDetails": "查看详情",
+    "requestAccess": "申请访问",
+    "create": "创建",
+    "save": "保存",
+    "cancel": "取消",
+    "delete": "删除",
+    "edit": "编辑",
+    "search": "搜索",
+    "filters": "筛选",
+    "clearFilters": "清除筛选",
+    "applyFilters": "应用筛选",
+    "loading": "加载中",
+    "retry": "重试",
+    "dismiss": "关闭",
+    "notAvailable": "不可用",
+    "all": "全部",
+    "view": "视图",
+    "status": "状态"
+  },
+  "Home": {
+    "heroEyebrow": "HSAH 平台",
+    "heroTitle": "面向 AI 交付资产的品牌化内容平台",
+    "heroSummary": "通过场景、架构、洞察和可实施资产，以统一公共壳层从发现走向复用。",
+    "primaryCta": "探索资产库",
+    "secondaryCta": "查看平台概览",
+    "metrics": {
+      "assets": {
+        "value": "150+",
+        "label": "解决方案资产与演示"
+      },
+      "industries": {
+        "value": "12",
+        "label": "行业视角与运营语境"
+      },
+      "lanes": {
+        "value": "4",
+        "label": "基于角色的内容通道"
+      },
+      "entry": {
+        "value": "1",
+        "label": "统一公共入口"
+      }
+    },
+    "valueEyebrow": "平台价值",
+    "valueTitle": "先对齐利益相关方，再进入实施细节。",
+    "valueSummary": "首页现在阐明产品定位、展示真实精选资产，并在用户进入资产库前将每个角色引导到最相关的内容通道。",
+    "goToLibrary": "前往资产库",
+    "browseScenarios": "浏览场景"
+  },
+  "Assets": {
+    "eyebrow": "资产库",
+    "title": "资产库",
+    "summary": "搜索可复用演示、架构和实施参考。",
+    "savedFilters": "已保存筛选",
+    "searchLabel": "搜索资产",
+    "searchPlaceholder": "按标题或描述搜索",
+    "results": "{count} 个结果",
+    "sortBy": "排序方式",
+    "sortTitle": "标题",
+    "sortRecentlyUpdated": "最近更新",
+    "gridView": "网格视图",
+    "listView": "列表视图",
+    "emptyTitle": "未找到匹配资产",
+    "emptyDescription": "调整搜索条件或清除筛选以查看可用资产。",
+    "cloud": "云平台",
+    "industry": "行业",
+    "technology": "技术",
+    "assetType": "资产类型",
+    "published": "已发布",
+    "draft": "草稿"
+  },
+  "AssetDetail": {
+    "sharedContext": "共享上下文",
+    "useCases": "用例",
+    "watchDemoVideo": "观看演示视频",
+    "openLiveDemo": "打开在线演示",
+    "salesValue": "销售价值",
+    "differentiators": "差异化亮点",
+    "outcomes": "成果",
+    "implementation": "实施",
+    "prerequisites": "前置条件",
+    "rolloutSteps": "上线步骤",
+    "viewMode": "视图模式",
+    "chooseLens": "选择该资产的查看视角",
+    "lensSummary": "销售视角聚焦价值表达；交付视角在授权后展示实施指导。",
+    "sales": "销售",
+    "delivery": "交付",
+    "controlledDeliveryContent": "受控交付内容",
+    "deliveryAccessTitle": "交付实施访问权限",
+    "signinRequiredDescription": "使用获批角色登录以查看运行手册、部署步骤和交付说明。",
+    "requestAccessDescription": "申请交付访问权限以查看运行手册、部署步骤和交付说明。"
+  },
+  "VideoPlayer": {
+    "demoVideo": "演示视频",
+    "allVideos": "全部视频",
+    "primary": "主视频"
+  },
+  "NotFound": {
+    "title": "页面未找到",
+    "description": "该页面可能已移动，或链接不再可用。",
+    "backHome": "返回首页"
+  },
+  "Login": {
+    "productName": "Hyperscaler Asset Hub",
+    "heroTitle": "探索公共内容平台，然后进入运营工作区。",
+    "heroSummary": "通过一个身份入口访问已保存资产、个人资料和后台运营。",
+    "publicDiscoveryTitle": "公共发现",
+    "publicDiscoveryDescription": "登录前浏览可复用演示、架构和场景驱动内容。",
+    "operationalContinuityTitle": "运营连续性",
+    "operationalContinuityDescription": "从发现进入后台工作流，同时保留路由上下文。",
+    "protectedAccessTitle": "受保护访问",
+    "protectedAccessDescription": "将敏感治理动作置于认证工作区和必要的双因素认证之后。",
+    "quickLook": "想先快速了解？",
+    "explorePublicPlatform": "探索公共内容平台",
+    "identityGateway": "身份入口",
+    "title": "登录",
+    "passwordStepSummary": "访问已保存资产、个人资料和后台运营。",
+    "totpStepSummary": "输入身份验证器中的 6 位验证码以继续。",
+    "adminWorkspaceSignIn": "后台工作区登录",
+    "adminReturnSummary": "你从后台工作区跳转至此，登录后将返回原页面。",
+    "workspace": "工作区",
+    "adminWorkspace": "后台工作区",
+    "targetPath": "目标路径",
+    "returnRoute": "返回路径：公共资产库仍是发现资产、资料和参考内容的入口。",
+    "email": "邮箱",
+    "password": "密码",
+    "totpCode": "双因素验证码",
+    "loginFailed": "登录失败",
+    "createAccountFailed": "创建账号失败",
+    "verifyAndSignIn": "验证并登录",
+    "createAccountDev": "创建账号（开发）",
+    "returnToLibrary": "返回公共资产库",
+    "loadingTitle": "正在加载登录工作区..."
+  },
+  "About": {
+    "eyebrow": "关于",
+    "title": "围绕可信 AI 交付资产构建的公共入口",
+    "summary": "HSAH 帮助团队以业务场景、架构和社区实践对齐，然后进入可复用资产。",
+    "readInsights": "阅读洞察",
+    "joinCommunity": "加入社区",
+    "highlights": {
+      "scenarioLedDelivery": {
+        "title": "场景驱动交付",
+        "description": "我们围绕业务旅程、运营风险和可衡量成果塑造资产，而不是孤立演示。"
+      },
+      "reusableArchitecture": {
+        "title": "可复用架构",
+        "description": "参考模式加速编排、知识、信任和边缘执行中的设计决策。"
+      },
+      "workingCommunity": {
+        "title": "实践型社区",
+        "description": "运营、架构和产品团队跨行业共享方法、证据点与交付模式。"
+      }
+    }
+  },
+  "Footer": {
+    "productSummary": "场景、架构、洞察和社区实践的统一入口，用于加速 AI 交付资产复用。",
+    "navigation": "导航",
+    "resources": "资源",
+    "copyright": "© 2026 Hyperscaler Asset Hub。保留所有权利。"
+  },
+  "ContentLanes": {
+    "eyebrow": "内容通道",
+    "title": "从你的角色需要出发",
+    "summary": "四条内容通道帮助团队从业务问题推进到可复用实施资产。",
+    "items": {
+      "scenarios": {
+        "href": "/scenarios",
+        "title": "场景",
+        "summary": "先从业务旅程和可衡量的 AI 成果出发，再进入实施细节。",
+        "audience": "业务与交付负责人"
+      },
+      "architecture": {
+        "href": "/architecture",
+        "title": "架构",
+        "summary": "深入信任、编排、知识与实施模式，让方案规模化超越试点。",
+        "audience": "平台与解决方案架构师"
+      },
+      "insights": {
+        "href": "/insights",
+        "title": "洞察",
+        "summary": "用短篇内容帮助发起人和团队对齐运营模式选择、风险与取舍。",
+        "audience": "项目发起人与战略负责人"
+      },
+      "community": {
+        "href": "/community",
+        "title": "社区",
+        "summary": "连接工作组、实验室与从业者共享的可复用交付实践。",
+        "audience": "能力团队与一线实践者"
+      }
+    }
+  },
+  "FeaturedAssets": {
+    "eyebrow": "精选资产",
+    "title": "优先复用的参考模式",
+    "summary": "从经过策展的架构资产开始，将场景意图连接到实施选项。",
+    "viewAsset": "查看资产"
+  },
+  "Theme": {
+    "toggle": "切换主题",
+    "light": "浅色",
+    "dark": "深色",
+    "system": "跟随系统"
+  },
+  "Error": {
+    "genericTitle": "出现问题",
+    "genericDescription": "请求未能完成。请重试或稍后再试。",
+    "networkTitle": "网络错误",
+    "unauthorized": "你需要登录后继续。",
+    "forbidden": "你没有执行此操作的权限。",
+    "notFound": "未找到请求的资源。",
+    "validation": "请检查表单内容后重试。"
+  },
+  "RouteGuard": {
+    "checking": "正在检查访问权限",
+    "redirecting": "正在跳转到登录页",
+    "protectedRoute": "受保护路由",
+    "adminRequired": "需要后台访问权限才能继续。"
+  },
+  "PublicSite": {
+    "skipToContent": "跳到正文",
+    "ctaLabel": "登录",
+    "navLabel": "公共站点导航",
+    "brandName": "Hyperscaler Asset Hub",
+    "section": {
+      "overview": "概览",
+      "metrics": "指标",
+      "details": "详情",
+      "related": "相关内容"
+    }
+  },
+  "FilterToolbar": {
+    "filters": "筛选",
+    "showFilters": "显示筛选",
+    "hideFilters": "隐藏筛选",
+    "results": "结果",
+    "mobilePanel": "筛选面板"
+  },
+  "Nav": {
+    "scenarios": "场景",
+    "architecture": "架构",
+    "insights": "洞察",
+    "community": "社区",
+    "about": "关于",
+    "assets": "资产",
+    "admin": "后台"
+  },
+  "Scenarios": {
+    "eyebrow": "场景",
+    "title": "按业务旅程探索 AI 交付场景",
+    "summary": "每个场景都连接业务成果、阶段、指标和可复用参考架构。",
+    "viewArchitectures": "查看架构",
+    "joinCommunity": "加入社区",
+    "allScenarios": "全部场景",
+    "relatedArchitectures": "相关架构",
+    "businessOutcome": "业务成果",
+    "industry": "行业",
+    "phases": "阶段",
+    "items": {
+      "intelligentCustomerOperations": {
+        "slug": "intelligent-customer-operations",
+        "title": "智能客户运营",
+        "eyebrow": "场景",
+        "summary": "围绕有依据的 Copilot、具备策略感知的自动化与持续质量闭环重塑服务运营。",
+        "industry": "电信",
+        "businessOutcome": "缩短处理时长，同时提升数字与语音渠道的一次解决率。",
+        "tags": [
+          "联络中心",
+          "坐席辅助",
+          "知识溯源"
+        ],
+        "metrics": [
+          {
+            "label": "平均处理时长",
+            "value": "-28%"
+          },
+          {
+            "label": "一次解决率提升",
+            "value": "+17 点"
+          },
+          {
+            "label": "知识复用",
+            "value": "3.2 倍"
+          }
+        ],
+        "phases": [
+          {
+            "title": "观察并排序优先级",
+            "description": "梳理跨渠道的高频意图、异常路径、策略依赖与当前流失点。"
+          },
+          {
+            "title": "知识扎根并自动化",
+            "description": "引入检索增强 Copilot、引导式解决剧本与事件驱动的后续动作。"
+          },
+          {
+            "title": "衡量并优化",
+            "description": "通过每周改进闭环追踪承接质量、升级处理与情绪修复。"
+          }
+        ],
+        "relatedArchitectureSlugs": [
+          "agentic-service-mesh",
+          "knowledge-governance-fabric"
+        ]
+      },
+      "regulatedRiskCaseOrchestration": {
+        "slug": "regulated-risk-case-orchestration",
+        "title": "受监管风险案件编排",
+        "eyebrow": "场景",
+        "summary": "为高信任金融流程协调文档审阅、分析师工作台与人工审批。",
+        "industry": "银行",
+        "businessOutcome": "缩短风险审查周期，同时不削弱可追溯性、审批与策略控制。",
+        "tags": [
+          "风险运营",
+          "人在回路",
+          "策略控制"
+        ],
+        "metrics": [
+          {
+            "label": "案件周期",
+            "value": "-41%"
+          },
+          {
+            "label": "分析师产能",
+            "value": "+22%"
+          },
+          {
+            "label": "审计就绪度",
+            "value": "99.5%"
+          }
+        ],
+        "phases": [
+          {
+            "title": "标准化证据接入",
+            "description": "将文档、交易记录与审阅备注归一为一致的案件时间线。"
+          },
+          {
+            "title": "辅助决策准备",
+            "description": "呈现异常、预填判断依据，并让建议与内部控制语言保持一致。"
+          },
+          {
+            "title": "带血缘关系闭环",
+            "description": "持久化每个决策、例外与支撑材料，用于下游审计和模型治理。"
+          }
+        ],
+        "relatedArchitectureSlugs": [
+          "trust-control-plane",
+          "knowledge-governance-fabric"
+        ]
+      },
+      "fieldServiceKnowledgeAcceleration": {
+        "slug": "field-service-knowledge-acceleration",
+        "title": "现场服务知识加速",
+        "eyebrow": "场景",
+        "summary": "在工作流中为技术人员提供多模态指导、备件智能与完工捕获能力。",
+        "industry": "工业",
+        "businessOutcome": "提升一次修复率，并压缩新培训现场团队的上手时间。",
+        "tags": [
+          "现场服务",
+          "视觉辅助",
+          "作业指导"
+        ],
+        "metrics": [
+          {
+            "label": "一次修复率",
+            "value": "+13 点"
+          },
+          {
+            "label": "上手时间",
+            "value": "-35%"
+          },
+          {
+            "label": "重复上门",
+            "value": "-18%"
+          }
+        ],
+        "phases": [
+          {
+            "title": "数字化隐性知识",
+            "description": "将专家流程、备件依赖和异常处理沉淀为引导式数字剧本。"
+          },
+          {
+            "title": "现场辅助",
+            "description": "将资产历史、排障树和视觉识别融合到统一现场体验中。"
+          },
+          {
+            "title": "反馈闭环",
+            "description": "把作业结果和技术人员反馈转化为更新后的内容与更优派工逻辑。"
+          }
+        ],
+        "relatedArchitectureSlugs": [
+          "edge-inference-backbone"
+        ]
+      }
+    }
+  },
+  "Architectures": {
+    "eyebrow": "架构",
+    "title": "面向可信 AI 交付的参考架构",
+    "summary": "用可复用模式连接体验、编排、知识、控制和执行层。",
+    "browseScenarios": "浏览场景",
+    "readInsights": "阅读洞察",
+    "allArchitectures": "全部架构",
+    "relatedScenarios": "相关场景",
+    "focus": "关注领域",
+    "layers": "层级",
+    "governance": "治理",
+    "deploymentNotes": "部署说明",
+    "items": {
+      "agenticServiceMesh": {
+        "slug": "agentic-service-mesh",
+        "title": "智能体服务网格",
+        "eyebrow": "参考架构",
+        "summary": "一种用于 Copilot 与自动化的模块化编排模式，将策略、记忆、路由与执行解耦。",
+        "focus": "企业服务运营",
+        "tags": [
+          "编排",
+          "可观测性",
+          "人工审批"
+        ],
+        "layers": [
+          {
+            "title": "体验层",
+            "description": "桌面、CRM、门户和渠道集成呈现任务上下文、建议与审批。"
+          },
+          {
+            "title": "智能体编排层",
+            "description": "意图路由、提示词组合、工具调用、回退逻辑与主管控制位于此层。"
+          },
+          {
+            "title": "知识与记忆层",
+            "description": "文档检索、语义记忆、会话状态与策略引用均被版本化并纳入治理。"
+          },
+          {
+            "title": "执行层",
+            "description": "工作流引擎和企业系统执行更新、案件动作、通知与数据写入。"
+          }
+        ],
+        "governance": [
+          "将提示词资产与策略资产分离，便于独立审阅。",
+          "记录每一次工具调用、审批交接和生成的判断依据。",
+          "为模型与检索变更保留回滚控制。"
+        ],
+        "deploymentNotes": [
+          "先从窄领域和单一渠道开始，再扩展工具访问范围。",
+          "在编排和下游系统之间使用共享追踪标识。",
+          "将置信度阈值视为业务控制，而不仅是模型设置。"
+        ],
+        "relatedScenarioSlugs": [
+          "intelligent-customer-operations"
+        ]
+      },
+      "knowledgeGovernanceFabric": {
+        "slug": "knowledge-governance-fabric",
+        "title": "知识治理织网",
+        "eyebrow": "参考架构",
+        "summary": "面向高信任检索场景的受治理内容流水线，强调新鲜度、血缘关系与审批。",
+        "focus": "知识密集型受监管流程",
+        "tags": [
+          "RAG",
+          "血缘关系",
+          "内容生命周期"
+        ],
+        "layers": [
+          {
+            "title": "来源接入",
+            "description": "策略、文档、工单和专家备注在接入时被规范化、分类并版本控制。"
+          },
+          {
+            "title": "策展层",
+            "description": "编辑工作流在发布到检索前识别冲突、缺失元数据和过期资产。"
+          },
+          {
+            "title": "服务层",
+            "description": "搜索索引、向量嵌入与权限感知检索按角色和工作流状态提供上下文。"
+          },
+          {
+            "title": "反馈闭环",
+            "description": "使用分析、无答案报告和审阅者覆盖结果反哺持续策展与退役决策。"
+          }
+        ],
+        "governance": [
+          "为每个可检索材料附加来源血缘和审阅状态。",
+          "在检索前和答案生成前执行访问范围控制。",
+          "在敏感场景中通过人工审阅衡量检索质量。"
+        ],
+        "deploymentNotes": [
+          "为高波动策略领域定义发布 SLA。",
+          "在存储和体验中区分草稿、已批准和已退役知识状态。",
+          "用业务归属负责内容新鲜度，而不仅依赖平台归属。"
+        ],
+        "relatedScenarioSlugs": [
+          "intelligent-customer-operations",
+          "regulated-risk-case-orchestration"
+        ]
+      },
+      "trustControlPlane": {
+        "slug": "trust-control-plane",
+        "title": "信任控制平面",
+        "eyebrow": "参考架构",
+        "summary": "面向评估、审批、策略执行和运营风险管理的横向控制平面。",
+        "focus": "高保障决策支持",
+        "tags": [
+          "控制平面",
+          "评估",
+          "保障"
+        ],
+        "layers": [
+          {
+            "title": "策略定义",
+            "description": "业务规则、升级阈值和审批路径被声明为可复用控制。"
+          },
+          {
+            "title": "运行时执行",
+            "description": "请求在执行动作前会接受访问、置信度、风险等级和强制审阅评估。"
+          },
+          {
+            "title": "评估服务",
+            "description": "离线和在线评估对建议质量、幻觉风险与漂移指标进行打分。"
+          },
+          {
+            "title": "证据库",
+            "description": "决策包、审阅结果和审计材料被保留用于治理与整改。"
+          }
+        ],
+        "governance": [
+          "控制项可独立于模型或工作流变更推进。",
+          "用负责人、到期时间和依据让例外处理显性化。",
+          "在生产发布控制项前使用策略模拟。"
+        ],
+        "deploymentNotes": [
+          "尽早集成案件系统以保留分析师信任。",
+          "将评估数据集作为治理资产并定期刷新。",
+          "让风险团队获得自助可见性，而无需依赖工程改动。"
+        ],
+        "relatedScenarioSlugs": [
+          "regulated-risk-case-orchestration"
+        ]
+      },
+      "edgeInferenceBackbone": {
+        "slug": "edge-inference-backbone",
+        "title": "边缘推理骨干",
+        "eyebrow": "参考架构",
+        "summary": "适用于现场和工厂环境的韧性模式，让本地辅助智能能够容忍连接中断。",
+        "focus": "现场与一线执行",
+        "tags": [
+          "边缘",
+          "离线优先",
+          "设备遥测"
+        ],
+        "layers": [
+          {
+            "title": "设备体验",
+            "description": "平板、加固设备和可穿戴界面提供引导任务、图像采集与备件查询。"
+          },
+          {
+            "title": "本地推理与缓存",
+            "description": "紧凑模型和精选知识包在带宽受限时支持现场辅助。"
+          },
+          {
+            "title": "同步与遥测",
+            "description": "双向同步处理工单、资产更新和延迟证据上传。"
+          },
+          {
+            "title": "中央学习闭环",
+            "description": "总部团队重新训练、审阅现场结果，并将改进后的作业剧本发布回边缘。"
+          }
+        ],
+        "governance": [
+          "将本地模型范围限定在已批准的离线任务内。",
+          "加密本地缓存并自动过期敏感内容。",
+          "将运营遥测与员工绩效管理数据分离。"
+        ],
+        "deploymentNotes": [
+          "先设计优雅降级，再优化峰值在线性能。",
+          "对现场作业剧本进行版本化，避免不同班组出现含糊指令。",
+          "将同步成功率和内容过期率作为一等健康指标。"
+        ],
+        "relatedScenarioSlugs": [
+          "field-service-knowledge-acceleration"
+        ]
+      }
+    }
+  },
+  "Insights": {
+    "eyebrow": "洞察",
+    "title": "帮助团队对齐运营选择的短篇洞察",
+    "summary": "用实用观点连接治理、体验设计、知识系统和产品化交付。",
+    "reviewArchitectures": "查看架构",
+    "allInsights": "全部洞察",
+    "keyPoints": "关键要点",
+    "published": "发布日期",
+    "readTime": "阅读时间",
+    "items": {
+      "fromPrototypesToGovernedAiProducts": {
+        "slug": "from-prototypes-to-governed-ai-products",
+        "title": "从原型走向受治理的 AI 产品",
+        "category": "运营模式",
+        "summary": "为什么许多试点停滞，以及组合管理、归属和交付设计必须如何改变。",
+        "publishDate": "2026-06-10",
+        "readTime": "6 分钟阅读",
+        "keyPoints": [
+          "原型成功本身很少能预测生产采纳。",
+          "治理必须嵌入产品流，而不是上线后再补上。",
+          "团队需要可复用控制、共享遥测和清晰的资产归属。"
+        ],
+        "bodySections": [
+          {
+            "title": "失败模式",
+            "description": "许多试点证明模型能生成输出，却没有证明周边工作流能安全且可重复地吸收这些输出。"
+          },
+          {
+            "title": "真正能规模化的做法",
+            "description": "最强的项目会先工业化评估、提示词与策略版本管理，以及面向业务的审阅路径，再扩展用例。"
+          },
+          {
+            "title": "下一步做什么",
+            "description": "将 AI 交付视为产品组合，明确服务层级、可复用组件和业务负责人真正关心的运营指标。"
+          }
+        ]
+      },
+      "designingRetrievalForHighTrustWorkflows": {
+        "slug": "designing-retrieval-for-high-trust-workflows",
+        "title": "为高信任流程设计检索",
+        "category": "知识系统",
+        "summary": "检索质量不仅取决于嵌入和切块，也同样取决于编辑与治理系统。",
+        "publishDate": "2026-05-27",
+        "readTime": "5 分钟阅读",
+        "keyPoints": [
+          "后果越高，新鲜度与血缘关系越重要。",
+          "授权和审阅状态必须随内容一同流转。",
+          "无答案分析是产品信号，而不是边缘情况。"
+        ],
+        "bodySections": [
+          {
+            "title": "转换问题",
+            "description": "真正的设计问题不只是如何找到相似文本，而是如何在工作流中的正确节点，把正确的已批准上下文提供给正确角色。"
+          },
+          {
+            "title": "编辑系统也是架构的一部分",
+            "description": "如果缺少清晰的审阅、归属和退役模式，即使检索基础设施很强，也会演变成终端用户的信任问题。"
+          },
+          {
+            "title": "衡量有用性，而不只是相关性",
+            "description": "有用的检索会减少来回确认，支持动作完成，并暴露系统无法有把握回答的时刻。"
+          }
+        ]
+      },
+      "whyAgentExperienceNeedsJourneyDesign": {
+        "slug": "why-agent-experience-needs-journey-design",
+        "title": "为什么智能体体验需要旅程设计",
+        "category": "体验设计",
+        "summary": "当 Copilot 被作为侧边小组件插入，而不是围绕待完成任务设计时，就容易失败。",
+        "publishDate": "2026-04-18",
+        "readTime": "4 分钟阅读",
+        "keyPoints": [
+          "辅助型 AI 应减少决策，而不是制造另一个需要管理的界面。",
+          "旅程地图揭示信心与审批真正重要的位置。",
+          "最佳体验会把自动化与透明的下一步最佳动作结合起来。"
+        ],
+        "bodySections": [
+          {
+            "title": "从功能思维转向旅程思维",
+            "description": "用户并不想要一个聊天机器人功能；他们想要更短、更清晰、风险决策更少的完成路径。"
+          },
+          {
+            "title": "为信心而设计",
+            "description": "依据提示、来源预览和审批检查点让辅助能力在真实运营语境中更容易被信任。"
+          },
+          {
+            "title": "为交接而设计",
+            "description": "人工接管、升级和案件连续性应当像原生流程，而不是失败状态。"
+          }
+        ]
+      }
+    }
+  },
+  "Community": {
+    "eyebrow": "社区",
+    "title": "连接实践者、实验室与工作组",
+    "summary": "加入围绕可复用 AI 交付模式、治理与架构实践的社区项目。",
+    "readInsights": "阅读洞察",
+    "exploreScenarios": "探索场景",
+    "allPrograms": "全部社区项目",
+    "agenda": "议程",
+    "resources": "资源",
+    "audience": "适合人群",
+    "location": "地点",
+    "format": "形式",
+    "items": {
+      "buildersRoundtableQ3": {
+        "slug": "builders-roundtable-q3",
+        "title": "第三季度建设者圆桌",
+        "format": "圆桌",
+        "summary": "面向平台、架构和产品负责人，用于对齐可复用企业 AI 交付模式的同行论坛。",
+        "audience": "企业架构师与产品负责人",
+        "dateLabel": "2026-07-18",
+        "location": "线上线下混合 / 新加坡",
+        "agenda": [
+          {
+            "title": "可复用平台模式",
+            "description": "跨团队分享交付加速器、控制模型与上线排序。"
+          },
+          {
+            "title": "规模化保障",
+            "description": "比较评估实践、发布关卡和面向业务的证据模型。"
+          },
+          {
+            "title": "工作坊",
+            "description": "梳理共同阻碍，并在活动后发布简短模式包。"
+          }
+        ],
+        "resources": [
+          {
+            "label": "申请邀请",
+            "href": "/about"
+          },
+          {
+            "label": "查看相关洞察",
+            "href": "/insights"
+          }
+        ]
+      },
+      "fieldAiPractitionerLab": {
+        "slug": "field-ai-practitioner-lab",
+        "title": "现场 AI 实践者实验室",
+        "format": "实操实验室",
+        "summary": "聚焦一线与现场服务 AI 模式的实践项目，覆盖从知识捕获到边缘交付。",
+        "audience": "运营负责人和现场转型团队",
+        "dateLabel": "2026-08-06",
+        "location": "现场 / 吉隆坡",
+        "agenda": [
+          {
+            "title": "工作流拆解",
+            "description": "将当前现场旅程拆解为辅助时刻、控制点和可衡量成果。"
+          },
+          {
+            "title": "架构诊所",
+            "description": "审阅离线优先设计选择、同步边界和设备遥测需求。"
+          },
+          {
+            "title": "能力路线图",
+            "description": "将实验室发现转化为带就绪检查点的分阶段交付路线图。"
+          }
+        ],
+        "resources": [
+          {
+            "label": "探索场景",
+            "href": "/scenarios"
+          },
+          {
+            "label": "查看参考架构",
+            "href": "/architecture/edge-inference-backbone"
+          }
+        ]
+      },
+      "governedRagWorkingGroup": {
+        "slug": "governed-rag-working-group",
+        "title": "受治理 RAG 工作组",
+        "format": "工作组",
+        "summary": "面向在受监管或高信任领域构建检索密集体验团队的定期协作机制。",
+        "audience": "知识平台团队与治理负责人",
+        "dateLabel": "每月",
+        "location": "线上",
+        "agenda": [
+          {
+            "title": "模式审阅",
+            "description": "讨论内容生命周期、权限感知检索与三道防线职责。"
+          },
+          {
+            "title": "指标交流",
+            "description": "对比新鲜度、无答案率和审阅者介入情况。"
+          },
+          {
+            "title": "成果共享",
+            "description": "为成员发布模板、治理清单和架构参考笔记。"
+          }
+        ],
+        "resources": [
+          {
+            "label": "阅读检索洞察",
+            "href": "/insights/designing-retrieval-for-high-trust-workflows"
+          },
+          {
+            "label": "认识团队",
+            "href": "/about"
+          }
+        ]
+      }
+    }
+  },
+  "Admin": {
+    "overview": {
+      "eyebrow": "后台",
+      "title": "运营概览",
+      "summary": "在一个工作区监控内容健康、近期工作和访问控制界面。"
+    },
+    "quickAction": {
+      "title": "快捷操作",
+      "createAsset": {
+        "title": "创建资产",
+        "description": "启动新资产草稿并进入内容治理流程。"
+      },
+      "manageTemplates": {
+        "title": "管理模板",
+        "description": "更新可复用模板，统一结构与块级基线。"
+      },
+      "policySimulator": {
+        "title": "策略模拟器",
+        "description": "快速验证一条鉴权请求在当前策略下的结果。"
+      }
+    },
+    "recentDrafts": {
+      "title": "近期草稿",
+      "assetDraftsQueue": {
+        "title": "资产草稿队列",
+        "description": "集中处理待发布资产、补齐元数据并推进上线。",
+        "cta": "审阅资产"
+      },
+      "templateBaselineRefresh": {
+        "title": "模板基线刷新",
+        "description": "确保新资产默认继承统一模板与内容块结构。",
+        "cta": "打开模板"
+      },
+      "policyReviewWindow": {
+        "title": "策略审阅窗口",
+        "description": "联动角色与策略页面，收敛访问控制变更风险。",
+        "cta": "检查策略"
+      }
+    },
+    "kpi": {
+      "managedAssets": {
+        "title": "受管理资产",
+        "description": "后台已纳入运营与发布治理的内容资产。"
+      },
+      "adminUsers": {
+        "title": "后台用户",
+        "description": "具备后台访问能力的账号与运维身份。"
+      },
+      "governanceSurfaces": {
+        "title": "治理界面",
+        "description": "已接入统一壳层与导航元数据的后台模块。"
+      },
+      "protectedRoutes": {
+        "title": "受保护路由",
+        "description": "所有 `/admin` 路由经由 `RouteGuard` 保护。"
+      }
+    },
+    "flow": {
+      "label": "流程",
+      "recentDrafts": "近期草稿"
+    },
+    "actions": {
+      "label": "操作",
+      "quickActions": "快捷操作",
+      "new": "新建",
+      "publish": "发布",
+      "archive": "归档",
+      "duplicate": "复制",
+      "export": "导出"
+    },
+    "governance": {
+      "label": "治理",
+      "healthHighlights": "健康亮点",
+      "shellHighlight": "壳层、侧边栏、顶栏和概览现在共享同一运营框架。",
+      "navigationHighlight": "导航元数据已集中管理，覆盖概览、资产、模板和访问页面。",
+      "routeGuardHighlight": "`RouteGuard` 仍是受保护后台路由的唯一入口。"
+    },
+    "assets": {
+      "title": "资产",
+      "description": "内容资产、发布状态与治理操作。",
+      "newAsset": "新建资产",
+      "editAsset": "编辑资产",
+      "assetList": "资产列表"
+    },
+    "roles": {
+      "title": "角色",
+      "description": "角色定义、职责边界与授权范围。"
+    },
+    "users": {
+      "title": "用户",
+      "description": "账号活跃度、可用性与 MFA 视图。"
+    },
+    "templates": {
+      "title": "模板",
+      "description": "模板库、结构复用与内容基线。"
+    },
+    "policies": {
+      "title": "策略",
+      "description": "访问规则、条件组合与执行口径。"
+    },
+    "policyWizard": {
+      "title": "策略向导",
+      "description": "通过分步流程创建和校验访问策略。",
+      "steps": {
+        "scope": "范围",
+        "conditions": "条件",
+        "review": "审阅"
+      }
+    },
+    "matrix": {
+      "title": "矩阵",
+      "description": "角色与权限矩阵联查视图。"
+    },
+    "simulator": {
+      "title": "模拟器",
+      "description": "鉴权请求验证与策略回放。"
+    },
+    "assetEditor": {
+      "title": "资产编辑器",
+      "description": "编辑资产元数据、内容块、销售与交付信息。",
+      "fields": {
+        "slug": "Slug",
+        "title": "标题",
+        "subtitle": "副标题",
+        "shortDescription": "简短描述",
+        "assetType": "资产类型"
+      }
+    },
+    "videoManager": {
+      "title": "视频管理",
+      "description": "管理演示视频、海报图、说明和主视频标记。",
+      "addVideo": "新增视频",
+      "setPrimary": "设为主视频",
+      "removeVideo": "删除视频"
+    },
+    "shell": {
+      "brand": "HSAH 后台",
+      "workspace": "运营工作区",
+      "summary": "持续管理资产、模板、身份与访问控制。"
+    },
+    "sidebar": {
+      "ariaLabel": "后台模块",
+      "overview": "概览",
+      "assets": "资产",
+      "templates": "模板",
+      "users": "用户",
+      "roles": "角色",
+      "policies": "策略",
+      "matrix": "矩阵",
+      "simulator": "模拟器"
+    },
+    "topbar": {
+      "workspaceLabel": "后台工作区",
+      "summary": "面向治理工作流、发布控制和访问运营的共享壳层。",
+      "quickJump": "跨后台界面快速跳转",
+      "protectedRoutesActive": "受保护路由已启用",
+      "openLibrary": "打开资产库",
+      "breadcrumb": "面包屑"
+    },
+    "layout": {
+      "defaultTitle": "后台",
+      "loading": "正在加载后台工作区",
+      "contentLabel": "后台内容"
+    }
   }
 }
