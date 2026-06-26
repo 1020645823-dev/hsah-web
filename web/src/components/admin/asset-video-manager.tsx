@@ -1,0 +1,151 @@
+"use client";
+
+import { Plus, Trash2, Star } from "lucide-react";
+import type { AssetVideoDraft } from "@/lib/admin-asset-editor";
+
+type AssetVideoManagerProps = {
+  videos: AssetVideoDraft[];
+  onChange: (videos: AssetVideoDraft[]) => void;
+};
+
+const inputClass =
+  "w-full rounded-lg border border-[rgb(212_218_245_/12%)] bg-[rgb(255_255_255_/5%)] px-3 py-2 text-sm text-[var(--color-text-primary)] focus:border-[var(--color-electric-purple)] focus:outline-none";
+
+function randomId() {
+  return Math.random().toString(36).slice(2, 10) + Date.now().toString(36);
+}
+
+function createEmptyVideo(): AssetVideoDraft {
+  return {
+    id: randomId(),
+    title: "",
+    videoUrl: "",
+    posterUrl: "",
+    description: "",
+    isPrimary: false,
+  };
+}
+
+export function AssetVideoManager({ videos, onChange }: AssetVideoManagerProps) {
+  function addVideo() {
+    const newVideo = createEmptyVideo();
+    if (videos.length === 0) {
+      newVideo.isPrimary = true;
+    }
+    onChange([...videos, newVideo]);
+  }
+
+  function updateVideo(index: number, patch: Partial<AssetVideoDraft>) {
+    const updated = videos.map((v, i) => (i === index ? { ...v, ...patch } : v));
+    onChange(updated);
+  }
+
+  function removeVideo(index: number) {
+    const removed = videos[index];
+    const remaining = videos.filter((_, i) => i !== index);
+    if (removed.isPrimary && remaining.length > 0) {
+      remaining[0] = { ...remaining[0], isPrimary: true };
+    }
+    onChange(remaining);
+  }
+
+  function setPrimary(index: number) {
+    onChange(
+      videos.map((v, i) => ({
+        ...v,
+        isPrimary: i === index,
+      })),
+    );
+  }
+
+  return (
+    <div className="space-y-4">
+      {videos.map((video, index) => (
+        <div
+          key={video.id}
+          className="rounded-xl border border-[rgb(212_218_245_/12%)] bg-[rgb(18_18_26_/50%)] p-4 space-y-3"
+        >
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              {video.isPrimary ? (
+                <span className="inline-flex items-center gap-1 rounded-md bg-[var(--color-electric-purple)]/20 px-2 py-0.5 text-xs font-medium text-[var(--color-electric-purple)]">
+                  <Star className="size-3 fill-current" />
+                  主视频
+                </span>
+              ) : (
+                <span className="text-xs text-[var(--color-text-tertiary)]">视频 #{index + 1}</span>
+              )}
+            </div>
+            <div className="flex items-center gap-2">
+              {!video.isPrimary && (
+                <button
+                  type="button"
+                  onClick={() => setPrimary(index)}
+                  className="rounded-md border border-[rgb(212_218_245_/12%)] px-2.5 py-1 text-xs text-[var(--color-text-secondary)] transition-colors hover:bg-white/5"
+                >
+                  设为主视频
+                </button>
+              )}
+              <button
+                type="button"
+                onClick={() => removeVideo(index)}
+                className="rounded-md border border-red-500/30 px-2.5 py-1 text-xs text-red-400 transition-colors hover:bg-red-500/10"
+              >
+                <Trash2 className="size-3 inline mr-1" />
+                删除
+              </button>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+            <div>
+              <label className="mb-1 block text-xs text-[var(--color-text-tertiary)]">标题</label>
+              <input
+                className={inputClass}
+                value={video.title}
+                onChange={(e) => updateVideo(index, { title: e.target.value })}
+                placeholder="视频标题"
+              />
+            </div>
+            <div>
+              <label className="mb-1 block text-xs text-[var(--color-text-tertiary)]">视频链接</label>
+              <input
+                className={inputClass}
+                value={video.videoUrl}
+                onChange={(e) => updateVideo(index, { videoUrl: e.target.value })}
+                placeholder="https://example.com/video.mp4"
+              />
+            </div>
+            <div>
+              <label className="mb-1 block text-xs text-[var(--color-text-tertiary)]">封面链接</label>
+              <input
+                className={inputClass}
+                value={video.posterUrl}
+                onChange={(e) => updateVideo(index, { posterUrl: e.target.value })}
+                placeholder="https://example.com/poster.jpg（可选）"
+              />
+            </div>
+            <div>
+              <label className="mb-1 block text-xs text-[var(--color-text-tertiary)]">简介</label>
+              <input
+                className={inputClass}
+                value={video.description}
+                onChange={(e) => updateVideo(index, { description: e.target.value })}
+                placeholder="简短描述（可选）"
+              />
+            </div>
+          </div>
+        </div>
+      ))}
+
+      <button
+        type="button"
+        onClick={addVideo}
+        className="flex w-full items-center justify-center gap-2 rounded-xl border border-dashed border-[rgb(212_218_245_/20%)] py-3 text-sm text-[var(--color-text-secondary)] transition-colors hover:border-[var(--color-electric-purple)] hover:text-[var(--color-text-primary)]"
+      >
+        <Plus className="size-4" />
+        新增视频
+      </button>
+    </div>
+  );
+}
