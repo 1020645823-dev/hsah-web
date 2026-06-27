@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { render, screen, fireEvent, waitFor, cleanup } from "@testing-library/react";
+import { render, screen, fireEvent, waitFor, cleanup } from "@/test-utils";
 import "@testing-library/jest-dom/vitest";
 
 import { TemplateSelector } from "./template-selector";
@@ -54,7 +54,7 @@ describe("TemplateSelector", () => {
 
     expect(screen.getByText("Blog Post")).toBeInTheDocument();
     expect(screen.getByText("A landing page template")).toBeInTheDocument();
-    expect(screen.getByText("内置")).toBeInTheDocument();
+    expect(screen.getByText("Built-in")).toBeInTheDocument();
   });
 
   it("calls onApply with cloned blocks when apply button is clicked", async () => {
@@ -67,7 +67,7 @@ describe("TemplateSelector", () => {
       expect(screen.getByText("Landing Page")).toBeInTheDocument();
     });
 
-    const applyButtons = screen.getAllByText("应用");
+    const applyButtons = screen.getAllByText("Apply");
     fireEvent.click(applyButtons[0]);
 
     await waitFor(() => {
@@ -106,7 +106,7 @@ describe("TemplateSelector", () => {
       <TemplateSelector isOpen={true} onClose={vi.fn()} onApply={vi.fn()} token="token-123" />,
     );
 
-    expect(screen.getByText("加载中...")).toBeInTheDocument();
+    expect(screen.getByText("Loading...")).toBeInTheDocument();
   });
 
   it("does not render when isOpen is false", () => {

@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import Link from "next/link";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -17,10 +18,10 @@ type PermissionMatrixDetailProps = {
   selection: PermissionMatrixSelection | null;
 };
 
-function describeReason(reason: MatrixCell["reason"]) {
-  if (reason === "matched_deny_policy") return "命中至少一条 deny 策略，最终决策按优先级收敛为 deny。";
-  if (reason === "matched_allow_policy") return "未命中 deny，但命中 allow 策略，最终决策为 allow。";
-  return "当前资源上下文下没有命中策略，结果为 implicit。";
+function describeReason(reason: MatrixCell["reason"], t: (key: string) => string) {
+  if (reason === "matched_deny_policy") return t("permissionMatrixDetail.reasonDeny");
+  if (reason === "matched_allow_policy") return t("permissionMatrixDetail.reasonAllow");
+  return t("permissionMatrixDetail.reasonImplicit");
 }
 
 function getDecisionTone(decision: MatrixCell["decision"]) {
@@ -30,16 +31,18 @@ function getDecisionTone(decision: MatrixCell["decision"]) {
 }
 
 export function PermissionMatrixDetail({ selection }: PermissionMatrixDetailProps) {
+  const t = useTranslations("Admin");
+
   if (!selection) {
     return (
       <Card className="border-[rgb(212_218_245_/12%)] bg-[rgb(18_18_26_/70%)] backdrop-blur-[24px]">
         <CardHeader>
-          <CardTitle className="text-[var(--color-text-primary)]">Cell Detail</CardTitle>
+          <CardTitle className="text-[var(--color-text-primary)]">{t("permissionMatrixDetail.title")}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4 text-sm leading-6 text-[var(--color-text-secondary)]">
-          <div>选择任意矩阵单元格后，这里会展示角色、权限、决策原因和命中策略。</div>
+          <div>{t("permissionMatrixDetail.emptyDescription")}</div>
           <div className="rounded-2xl border border-[rgb(212_218_245_/10%)] bg-black/10 px-4 py-3 text-xs tracking-[0.12em] text-[var(--color-periwinkle)]">
-            CLICK A CELL TO INSPECT SOURCES
+            {t("permissionMatrixDetail.clickHint")}
           </div>
         </CardContent>
       </Card>
@@ -52,7 +55,7 @@ export function PermissionMatrixDetail({ selection }: PermissionMatrixDetailProp
         <div className="flex items-start justify-between gap-3">
           <div className="space-y-2">
             <div className="text-xs tracking-[0.14em] text-[var(--color-text-tertiary)]">
-              SELECTED CELL
+              {t("permissionMatrixDetail.selectedCell")}
             </div>
             <CardTitle className="text-[var(--color-text-primary)]">{selection.permission}</CardTitle>
           </div>
@@ -64,20 +67,20 @@ export function PermissionMatrixDetail({ selection }: PermissionMatrixDetailProp
       <CardContent className="space-y-5">
         <div className="grid gap-4 sm:grid-cols-2">
           <div className="space-y-2">
-            <div className="text-xs tracking-[0.14em] text-[var(--color-text-tertiary)]">ROLE</div>
+            <div className="text-xs tracking-[0.14em] text-[var(--color-text-tertiary)]">{t("permissionMatrixDetail.role")}</div>
             <div className="text-sm text-[var(--color-text-primary)]">{selection.roleName}</div>
           </div>
           <div className="space-y-2">
-            <div className="text-xs tracking-[0.14em] text-[var(--color-text-tertiary)]">REASON</div>
+            <div className="text-xs tracking-[0.14em] text-[var(--color-text-tertiary)]">{t("permissionMatrixDetail.reason")}</div>
             <div className="text-sm leading-6 text-[var(--color-text-secondary)]">
-              {describeReason(selection.reason)}
+              {describeReason(selection.reason, t)}
             </div>
           </div>
         </div>
 
         <div className="space-y-3">
           <div className="text-xs tracking-[0.14em] text-[var(--color-text-tertiary)]">
-            MATCHED POLICIES
+            {t("permissionMatrixDetail.matchedPolicies")}
           </div>
           {selection.matchedPolicies.length > 0 ? (
             <div className="space-y-3">
@@ -98,33 +101,33 @@ export function PermissionMatrixDetail({ selection }: PermissionMatrixDetailProp
             </div>
           ) : (
             <div className="rounded-2xl border border-[rgb(212_218_245_/10%)] bg-black/10 px-4 py-3 text-sm text-[var(--color-text-secondary)]">
-              当前单元格未命中任何策略。
+              {t("permissionMatrixDetail.noPolicies")}
             </div>
           )}
         </div>
 
         <div className="space-y-3">
           <div className="text-xs tracking-[0.14em] text-[var(--color-text-tertiary)]">
-            RELATED VIEWS
+            {t("permissionMatrixDetail.relatedViews")}
           </div>
           <div className="grid gap-3 sm:grid-cols-3">
             <Link
               href="/admin/roles"
               className="rounded-2xl border border-[rgb(212_218_245_/10%)] bg-black/10 px-4 py-3 text-sm text-[var(--color-text-primary)] transition-colors hover:border-[rgb(123_63_242_/35%)]"
             >
-              Open Roles
+              {t("permissionMatrixDetail.openRoles")}
             </Link>
             <Link
               href="/admin/policies"
               className="rounded-2xl border border-[rgb(212_218_245_/10%)] bg-black/10 px-4 py-3 text-sm text-[var(--color-text-primary)] transition-colors hover:border-[rgb(123_63_242_/35%)]"
             >
-              Open Policies
+              {t("permissionMatrixDetail.openPolicies")}
             </Link>
             <Link
               href="/admin/simulator"
               className="rounded-2xl border border-[rgb(212_218_245_/10%)] bg-black/10 px-4 py-3 text-sm text-[var(--color-text-primary)] transition-colors hover:border-[rgb(123_63_242_/35%)]"
             >
-              Open Simulator
+              {t("permissionMatrixDetail.openSimulator")}
             </Link>
           </div>
         </div>

@@ -1,66 +1,72 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import { useParams } from "next/navigation";
+import { useTranslations } from "next-intl";
 import Link from "next/link";
-import { ArrowRight, Search, ShieldCheck } from "lucide-react";
+import { Menu, X, LogOut } from "lucide-react";
 
-import { ThemeToggle } from "@/components/theme-toggle";
+import { Button } from "@/components/ui/button";
+import { getStoredAdminToken, clearStoredAdminToken } from "@/lib/admin";
 
-type AdminTopbarProps = {
-  pageTitle: string;
-  breadcrumb?: readonly {
-    label: string;
-    href: string;
-  }[];
-};
+export function AdminTopbar({ pageTitle }: { pageTitle: string }) {
+  const t = useTranslations("Admin");
+  const params = useParams<{ locale: string }>();
+  const locale = params?.locale ?? "en";
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [token, setToken] = useState<string | null>(() => getStoredAdminToken());
 
-export function AdminTopbar({ pageTitle, breadcrumb }: AdminTopbarProps) {
+  const handleLogout = () => {
+    clearStoredAdminToken();
+    setToken(null);
+    window.location.href = `/${locale}`;
+  };
+
   return (
-    <header className="border-b border-border/70 bg-background/95 px-6 py-4 backdrop-blur">
-      <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-        <div className="space-y-1">
-          {breadcrumb && breadcrumb.length > 0 ? (
-            <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs text-muted-foreground">
-              {breadcrumb.map((item, index) => (
-                <span key={item.href} className="flex items-center gap-2">
-                  {index > 0 ? <span aria-hidden="true">/</span> : null}
-                  {index === breadcrumb.length - 1 ? (
-                    <span aria-current="page">{item.label}</span>
-                  ) : (
-                    <Link href={item.href} className="transition-colors hover:text-foreground">
-                      {item.label}
-                    </Link>
-                  )}
-                </span>
-              ))}
-            </nav>
-          ) : null}
-          <p className="text-xs font-medium tracking-[0.18em] text-primary">ADMIN WORKSPACE</p>
-          <h1 className="text-2xl font-semibold tracking-tight text-foreground">{pageTitle}</h1>
-          <p className="text-sm text-muted-foreground">
-            Shared shell for governance workflows, publishing controls, and access operations.
-          </p>
+    <header className="sticky top-0 z-40 border-b border-border/70 bg-background/80 backdrop-blur-md">
+      <div className="mx-auto flex max-w-[1440px] items-center justify-between px-4 py-3 md:px-6">
+        <div className="flex items-center gap-3">
+          <button
+            type="button"
+            aria-label={t("topbar.toggleMenu")}
+            className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-border/70 text-muted-foreground md:hidden"
+            onClick={() => setMobileOpen((v) => !v)}
+          >
+            {mobileOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+          </button>
+
+          <div className="flex items-center gap-2">
+            <span className="text-sm font-semibold text-foreground">{pageTitle}</span>
+          </div>
         </div>
 
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-          <div className="flex items-center gap-2 rounded-xl border border-border/70 bg-muted/40 px-3 py-2 text-sm text-muted-foreground">
-            <Search className="h-4 w-4 text-primary" />
-            <span>Quick jump across admin surfaces</span>
-          </div>
-
-          <div className="flex items-center gap-2 rounded-xl border border-border/70 bg-background px-3 py-2 text-sm text-foreground">
-            <ShieldCheck className="h-4 w-4 text-primary" />
-            <span>Protected routes active</span>
-          </div>
-
-          <Link
-            href="/assets"
-            className="inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
-          >
-            Open library
-            <ArrowRight className="h-4 w-4" />
-          </Link>
-
-          <ThemeToggle />
+        <div className="flex items-center gap-3">
+          {token ? (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleLogout}
+              className="gap-2"
+            >
+              <LogOut className="h-4 w-4" />
+              {t("topbar.logout")}
+            </Button>
+          ) : (
+            <Link href={`/${locale}/login`}>
+              <Button variant="outline" size="sm" className="gap-2">
+                <LogOut className="h-4 w-4" />
+                {t("topbar.login")}
+              </Button>
+            </Link>
+          )}
         </div>
       </div>
+
+      {mobileOpen && (
+        <div className="border-t border-border/70 bg-background/90 px-4 py-3 md:hidden">
+          <p className="text-sm text-muted-foreground">{t("topbar.mobileMenuPlaceholder")}</p>
+        </div>
+      )}
     </header>
   );
 }

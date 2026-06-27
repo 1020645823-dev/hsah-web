@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { getTranslations } from "next-intl/server";
 
 import {
   PublicContentCard,
@@ -6,29 +7,36 @@ import {
   PublicSectionHero,
   PublicSiteShell,
 } from "@/components/public-site-shell";
-import { architectures } from "@/lib/public-content";
+import { architectureSlugs } from "@/lib/public-content";
 
-export default function ArchitecturePage() {
+export default async function ArchitecturePage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "Architectures" });
+
   return (
-    <PublicSiteShell ctaHref="/scenarios" ctaLabel="Browse Scenarios">
+    <PublicSiteShell ctaHref="/scenarios" ctaLabel={t("browseScenarios")}>
       <div className="space-y-8">
         <PublicSectionHero
-          eyebrow="ARCHITECTURE"
-          title="Reference architectures that keep AI programs operable, governed, and reusable."
-          summary="Use these viewpoints to frame core layers, ownership boundaries, and rollout risks before implementation starts."
+          eyebrow={t("eyebrow")}
+          title={t("title")}
+          summary={t("summary")}
           actions={
             <>
               <Link
                 href="/insights"
                 className="inline-flex h-11 items-center justify-center rounded-md bg-primary px-6 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
               >
-                Read Insights
+                {t("readInsights")}
               </Link>
               <Link
                 href="/about"
                 className="inline-flex h-11 items-center justify-center rounded-md border border-border bg-background px-6 text-sm font-medium text-foreground transition-colors hover:bg-muted"
               >
-                Learn About the Hub
+                {t("readInsights")}
               </Link>
             </>
           }
@@ -36,25 +44,28 @@ export default function ArchitecturePage() {
 
         <PublicMetricStrip
           items={[
-            { value: `${architectures.length}`, label: "Reference architectures" },
-            { value: "4", label: "Core layers per pattern" },
-            { value: "Control-aware", label: "Design principle" },
-            { value: "Reusable", label: "Across scenarios" },
+            { value: `${architectureSlugs.length}`, label: t("allArchitectures") },
+            { value: "4", label: t("layers") },
+            { value: t("governance"), label: t("focus") },
+            { value: t("deploymentNotes"), label: t("relatedScenarios") },
           ]}
         />
 
         <div className="grid gap-5 lg:grid-cols-2">
-          {architectures.map((item) => (
-            <PublicContentCard
-              key={item.slug}
-              href={`/architecture/${item.slug}`}
-              eyebrow={item.eyebrow.toUpperCase()}
-              title={item.title}
-              summary={item.summary}
-              meta={item.focus}
-              tags={item.tags}
-            />
-          ))}
+          {architectureSlugs.map((slug) => {
+            const item = t.raw(`items.${slug}`) as Record<string, unknown>;
+            return (
+              <PublicContentCard
+                key={slug}
+                href={`/architecture/${slug}`}
+                eyebrow={(item.eyebrow as string).toUpperCase()}
+                title={item.title as string}
+                summary={item.summary as string}
+                meta={item.focus as string}
+                tags={item.tags as string[]}
+              />
+            );
+          })}
         </div>
       </div>
     </PublicSiteShell>

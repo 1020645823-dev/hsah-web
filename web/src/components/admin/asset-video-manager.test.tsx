@@ -1,5 +1,5 @@
 import { afterEach, describe, it, expect, vi } from "vitest";
-import { cleanup, render, screen, fireEvent } from "@testing-library/react";
+import { cleanup, render, screen, fireEvent } from "@/test-utils";
 import { AssetVideoManager } from "./asset-video-manager";
 import type { AssetVideoDraft } from "@/lib/admin-asset-editor";
 
@@ -18,7 +18,7 @@ describe("AssetVideoManager", () => {
   it("renders empty state with add button when no videos", () => {
     const onChange = vi.fn();
     render(<AssetVideoManager videos={[]} onChange={onChange} />);
-    expect(screen.getByText(/新增视频/)).toBeTruthy();
+    expect(screen.getByText(/Add video/)).toBeTruthy();
   });
 
   it("renders video cards with title and url", () => {
@@ -31,7 +31,7 @@ describe("AssetVideoManager", () => {
   it("calls onChange with new video when add is clicked", () => {
     const onChange = vi.fn();
     render(<AssetVideoManager videos={[]} onChange={onChange} />);
-    fireEvent.click(screen.getByText(/新增视频/));
+    fireEvent.click(screen.getByText(/Add video/));
     expect(onChange).toHaveBeenCalledTimes(1);
     const newVideos = onChange.mock.calls[0][0] as AssetVideoDraft[];
     expect(newVideos).toHaveLength(1);
@@ -41,7 +41,7 @@ describe("AssetVideoManager", () => {
   it("calls onChange without deleted video when remove is clicked", () => {
     const onChange = vi.fn();
     render(<AssetVideoManager videos={[baseVideo]} onChange={onChange} />);
-    fireEvent.click(screen.getByText(/删除/));
+    fireEvent.click(screen.getByText(/Delete/));
     expect(onChange).toHaveBeenCalledWith([]);
   });
 
@@ -51,7 +51,7 @@ describe("AssetVideoManager", () => {
     render(
       <AssetVideoManager videos={[baseVideo, video2]} onChange={onChange} />,
     );
-    const setPrimaryButtons = screen.getAllByText(/设为主视频/);
+    const setPrimaryButtons = screen.getAllByText(/Set as primary/);
     fireEvent.click(setPrimaryButtons[0]);
     const updated = onChange.mock.calls[0][0] as AssetVideoDraft[];
     expect(updated.find((v) => v.id === "v2")?.isPrimary).toBe(true);

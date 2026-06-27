@@ -1,6 +1,7 @@
 "use client";
 
 import { AlertTriangle } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 type ConfirmDialogProps = {
   isOpen: boolean;
@@ -11,6 +12,8 @@ type ConfirmDialogProps = {
 };
 
 export function ConfirmDialog({ isOpen, title, message, onConfirm, onCancel }: ConfirmDialogProps) {
+  const t = useTranslations("Admin");
+
   if (!isOpen) return null;
 
   return (
@@ -31,14 +34,14 @@ export function ConfirmDialog({ isOpen, title, message, onConfirm, onCancel }: C
             onClick={onCancel}
             className="rounded-lg border border-[rgb(212_218_245_/12%)] px-4 py-2 text-sm font-medium text-[var(--color-text-primary)] hover:bg-white/5"
           >
-            取消
+            {t("assets.cancel")}
           </button>
           <button
             type="button"
             onClick={onConfirm}
             className="rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-500"
           >
-            确认删除
+            {t("assets.confirmDelete")}
           </button>
         </div>
       </div>

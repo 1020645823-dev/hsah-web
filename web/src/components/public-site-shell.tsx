@@ -1,5 +1,8 @@
+"use client";
+
 import type { ReactNode } from "react";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { ArrowRight } from "lucide-react";
 
 import { PublicFooter } from "@/components/public/public-footer";
@@ -63,14 +66,16 @@ export function PublicSiteShell({
   children,
   ctaHref = "/assets",
   ctaLabel = "Open Library",
+  locale,
 }: {
   children: ReactNode;
   ctaHref?: string;
   ctaLabel?: string;
+  locale?: string;
 }) {
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <PublicHeader ctaHref={ctaHref} ctaLabel={ctaLabel} />
+      <PublicHeader ctaHref={ctaHref} ctaLabel={ctaLabel} locale={locale ?? "en"} />
       <div className="mx-auto flex min-h-[calc(100vh-73px)] w-full max-w-7xl flex-col px-6 py-10 md:px-8">
         <main className="flex-1">{children}</main>
       </div>
@@ -122,6 +127,7 @@ export function PublicMetricStrip({ items }: MetricStripProps) {
 }
 
 export function PublicContentCard({ href, eyebrow, title, summary, meta, tags }: ContentCardProps) {
+  const t = useTranslations();
   return (
     <Link
       href={href}
@@ -145,7 +151,7 @@ export function PublicContentCard({ href, eyebrow, title, summary, meta, tags }:
         </div>
       ) : null}
       <div className="mt-6 inline-flex items-center gap-2 text-sm font-medium text-foreground">
-        Open details
+        {t("Common.openDetails")}
         <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
       </div>
     </Link>

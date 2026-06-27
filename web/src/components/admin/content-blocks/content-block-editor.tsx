@@ -4,6 +4,7 @@ import { useState, useMemo } from "react";
 import type { ReactNode } from "react";
 import type {
   ContentBlock,
+  ContentAudience,
   TextBlockConfig,
   StatCardBlockConfig,
   ImageBlockConfig,
@@ -160,6 +161,13 @@ function ContentBlockEditorInner({ blocks, onChange, token, errors }: ContentBlo
     onChange(updated);
   };
 
+  const handleBlockAudienceChange = (blockId: string, audience: ContentAudience) => {
+    const updated = blocks.map((b) =>
+      b.id === blockId ? { ...b, audience } : b
+    );
+    onChange(updated);
+  };
+
   const handleCopy = (blockId: string) => {
     const block = blocks.find((b) => b.id === blockId);
     if (block) copyBlock(block);
@@ -185,9 +193,32 @@ function ContentBlockEditorInner({ blocks, onChange, token, errors }: ContentBlo
 
   const renderEditor = (block: ContentBlock): ReactNode => {
     const blockErrors = errorsByBlockId[block.id];
+    const audience = block.audience ?? "sales";
+
+    const withAudienceControl = (editor: ReactNode) => (
+      <div className="space-y-4">
+        <div className="space-y-1">
+          <label htmlFor={`block-audience-${block.id}`} className="block text-xs font-medium text-[var(--color-text-secondary)]">
+            Audience
+          </label>
+          <select
+            id={`block-audience-${block.id}`}
+            aria-label="Audience"
+            value={audience}
+            onChange={(event) => handleBlockAudienceChange(block.id, event.target.value as ContentAudience)}
+            className="w-full rounded-lg border border-[rgb(255_255_255_/10%)] bg-[rgb(255_255_255_/5%)] px-3 py-2 text-sm text-[var(--color-text-primary)] focus:outline-none focus:border-[rgb(139_92_246_/60%)]"
+          >
+            <option value="shared">Shared</option>
+            <option value="sales">Sales</option>
+            <option value="delivery">Delivery</option>
+          </select>
+        </div>
+        {editor}
+      </div>
+    );
 
     if (block.type === "text") {
-      return (
+      return withAudienceControl(
         <TextBlockEditor
           config={block.config as TextBlockConfig}
           errors={blockErrors}
@@ -202,7 +233,7 @@ function ContentBlockEditorInner({ blocks, onChange, token, errors }: ContentBlo
         : ((block.config as unknown as {
             items?: Array<{ label: string; value: string; description?: string }>;
           }).items ?? []);
-      return (
+      return withAudienceControl(
         <StatCardBlockEditor
           config={{
             items: stats.map((item) => ({
@@ -232,7 +263,7 @@ function ContentBlockEditorInner({ blocks, onChange, token, errors }: ContentBlo
     if (block.type === "image") {
       const config = block.config as ImageBlockConfig;
       const src = config.src || ((block.config as unknown as { url?: string }).url ?? "");
-      return (
+      return withAudienceControl(
         <ImageBlockEditor
           config={{
             url: src,
@@ -258,7 +289,7 @@ function ContentBlockEditorInner({ blocks, onChange, token, errors }: ContentBlo
     }
     if (block.type === "code_snippet") {
       const config = block.config as CodeSnippetBlockConfig;
-      return (
+      return withAudienceControl(
         <CodeSnippetBlockEditor
           config={{
             language: config.language,
@@ -286,7 +317,7 @@ function ContentBlockEditorInner({ blocks, onChange, token, errors }: ContentBlo
     }
     if (block.type === "callout") {
       const config = block.config as CalloutBlockConfig;
-      return (
+      return withAudienceControl(
         <CalloutBlockEditor
           config={{
             tone:
@@ -319,7 +350,7 @@ function ContentBlockEditorInner({ blocks, onChange, token, errors }: ContentBlo
         />
       );
     }
-    return (
+    return withAudienceControl(
       <div className="text-sm text-[var(--color-text-secondary)]">
         Editor placeholder for {block.type}
       </div>

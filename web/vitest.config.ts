@@ -14,8 +14,21 @@ export default defineConfig({
   test: {
     environment: "jsdom",
     include: ["src/**/*.test.ts", "src/**/*.test.tsx"],
+    setupFiles: ["./src/test/setup.ts"],
     coverage: {
       reporter: ["text"],
+    },
+    deps: {
+      optimizer: {
+        web: {
+          include: ["next-intl"],
+        },
+      },
+    },
+    server: {
+      deps: {
+        inline: ["next-intl"],
+      },
     },
   },
 });

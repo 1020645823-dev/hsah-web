@@ -38,6 +38,7 @@ export type CalloutBlockConfig = {
 };
 
 export type ContentBlockType = "text" | "stat_card" | "image" | "code_snippet" | "callout";
+export type ContentAudience = "shared" | "sales" | "delivery";
 
 export type ContentBlockConfig = TextBlockConfig | StatCardBlockConfig | ImageBlockConfig | CodeSnippetBlockConfig | CalloutBlockConfig;
 
@@ -47,6 +48,7 @@ export type ContentBlock = {
   version: number;
   order: number;
   visible: boolean;
+  audience?: ContentAudience;
   config: ContentBlockConfig;
 };
 
@@ -55,6 +57,13 @@ export const LATEST_CONTENT_BLOCK_VERSION = 2;
 
 function isPlainObject(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+export function normalizeContentAudience(value: unknown): ContentAudience {
+  if (value === "shared" || value === "delivery") {
+    return value;
+  }
+  return "sales";
 }
 
 export function isContentBlock(value: unknown): value is ContentBlock {
@@ -69,6 +78,7 @@ export function isContentBlock(value: unknown): value is ContentBlock {
   }
   if (typeof value.order !== "number" || value.order < 0) return false;
   if (typeof value.visible !== "boolean") return false;
+  if ("audience" in value && !["shared", "sales", "delivery"].includes(String(value.audience))) return false;
   if (!isPlainObject(value.config)) return false;
 
   if (value.type === "text") {
@@ -186,6 +196,7 @@ export function validateBlock(block: unknown): ContentBlock {
       : LATEST_CONTENT_BLOCK_VERSION;
   const order = typeof block.order === "number" && block.order >= 0 ? block.order : 0;
   const visible = typeof block.visible === "boolean" ? block.visible : true;
+  const audience = "audience" in block ? normalizeContentAudience(block.audience) : undefined;
 
   let config: ContentBlockConfig;
   if (type === "text") {
@@ -271,7 +282,7 @@ export function validateBlock(block: unknown): ContentBlock {
     config = { tone, title, content };
   }
 
-  return { id, type, version, order, visible, config };
+  return { id, type, version, order, visible, audience, config };
 }
 
 function normalizeCalloutTone(value: string): CalloutBlockConfig["tone"] {

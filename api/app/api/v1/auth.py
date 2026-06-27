@@ -24,12 +24,12 @@ router = APIRouter(prefix="/auth", tags=["auth"])
 http_bearer = HTTPBearer(auto_error=False)
 
 
-def get_current_user(
+def _resolve_user_from_credentials(
     credentials: HTTPAuthorizationCredentials | None = Depends(http_bearer),
     db: Session = Depends(get_db),
-) -> User:
+) -> User | None:
     if credentials is None:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
+        return None
 
     try:
         payload = decode_token(credentials.credentials)
@@ -48,6 +48,20 @@ def get_current_user(
     if user is None or not user.is_active:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
 
+    return user
+
+
+def get_current_user(
+    user: User | None = Depends(_resolve_user_from_credentials),
+) -> User:
+    if user is None:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
+    return user
+
+
+def get_optional_user(
+    user: User | None = Depends(_resolve_user_from_credentials),
+) -> User | None:
     return user
 
 

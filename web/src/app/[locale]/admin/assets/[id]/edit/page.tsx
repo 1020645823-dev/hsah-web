@@ -1,46 +1,80 @@
 "use client";
 
-import { useState } from "react";
-import { useParams } from "next/navigation";
-import Link from "next/link";
-import { getStoredAdminToken } from "@/lib/admin";
+import { useEffect, useState } from "react";
+import { useRouter, useParams } from "next/navigation";
+import { useTranslations } from "next-intl";
+
+import { PageHeader } from "@/components/product/page-header";
+import { Card, CardContent } from "@/components/ui/card";
+import { ErrorAlert } from "@/components/error-alert";
+import { adminRequest, getStoredAdminToken } from "@/lib/admin";
+import { parseApiError, type ApiErrorInfo } from "@/lib/api-errors";
 import { AssetEditorForm } from "@/components/admin/asset-editor-form";
+import { AssetVideoManager } from "@/components/admin/asset-video-manager";
 
-export default function EditAssetPage() {
-  const params = useParams();
-  const assetId = params.id as string;
-  const [token] = useState<string | null>(() => {
-    if (typeof window === "undefined") return null;
-    return getStoredAdminToken();
-  });
+import type { Asset } from "@/types/asset";
 
-  if (!token) return null;
+export default function AssetEditPage() {
+  const t = useTranslations("Admin");
+  const router = useRouter();
+  const params = useParams<{ id: string }>();
+  const [token] = useState<string | null>(() => getStoredAdminToken());
+  const [asset, setAsset] = useState<Asset | null>(null);
+  const [error, setError] = useState<ApiErrorInfo | null>(null);
+
+  useEffect(() => {
+    if (!token) return;
+    let canceled = false;
+    adminRequest<{ asset: Asset }>(`/api/v1/admin/assets/${params.id}`, token, { method: "GET" })
+      .then((data) => {
+        if (canceled) return;
+        if (!data.ok) {
+          setError(parseApiError(data.data, data.status));
+          setAsset(null);
+        } else {
+          setError(null);
+          setAsset(data.data.asset ?? null);
+        }
+      })
+      .catch(() => {
+        if (canceled) return;
+        setError(parseApiError(null, undefined));
+        setAsset(null);
+      });
+    return () => {
+      canceled = true;
+    };
+  }, [token, params.id]);
 
   return (
-    <div className="flex flex-1 justify-center px-6 py-12">
-      <div className="w-full max-w-6xl space-y-8">
-        <div className="flex items-center justify-between">
-          <div className="space-y-2">
-            <div className="text-xs tracking-[0.18em] text-[var(--color-electric-purple)]">
-              ADMIN / ASSETS / EDIT
-            </div>
-            <div className="text-2xl font-semibold text-[var(--color-text-primary)]">
-              Edit Asset
-            </div>
-            <div className="text-sm text-[var(--color-text-secondary)]">
-              编辑资产条目
-            </div>
-          </div>
-          <Link
-            href="/admin/assets"
-            className="text-sm text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]"
-          >
-            ← Back to Assets
-          </Link>
-        </div>
+    <div className="space-y-8">
+      <PageHeader
+        eyebrow={t("assetEditor.eyebrow")}
+        title={asset?.title ?? t("assetEditor.title")}
+        summary={t("assetEditor.summary")}
+      />
 
-        <AssetEditorForm mode="edit" assetId={assetId} token={token} />
-      </div>
+      {error && (
+        <ErrorAlert
+          error={error}
+          onRetry={error.retryable ? () => setError(null) : undefined}
+          onDismiss={() => setError(null)}
+        />
+      )}
+
+      {asset && token && (
+        <div className="space-y-6">
+          <Card className="border-border/70 bg-card/90">
+            <CardContent className="p-6">
+              <AssetEditorForm
+                mode="edit"
+                assetId={params.id}
+                token={token}
+              />
+            </CardContent>
+          </Card>
+        </div>
+      )}
     </div>
   );
 }

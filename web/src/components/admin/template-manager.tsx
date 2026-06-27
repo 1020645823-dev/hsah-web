@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useCallback, useRef } from "react";
+import { useTranslations } from "next-intl";
 import {
   FileText,
   BarChart3,
@@ -38,6 +39,7 @@ const BLOCK_TYPE_ICONS: Record<string, React.ReactNode> = {
 };
 
 export function TemplateManager({ token, initialBlocks }: TemplateManagerProps) {
+  const t = useTranslations("Admin");
   const [templates, setTemplates] = useState<Template[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -57,11 +59,11 @@ export function TemplateManager({ token, initialBlocks }: TemplateManagerProps) 
       const data = await listTemplates(token);
       if (!canceledRef.current) setTemplates(data);
     } catch (err) {
-      if (!canceledRef.current) setError(err instanceof Error ? err.message : "加载失败");
+      if (!canceledRef.current) setError(err instanceof Error ? err.message : t("templateManager.loadFailed"));
     } finally {
       if (!canceledRef.current) setLoading(false);
     }
-  }, [token]);
+  }, [token, t]);
 
   useEffect(() => {
     if (didInitRef.current) return;
@@ -79,7 +81,7 @@ export function TemplateManager({ token, initialBlocks }: TemplateManagerProps) 
       setDeleteConfirmId(null);
       await loadTemplates();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "删除失败");
+      setError(err instanceof Error ? err.message : t("templateManager.deleteFailed"));
     }
   }
 
@@ -94,7 +96,7 @@ export function TemplateManager({ token, initialBlocks }: TemplateManagerProps) 
       setEditingId(null);
       await loadTemplates();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "更新失败");
+      setError(err instanceof Error ? err.message : t("templateManager.updateFailed"));
     } finally {
       setSubmitting(false);
     }
@@ -113,7 +115,7 @@ export function TemplateManager({ token, initialBlocks }: TemplateManagerProps) 
       setCreateForm({ name: "", description: "" });
       await loadTemplates();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "创建失败");
+      setError(err instanceof Error ? err.message : t("templateManager.createFailed"));
     } finally {
       setSubmitting(false);
     }
@@ -133,7 +135,7 @@ export function TemplateManager({ token, initialBlocks }: TemplateManagerProps) 
         <div className="flex items-center gap-3">
           <LayoutTemplate className="h-5 w-5 text-[var(--color-electric-purple)]" />
           <h2 className="text-xl font-semibold text-[var(--color-text-primary)]">
-            内容模板
+            {t("templateManager.title")}
           </h2>
         </div>
         {initialBlocks && initialBlocks.length > 0 && (
@@ -142,7 +144,7 @@ export function TemplateManager({ token, initialBlocks }: TemplateManagerProps) 
             className="flex items-center gap-2 rounded-lg bg-[rgb(123_63_242_/25%)] px-4 py-2 text-sm font-medium text-[var(--color-text-primary)] hover:bg-[rgb(123_63_242_/35%)] transition-colors"
           >
             <Plus className="h-4 w-4" />
-            从当前内容创建
+            {t("templateManager.createFromCurrent")}
           </button>
         )}
       </div>
@@ -155,11 +157,11 @@ export function TemplateManager({ token, initialBlocks }: TemplateManagerProps) 
 
       {loading ? (
         <div className="py-12 text-center text-sm text-[var(--color-text-secondary)]">
-          加载中...
+          {t("templateManager.loading")}
         </div>
       ) : templates.length === 0 ? (
         <div className="rounded-xl border border-[rgb(255_255_255_/10%)] bg-[rgb(255_255_255_/3%)] py-12 text-center text-sm text-[var(--color-text-secondary)]">
-          暂无模板
+          {t("templateManager.empty")}
         </div>
       ) : (
         <div className="grid gap-4">
@@ -174,13 +176,13 @@ export function TemplateManager({ token, initialBlocks }: TemplateManagerProps) 
                     value={editForm.name}
                     onChange={(e) => setEditForm((f) => ({ ...f, name: e.target.value }))}
                     className="w-full rounded-lg border border-[rgb(255_255_255_/10%)] bg-[rgb(18_18_26_/80%)] px-3 py-2 text-sm text-[var(--color-text-primary)] placeholder:text-[var(--color-text-tertiary)]"
-                    placeholder="模板名称"
+                    placeholder={t("templateManager.namePlaceholder")}
                   />
                   <input
                     value={editForm.description}
                     onChange={(e) => setEditForm((f) => ({ ...f, description: e.target.value }))}
                     className="w-full rounded-lg border border-[rgb(255_255_255_/10%)] bg-[rgb(18_18_26_/80%)] px-3 py-2 text-sm text-[var(--color-text-primary)] placeholder:text-[var(--color-text-tertiary)]"
-                    placeholder="描述（可选）"
+                    placeholder={t("templateManager.descriptionPlaceholder")}
                   />
                   <div className="flex gap-2">
                     <button
@@ -189,14 +191,14 @@ export function TemplateManager({ token, initialBlocks }: TemplateManagerProps) 
                       className="flex items-center gap-1 rounded-lg bg-emerald-500/20 px-3 py-1.5 text-sm text-emerald-200 hover:bg-emerald-500/30 disabled:opacity-50 transition-colors"
                     >
                       <Check className="h-3.5 w-3.5" />
-                      保存
+                      {t("templateManager.save")}
                     </button>
                     <button
                       onClick={() => setEditingId(null)}
                       className="flex items-center gap-1 rounded-lg bg-[rgb(255_255_255_/5%)] px-3 py-1.5 text-sm text-[var(--color-text-secondary)] hover:bg-[rgb(255_255_255_/10%)] transition-colors"
                     >
                       <X className="h-3.5 w-3.5" />
-                      取消
+                      {t("templateManager.cancel")}
                     </button>
                   </div>
                 </div>
@@ -210,7 +212,7 @@ export function TemplateManager({ token, initialBlocks }: TemplateManagerProps) 
                       {template.is_builtin && (
                         <span className="flex items-center gap-1 rounded-full bg-[rgb(123_63_242_/18%)] px-2 py-0.5 text-xs text-[var(--color-electric-purple)]">
                           <Shield className="h-3 w-3" />
-                          内置
+                          {t("templateManager.builtin")}
                         </span>
                       )}
                     </div>
@@ -221,7 +223,7 @@ export function TemplateManager({ token, initialBlocks }: TemplateManagerProps) 
                     )}
                     <div className="flex items-center gap-3">
                       <span className="text-xs text-[var(--color-text-tertiary)]">
-                        {template.blocks.length} 个内容块
+                        {t("templateManager.blockCount", { count: template.blocks.length })}
                       </span>
                       <div className="flex gap-1">
                         {template.blocks.map((block, index) => (
@@ -237,7 +239,7 @@ export function TemplateManager({ token, initialBlocks }: TemplateManagerProps) 
                       <button
                         onClick={() => startEdit(template)}
                         className="rounded-lg p-2 text-[var(--color-text-secondary)] hover:bg-[rgb(255_255_255_/5%)] hover:text-[var(--color-text-primary)] transition-colors"
-                        title="编辑"
+                        title={t("templateManager.edit")}
                       >
                         <Pencil className="h-4 w-4" />
                       </button>
@@ -246,14 +248,14 @@ export function TemplateManager({ token, initialBlocks }: TemplateManagerProps) 
                           <button
                             onClick={() => handleDelete(template.id)}
                             className="rounded-lg bg-red-500/20 p-2 text-red-200 hover:bg-red-500/30 transition-colors"
-                            title="确认删除"
+                            title={t("templateManager.confirmDelete")}
                           >
                             <Check className="h-4 w-4" />
                           </button>
                           <button
                             onClick={() => setDeleteConfirmId(null)}
                             className="rounded-lg p-2 text-[var(--color-text-secondary)] hover:bg-[rgb(255_255_255_/5%)] transition-colors"
-                            title="取消"
+                            title={t("templateManager.cancelDelete")}
                           >
                             <X className="h-4 w-4" />
                           </button>
@@ -262,7 +264,7 @@ export function TemplateManager({ token, initialBlocks }: TemplateManagerProps) 
                         <button
                           onClick={() => setDeleteConfirmId(template.id)}
                           className="rounded-lg p-2 text-[var(--color-text-secondary)] hover:bg-red-500/10 hover:text-red-200 transition-colors"
-                          title="删除"
+                          title={t("templateManager.delete")}
                         >
                           <Trash2 className="h-4 w-4" />
                         </button>
@@ -285,20 +287,20 @@ export function TemplateManager({ token, initialBlocks }: TemplateManagerProps) 
         >
           <div className="w-full max-w-md rounded-2xl border border-[rgb(255_255_255_/10%)] bg-[rgb(18_18_26_/95%)] p-6 shadow-2xl">
             <h3 className="mb-4 text-lg font-semibold text-[var(--color-text-primary)]">
-              保存为模板
+              {t("templateManager.saveAsTemplate")}
             </h3>
             <div className="space-y-3">
               <input
                 value={createForm.name}
                 onChange={(e) => setCreateForm((f) => ({ ...f, name: e.target.value }))}
                 className="w-full rounded-lg border border-[rgb(255_255_255_/10%)] bg-[rgb(18_18_26_/80%)] px-3 py-2 text-sm text-[var(--color-text-primary)] placeholder:text-[var(--color-text-tertiary)]"
-                placeholder="模板名称"
+                placeholder={t("templateManager.namePlaceholder")}
               />
               <input
                 value={createForm.description}
                 onChange={(e) => setCreateForm((f) => ({ ...f, description: e.target.value }))}
                 className="w-full rounded-lg border border-[rgb(255_255_255_/10%)] bg-[rgb(18_18_26_/80%)] px-3 py-2 text-sm text-[var(--color-text-primary)] placeholder:text-[var(--color-text-tertiary)]"
-                placeholder="描述（可选）"
+                placeholder={t("templateManager.descriptionPlaceholder")}
               />
               <div className="flex gap-2 pt-2">
                 <button
@@ -306,13 +308,13 @@ export function TemplateManager({ token, initialBlocks }: TemplateManagerProps) 
                   disabled={submitting || !createForm.name.trim()}
                   className="flex-1 rounded-lg bg-[rgb(123_63_242_/25%)] py-2 text-sm font-medium text-[var(--color-text-primary)] hover:bg-[rgb(123_63_242_/35%)] disabled:opacity-50 transition-colors"
                 >
-                  {submitting ? "保存中..." : "保存"}
+                  {submitting ? t("templateManager.saving") : t("templateManager.save")}
                 </button>
                 <button
                   onClick={() => setShowCreateDialog(false)}
                   className="rounded-lg bg-[rgb(255_255_255_/5%)] px-4 py-2 text-sm text-[var(--color-text-secondary)] hover:bg-[rgb(255_255_255_/10%)] transition-colors"
                 >
-                  取消
+                  {t("templateManager.cancel")}
                 </button>
               </div>
             </div>

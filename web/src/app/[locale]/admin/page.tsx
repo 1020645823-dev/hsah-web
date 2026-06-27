@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { ArrowRight, FileText, LayoutTemplate, Package, ShieldCheck, User } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { PageHeader } from "@/components/product/page-header";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -13,49 +14,8 @@ import { adminNavigation } from "@/lib/admin-navigation";
 
 type Overview = { users: number; assets: number };
 
-const quickActionDefinitions = [
-  {
-    href: "/admin/assets/new",
-    title: "Create asset",
-    description: "启动新资产草稿并进入内容治理流程。",
-    icon: Package,
-  },
-  {
-    href: "/admin/templates",
-    title: "Manage templates",
-    description: "更新可复用模板，统一结构与块级基线。",
-    icon: LayoutTemplate,
-  },
-  {
-    href: "/admin/simulator",
-    title: "Policy simulator",
-    description: "快速验证一条鉴权请求在当前策略下的结果。",
-    icon: ShieldCheck,
-  },
-] as const;
-
-const recentDrafts = [
-  {
-    href: "/admin/assets",
-    title: "Asset drafts queue",
-    description: "集中处理待发布资产、补齐元数据并推进上线。",
-    cta: "Review assets",
-  },
-  {
-    href: "/admin/templates",
-    title: "Template baseline refresh",
-    description: "确保新资产默认继承统一模板与内容块结构。",
-    cta: "Open templates",
-  },
-  {
-    href: "/admin/policies",
-    title: "Policy review window",
-    description: "联动角色与策略页面，收敛访问控制变更风险。",
-    cta: "Inspect policies",
-  },
-] as const;
-
 export default function AdminPage() {
+  const t = useTranslations("Admin");
   const [token] = useState<string | null>(() => getStoredAdminToken());
   const [overview, setOverview] = useState<Overview | null>(null);
   const [error, setError] = useState<ApiErrorInfo | null>(null);
@@ -84,37 +44,71 @@ export default function AdminPage() {
     };
   }, [token]);
 
-  const quickActions = quickActionDefinitions.map((item) => {
-    const navigationItem = adminNavigation.find((entry) => entry.href === item.href);
-    return {
-      ...item,
-      description: navigationItem?.description ?? item.description,
-    };
-  });
-
-  const kpiCards = [
+  const quickActions = [
     {
-      title: "Managed assets",
-      value: overview?.assets ?? "—",
-      description: "后台已纳入运营与发布治理的内容资产。",
+      href: "/admin/assets/new",
+      title: t("quickAction.createAsset.title"),
+      description: t("quickAction.createAsset.description"),
       icon: Package,
     },
     {
-      title: "Admin users",
+      href: "/admin/templates",
+      title: t("quickAction.manageTemplates.title"),
+      description: t("quickAction.manageTemplates.description"),
+      icon: LayoutTemplate,
+    },
+    {
+      href: "/admin/simulator",
+      title: t("quickAction.policySimulator.title"),
+      description: t("quickAction.policySimulator.description"),
+      icon: ShieldCheck,
+    },
+  ] as const;
+
+  const recentDrafts = [
+    {
+      href: "/admin/assets",
+      title: t("recentDrafts.assetDraftsQueue.title"),
+      description: t("recentDrafts.assetDraftsQueue.description"),
+      cta: t("recentDrafts.assetDraftsQueue.cta"),
+    },
+    {
+      href: "/admin/templates",
+      title: t("recentDrafts.templateBaselineRefresh.title"),
+      description: t("recentDrafts.templateBaselineRefresh.description"),
+      cta: t("recentDrafts.templateBaselineRefresh.cta"),
+    },
+    {
+      href: "/admin/policies",
+      title: t("recentDrafts.policyReviewWindow.title"),
+      description: t("recentDrafts.policyReviewWindow.description"),
+      cta: t("recentDrafts.policyReviewWindow.cta"),
+    },
+  ] as const;
+
+  const kpiCards = [
+    {
+      title: t("kpi.managedAssets.title"),
+      value: overview?.assets ?? "—",
+      description: t("kpi.managedAssets.description"),
+      icon: Package,
+    },
+    {
+      title: t("kpi.adminUsers.title"),
       value: overview?.users ?? "—",
-      description: "具备后台访问能力的账号与运维身份。",
+      description: t("kpi.adminUsers.description"),
       icon: User,
     },
     {
-      title: "Governance surfaces",
+      title: t("kpi.governanceSurfaces.title"),
       value: adminNavigation.length,
-      description: "已接入统一壳层与导航元数据的后台模块。",
+      description: t("kpi.governanceSurfaces.description"),
       icon: FileText,
     },
     {
-      title: "Protected routes",
+      title: t("kpi.protectedRoutes.title"),
       value: "100%",
-      description: "所有 `/admin` 路由经由 `RouteGuard` 保护。",
+      description: t("kpi.protectedRoutes.description"),
       icon: ShieldCheck,
     },
   ] as const;
@@ -122,9 +116,9 @@ export default function AdminPage() {
   return (
     <div className="space-y-8">
       <PageHeader
-        eyebrow="ADMIN"
-        title="Operations overview"
-        summary="Monitor content health, recent work, and access-control surfaces from one workspace."
+        eyebrow={t("overview.eyebrow")}
+        title={t("overview.title")}
+        summary={t("overview.summary")}
       />
 
       {error && (
@@ -163,8 +157,8 @@ export default function AdminPage() {
       <section className="grid gap-6 xl:grid-cols-[1.25fr_0.95fr]">
         <Card className="border-border/70 bg-card/90">
           <CardHeader className="space-y-1">
-            <p className="text-xs font-medium tracking-[0.18em] text-primary">FLOW</p>
-            <CardTitle className="text-xl text-foreground">Recent drafts</CardTitle>
+            <p className="text-xs font-medium tracking-[0.18em] text-primary">{t("flow.label")}</p>
+            <CardTitle className="text-xl text-foreground">{t("flow.recentDrafts")}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             {recentDrafts.map((item) => (
@@ -191,8 +185,8 @@ export default function AdminPage() {
         <div className="space-y-6">
           <Card className="border-border/70 bg-card/90">
             <CardHeader className="space-y-1">
-              <p className="text-xs font-medium tracking-[0.18em] text-primary">ACTIONS</p>
-              <CardTitle className="text-xl text-foreground">Quick actions</CardTitle>
+              <p className="text-xs font-medium tracking-[0.18em] text-primary">{t("actions.label")}</p>
+              <CardTitle className="text-xl text-foreground">{t("actions.quickActions")}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
               {quickActions.map((item) => {
@@ -222,18 +216,18 @@ export default function AdminPage() {
 
           <Card className="border-border/70 bg-card/90">
             <CardHeader className="space-y-1">
-              <p className="text-xs font-medium tracking-[0.18em] text-primary">GOVERNANCE</p>
-              <CardTitle className="text-xl text-foreground">Health highlights</CardTitle>
+              <p className="text-xs font-medium tracking-[0.18em] text-primary">{t("governance.label")}</p>
+              <CardTitle className="text-xl text-foreground">{t("governance.healthHighlights")}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3 text-sm text-muted-foreground">
               <div className="rounded-xl border border-border/70 bg-background/80 px-4 py-4">
-                Shell, sidebar, topbar, and overview now share one operational frame.
+                {t("governance.shellHighlight")}
               </div>
               <div className="rounded-xl border border-border/70 bg-background/80 px-4 py-4">
-                Navigation metadata is centralized for overview, assets, templates, and access pages.
+                {t("governance.navigationHighlight")}
               </div>
               <div className="rounded-xl border border-border/70 bg-background/80 px-4 py-4">
-                `RouteGuard` remains the only entry point for protected admin routes.
+                {t("governance.routeGuardHighlight")}
               </div>
             </CardContent>
           </Card>

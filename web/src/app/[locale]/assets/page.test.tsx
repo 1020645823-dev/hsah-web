@@ -11,6 +11,10 @@ const mocks = vi.hoisted(() => ({
   publicSiteShellProps: vi.fn(),
 }));
 
+vi.mock("next-intl/server", () => ({
+  getTranslations: () => Promise.resolve((key: string) => key),
+}));
+
 vi.mock("@/lib/public-assets", () => ({
   fetchPublicAssets: mocks.fetchPublicAssets,
   parseAssetQueryFromSearchParams: mocks.parseAssetQueryFromSearchParams,
@@ -66,6 +70,7 @@ describe("AssetsPage", () => {
     });
 
     const element = await AssetsPage({
+      params: Promise.resolve({ locale: "en" }),
       searchParams: Promise.resolve({
         q: "agent",
         cloud: "aws",
@@ -94,7 +99,7 @@ describe("AssetsPage", () => {
     });
     expect(mocks.publicSiteShellProps).toHaveBeenCalledWith({
       ctaHref: "/auth/login",
-      ctaLabel: "Sign in",
+      ctaLabel: "ctaLabel",
     });
     expect(screen.getByText("mocked-assets-client")).toBeInTheDocument();
   });
@@ -111,20 +116,21 @@ describe("AssetsPage", () => {
         category: "server",
         status: 500,
         message: "Internal Server Error",
-        userMessage: "服务器暂时不可用，请稍后重试。",
+        userMessage: "Server temporarily unavailable, please try again later.",
         icon: () => null,
         retryable: true,
       },
     });
 
     const element = await AssetsPage({
+      params: Promise.resolve({ locale: "en" }),
       searchParams: Promise.resolve({ q: "agent" }),
     });
 
     render(element);
 
     expect(screen.getByTestId("error-alert")).toHaveTextContent(
-      "服务器暂时不可用，请稍后重试。"
+      "Server temporarily unavailable, please try again later."
     );
   });
 });

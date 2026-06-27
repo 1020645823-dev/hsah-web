@@ -4,6 +4,7 @@ import { Suspense, useMemo, useState } from "react";
 import Link from "next/link";
 import { ArrowRight, ShieldCheck, Sparkles, Workflow } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useTranslations } from "next-intl";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -29,6 +30,7 @@ export default function LoginPage() {
 function LoginPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const t = useTranslations("Login");
   const [step, setStep] = useState<Step>("password");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -59,7 +61,7 @@ function LoginPageContent() {
         setStep("totp");
         return;
       }
-      setError(typeof res.data === "string" ? res.data : "登录失败");
+      setError(typeof res.data === "string" ? res.data : t("loginFailed"));
       return;
     }
 
@@ -73,7 +75,7 @@ function LoginPageContent() {
     const res = await register(email.trim(), password);
     if (!res.ok && res.status !== 409) {
       setSubmitting(false);
-      setError("创建账号失败");
+      setError(t("createAccountFailed"));
       return;
     }
     setSubmitting(false);
@@ -86,44 +88,42 @@ function LoginPageContent() {
         <div className="space-y-10">
           <div className="space-y-5">
             <p className="text-[11px] font-semibold tracking-[0.2em] text-white/70 uppercase">
-              Hyperscaler Asset Hub
+              {t("productName")}
             </p>
             <h2 className="max-w-2xl font-heading text-[2.75rem] font-semibold leading-[1.15] tracking-tight">
-              Explore the public content platform, then move into operational
-              workspaces.
+              {t("heroTitle")}
             </h2>
             <p className="max-w-lg text-[15px] leading-[1.7] text-white/70">
-              Access saved assets, profiles, and admin operations from one
-              identity entry point.
+              {t("heroSummary")}
             </p>
           </div>
 
           <div className="grid gap-4">
             <FeatureBullet
               icon={Sparkles}
-              title="Public discovery"
-              description="Browse reusable demos, architectures, and scenario-led content before you sign in."
+              title={t("publicDiscoveryTitle")}
+              description={t("publicDiscoveryDescription")}
             />
             <FeatureBullet
               icon={Workflow}
-              title="Operational continuity"
-              description="Move from discovery into admin workflows without losing route context."
+              title={t("operationalContinuityTitle")}
+              description={t("operationalContinuityDescription")}
             />
             <FeatureBullet
               icon={ShieldCheck}
-              title="Protected access"
-              description="Keep sensitive governance actions behind authenticated workspaces and 2FA when required."
+              title={t("protectedAccessTitle")}
+              description={t("protectedAccessDescription")}
             />
           </div>
         </div>
 
         <div className="mt-10 flex items-center justify-between rounded-2xl border border-white/10 bg-white/[0.04] px-6 py-5 text-sm text-white/80 backdrop-blur-sm">
-          <span className="text-white/60">Need a quick look first?</span>
+          <span className="text-white/60">{t("quickLook")}</span>
           <Link
             href="/assets"
             className="inline-flex items-center gap-2 font-medium text-white transition-colors hover:text-white/80"
           >
-            Explore the public content platform
+            {t("explorePublicPlatform")}
             <ArrowRight className="size-4" />
           </Link>
         </div>
@@ -133,15 +133,15 @@ function LoginPageContent() {
         <div className="w-full max-w-[400px] space-y-8">
           <div className="space-y-3">
             <p className="text-[11px] font-semibold tracking-[0.2em] text-primary uppercase">
-              Identity Gateway
+              {t("identityGateway")}
             </p>
             <h1 className="font-heading text-[2rem] font-semibold leading-tight tracking-tight text-foreground">
-              Sign in
+              {t("title")}
             </h1>
             <p className="text-[15px] leading-[1.6] text-foreground/70">
               {step === "password"
-                ? "Access saved assets, profiles, and admin operations."
-                : "Enter the 6-digit code from your authenticator to continue."}
+                ? t("passwordStepSummary")
+                : t("totpStepSummary")}
             </p>
           </div>
 
@@ -152,23 +152,22 @@ function LoginPageContent() {
                   <ShieldCheck className="size-4" />
                 </div>
                 <div className="space-y-2">
-                  <p className="font-medium text-foreground">Admin workspace sign-in</p>
+                  <p className="font-medium text-foreground">{t("adminWorkspaceSignIn")}</p>
                   <p className="leading-6 text-foreground/70">
-                    You were sent here from the admin workspace and will return to the
-                    exact page after sign-in.
+                    {t("adminReturnSummary")}
                   </p>
                   <dl className="grid gap-2 text-[13px] text-foreground/70 sm:grid-cols-2">
                     <div className="rounded-xl bg-background/80 px-3 py-2.5">
                       <dt className="text-[11px] font-semibold tracking-[0.16em] text-foreground/45 uppercase">
-                        Workspace
+                        {t("workspace")}
                       </dt>
                       <dd className="mt-1 font-medium text-foreground">
-                        Admin workspace
+                        {t("adminWorkspace")}
                       </dd>
                     </div>
                     <div className="rounded-xl bg-background/80 px-3 py-2.5">
                       <dt className="text-[11px] font-semibold tracking-[0.16em] text-foreground/45 uppercase">
-                        Target path
+                        {t("targetPath")}
                       </dt>
                       <dd className="mt-1 font-mono text-[12px] text-foreground">
                         {loginContext.targetPath ?? "/admin"}
@@ -176,8 +175,7 @@ function LoginPageContent() {
                     </div>
                   </dl>
                   <p className="text-[13px] leading-6 text-foreground/60">
-                    Return route: the public library remains your discovery surface for
-                    assets, profiles, and reference content.
+                    {t("returnRoute")}
                   </p>
                 </div>
               </div>
@@ -187,7 +185,7 @@ function LoginPageContent() {
           <div className="space-y-5">
             <div className="space-y-2.5">
               <Label htmlFor="email" className="text-[13px] font-medium text-foreground/80">
-                Email
+                {t("email")}
               </Label>
               <Input
                 id="email"
@@ -200,7 +198,7 @@ function LoginPageContent() {
             </div>
             <div className="space-y-2.5">
               <Label htmlFor="password" className="text-[13px] font-medium text-foreground/80">
-                Password
+                {t("password")}
               </Label>
               <Input
                 id="password"
@@ -215,7 +213,7 @@ function LoginPageContent() {
             {step === "totp" ? (
               <div className="space-y-2.5">
                 <Label htmlFor="totp" className="text-[13px] font-medium text-foreground/80">
-                  2FA Code
+                  {t("totpCode")}
                 </Label>
                 <Input
                   id="totp"
@@ -241,7 +239,7 @@ function LoginPageContent() {
               onClick={handleLogin}
               disabled={!canSubmit || submitting}
             >
-              {step === "totp" ? "Verify & Sign in" : "Sign in"}
+              {step === "totp" ? t("verifyAndSignIn") : t("title")}
             </Button>
             <Button
               className="h-11 w-full rounded-xl text-[15px] font-medium transition-all duration-200"
@@ -249,14 +247,14 @@ function LoginPageContent() {
               onClick={handleCreateAccount}
               disabled={!email.trim() || !password || submitting}
             >
-              Create account (dev)
+              {t("createAccountDev")}
             </Button>
             <div className="w-full pt-1 text-center text-sm text-foreground/60">
               <Link
                 href="/assets"
                 className="font-medium text-foreground transition-colors hover:text-primary"
               >
-                Return to public library
+                {t("returnToLibrary")}
               </Link>
             </div>
           </div>
@@ -267,14 +265,15 @@ function LoginPageContent() {
 }
 
 function LoginPageFallback() {
+  const t = useTranslations("Login");
   return (
     <div className="flex min-h-dvh items-center justify-center bg-background px-6 py-10">
       <div className="w-full max-w-md rounded-2xl border border-border bg-card px-6 py-10 text-center shadow-[var(--shadow-card)]">
         <p className="text-xs font-medium tracking-[0.18em] text-primary">
-          IDENTITY GATEWAY
+          {t("identityGateway")}
         </p>
         <h1 className="mt-3 font-heading text-2xl font-semibold tracking-tight text-foreground">
-          Loading sign-in workspace...
+          {t("loadingTitle")}
         </h1>
       </div>
     </div>

@@ -1,4 +1,4 @@
-import { render, screen, cleanup } from "@testing-library/react";
+import { render, screen, cleanup } from "@/test-utils";
 import "@testing-library/jest-dom/vitest";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -7,7 +7,12 @@ import { PublicHeader } from "./public-header";
 const mockUsePathname = vi.fn();
 
 vi.mock("next/navigation", () => ({
+  useRouter: () => ({ push: vi.fn(), replace: vi.fn(), back: vi.fn() }),
   usePathname: () => mockUsePathname(),
+  useParams: () => ({ locale: "en" }),
+  redirect: vi.fn(),
+  permanentRedirect: vi.fn(),
+  notFound: vi.fn(),
 }));
 
 vi.mock("@/components/theme-toggle", () => ({

@@ -1,27 +1,17 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { cleanup, render, screen, waitFor } from "@/test-utils";
 import "@testing-library/jest-dom/vitest";
 
 const {
   mockGetStoredAdminToken,
-  mockAdminPaginatedRequest,
-  mockBatchDeleteAssets,
-  mockPublishAsset,
-  mockArchiveAsset,
+  mockAdminRequest,
 } = vi.hoisted(() => ({
   mockGetStoredAdminToken: vi.fn(),
-  mockAdminPaginatedRequest: vi.fn(),
-  mockBatchDeleteAssets: vi.fn(),
-  mockPublishAsset: vi.fn(),
-  mockArchiveAsset: vi.fn(),
+  mockAdminRequest: vi.fn(),
 }));
 
-vi.mock("next/link", () => ({
-  default: ({ href, children, ...props }: { href: string; children: unknown }) => (
-    <a href={href} {...props}>
-      {children}
-    </a>
-  ),
+vi.mock("next/navigation", () => ({
+  useRouter: () => ({ push: vi.fn(), replace: vi.fn() }),
 }));
 
 vi.mock("@/lib/admin", async () => {
@@ -29,20 +19,17 @@ vi.mock("@/lib/admin", async () => {
   return {
     ...actual,
     getStoredAdminToken: mockGetStoredAdminToken,
-    adminPaginatedRequest: mockAdminPaginatedRequest,
-    batchDeleteAssets: mockBatchDeleteAssets,
-    publishAsset: mockPublishAsset,
-    archiveAsset: mockArchiveAsset,
+    adminRequest: mockAdminRequest,
   };
 });
 
 import AdminAssetsPage from "./page";
 
-function buildAssetRow(overrides: Partial<{
+function buildAsset(overrides: Partial<{
   id: string;
   slug: string;
   title: string;
-  asset_type: string;
+  type: string;
   status: string;
   visibility: string;
   cloud_providers: string[];
@@ -51,7 +38,7 @@ function buildAssetRow(overrides: Partial<{
     id: "asset-1",
     slug: "asset-one",
     title: "Asset One",
-    asset_type: "solution",
+    type: "solution",
     status: "draft",
     visibility: "public",
     cloud_providers: ["aws"],
@@ -69,94 +56,46 @@ describe("AdminAssetsPage", () => {
     cleanup();
   });
 
-  it("renders the new page header and admin actions", async () => {
-    mockAdminPaginatedRequest.mockResolvedValue({
+  it("renders the page header and create asset button", async () => {
+    mockAdminRequest.mockResolvedValue({
       ok: true,
-      data: { items: [], total: 0, limit: 10, offset: 0 },
+      data: { assets: [] },
     });
 
     render(<AdminAssetsPage />);
-
-    expect(screen.getByRole("heading", { name: "Assets" })).toBeInTheDocument();
-    expect(
-      screen.getByText("Manage discovery, publication, and lifecycle for reusable platform assets."),
-    ).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "New asset" })).toHaveAttribute("href", "/admin/assets/new");
-  });
-
-  it("uses batch delete helper once and shows success message", async () => {
-    const row = buildAssetRow({ id: "asset-batch", title: "Batch Asset" });
-    mockAdminPaginatedRequest.mockImplementation(async () => ({
-      ok: true,
-      data: { items: [row], total: 1, limit: 10, offset: 0 },
-    }));
-    mockBatchDeleteAssets.mockResolvedValue({
-      ok: true,
-      data: { deleted: 1, failed: [] },
-    });
-
-    render(<AdminAssetsPage />);
-
-    await screen.findByText("Batch Asset");
-    fireEvent.click(screen.getAllByRole("checkbox")[1]);
-    fireEvent.click(screen.getByText("删除"));
-    fireEvent.click(screen.getByRole("button", { name: "确认删除" }));
 
     await waitFor(() => {
-      expect(mockBatchDeleteAssets).toHaveBeenCalledTimes(1);
+      expect(screen.getByRole("heading", { name: "Assets" })).toBeInTheDocument();
     });
-    expect(mockBatchDeleteAssets).toHaveBeenCalledWith("token-123", ["asset-batch"]);
-    expect(await screen.findByText("已删除 1 个资产")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Create new asset" })).toBeInTheDocument();
   });
 
-  it("shows validation fields when publish fails", async () => {
-    const row = buildAssetRow({ id: "asset-publish", title: "Publish Asset", status: "draft" });
-    mockAdminPaginatedRequest.mockImplementation(async () => ({
+  it("renders asset cards when data is fetched", async () => {
+    const asset = buildAsset({ id: "asset-1", title: "Test Asset" });
+    mockAdminRequest.mockResolvedValue({
       ok: true,
-      data: { items: [row], total: 1, limit: 10, offset: 0 },
-    }));
-    mockPublishAsset.mockResolvedValue({
-      ok: false,
-      status: 422,
-      data: {
-        detail: {
-          code: "publish_validation_failed",
-          fields: ["title", "content_blocks"],
-        },
-      },
-      message: "publish_validation_failed",
+      data: { assets: [asset] },
     });
 
     render(<AdminAssetsPage />);
 
-    await screen.findByText("Publish Asset");
-    fireEvent.click(screen.getByRole("button", { name: "Publish" }));
-
     await waitFor(() => {
-      expect(mockPublishAsset).toHaveBeenCalledWith("token-123", "asset-publish");
+      expect(screen.getByText("Test Asset")).toBeInTheDocument();
     });
-    expect(await screen.findByText("发布失败，请完善：title、content_blocks")).toBeInTheDocument();
+    expect(screen.getByText((content) => content.includes("Type") && content.includes("solution"))).toBeInTheDocument();
+    expect(screen.getByText((content) => content.includes("Status") && content.includes("draft"))).toBeInTheDocument();
   });
 
-  it("archives published assets and shows success message", async () => {
-    const row = buildAssetRow({ id: "asset-archive", title: "Archive Asset", status: "published" });
-    mockAdminPaginatedRequest.mockImplementation(async () => ({
+  it("shows empty state when no assets", async () => {
+    mockAdminRequest.mockResolvedValue({
       ok: true,
-      data: { items: [row], total: 1, limit: 10, offset: 0 },
-    }));
-    mockArchiveAsset.mockResolvedValue({
-      ok: true,
-      data: { ...row, status: "archived" },
+      data: { assets: [] },
     });
 
     render(<AdminAssetsPage />);
 
-    await screen.findByText("Archive Asset");
-    fireEvent.click(screen.getByRole("button", { name: "Archive" }));
-
     await waitFor(() => {
-      expect(mockArchiveAsset).toHaveBeenCalledWith("token-123", "asset-archive");
+      expect(screen.getByText("No assets found")).toBeInTheDocument();
     });
-    expect(await screen.findByText("资产已归档")).toBeInTheDocument();
   });
 });

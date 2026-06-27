@@ -144,4 +144,116 @@ describe("ContentBlockRenderer (phase9 schema)", () => {
     expect(screen.getByText("python")).toBeInTheDocument();
     expect(screen.queryByText("1")).not.toBeInTheDocument();
   });
+
+  it("shows shared and sales blocks in sales mode only", () => {
+    render(
+      <ContentBlockRenderer
+        mode="sales"
+        blocks={[
+          {
+            id: "shared-1",
+            type: "text",
+            version: 2,
+            order: 0,
+            visible: true,
+            audience: "shared",
+            config: {
+              markdown: "",
+              html: "<p>Shared narrative</p>",
+            },
+          },
+          {
+            id: "sales-1",
+            type: "text",
+            version: 2,
+            order: 1,
+            visible: true,
+            audience: "sales",
+            config: {
+              markdown: "",
+              html: "<p>Sales storyline</p>",
+            },
+          },
+          {
+            id: "delivery-1",
+            type: "text",
+            version: 2,
+            order: 2,
+            visible: true,
+            audience: "delivery",
+            config: {
+              markdown: "",
+              html: "<p>Delivery runbook</p>",
+            },
+          },
+        ]}
+      />,
+    );
+
+    expect(screen.getByText("Shared narrative")).toBeInTheDocument();
+    expect(screen.getByText("Sales storyline")).toBeInTheDocument();
+    expect(screen.queryByText("Delivery runbook")).not.toBeInTheDocument();
+  });
+
+  it("shows shared and delivery blocks in delivery mode only", () => {
+    render(
+      <ContentBlockRenderer
+        mode="delivery"
+        blocks={[
+          {
+            id: "legacy-1",
+            type: "text",
+            version: 2,
+            order: 0,
+            visible: true,
+            config: {
+              markdown: "",
+              html: "<p>Legacy public block</p>",
+            },
+          },
+          {
+            id: "shared-2",
+            type: "text",
+            version: 2,
+            order: 1,
+            visible: true,
+            audience: "shared",
+            config: {
+              markdown: "",
+              html: "<p>Shared implementation notes</p>",
+            },
+          },
+          {
+            id: "sales-2",
+            type: "text",
+            version: 2,
+            order: 2,
+            visible: true,
+            audience: "sales",
+            config: {
+              markdown: "",
+              html: "<p>Sales value points</p>",
+            },
+          },
+          {
+            id: "delivery-2",
+            type: "text",
+            version: 2,
+            order: 3,
+            visible: true,
+            audience: "delivery",
+            config: {
+              markdown: "",
+              html: "<p>Delivery checklist</p>",
+            },
+          },
+        ]}
+      />,
+    );
+
+    expect(screen.getByText("Shared implementation notes")).toBeInTheDocument();
+    expect(screen.getByText("Delivery checklist")).toBeInTheDocument();
+    expect(screen.queryByText("Legacy public block")).not.toBeInTheDocument();
+    expect(screen.queryByText("Sales value points")).not.toBeInTheDocument();
+  });
 });

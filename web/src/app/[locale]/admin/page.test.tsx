@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen, waitFor } from "@/test-utils";
 import "@testing-library/jest-dom/vitest";
 
 const { mockGetStoredAdminToken, mockAdminRequest } = vi.hoisted(() => ({

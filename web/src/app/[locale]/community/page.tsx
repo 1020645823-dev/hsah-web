@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { getTranslations } from "next-intl/server";
 
 import {
   PublicContentCard,
@@ -6,29 +7,36 @@ import {
   PublicSectionHero,
   PublicSiteShell,
 } from "@/components/public-site-shell";
-import { communityItems } from "@/lib/public-content";
+import { communitySlugs } from "@/lib/public-content";
 
-export default function CommunityPage() {
+export default async function CommunityPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "Community" });
+
   return (
-    <PublicSiteShell ctaHref="/about" ctaLabel="Get in Touch">
+    <PublicSiteShell ctaHref="/about" ctaLabel={t("readInsights")}>
       <div className="space-y-8">
         <PublicSectionHero
-          eyebrow="COMMUNITY"
-          title="Programs that turn isolated delivery teams into a working learning network."
-          summary="Find roundtables, labs, and recurring working groups designed for architects, operators, and product leaders."
+          eyebrow={t("eyebrow")}
+          title={t("title")}
+          summary={t("summary")}
           actions={
             <>
               <Link
                 href="/insights"
                 className="inline-flex h-11 items-center justify-center rounded-md bg-primary px-6 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
               >
-                Read Insights
+                {t("readInsights")}
               </Link>
               <Link
                 href="/scenarios"
                 className="inline-flex h-11 items-center justify-center rounded-md border border-border bg-background px-6 text-sm font-medium text-foreground transition-colors hover:bg-muted"
               >
-                Explore Scenarios
+                {t("exploreScenarios")}
               </Link>
             </>
           }
@@ -36,25 +44,28 @@ export default function CommunityPage() {
 
         <PublicMetricStrip
           items={[
-            { value: `${communityItems.length}`, label: "Programs and events" },
-            { value: "Hybrid", label: "Engagement format" },
-            { value: "Operators", label: "Primary audience" },
-            { value: "Ongoing", label: "Participation cadence" },
+            { value: `${communitySlugs.length}`, label: t("allPrograms") },
+            { value: t("agenda"), label: t("resources") },
+            { value: t("audience"), label: t("location") },
+            { value: t("format"), label: t("agenda") },
           ]}
         />
 
         <div className="grid gap-5 lg:grid-cols-3">
-          {communityItems.map((item) => (
-            <PublicContentCard
-              key={item.slug}
-              href={`/community/${item.slug}`}
-              eyebrow={item.format.toUpperCase()}
-              title={item.title}
-              summary={item.summary}
-              meta={`${item.dateLabel} · ${item.location}`}
-              tags={[item.audience]}
-            />
-          ))}
+          {communitySlugs.map((slug) => {
+            const item = t.raw(`items.${slug}`) as Record<string, unknown>;
+            return (
+              <PublicContentCard
+                key={slug}
+                href={`/community/${slug}`}
+                eyebrow={(item.format as string).toUpperCase()}
+                title={item.title as string}
+                summary={item.summary as string}
+                meta={`${item.dateLabel} · ${item.location}`}
+                tags={[item.audience as string]}
+              />
+            );
+          })}
         </div>
       </div>
     </PublicSiteShell>

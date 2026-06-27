@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { X } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 
 type TagInputProps = {
@@ -32,6 +33,7 @@ export function TagInput({
   suggestions,
   className,
 }: TagInputProps) {
+  const t = useTranslations("Admin");
   const [input, setInput] = React.useState("");
   const [focused, setFocused] = React.useState(false);
   const inputRef = React.useRef<HTMLInputElement>(null);
@@ -122,7 +124,7 @@ export function TagInput({
             <button
               type="button"
               data-testid="tag-remove"
-              aria-label={`Remove ${tag}`}
+              aria-label={t("tagInput.removeTag", { tag })}
               className="ml-0.5 rounded-full p-0.5 hover:bg-white/10"
               onClick={(e) => {
                 e.stopPropagation();

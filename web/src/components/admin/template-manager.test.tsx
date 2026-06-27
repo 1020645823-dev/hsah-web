@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { render, screen, fireEvent, waitFor, cleanup } from "@testing-library/react";
+import { render, screen, fireEvent, waitFor, cleanup } from "@/test-utils";
 import "@testing-library/jest-dom/vitest";
 
 import { TemplateManager } from "./template-manager";
@@ -53,7 +53,7 @@ describe("TemplateManager", () => {
     });
 
     expect(screen.getByText("Custom Template")).toBeInTheDocument();
-    expect(screen.getByText("内置")).toBeInTheDocument();
+    expect(screen.getByText("Built-in")).toBeInTheDocument();
   });
 
   it("shows delete confirmation and deletes template", async () => {
@@ -64,14 +64,14 @@ describe("TemplateManager", () => {
       expect(screen.getByText("Custom Template")).toBeInTheDocument();
     });
 
-    const deleteButtons = screen.getAllByTitle("删除");
+    const deleteButtons = screen.getAllByTitle("Delete");
     fireEvent.click(deleteButtons[0]);
 
     await waitFor(() => {
-      expect(screen.getByTitle("确认删除")).toBeInTheDocument();
+      expect(screen.getByTitle("Confirm delete")).toBeInTheDocument();
     });
 
-    fireEvent.click(screen.getByTitle("确认删除"));
+    fireEvent.click(screen.getByTitle("Confirm delete"));
 
     await waitFor(() => {
       expect(adminTemplates.deleteTemplate).toHaveBeenCalledWith("token-123", 2);
@@ -90,16 +90,16 @@ describe("TemplateManager", () => {
       expect(screen.getByText("Built-in Template")).toBeInTheDocument();
     });
 
-    fireEvent.click(screen.getByText("从当前内容创建"));
+    fireEvent.click(screen.getByText("Create from current content"));
 
     await waitFor(() => {
-      expect(screen.getByText("保存为模板")).toBeInTheDocument();
+      expect(screen.getByText("Save as template")).toBeInTheDocument();
     });
 
-    const nameInput = screen.getByPlaceholderText("模板名称");
+    const nameInput = screen.getByPlaceholderText("Template name");
     fireEvent.change(nameInput, { target: { value: "My New Template" } });
 
-    fireEvent.click(screen.getByText("保存"));
+    fireEvent.click(screen.getByText("Save"));
 
     await waitFor(() => {
       expect(adminTemplates.createTemplate).toHaveBeenCalledWith("token-123", {
@@ -117,13 +117,13 @@ describe("TemplateManager", () => {
       expect(screen.getByText("Custom Template")).toBeInTheDocument();
     });
 
-    const editButtons = screen.getAllByTitle("编辑");
+    const editButtons = screen.getAllByTitle("Edit");
     fireEvent.click(editButtons[0]);
 
     const nameInput = screen.getByDisplayValue("Custom Template");
     fireEvent.change(nameInput, { target: { value: "Updated Name" } });
 
-    fireEvent.click(screen.getByText("保存"));
+    fireEvent.click(screen.getByText("Save"));
 
     await waitFor(() => {
       expect(adminTemplates.updateTemplate).toHaveBeenCalledWith("token-123", 2, {

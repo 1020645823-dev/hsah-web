@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen, waitFor } from "@/test-utils";
 import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom/vitest";
 
@@ -125,11 +125,11 @@ describe("AssetEditorForm", () => {
 
     await screen.findByDisplayValue("Demo Asset");
 
-    const descriptionInput = screen.getByPlaceholderText("资产的简短描述");
+    const descriptionInput = screen.getByPlaceholderText("Brief description shown in listings");
     await user.clear(descriptionInput);
     await user.type(descriptionInput, "Updated short description");
 
-    await user.click(screen.getByRole("button", { name: "保存" }));
+    await user.click(screen.getByRole("button", { name: "Save" }));
 
     await waitFor(() => {
       expect(screen.getByText("Alt text is required")).toBeInTheDocument();

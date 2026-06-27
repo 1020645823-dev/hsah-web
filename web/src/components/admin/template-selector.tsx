@@ -10,6 +10,7 @@ import {
   X,
   LayoutTemplate,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import type { ContentBlock } from "@/lib/admin-content-blocks";
 import { listTemplates } from "@/lib/admin-templates";
 
@@ -37,6 +38,7 @@ const BLOCK_TYPE_LABELS: Record<string, string> = {
 };
 
 export function TemplateSelector({ isOpen, onClose, onApply, token }: TemplateSelectorProps) {
+  const t = useTranslations("Admin");
   const [templates, setTemplates] = useState<Awaited<ReturnType<typeof listTemplates>>>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -94,7 +96,7 @@ export function TemplateSelector({ isOpen, onClose, onApply, token }: TemplateSe
           <div className="flex items-center gap-3">
             <LayoutTemplate className="h-5 w-5 text-[var(--color-electric-purple)]" />
             <h2 className="text-xl font-semibold text-[var(--color-text-primary)]">
-              选择模板
+              {t("templateSelector.title")}
             </h2>
           </div>
           <button
@@ -108,7 +110,7 @@ export function TemplateSelector({ isOpen, onClose, onApply, token }: TemplateSe
 
         {loading && (
           <div className="flex items-center justify-center py-12 text-sm text-[var(--color-text-secondary)]">
-            加载中...
+            {t("templateSelector.loading")}
           </div>
         )}
 
@@ -120,7 +122,7 @@ export function TemplateSelector({ isOpen, onClose, onApply, token }: TemplateSe
 
         {!loading && !error && templates.length === 0 && (
           <div className="py-12 text-center text-sm text-[var(--color-text-secondary)]">
-            暂无可用模板
+            {t("templateSelector.empty")}
           </div>
         )}
 
@@ -137,7 +139,7 @@ export function TemplateSelector({ isOpen, onClose, onApply, token }: TemplateSe
                   </h3>
                   {template.is_builtin && (
                     <span className="rounded-full bg-[rgb(123_63_242_/18%)] px-2 py-0.5 text-xs text-[var(--color-electric-purple)]">
-                      内置
+                      {t("templateSelector.builtin")}
                     </span>
                   )}
                 </div>
@@ -148,7 +150,7 @@ export function TemplateSelector({ isOpen, onClose, onApply, token }: TemplateSe
                 )}
                 <div className="flex items-center gap-2 mb-4">
                   <span className="text-xs text-[var(--color-text-tertiary)]">
-                    {template.blocks.length} 个内容块
+                    {t("templateSelector.blockCount", { count: template.blocks.length })}
                   </span>
                   <div className="flex gap-1">
                     {template.blocks.map((block, index) => (
@@ -166,7 +168,7 @@ export function TemplateSelector({ isOpen, onClose, onApply, token }: TemplateSe
                   onClick={() => handleApply(template.blocks)}
                   className="w-full rounded-lg bg-[rgb(123_63_242_/25%)] py-2 text-sm font-medium text-[var(--color-text-primary)] hover:bg-[rgb(123_63_242_/35%)] transition-colors"
                 >
-                  应用
+                  {t("templateSelector.apply")}
                 </button>
               </div>
             ))}

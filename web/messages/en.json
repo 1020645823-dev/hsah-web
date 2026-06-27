@@ -28,7 +28,21 @@
     "notAvailable": "Not available",
     "all": "All",
     "view": "View",
-    "status": "Status"
+    "status": "Status",
+    "back": "Back",
+    "previous": "Previous",
+    "next": "Next",
+    "confirm": "Confirm",
+    "submit": "Submit",
+    "update": "Update",
+    "close": "Close",
+    "browseAll": "Browse all",
+    "openDetails": "Open details",
+    "backToHome": "Back to home",
+    "allClouds": "All clouds",
+    "allIndustries": "All industries",
+    "allTechnologies": "All technologies",
+    "allAssetTypes": "All asset types"
   },
   "Home": {
     "heroEyebrow": "HSAH PLATFORM",
@@ -58,7 +72,8 @@
     "valueTitle": "Align stakeholders, then move into implementation detail.",
     "valueSummary": "The homepage now frames the product, exposes real featured assets, and sends every role into the most relevant content lane before they enter the library.",
     "goToLibrary": "Go to Asset Library",
-    "browseScenarios": "Browse Scenarios"
+    "browseScenarios": "Browse Scenarios",
+    "ctaLabel": "Sign in"
   },
   "Assets": {
     "eyebrow": "ASSET LIBRARY",
@@ -75,12 +90,19 @@
     "listView": "List view",
     "emptyTitle": "No matching assets found",
     "emptyDescription": "Adjust the search terms or clear filters to see available assets.",
+    "emptyClearTitle": "No assets matched the current filters.",
+    "emptyClearDescription": "Clear the active filters or return to featured assets to see all available content.",
     "cloud": "Cloud",
     "industry": "Industry",
     "technology": "Technology",
     "assetType": "Asset type",
     "published": "Published",
-    "draft": "Draft"
+    "draft": "Draft",
+    "pageIndicator": "Page {currentPage} of {totalPages}",
+    "previousPage": "Previous page",
+    "nextPage": "Next page",
+    "backToAssets": "Back to Assets",
+    "exploreAssets": "Explore Assets"
   },
   "AssetDetail": {
     "sharedContext": "Shared context",
@@ -111,6 +133,7 @@
   "NotFound": {
     "title": "Page not found",
     "description": "This page may have moved, or the link is no longer available.",
+    "descriptionAlt": "The page you are looking for does not exist or has been moved.",
     "backHome": "Back to home"
   },
   "Login": {
@@ -147,10 +170,11 @@
   },
   "About": {
     "eyebrow": "ABOUT",
-    "title": "A public entry point built around trusted AI delivery assets",
-    "summary": "HSAH helps teams align around business scenarios, architectures, and community practices before moving into reusable assets.",
+    "title": "A public content layer that helps teams align before they commit to build.",
+    "summary": "The hub connects scenario framing, architecture direction, editorial insight, and community participation so teams can move from curiosity to execution with less ambiguity.",
     "readInsights": "Read Insights",
     "joinCommunity": "Join Community",
+    "exploreAssets": "Explore Assets",
     "highlights": {
       "scenarioLedDelivery": {
         "title": "Scenario-led delivery",
@@ -164,13 +188,62 @@
         "title": "Working community",
         "description": "Operators, architects, and product teams share methods, proof points, and delivery patterns across sectors."
       }
+    },
+    "metrics": {
+      "discoveryApproach": {
+        "value": "Scenario-led",
+        "label": "Discovery approach"
+      },
+      "architecturePosture": {
+        "value": "Reference-first",
+        "label": "Architecture posture"
+      },
+      "contentMode": {
+        "value": "Editorial",
+        "label": "Content mode"
+      },
+      "learningModel": {
+        "value": "Community-backed",
+        "label": "Learning model"
+      }
+    },
+    "howUsedTitle": "How the platform is used",
+    "howUsedItems": [
+      "Stakeholders browse scenarios to align on business value and workflow change.",
+      "Architecture teams use reference patterns to reduce design churn before delivery begins.",
+      "Program leaders share insight articles to align controls, ownership, and rollout expectations.",
+      "Working groups and labs create a repeatable feedback loop across teams and sectors."
+    ],
+    "startFromSection": "Start from the section that fits your need",
+    "startWithScenarios": {
+      "label": "Start with scenarios",
+      "description": "Use business journeys when the problem statement is still forming."
+    },
+    "startWithArchitecture": {
+      "label": "Start with architecture",
+      "description": "Use reference views when the delivery model and controls need alignment."
+    },
+    "startWithCommunity": {
+      "label": "Start with community",
+      "description": "Use programs and labs when teams need peer exchange and practical review."
+    },
+    "goToAssets": {
+      "label": "Go to assets",
+      "description": "Use the asset library when the team is ready for implementation-oriented exploration."
     }
   },
   "Footer": {
     "productSummary": "A unified entry point for scenarios, architectures, insights, and community practices that accelerate AI delivery asset reuse.",
     "navigation": "Navigation",
     "resources": "Resources",
-    "copyright": "© 2026 Hyperscaler Asset Hub. All rights reserved."
+    "copyright": "\u00a9 2026 Hyperscaler Asset Hub. All rights reserved.",
+    "aboutHub": "ABOUT THE HUB",
+    "aboutHubDescription": "Discover scenario-led content, reference architecture thinking, and implementation-ready delivery assets from one branded platform.",
+    "sections": "SECTIONS",
+    "startHere": "START HERE",
+    "assetLibrary": "Asset Library",
+    "signIn": "Sign in",
+    "aboutPlatform": "About the platform"
   },
   "ContentLanes": {
     "eyebrow": "CONTENT LANES",
@@ -224,17 +297,37 @@
     "notFound": "The requested resource was not found.",
     "validation": "Please review the form and try again."
   },
+  "ErrorBoundary": {
+    "somethingWentWrong": "Something went wrong",
+    "unexpectedError": "An unexpected error occurred. Please try reloading the page or return home.",
+    "errorDetails": "Error details",
+    "reloadPage": "Reload page",
+    "backToHome": "Back to home"
+  },
   "RouteGuard": {
     "checking": "Checking access",
+    "checkingMessage": "Checking your session before loading admin tools.",
     "redirecting": "Redirecting to sign-in",
+    "signinRequired": "You need to sign in before accessing admin routes.",
     "protectedRoute": "Protected route",
     "adminRequired": "Admin access is required to continue."
+  },
+  "Auth": {
+    "authentication": "Authentication",
+    "redirectingToSignIn": "Redirecting to sign in",
+    "workspaceContext": "Workspace context",
+    "workspaceContextDesc": "Keep the current workspace in focus while the session is restored.",
+    "libraryReturnPath": "Library return path",
+    "libraryReturnPathDesc": "You can always return to the public library after authentication.",
+    "publicLibraryAvailable": "Public library remains available for discovery.",
+    "goToPublicLibrary": "Go to public library"
   },
   "PublicSite": {
     "skipToContent": "Skip to content",
     "ctaLabel": "Sign in",
     "navLabel": "Public site navigation",
     "brandName": "Hyperscaler Asset Hub",
+    "brandTagline": "AI delivery content platform",
     "section": {
       "overview": "Overview",
       "metrics": "Metrics",
@@ -257,549 +350,6 @@
     "about": "About",
     "assets": "Assets",
     "admin": "Admin"
-  },
-  "Scenarios": {
-    "eyebrow": "SCENARIOS",
-    "title": "Explore AI delivery scenarios by business journey",
-    "summary": "Each scenario connects business outcomes, phases, metrics, and reusable reference architectures.",
-    "viewArchitectures": "View Architectures",
-    "joinCommunity": "Join the Community",
-    "allScenarios": "All Scenarios",
-    "relatedArchitectures": "Related Architectures",
-    "businessOutcome": "Business outcome",
-    "industry": "Industry",
-    "phases": "Phases",
-    "items": {
-      "intelligentCustomerOperations": {
-        "slug": "intelligent-customer-operations",
-        "title": "Intelligent Customer Operations",
-        "eyebrow": "Scenario",
-        "summary": "Reframe service operations around grounded copilots, policy-aware automation, and continuous quality loops.",
-        "industry": "Telecom",
-        "businessOutcome": "Reduce handling time while raising first-contact resolution across digital and voice channels.",
-        "tags": [
-          "Contact Center",
-          "Agent Assist",
-          "Knowledge Grounding"
-        ],
-        "metrics": [
-          {
-            "label": "Average Handle Time",
-            "value": "-28%"
-          },
-          {
-            "label": "FCR Lift",
-            "value": "+17 pts"
-          },
-          {
-            "label": "Knowledge Reuse",
-            "value": "3.2x"
-          }
-        ],
-        "phases": [
-          {
-            "title": "Observe and prioritize",
-            "description": "Map high-volume intents, exception paths, policy dependencies, and current leakage points across channels."
-          },
-          {
-            "title": "Ground and automate",
-            "description": "Introduce retrieval-backed copilots, guided resolution playbooks, and event-driven follow-up actions."
-          },
-          {
-            "title": "Measure and optimize",
-            "description": "Track containment quality, escalations, and sentiment recovery through weekly improvement loops."
-          }
-        ],
-        "relatedArchitectureSlugs": [
-          "agentic-service-mesh",
-          "knowledge-governance-fabric"
-        ]
-      },
-      "regulatedRiskCaseOrchestration": {
-        "slug": "regulated-risk-case-orchestration",
-        "title": "Regulated Risk Case Orchestration",
-        "eyebrow": "Scenario",
-        "summary": "Coordinate document review, analyst workbenches, and human approvals for high-trust financial workflows.",
-        "industry": "Banking",
-        "businessOutcome": "Shorten risk review lead time without weakening traceability, approvals, or policy controls.",
-        "tags": [
-          "Risk Ops",
-          "Human in the Loop",
-          "Policy Control"
-        ],
-        "metrics": [
-          {
-            "label": "Case Cycle Time",
-            "value": "-41%"
-          },
-          {
-            "label": "Analyst Capacity",
-            "value": "+22%"
-          },
-          {
-            "label": "Audit Readiness",
-            "value": "99.5%"
-          }
-        ],
-        "phases": [
-          {
-            "title": "Standardize evidence intake",
-            "description": "Normalize documents, transaction records, and reviewer notes into a consistent case timeline."
-          },
-          {
-            "title": "Assist decision preparation",
-            "description": "Surface anomalies, pre-populate rationales, and align recommendations with internal control language."
-          },
-          {
-            "title": "Close with lineage",
-            "description": "Persist every decision, override, and supporting artifact for downstream audit and model governance."
-          }
-        ],
-        "relatedArchitectureSlugs": [
-          "trust-control-plane",
-          "knowledge-governance-fabric"
-        ]
-      },
-      "fieldServiceKnowledgeAcceleration": {
-        "slug": "field-service-knowledge-acceleration",
-        "title": "Field Service Knowledge Acceleration",
-        "eyebrow": "Scenario",
-        "summary": "Equip technicians with multimodal guidance, parts intelligence, and job-completion capture in the flow of work.",
-        "industry": "Industrial",
-        "businessOutcome": "Lift first-time fix rates and compress onboarding time for newly trained field teams.",
-        "tags": [
-          "Field Service",
-          "Vision Assist",
-          "Work Instructions"
-        ],
-        "metrics": [
-          {
-            "label": "First-Time Fix",
-            "value": "+13 pts"
-          },
-          {
-            "label": "Onboarding Time",
-            "value": "-35%"
-          },
-          {
-            "label": "Repeat Visits",
-            "value": "-18%"
-          }
-        ],
-        "phases": [
-          {
-            "title": "Digitize tacit knowledge",
-            "description": "Capture expert procedures, parts dependencies, and exception handling into guided digital playbooks."
-          },
-          {
-            "title": "Assist on site",
-            "description": "Blend asset history, troubleshooting trees, and visual recognition into a single field experience."
-          },
-          {
-            "title": "Feed the loop",
-            "description": "Convert job outcomes and technician feedback into refreshed content and improved dispatch logic."
-          }
-        ],
-        "relatedArchitectureSlugs": [
-          "edge-inference-backbone"
-        ]
-      }
-    }
-  },
-  "Architectures": {
-    "eyebrow": "ARCHITECTURE",
-    "title": "Reference architectures for trusted AI delivery",
-    "summary": "Use reusable patterns to connect experience, orchestration, knowledge, controls, and execution layers.",
-    "browseScenarios": "Browse Scenarios",
-    "readInsights": "Read Insights",
-    "allArchitectures": "All Architectures",
-    "relatedScenarios": "Related Scenarios",
-    "focus": "Focus",
-    "layers": "Layers",
-    "governance": "Governance",
-    "deploymentNotes": "Deployment notes",
-    "items": {
-      "agenticServiceMesh": {
-        "slug": "agentic-service-mesh",
-        "title": "Agentic Service Mesh",
-        "eyebrow": "Reference Architecture",
-        "summary": "A modular orchestration pattern for copilots and automations that separates policy, memory, routing, and execution.",
-        "focus": "Enterprise service operations",
-        "tags": [
-          "Orchestration",
-          "Observability",
-          "Human Approval"
-        ],
-        "layers": [
-          {
-            "title": "Experience layer",
-            "description": "Desktop, CRM, portal, and channel integrations surface task context, recommendations, and approvals."
-          },
-          {
-            "title": "Agent orchestration layer",
-            "description": "Intent routing, prompt composition, tool calling, fallback logic, and supervisor controls live here."
-          },
-          {
-            "title": "Knowledge and memory layer",
-            "description": "Document retrieval, semantic memory, conversation state, and policy references are versioned and governed."
-          },
-          {
-            "title": "Execution layer",
-            "description": "Workflow engines and enterprise systems execute updates, case actions, notifications, and data writes."
-          }
-        ],
-        "governance": [
-          "Separate prompt assets from policy assets for independent review.",
-          "Log every tool call, approval handoff, and generated rationale.",
-          "Maintain rollback controls for model and retrieval changes."
-        ],
-        "deploymentNotes": [
-          "Start with a narrow domain and one channel before broadening tool access.",
-          "Use shared tracing identifiers across orchestration and downstream systems.",
-          "Treat confidence thresholds as business controls, not model-only settings."
-        ],
-        "relatedScenarioSlugs": [
-          "intelligent-customer-operations"
-        ]
-      },
-      "knowledgeGovernanceFabric": {
-        "slug": "knowledge-governance-fabric",
-        "title": "Knowledge Governance Fabric",
-        "eyebrow": "Reference Architecture",
-        "summary": "A governed content pipeline for high-trust retrieval use cases where freshness, lineage, and approval matter.",
-        "focus": "Knowledge-intensive regulated workflows",
-        "tags": [
-          "RAG",
-          "Lineage",
-          "Content Lifecycle"
-        ],
-        "layers": [
-          {
-            "title": "Source ingestion",
-            "description": "Policies, documents, tickets, and expert notes are normalized, classified, and version controlled on ingest."
-          },
-          {
-            "title": "Curation layer",
-            "description": "Editorial workflows detect conflicts, missing metadata, and stale assets before publication to retrieval."
-          },
-          {
-            "title": "Serving layer",
-            "description": "Search indexes, embeddings, and authorization-aware retrieval deliver context by persona and workflow state."
-          },
-          {
-            "title": "Feedback loop",
-            "description": "Usage analytics, missing-answer reports, and reviewer overrides feed ongoing curation and retirement decisions."
-          }
-        ],
-        "governance": [
-          "Attach source lineage and review status to every retrievable artifact.",
-          "Enforce access scopes before retrieval and before answer generation.",
-          "Measure retrieval quality with human review on sensitive use cases."
-        ],
-        "deploymentNotes": [
-          "Define a publication SLA for high-volatility policy domains.",
-          "Separate draft, approved, and retired knowledge states in storage and UX.",
-          "Use business ownership for content freshness, not only platform ownership."
-        ],
-        "relatedScenarioSlugs": [
-          "intelligent-customer-operations",
-          "regulated-risk-case-orchestration"
-        ]
-      },
-      "trustControlPlane": {
-        "slug": "trust-control-plane",
-        "title": "Trust Control Plane",
-        "eyebrow": "Reference Architecture",
-        "summary": "A cross-cutting control plane for evaluation, approval, policy enforcement, and operational risk management.",
-        "focus": "High-assurance decision support",
-        "tags": [
-          "Control Plane",
-          "Evaluation",
-          "Assurance"
-        ],
-        "layers": [
-          {
-            "title": "Policy definition",
-            "description": "Business rules, escalation thresholds, and approval routes are declared as reusable controls."
-          },
-          {
-            "title": "Runtime enforcement",
-            "description": "Requests are evaluated for access, confidence, risk class, and mandatory review before action execution."
-          },
-          {
-            "title": "Evaluation services",
-            "description": "Offline and online evaluations score recommendation quality, hallucination risk, and drift indicators."
-          },
-          {
-            "title": "Evidence store",
-            "description": "Decision packets, review outcomes, and audit artifacts are retained for governance and remediation."
-          }
-        ],
-        "governance": [
-          "Promote controls independently from model or workflow changes.",
-          "Make exception handling explicit with owner, expiry, and rationale.",
-          "Use policy simulation before releasing controls to production."
-        ],
-        "deploymentNotes": [
-          "Integrate with case systems early to preserve analyst trust.",
-          "Treat eval datasets as governed assets with periodic refresh cycles.",
-          "Give risk teams self-service visibility without requiring engineering changes."
-        ],
-        "relatedScenarioSlugs": [
-          "regulated-risk-case-orchestration"
-        ]
-      },
-      "edgeInferenceBackbone": {
-        "slug": "edge-inference-backbone",
-        "title": "Edge Inference Backbone",
-        "eyebrow": "Reference Architecture",
-        "summary": "A resilient pattern for field and plant environments where local assistive intelligence must tolerate connectivity gaps.",
-        "focus": "Field and frontline execution",
-        "tags": [
-          "Edge",
-          "Offline First",
-          "Device Telemetry"
-        ],
-        "layers": [
-          {
-            "title": "Device experience",
-            "description": "Tablet, rugged device, and wearable surfaces provide guided tasks, image capture, and parts lookup."
-          },
-          {
-            "title": "Local inference and cache",
-            "description": "Compact models and curated knowledge bundles support on-site assistance when bandwidth is constrained."
-          },
-          {
-            "title": "Sync and telemetry",
-            "description": "Bi-directional sync handles work orders, asset updates, and deferred evidence uploads."
-          },
-          {
-            "title": "Central learning loop",
-            "description": "Headquarters teams retrain, review field outcomes, and publish improved playbooks back to the edge."
-          }
-        ],
-        "governance": [
-          "Bound local model scope to approved offline tasks.",
-          "Encrypt local caches and expire sensitive content automatically.",
-          "Separate operational telemetry from worker performance management data."
-        ],
-        "deploymentNotes": [
-          "Design graceful degradation before optimizing peak online performance.",
-          "Version field playbooks to avoid ambiguous instructions across crews.",
-          "Instrument sync success and stale-content rates as first-class health metrics."
-        ],
-        "relatedScenarioSlugs": [
-          "field-service-knowledge-acceleration"
-        ]
-      }
-    }
-  },
-  "Insights": {
-    "eyebrow": "INSIGHTS",
-    "title": "Short insights that help teams align operating choices",
-    "summary": "Use practical perspectives to connect governance, experience design, knowledge systems, and productized delivery.",
-    "reviewArchitectures": "Review Architectures",
-    "allInsights": "All Insights",
-    "keyPoints": "Key points",
-    "published": "Published",
-    "readTime": "Read time",
-    "items": {
-      "fromPrototypesToGovernedAiProducts": {
-        "slug": "from-prototypes-to-governed-ai-products",
-        "title": "From Prototypes to Governed AI Products",
-        "category": "Operating Model",
-        "summary": "Why many pilots stall and what has to change in portfolio management, ownership, and delivery design.",
-        "publishDate": "2026-06-10",
-        "readTime": "6 min read",
-        "keyPoints": [
-          "Prototype success rarely predicts production adoption on its own.",
-          "Governance has to be embedded in product flow, not bolted on after launch.",
-          "Teams need reusable controls, shared telemetry, and clear asset ownership."
-        ],
-        "bodySections": [
-          {
-            "title": "The failure mode",
-            "description": "Many pilots prove a model can generate outputs, but they do not prove that the surrounding workflow can absorb those outputs safely and repeatedly."
-          },
-          {
-            "title": "What scales",
-            "description": "The strongest programs industrialize evaluation, prompt and policy versioning, and business-ready review paths before multiplying use cases."
-          },
-          {
-            "title": "What to do next",
-            "description": "Treat AI delivery as a product portfolio with clear service tiers, reusable components, and operating metrics that matter to business owners."
-          }
-        ]
-      },
-      "designingRetrievalForHighTrustWorkflows": {
-        "slug": "designing-retrieval-for-high-trust-workflows",
-        "title": "Designing Retrieval for High-Trust Workflows",
-        "category": "Knowledge Systems",
-        "summary": "Retrieval quality depends as much on editorial and governance systems as it does on embeddings and chunking.",
-        "publishDate": "2026-05-27",
-        "readTime": "5 min read",
-        "keyPoints": [
-          "Freshness and lineage matter more as consequence increases.",
-          "Authorization and review state must travel with the content.",
-          "Missing-answer analytics are a product signal, not an edge case."
-        ],
-        "bodySections": [
-          {
-            "title": "Shift the question",
-            "description": "The real design problem is not only how to find similar text, but how to serve the right approved context to the right role at the right point in a workflow."
-          },
-          {
-            "title": "Editorial systems are part of the architecture",
-            "description": "Without clear review, ownership, and retirement patterns, even strong retrieval infrastructure degrades into a confidence problem for end users."
-          },
-          {
-            "title": "Measure usefulness, not only relevance",
-            "description": "Useful retrieval reduces back-and-forth, supports action completion, and exposes when the system cannot answer with confidence."
-          }
-        ]
-      },
-      "whyAgentExperienceNeedsJourneyDesign": {
-        "slug": "why-agent-experience-needs-journey-design",
-        "title": "Why Agent Experience Needs Journey Design",
-        "category": "Experience Design",
-        "summary": "Copilots fail when they are inserted as side widgets instead of being designed around the job-to-be-done.",
-        "publishDate": "2026-04-18",
-        "readTime": "4 min read",
-        "keyPoints": [
-          "Assistive AI should reduce decisions, not create another interface to manage.",
-          "Journey mapping reveals where confidence and approvals really matter.",
-          "The best experiences combine automation with transparent next-best actions."
-        ],
-        "bodySections": [
-          {
-            "title": "Move from feature thinking to journey thinking",
-            "description": "Users do not want a chatbot feature; they want a shorter, clearer path to a completed outcome with fewer risky decisions."
-          },
-          {
-            "title": "Design for confidence",
-            "description": "Grounding signals, source previews, and approval checkpoints make assistance easier to trust in real operating contexts."
-          },
-          {
-            "title": "Design for handoff",
-            "description": "Human takeover, escalation, and case continuity should feel native, not like failure states."
-          }
-        ]
-      }
-    }
-  },
-  "Community": {
-    "eyebrow": "COMMUNITY",
-    "title": "Connect with practitioners, labs, and working groups",
-    "summary": "Join community programs around reusable AI delivery patterns, governance, and architecture practices.",
-    "readInsights": "Read Insights",
-    "exploreScenarios": "Explore Scenarios",
-    "allPrograms": "All Community Programs",
-    "agenda": "Agenda",
-    "resources": "Resources",
-    "audience": "Audience",
-    "location": "Location",
-    "format": "Format",
-    "items": {
-      "buildersRoundtableQ3": {
-        "slug": "builders-roundtable-q3",
-        "title": "Builders Roundtable Q3",
-        "format": "Roundtable",
-        "summary": "A peer forum for platform, architecture, and product leaders aligning on reusable enterprise AI delivery patterns.",
-        "audience": "Enterprise architects and product owners",
-        "dateLabel": "2026-07-18",
-        "location": "Hybrid / Singapore",
-        "agenda": [
-          {
-            "title": "Reusable platform patterns",
-            "description": "Share delivery accelerators, control models, and rollout sequencing across teams."
-          },
-          {
-            "title": "Assurance at scale",
-            "description": "Compare evaluation practices, release gates, and business-facing evidence models."
-          },
-          {
-            "title": "Working session",
-            "description": "Map common blockers and publish a short pattern pack after the event."
-          }
-        ],
-        "resources": [
-          {
-            "label": "Request invitation",
-            "href": "/about"
-          },
-          {
-            "label": "See related insights",
-            "href": "/insights"
-          }
-        ]
-      },
-      "fieldAiPractitionerLab": {
-        "slug": "field-ai-practitioner-lab",
-        "title": "Field AI Practitioner Lab",
-        "format": "Hands-on Lab",
-        "summary": "A practical program focused on frontline and field-service AI patterns, from knowledge capture to edge delivery.",
-        "audience": "Operations leads and field transformation teams",
-        "dateLabel": "2026-08-06",
-        "location": "Onsite / Kuala Lumpur",
-        "agenda": [
-          {
-            "title": "Workflow teardown",
-            "description": "Decompose current field journeys into assistive moments, controls, and measurable outcomes."
-          },
-          {
-            "title": "Architecture clinic",
-            "description": "Review offline-first design choices, sync boundaries, and device telemetry needs."
-          },
-          {
-            "title": "Capability roadmap",
-            "description": "Translate lab findings into a staged delivery roadmap with readiness checkpoints."
-          }
-        ],
-        "resources": [
-          {
-            "label": "Explore scenarios",
-            "href": "/scenarios"
-          },
-          {
-            "label": "Review reference architecture",
-            "href": "/architecture/edge-inference-backbone"
-          }
-        ]
-      },
-      "governedRagWorkingGroup": {
-        "slug": "governed-rag-working-group",
-        "title": "Governed RAG Working Group",
-        "format": "Working Group",
-        "summary": "A recurring collaboration stream for teams building retrieval-heavy experiences in regulated or high-trust domains.",
-        "audience": "Knowledge platform teams and governance leads",
-        "dateLabel": "Monthly",
-        "location": "Virtual",
-        "agenda": [
-          {
-            "title": "Pattern review",
-            "description": "Discuss content lifecycle, authorization-aware retrieval, and line-of-defense responsibilities."
-          },
-          {
-            "title": "Metrics exchange",
-            "description": "Benchmark freshness, missing-answer rates, and reviewer intervention across implementations."
-          },
-          {
-            "title": "Artifact share-out",
-            "description": "Publish templates, governance checklists, and architecture reference notes for members."
-          }
-        ],
-        "resources": [
-          {
-            "label": "Read retrieval insight",
-            "href": "/insights/designing-retrieval-for-high-trust-workflows"
-          },
-          {
-            "label": "Meet the team",
-            "href": "/about"
-          }
-        ]
-      }
-    }
   },
   "Admin": {
     "overview": {
@@ -880,69 +430,329 @@
     },
     "assets": {
       "title": "Assets",
-      "description": "Content assets, publishing status, and governance actions.",
+      "description": "Manage discovery, publication, and lifecycle for reusable platform assets.",
+      "descriptionShort": "Content assets, publishing status, and governance actions.",
       "newAsset": "New asset",
       "editAsset": "Edit asset",
-      "assetList": "Asset list"
+      "assetList": "Asset list",
+      "createNewAsset": "Create New Asset",
+      "createDescription": "Create a new asset entry.",
+      "editDescription": "Edit asset entry.",
+      "columnTitle": "Title",
+      "columnType": "Type",
+      "columnStatus": "Status",
+      "columnVisibility": "Visibility",
+      "columnCloud": "Cloud",
+      "columnActions": "Actions",
+      "publish": "Publish",
+      "unpublish": "Unpublish",
+      "restore": "Restore",
+      "archive": "Archive",
+      "noAssetsFound": "No assets found",
+      "noAssetsDescription": "Get started by creating a new asset.",
+      "deleteSuccess": "Asset deleted",
+      "publishSuccess": "Asset published",
+      "archiveSuccess": "Asset archived",
+      "unpublishSuccess": "Asset reverted to draft",
+      "restoreSuccess": "Asset restored to draft",
+      "publishFailed": "Publish failed, please complete required fields.",
+      "publishFailedFields": "Publish failed, please complete: {fields}",
+      "batchDeleteSuccess": "{deleted} assets deleted",
+      "batchDeletePartial": "{deleted} assets deleted, {failed} failed",
+      "confirmDelete": "Confirm delete",
+      "confirmDeleteMessage": "Are you sure you want to delete asset \"{title}\"? This action cannot be undone.",
+      "confirmDeleteGeneric": "Are you sure you want to delete this asset?",
+      "confirmBatchDelete": "Confirm batch delete",
+      "confirmBatchDeleteMessage": "Are you sure you want to delete {count} selected assets? This action cannot be undone.",
+      "eyebrow": "ASSETS",
+      "summary": "Manage discovery, publication, and lifecycle for reusable platform assets.",
+      "totalAssets": "Total assets",
+      "totalAssetsDescription": "Content assets governed through operations and publishing controls.",
+      "allAssets": "All assets",
+      "createNew": "Create new asset",
+      "empty": "No assets found",
+      "type": "Type",
+      "status": "Status",
+      "created": "Created"
     },
     "roles": {
       "title": "Roles",
-      "description": "Role definitions, responsibility boundaries, and authorization scopes."
+      "description": "Role definitions, responsibility boundaries, and authorization scopes.",
+      "descriptionLong": "View role definitions, permission sets, and policy bindings. Fields align with known API keys while preserving the raw response for debugging.",
+      "backToAdmin": "Back",
+      "roleCount": "ROLE COUNT",
+      "overview": "Overview",
+      "overviewDescription": "When the API returns an inconsistent schema, the page still shows raw JSON for field mapping debugging.",
+      "createRole": "Create Role",
+      "editRole": "Edit Role",
+      "roleName": "Role Name",
+      "userIds": "User IDs",
+      "description_label": "Description",
+      "descriptionPlaceholder": "Describe the ownership boundary and permission intent for this role.",
+      "availableUsers": "AVAILABLE USERS",
+      "boundPolicies": "BOUND POLICIES",
+      "updated": "UPDATED",
+      "permissions": "PERMISSIONS",
+      "permissionCount": "{count} permissions",
+      "noUsersLoaded": "No users loaded.",
+      "noPolicyMetadata": "No policy metadata",
+      "noPermissionList": "No permission list returned",
+      "noRolesFound": "No roles found",
+      "noRolesDescription": "No roles available.",
+      "roleCreated": "Role created successfully.",
+      "roleUpdated": "Role updated successfully.",
+      "roleDeleted": "Role deleted successfully.",
+      "creating": "Creating...",
+      "updating": "Updating...",
+      "deleting": "Deleting...",
+      "selectAll": "Select all ({selected}/{total})",
+      "batchDeleteFailed": "Batch delete failed: {count} roles could not be deleted",
+      "batchDeleteSuccess": "{count} roles deleted",
+      "confirmBatchDelete": "Confirm batch delete",
+      "confirmBatchDeleteMessage": "Are you sure you want to delete {count} selected roles? This action cannot be undone.",
+      "confirmDeleteRole": "Are you sure you want to delete this role?",
+      "viewRawResponse": "View raw role response"
     },
     "users": {
       "title": "Users",
-      "description": "Account activity, availability, and MFA views."
+      "description": "Account activity, availability, and MFA views.",
+      "createUser": "Create user",
+      "email": "Email",
+      "twoFactor": "2FA",
+      "status": "Status",
+      "actions": "Actions",
+      "enabled": "Enabled",
+      "disabled": "Disabled",
+      "active": "Active",
+      "noUsers": "No users yet",
+      "noUsersDescription": "Click the \"Create user\" button above to add the first user.",
+      "userCreated": "User created successfully",
+      "userUpdated": "User updated successfully",
+      "userDeleted": "User deleted successfully",
+      "fetchFailed": "Failed to fetch user list. Please check your network connection.",
+      "confirmDelete": "Confirm delete",
+      "confirmDeleteMessage": "Are you sure you want to delete user \"{email}\"? This action cannot be undone.",
+      "confirmDeleteGeneric": "Are you sure you want to delete this user?",
+      "confirmBatchDelete": "Confirm batch delete",
+      "confirmBatchDeleteMessage": "Are you sure you want to delete {count} selected users? This action cannot be undone.",
+      "batchDeleteFailed": "Batch delete failed: {count} users could not be deleted",
+      "batchDeleteSuccess": "{count} users deleted"
     },
     "templates": {
       "title": "Templates",
-      "description": "Template library, structural reuse, and content baselines."
+      "description": "Template library, structural reuse, and content baselines.",
+      "descriptionLong": "Manage content templates for quickly creating asset content blocks.",
+      "backToAdmin": "Back",
+      "contentTemplates": "Content templates",
+      "createFromCurrent": "Create from current content",
+      "saveAsTemplate": "Save as template",
+      "templateName": "Template name",
+      "descriptionPlaceholder": "Description (optional)",
+      "builtin": "Built-in",
+      "blockCount": "{count} content blocks",
+      "noTemplates": "No templates yet",
+      "loading": "Loading...",
+      "save": "Save",
+      "saving": "Saving...",
+      "cancel": "Cancel",
+      "createSuccess": "Template created",
+      "updateSuccess": "Template updated",
+      "deleteSuccess": "Template deleted",
+      "loadFailed": "Failed to load",
+      "deleteFailed": "Failed to delete",
+      "updateFailed": "Failed to update",
+      "createFailed": "Failed to create"
     },
     "policies": {
       "title": "Policies",
-      "description": "Access rules, condition combinations, and execution semantics."
+      "description": "Access rules, condition combinations, and execution semantics.",
+      "descriptionLong": "View policy scope, subject ranges, resource constraints, and condition summaries. The raw response is preserved for continued field mapping refinement.",
+      "backToAdmin": "Back",
+      "createPolicy": "Create Policy",
+      "editPolicy": "Edit Policy",
+      "createWithWizard": "Create with Wizard",
+      "policyName": "Policy Name",
+      "effect": "Effect",
+      "permissions": "Permissions",
+      "resourceType": "Resource Type",
+      "resourceVisibility": "Resource Visibility",
+      "roleNames": "Role Names",
+      "subjects": "SUBJECTS",
+      "actions": "ACTIONS",
+      "resources": "RESOURCES",
+      "conditions": "CONDITIONS",
+      "updated": "UPDATED",
+      "noSubjectScope": "No subject scope",
+      "noActions": "No actions",
+      "noResources": "No resources",
+      "noConditions": "No conditions",
+      "noRoleSuggestions": "No role suggestions loaded.",
+      "noPoliciesFound": "No policies found",
+      "noPoliciesDescription": "No policies available.",
+      "policyCreated": "Policy created successfully.",
+      "policyUpdated": "Policy updated successfully.",
+      "policyDeleted": "Policy deleted successfully.",
+      "creating": "Creating...",
+      "updating": "Updating...",
+      "confirm": "Confirm",
+      "selectAll": "Select all ({selected}/{total})",
+      "batchDeleteFailed": "Batch delete failed: {count} policies could not be deleted",
+      "batchDeleteSuccess": "{count} policies deleted",
+      "confirmBatchDelete": "Confirm batch delete",
+      "confirmBatchDeleteMessage": "Are you sure you want to delete {count} selected policies? This action cannot be undone.",
+      "viewRawResponse": "View raw policy response"
     },
     "policyWizard": {
-      "title": "Policy wizard",
+      "title": "Policy Wizard",
       "description": "Create and validate access policies through a guided flow.",
+      "descriptionLong": "Create access policies step by step: Template \u2192 Basics \u2192 Permissions \u2192 Scope & Review.",
       "steps": {
-        "scope": "Scope",
-        "conditions": "Conditions",
-        "review": "Review"
-      }
+        "template": "Template",
+        "basics": "Basics",
+        "permissions": "Permissions",
+        "scopeReview": "Scope & Review"
+      },
+      "chooseTemplate": "Choose Template",
+      "blank": "Blank",
+      "blankDescription": "Start from scratch with effect, permissions, and scope.",
+      "allowPublicRead": "Allow Public Asset Read",
+      "allowPublicReadDescription": "Allow reading public assets.",
+      "denyRestrictedRead": "Deny Restricted Asset Read",
+      "denyRestrictedReadDescription": "Deny reading restricted assets.",
+      "denyPublicWrite": "Deny Public Asset Write",
+      "denyPublicWriteDescription": "Deny writing public assets.",
+      "selected": "Selected",
+      "currentDraft": "CURRENT DRAFT",
+      "currentPermissions": "CURRENT PERMISSIONS",
+      "currentRoles": "CURRENT ROLES",
+      "permissionsLabel": "Permissions (comma-separated)",
+      "roleNamesLabel": "Role Names (comma-separated)",
+      "noContent": "No content yet",
+      "previewPayload": "Preview create payload (JSON)",
+      "backToPolicies": "Back to Policies",
+      "draftSyncNote": "Drafts sync across steps; Next/Submit are enabled or disabled based on current step validation.",
+      "policyCreated": "Policy created successfully.",
+      "policyAlreadyExists": "Policy name already exists. Please choose a different name.",
+      "invalidRoleNames": "Contains invalid role names: {names}. Please refresh the role list or correct and retry.",
+      "invalidRoleNamesGeneric": "Contains invalid role names. Please refresh the role list or correct and retry.",
+      "preloadingRoles": "Preloading role list...",
+      "preloadedRoles": "Preloaded {count} roles for role_names suggestions.",
+      "noRolesFromApi": "Role API returned no data. You can still enter role_names manually.",
+      "submitting": "Submitting...",
+      "next": "Next",
+      "submit": "Submit",
+      "back": "Back"
     },
     "matrix": {
-      "title": "Matrix",
-      "description": "Joined view of roles and permissions matrix."
+      "title": "Permission Matrix",
+      "description": "Joined view of roles and permissions matrix.",
+      "descriptionLong": "Aggregate effective permission results by role and policy in real time, with support for resource_type, resource_visibility, and permission search. Select a cell to view matching policy sources.",
+      "backToAdmin": "Back",
+      "roles": "ROLES",
+      "rolesDescription": "Deduplicated by role name as matrix column headers, directly reflecting the current Admin role set.",
+      "policies": "POLICIES",
+      "policiesDescription": "Resolved policy effect, permission, role scope, and resource context for matrix aggregation.",
+      "rows": "Rows",
+      "columns": "Columns",
+      "selectCellHint": "Select a cell to view matching policies",
+      "noMatrixData": "No matrix data available",
+      "permissionSearch": "Permission search",
+      "resourceTypeFilter": "Resource type",
+      "resourceVisibilityFilter": "Resource visibility",
+      "refreshMatrix": "Refresh matrix"
     },
     "simulator": {
-      "title": "Simulator",
-      "description": "Authorization request validation and policy replay."
+      "title": "Policy Simulator",
+      "description": "Validate authorization requests and replay policy decisions.",
+      "descriptionLong": "Test authorization requests against current policies in real time. Adjust inputs to observe how role, resource, and condition combinations resolve to Allow or Deny.",
+      "backToAdmin": "Back",
+      "requestBuilder": "Request Builder",
+      "subject": "Subject",
+      "action": "Action",
+      "resource": "Resource",
+      "conditions": "Conditions",
+      "runSimulation": "Run simulation",
+      "simulating": "Simulating...",
+      "result": "Result",
+      "allowed": "Allowed",
+      "denied": "Denied",
+      "noResult": "No result yet. Build a request and run the simulation.",
+      "matchedPolicies": "Matched policies",
+      "noMatchedPolicies": "No policies matched this request.",
+      "errorTitle": "Simulation error",
+      "errorDescription": "The simulation could not be completed. Check the request format and try again."
     },
     "assetEditor": {
-      "title": "Asset editor",
-      "description": "Edit asset metadata, content blocks, sales details, and delivery guidance.",
+      "title": "Asset Editor",
+      "description": "Edit asset metadata, content blocks, sales, and delivery information.",
+      "backToAdmin": "Back to admin",
+      "saveDraft": "Save draft",
+      "publishAsset": "Publish asset",
+      "unpublishAsset": "Unpublish asset",
+      "archiveAsset": "Archive asset",
+      "restoreAsset": "Restore asset",
+      "deleteAsset": "Delete asset",
+      "confirmDelete": "Confirm delete",
+      "confirmDeleteMessage": "Are you sure you want to delete this asset? This action cannot be undone.",
       "fields": {
         "slug": "Slug",
         "title": "Title",
         "subtitle": "Subtitle",
         "shortDescription": "Short description",
-        "assetType": "Asset type"
-      }
+        "assetType": "Asset type",
+        "cloud": "Cloud",
+        "industry": "Industry",
+        "technology": "Technology",
+        "status": "Status",
+        "visibility": "Visibility",
+        "tags": "Tags",
+        "salesValue": "Sales value",
+        "differentiators": "Differentiators",
+        "outcomes": "Outcomes",
+        "prerequisites": "Prerequisites",
+        "rolloutSteps": "Rollout steps",
+        "useCases": "Use cases",
+        "demoUrl": "Demo URL",
+        "documentationUrl": "Documentation URL"
+      },
+      "contentBlocks": "Content blocks",
+      "addBlock": "Add block",
+      "blockTypes": {
+        "text": "Text",
+        "image": "Image",
+        "video": "Video",
+        "code": "Code",
+        "link": "Link"
+      },
+      "salesLens": "Sales lens",
+      "deliveryLens": "Delivery lens",
+      "videos": "Videos",
+      "manageVideos": "Manage videos"
     },
     "videoManager": {
-      "title": "Video manager",
-      "description": "Manage demo videos, poster images, descriptions, and primary video flags.",
+      "title": "Video Manager",
+      "description": "Manage demo videos, poster images, captions, and primary video flags.",
       "addVideo": "Add video",
-      "setPrimary": "Set primary",
-      "removeVideo": "Remove video"
+      "setPrimary": "Set as primary",
+      "removeVideo": "Remove video",
+      "videoUrl": "Video URL",
+      "posterUrl": "Poster URL",
+      "title": "Title",
+      "description": "Description",
+      "primary": "Primary",
+      "noVideos": "No videos added yet.",
+      "dragToReorder": "Drag to reorder"
     },
     "shell": {
-      "brand": "HSAH ADMIN",
+      "brand": "HSAH Admin",
       "workspace": "Operations workspace",
       "summary": "Continuously manage assets, templates, identities, and access controls."
     },
     "sidebar": {
-      "ariaLabel": "Admin sections",
+      "ariaLabel": "Admin modules",
+      "workspaceTitle": "Operations workspace",
+      "workspaceDescription": "Continuously manage assets, templates, identities, and access controls.",
+      "navLabel": "Admin modules",
       "overview": "Overview",
       "assets": "Assets",
       "templates": "Templates",
@@ -953,17 +763,173 @@
       "simulator": "Simulator"
     },
     "topbar": {
-      "workspaceLabel": "ADMIN WORKSPACE",
+      "workspaceLabel": "Admin workspace",
       "summary": "Shared shell for governance workflows, publishing controls, and access operations.",
       "quickJump": "Quick jump across admin surfaces",
       "protectedRoutesActive": "Protected routes active",
-      "openLibrary": "Open library",
-      "breadcrumb": "Breadcrumb"
+      "openLibrary": "Open asset library",
+      "breadcrumb": "Breadcrumb",
+      "toggleMenu": "Toggle menu",
+      "logout": "Logout",
+      "login": "Login",
+      "mobileMenuPlaceholder": "Menu"
     },
     "layout": {
       "defaultTitle": "Admin",
       "loading": "Loading admin workspace",
       "contentLabel": "Admin content"
+    },
+    "assetEditorForm": {
+      "title": "Asset Editor",
+      "slug": "Slug",
+      "slugPlaceholder": "e.g. my-asset-slug",
+      "titleLabel": "Title",
+      "titlePlaceholder": "Enter asset title",
+      "subtitle": "Subtitle",
+      "subtitlePlaceholder": "Enter subtitle",
+      "shortDescription": "Short description",
+      "shortDescriptionPlaceholder": "Brief description shown in listings",
+      "assetType": "Asset type",
+      "selectAssetType": "Select asset type",
+      "cloud": "Cloud",
+      "selectCloud": "Select cloud provider",
+      "industry": "Industry",
+      "selectIndustry": "Select industry",
+      "technology": "Technology",
+      "selectTechnology": "Select technology",
+      "status": "Status",
+      "selectStatus": "Select status",
+      "visibility": "Visibility",
+      "selectVisibility": "Select visibility",
+      "tags": "Tags",
+      "tagsPlaceholder": "Add tags separated by commas",
+      "salesValue": "Sales value",
+      "salesValuePlaceholder": "Describe the sales value proposition",
+      "differentiators": "Differentiators",
+      "differentiatorsPlaceholder": "What makes this asset unique?",
+      "outcomes": "Outcomes",
+      "outcomesPlaceholder": "Expected business outcomes",
+      "prerequisites": "Prerequisites",
+      "prerequisitesPlaceholder": "What is needed before using this asset?",
+      "rolloutSteps": "Rollout steps",
+      "rolloutStepsPlaceholder": "Steps to implement or deploy",
+      "useCases": "Use cases",
+      "useCasesPlaceholder": "Describe use cases",
+      "demoUrl": "Demo URL",
+      "demoUrlPlaceholder": "https://...",
+      "documentationUrl": "Documentation URL",
+      "documentationUrlPlaceholder": "https://...",
+      "basicInfo": "Basic information",
+      "metadata": "Metadata",
+      "salesLens": "Sales lens",
+      "deliveryLens": "Delivery lens",
+      "contentBlocks": "Content blocks",
+      "addBlock": "Add block",
+      "blockTypes": {
+        "text": "Text",
+        "image": "Image",
+        "video": "Video",
+        "code": "Code",
+        "link": "Link"
+      },
+      "cancel": "Cancel",
+      "save": "Save",
+      "saving": "Saving...",
+      "required": "Required"
+    },
+    "assetVideoManager": {
+      "title": "Video Manager",
+      "primary": "Primary",
+      "videoNumber": "Video {number}",
+      "setPrimary": "Set as primary",
+      "delete": "Delete",
+      "addVideo": "Add video",
+      "videoUrl": "Video URL",
+      "posterUrl": "Poster URL",
+      "videoTitle": "Title",
+      "videoDescription": "Description",
+      "noVideos": "No videos added yet.",
+      "dragToReorder": "Drag to reorder"
+    },
+    "templateManager": {
+      "title": "Templates",
+      "createFromCurrent": "Create from current content",
+      "loading": "Loading...",
+      "empty": "No templates yet",
+      "builtin": "Built-in",
+      "blockCount": "{count} content blocks",
+      "save": "Save",
+      "saving": "Saving...",
+      "cancel": "Cancel",
+      "templateName": "Template name",
+      "descriptionPlaceholder": "Description (optional)",
+      "edit": "Edit",
+      "delete": "Delete",
+      "confirmDelete": "Confirm delete",
+      "cancelDelete": "Cancel",
+      "saveAsTemplate": "Save as template",
+      "namePlaceholder": "Template name",
+      "loadFailed": "Failed to load templates",
+      "deleteFailed": "Failed to delete template",
+      "updateFailed": "Failed to update template",
+      "createFailed": "Failed to create template"
+    },
+    "permissionMatrix": {
+      "permissionHeader": "Permission",
+      "emptyFilter": "No matching results",
+      "policiesCount": "{count} policies",
+      "noPolicy": "No policy"
+    },
+    "permissionMatrixDetail": {
+      "title": "Permission Detail",
+      "emptyDescription": "Select a cell to view detailed permission analysis.",
+      "clickHint": "Click on a cell in the matrix to see which policies match.",
+      "selectedCell": "Selected cell",
+      "role": "Role",
+      "reason": "Reason",
+      "matchedPolicies": "Matched policies",
+      "noPolicies": "No policies matched this combination.",
+      "relatedViews": "Related views",
+      "openRoles": "Open roles",
+      "openPolicies": "Open policies",
+      "openSimulator": "Open simulator"
+    },
+    "userFormModal": {
+      "createUser": "Create user",
+      "editUser": "Edit user",
+      "email": "Email",
+      "emailRequired": "Email is required",
+      "emailInvalid": "Invalid email format",
+      "password": "Password",
+      "passwordRequired": "Password is required",
+      "enableAccount": "Enable account",
+      "enable2FA": "Enable 2FA",
+      "cancel": "Cancel",
+      "save": "Save",
+      "saving": "Saving..."
+    },
+    "batchActionBar": {
+      "selectedCount": "Selected {count} items",
+      "delete": "Delete",
+      "clearSelection": "Clear selection"
+    },
+    "pagination": {
+      "totalItems": "{total} items total",
+      "pageIndicator": "Page {currentPage}/{totalPages}",
+      "perPage": "{size} / page",
+      "previous": "Previous",
+      "next": "Next"
+    },
+    "tagInput": {
+      "removeTag": "Remove {tag}"
+    },
+    "templateSelector": {
+      "title": "Select template",
+      "loading": "Loading...",
+      "empty": "No templates available",
+      "apply": "Apply",
+      "builtin": "Built-in",
+      "blockCount": "{count} content blocks"
     }
   }
 }

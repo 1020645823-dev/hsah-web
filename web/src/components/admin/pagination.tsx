@@ -1,6 +1,7 @@
 "use client";
 
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 type PaginationProps = {
   total: number;
@@ -17,6 +18,7 @@ export function Pagination({
   onPageChange,
   onPageSizeChange,
 }: PaginationProps) {
+  const t = useTranslations("Admin");
   const totalPages = Math.max(1, Math.ceil(total / pageSize));
   const safePage = Math.min(Math.max(1, currentPage), totalPages);
 
@@ -42,7 +44,7 @@ export function Pagination({
     <div className="flex flex-wrap items-center justify-between gap-4 px-5 py-4 text-sm text-[var(--color-text-secondary)]">
       <div className="flex items-center gap-3">
         <span>
-          共 {total} 条，第 {safePage}/{totalPages} 页
+          {t("pagination.totalItems", { total })}，{t("pagination.pageIndicator", { currentPage: safePage, totalPages })}
         </span>
         {onPageSizeChange ? (
           <select
@@ -52,7 +54,7 @@ export function Pagination({
           >
             {[10, 20, 50].map((size) => (
               <option key={size} value={size}>
-                {size} / 页
+                {t("pagination.perPage", { size })}
               </option>
             ))}
           </select>
@@ -67,7 +69,7 @@ export function Pagination({
           className="flex items-center gap-1 rounded-md border border-[rgb(212_218_245_/12%)] px-2 py-1 text-xs text-[var(--color-text-primary)] transition-colors duration-150 hover:bg-white/5 disabled:cursor-not-allowed disabled:opacity-40"
         >
           <ChevronLeft className="h-3.5 w-3.5" />
-          上一页
+          {t("pagination.previous")}
         </button>
 
         <div className="flex items-center gap-1">
@@ -102,7 +104,7 @@ export function Pagination({
           disabled={safePage >= totalPages}
           className="flex items-center gap-1 rounded-md border border-[rgb(212_218_245_/12%)] px-2 py-1 text-xs text-[var(--color-text-primary)] transition-colors duration-150 hover:bg-white/5 disabled:cursor-not-allowed disabled:opacity-40"
         >
-          下一页
+          {t("pagination.next")}
           <ChevronRight className="h-3.5 w-3.5" />
         </button>
       </div>

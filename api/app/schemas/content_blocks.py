@@ -6,6 +6,7 @@ LATEST_ASSET_CONTENT_SCHEMA_VERSION = 2
 LATEST_BLOCK_VERSION = 2
 
 ContentBlockType = Literal["text", "stat_card", "image", "code_snippet", "callout"]
+ContentAudience = Literal["shared", "sales", "delivery"]
 
 
 class TextBlockConfig(BaseModel):

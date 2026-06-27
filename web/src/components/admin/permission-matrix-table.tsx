@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import type { MatrixCell } from "@/lib/admin-permission-matrix";
 
 type PermissionMatrixTableProps = {
@@ -28,10 +29,10 @@ function getCellTone(decision: MatrixCell["decision"], selected: boolean) {
     : "border-[rgb(212_218_245_/12%)] bg-[rgb(255_255_255_/4%)] text-[var(--color-text-secondary)] hover:border-[rgb(123_63_242_/35%)]";
 }
 
-function getDecisionLabel(decision: MatrixCell["decision"]) {
-  if (decision === "deny") return "Deny";
-  if (decision === "allow") return "Allow";
-  return "Implicit";
+function getDecisionLabel(decision: MatrixCell["decision"], t: (key: string) => string) {
+  if (decision === "deny") return t("permissionMatrix.deny");
+  if (decision === "allow") return t("permissionMatrix.allow");
+  return t("permissionMatrix.implicit");
 }
 
 export function PermissionMatrixTable({
@@ -41,10 +42,12 @@ export function PermissionMatrixTable({
   selectedKey,
   onSelect,
 }: PermissionMatrixTableProps) {
+  const t = useTranslations("Admin");
+
   if (permissionKeys.length === 0 || roleNames.length === 0) {
     return (
       <div className="rounded-2xl border border-[rgb(212_218_245_/10%)] bg-black/10 px-4 py-8 text-sm text-[var(--color-text-secondary)]">
-        当前筛选条件下没有可展示的权限矩阵。
+        {t("permissionMatrix.emptyFilter")}
       </div>
     );
   }
@@ -55,7 +58,7 @@ export function PermissionMatrixTable({
         <thead>
           <tr>
             <th className="sticky left-0 z-20 min-w-[220px] border-b border-[rgb(212_218_245_/10%)] bg-[rgb(16_16_24_/96%)] px-4 py-3 text-left text-xs tracking-[0.14em] text-[var(--color-text-tertiary)] backdrop-blur">
-              PERMISSION
+              {t("permissionMatrix.permissionHeader")}
             </th>
             {roleNames.map((roleName) => (
               <th
@@ -98,12 +101,12 @@ export function PermissionMatrixTable({
                       className={`flex w-full flex-col items-center justify-center rounded-2xl border px-3 py-3 text-center text-xs transition-colors ${getCellTone(cell.decision, selected)}`}
                     >
                       <span className="font-medium tracking-[0.08em] uppercase">
-                        {getDecisionLabel(cell.decision)}
+                        {getDecisionLabel(cell.decision, t)}
                       </span>
                       <span className="mt-1 text-[11px] opacity-80">
                         {cell.matchedPolicies.length > 0
-                          ? `${cell.matchedPolicies.length} policies`
-                          : "No policy"}
+                          ? t("permissionMatrix.policiesCount", { count: cell.matchedPolicies.length })
+                          : t("permissionMatrix.noPolicy")}
                       </span>
                     </button>
                   </td>

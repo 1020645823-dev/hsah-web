@@ -2,11 +2,13 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useTranslations } from "next-intl";
 
 import { adminNavigation, getAdminNavigationItem } from "@/lib/admin-navigation";
 import { cn } from "@/lib/utils";
 
 export function AdminSidebar() {
+  const t = useTranslations("Admin");
   const pathname = usePathname();
   const activeItem = getAdminNavigationItem(pathname);
 
@@ -16,14 +18,14 @@ export function AdminSidebar() {
         <div className="space-y-2 border-b border-border/70 pb-4">
           <p className="text-xs font-medium tracking-[0.18em] text-primary">HSAH ADMIN</p>
           <div>
-            <p className="text-lg font-semibold text-foreground">Operations workspace</p>
+            <p className="text-lg font-semibold text-foreground">{t("sidebar.workspaceTitle")}</p>
             <p className="text-sm text-muted-foreground">
-              持续管理资产、模板、身份与访问控制。
+              {t("sidebar.workspaceDescription")}
             </p>
           </div>
         </div>
 
-        <nav aria-label="Admin sections" className="space-y-1">
+        <nav aria-label={t("sidebar.navLabel")} className="space-y-1">
           {adminNavigation.map((item) => {
             const Icon = item.icon;
             const isActive = activeItem?.href === item.href;

@@ -2,17 +2,21 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { Blocks } from "lucide-react";
 
 import { publicNavLinks } from "@/lib/public-content";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { LocaleSwitcher } from "@/components/locale-switcher";
 
 type PublicHeaderProps = {
   ctaHref: string;
   ctaLabel: string;
+  locale: string;
 };
 
-export function PublicHeader({ ctaHref, ctaLabel }: PublicHeaderProps) {
+export function PublicHeader({ ctaHref, ctaLabel, locale }: PublicHeaderProps) {
+  const t = useTranslations();
   const pathname = usePathname();
   const isActive = (href: string) => pathname === href || (href !== "/" && pathname?.startsWith(`${href}/`));
 
@@ -24,8 +28,8 @@ export function PublicHeader({ ctaHref, ctaLabel }: PublicHeaderProps) {
             <Blocks className="size-4" />
           </span>
           <span className="space-y-0.5">
-            <span className="block text-[11px] tracking-[0.18em] text-muted-foreground">HYPERSCALER ASSET HUB</span>
-            <span className="block text-sm font-medium">AI delivery content platform</span>
+            <span className="block text-[11px] tracking-[0.18em] text-muted-foreground">{t("PublicSite.brandName")}</span>
+            <span className="block text-sm font-medium">{t("PublicSite.brandTagline")}</span>
           </span>
         </Link>
 
@@ -37,7 +41,7 @@ export function PublicHeader({ ctaHref, ctaLabel }: PublicHeaderProps) {
               isActive("/assets") ? "text-foreground" : "text-muted-foreground"
             }`}
           >
-            Assets
+            {t("Nav.assets")}
           </Link>
           {publicNavLinks.map((item) => (
             <Link
@@ -48,14 +52,14 @@ export function PublicHeader({ ctaHref, ctaLabel }: PublicHeaderProps) {
                 isActive(item.href) ? "text-foreground" : "text-muted-foreground"
               }`}
             >
-              {item.label}
+              {t(item.label)}
             </Link>
           ))}
         </nav>
 
         <div className="flex items-center gap-3">
           <Link href="/auth/login" className="text-sm text-muted-foreground transition-colors hover:text-foreground">
-            Sign in
+            {t("Common.signIn")}
           </Link>
           <Link
             href={ctaHref}
@@ -64,6 +68,7 @@ export function PublicHeader({ ctaHref, ctaLabel }: PublicHeaderProps) {
             {ctaLabel}
           </Link>
           <ThemeToggle />
+          <LocaleSwitcher locale={locale} />
         </div>
       </div>
     </header>

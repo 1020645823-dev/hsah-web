@@ -1,6 +1,6 @@
 import * as React from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { cleanup, render, screen } from "@testing-library/react";
+import { cleanup, render, screen } from "@/test-utils";
 import userEvent from "@testing-library/user-event";
 import { TagInput } from "./tag-input";
 

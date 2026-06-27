@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 
 import {
   PublicBulletSection,
@@ -6,40 +7,43 @@ import {
   PublicProseSection,
   PublicSiteShell,
 } from "@/components/public-site-shell";
-import { getInsightBySlug } from "@/lib/public-content";
 
 export default async function InsightDetailPage({
   params,
 }: {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ slug: string; locale: string }>;
 }) {
-  const { slug } = await params;
-  const insight = getInsightBySlug(slug);
+  const { slug, locale } = await params;
+  const t = await getTranslations({ locale, namespace: "Insights" });
 
-  if (!insight) {
+  const item = t.raw(`items.${slug}`) as Record<string, unknown> | undefined;
+  if (!item) {
     notFound();
   }
 
+  const keyPoints = (item.keyPoints as string[]) || [];
+  const bodySections = (item.bodySections as { title: string; description: string }[]) || [];
+
   return (
-    <PublicSiteShell ctaHref="/community" ctaLabel="Join Programs">
+    <PublicSiteShell ctaHref="/community" ctaLabel={t("joinCommunity")}>
       <div className="space-y-8">
         <PublicDetailHero
           backHref="/insights"
-          backLabel="All Insights"
-          eyebrow={insight.category.toUpperCase()}
-          title={insight.title}
-          summary={insight.summary}
-          meta={[`${insight.publishDate} · ${insight.readTime}`]}
+          backLabel={t("allInsights")}
+          eyebrow={(item.category as string).toUpperCase()}
+          title={item.title as string}
+          summary={item.summary as string}
+          meta={[`${item.publishDate} · ${item.readTime}`]}
         />
 
         <PublicBulletSection
-          title="Key Points"
-          items={insight.keyPoints}
+          title={t("keyPoints")}
+          items={keyPoints}
         />
 
         <PublicProseSection
-          title="Body"
-          items={insight.bodySections}
+          title={t("published")}
+          items={bodySections}
         />
       </div>
     </PublicSiteShell>

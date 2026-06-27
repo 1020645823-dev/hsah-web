@@ -336,4 +336,18 @@ describe("ContentBlockEditor", () => {
     expect(screen.queryByText("Alt text is required")).not.toBeInTheDocument();
     expect(screen.queryByTestId("content-block-errors-summary")).not.toBeInTheDocument();
   });
+
+  it("updates block audience when editor audience selector changes", () => {
+    render(<ContentBlockEditor blocks={sampleBlocks} onChange={mockOnChange} />);
+
+    fireEvent.click(screen.getAllByLabelText("Edit block")[0]);
+    fireEvent.change(screen.getByLabelText("Audience"), {
+      target: { value: "delivery" },
+    });
+
+    expect(mockOnChange).toHaveBeenCalledWith([
+      expect.objectContaining({ id: "block-1", audience: "delivery" }),
+      expect.objectContaining({ id: "block-2" }),
+    ]);
+  });
 });

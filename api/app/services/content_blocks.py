@@ -3,6 +3,7 @@ from dataclasses import dataclass
 from pydantic import BaseModel
 
 from app.schemas.content_blocks import (
+    ContentAudience,
     LATEST_ASSET_CONTENT_SCHEMA_VERSION,
     LATEST_BLOCK_VERSION,
     CalloutBlockConfig,
@@ -90,7 +91,20 @@ def _normalize_single_block(raw_block: dict, index: int, asset_schema_version: i
     if not isinstance(config, dict):
         config = _legacy_config_for_type(block_type, raw_block)
 
-    return {
+    audience = raw_block.get("audience")
+    if audience is not None and audience not in {"shared", "sales", "delivery"}:
+        raise ContentBlockValidationError(
+            [
+                _error(
+                    block_id=block_id,
+                    block_type=str(block_type),
+                    field="audience",
+                    message="Audience must be one of shared, sales, or delivery",
+                )
+            ]
+        )
+
+    normalized = {
         "id": block_id,
         "type": block_type,
         "version": version,
@@ -98,6 +112,9 @@ def _normalize_single_block(raw_block: dict, index: int, asset_schema_version: i
         "visible": raw_block.get("visible", True),
         "config": config,
     }
+    if audience is not None:
+        normalized["audience"] = audience
+    return normalized
 
 
 def _migrate_block(block: dict) -> dict:
@@ -159,10 +176,13 @@ def _validate_block(block: dict) -> dict:
 
     model = CONFIG_MODELS[block["type"]]
     validated = model.model_validate(block["config"]).model_dump()
-    return {
+    validated = {
         **block,
         "config": validated,
     }
+    if "audience" in block:
+        validated["audience"] = _normalize_audience(block["audience"])
+    return validated
 
 
 def _legacy_config_for_type(block_type: str, raw_block: dict) -> dict:
@@ -283,3 +303,9 @@ def _error(*, block_id: str, block_type: str, field: str, message: str) -> dict:
         "field": field,
         "message": message,
     }
+
+
+def _normalize_audience(value: str) -> ContentAudience:
+    if value == "shared" or value == "delivery":
+        return value
+    return "sales"

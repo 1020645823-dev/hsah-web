@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 
 const inputClass =
   "w-full rounded-lg border border-[rgb(212_218_245_/12%)] bg-[rgb(255_255_255_/5%)] px-3 py-2 text-sm text-[var(--color-text-primary)] focus:border-[var(--color-electric-purple)] focus:outline-none focus:ring-2 focus:ring-[var(--color-electric-purple)]/50";
@@ -22,6 +23,7 @@ type UserFormModalProps = {
 };
 
 export function UserFormModal({ isOpen, mode, initialData, onSubmit, onCancel, submitError }: UserFormModalProps) {
+  const t = useTranslations("Admin");
   const [form, setForm] = useState<UserFormData>({
     email: initialData?.email ?? "",
     password: "",
@@ -44,12 +46,12 @@ export function UserFormModal({ isOpen, mode, initialData, onSubmit, onCancel, s
   function validate(): boolean {
     const nextErrors: Partial<Record<keyof UserFormData, string>> = {};
     if (!form.email.trim()) {
-      nextErrors.email = "邮箱不能为空";
+      nextErrors.email = t("userFormModal.emailRequired");
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim())) {
-      nextErrors.email = "邮箱格式不正确";
+      nextErrors.email = t("userFormModal.emailInvalid");
     }
     if (mode === "create" && !form.password) {
-      nextErrors.password = "密码不能为空";
+      nextErrors.password = t("userFormModal.passwordRequired");
     }
     setErrors(nextErrors);
     return Object.keys(nextErrors).length === 0;
@@ -68,12 +70,12 @@ export function UserFormModal({ isOpen, mode, initialData, onSubmit, onCancel, s
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
       <div className="mx-4 w-full max-w-full rounded-2xl border border-[rgb(255_255_255_/10%)] bg-[rgb(18_18_26_/95%)] p-6 shadow-2xl md:max-w-md">
         <h3 className="mb-4 text-base font-semibold text-[var(--color-text-primary)]">
-          {mode === "create" ? "创建用户" : "编辑用户"}
+          {mode === "create" ? t("userFormModal.createUser") : t("userFormModal.editUser")}
         </h3>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="mb-1.5 block text-sm font-medium text-[var(--color-text-primary)]">
-              邮箱 <span className="text-red-500">*</span>
+              {t("userFormModal.email")} <span className="text-red-500">*</span>
             </label>
             <input
               type="email"
@@ -88,14 +90,14 @@ export function UserFormModal({ isOpen, mode, initialData, onSubmit, onCancel, s
           {mode === "create" && (
             <div>
               <label className="mb-1.5 block text-sm font-medium text-[var(--color-text-primary)]">
-                密码 <span className="text-red-500">*</span>
+                {t("userFormModal.password")} <span className="text-red-500">*</span>
               </label>
               <input
                 type="password"
                 className={inputClass}
                 value={form.password}
                 onChange={(e) => updateField("password", e.target.value)}
-                placeholder="输入密码"
+                placeholder="••••••••"
               />
               {errors.password && <p className="mt-1 text-xs text-red-500">{errors.password}</p>}
             </div>
@@ -110,7 +112,7 @@ export function UserFormModal({ isOpen, mode, initialData, onSubmit, onCancel, s
               className="h-4 w-4 rounded border-[rgb(212_218_245_/12%)] bg-[rgb(255_255_255_/5%)] text-[var(--color-electric-purple)] focus:ring-[var(--color-electric-purple)]"
             />
             <label htmlFor="is_active" className="text-sm text-[var(--color-text-primary)]">
-              启用账号
+              {t("userFormModal.enableAccount")}
             </label>
           </div>
 
@@ -123,7 +125,7 @@ export function UserFormModal({ isOpen, mode, initialData, onSubmit, onCancel, s
               className="h-4 w-4 rounded border-[rgb(212_218_245_/12%)] bg-[rgb(255_255_255_/5%)] text-[var(--color-electric-purple)] focus:ring-[var(--color-electric-purple)]"
             />
             <label htmlFor="is_2fa_enabled" className="text-sm text-[var(--color-text-primary)]">
-              启用 2FA
+              {t("userFormModal.enable2FA")}
             </label>
           </div>
 
@@ -139,14 +141,14 @@ export function UserFormModal({ isOpen, mode, initialData, onSubmit, onCancel, s
               onClick={onCancel}
               className="rounded-lg border border-[rgb(212_218_245_/12%)] px-4 py-2 text-sm font-medium text-[var(--color-text-primary)] transition-colors duration-150 hover:bg-white/5 focus:outline-none focus:ring-2 focus:ring-[var(--color-electric-purple)]/50"
             >
-              取消
+              {t("userFormModal.cancel")}
             </button>
             <button
               type="submit"
               disabled={submitting}
               className="rounded-lg bg-[var(--color-electric-purple)] px-4 py-2 text-sm font-medium text-white transition-colors duration-150 disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-[var(--color-electric-purple)]/50"
             >
-              {submitting ? "保存中…" : "保存"}
+              {submitting ? t("userFormModal.saving") : t("userFormModal.save")}
             </button>
           </div>
         </form>

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { getTranslations } from "next-intl/server";
 
 import {
   PublicContentCard,
@@ -6,29 +7,36 @@ import {
   PublicSectionHero,
   PublicSiteShell,
 } from "@/components/public-site-shell";
-import { insights } from "@/lib/public-content";
+import { insightSlugs } from "@/lib/public-content";
 
-export default function InsightsPage() {
+export default async function InsightsPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "Insights" });
+
   return (
-    <PublicSiteShell ctaHref="/about" ctaLabel="About the Platform">
+    <PublicSiteShell ctaHref="/about" ctaLabel={t("reviewArchitectures")}>
       <div className="space-y-8">
         <PublicSectionHero
-          eyebrow="INSIGHTS"
-          title="Concise perspectives for teams moving from exploration to delivery."
-          summary="Short-form thinking on portfolio design, knowledge systems, control models, and experience design for enterprise AI."
+          eyebrow={t("eyebrow")}
+          title={t("title")}
+          summary={t("summary")}
           actions={
             <>
               <Link
                 href="/architecture"
                 className="inline-flex h-11 items-center justify-center rounded-md bg-primary px-6 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
               >
-                Review Architectures
+                {t("reviewArchitectures")}
               </Link>
               <Link
                 href="/community"
                 className="inline-flex h-11 items-center justify-center rounded-md border border-border bg-background px-6 text-sm font-medium text-foreground transition-colors hover:bg-muted"
               >
-                Join Programs
+                {t("reviewArchitectures")}
               </Link>
             </>
           }
@@ -36,25 +44,28 @@ export default function InsightsPage() {
 
         <PublicMetricStrip
           items={[
-            { value: `${insights.length}`, label: "Published perspectives" },
-            { value: "5-6", label: "Minute average read time" },
-            { value: "Editorial", label: "Format style" },
-            { value: "Actionable", label: "Decision support" },
+            { value: `${insightSlugs.length}`, label: t("allInsights") },
+            { value: "5-6", label: t("readTime") },
+            { value: t("keyPoints"), label: t("published") },
+            { value: t("readTime"), label: t("keyPoints") },
           ]}
         />
 
         <div className="grid gap-5 lg:grid-cols-3">
-          {insights.map((item) => (
-            <PublicContentCard
-              key={item.slug}
-              href={`/insights/${item.slug}`}
-              eyebrow={item.category.toUpperCase()}
-              title={item.title}
-              summary={item.summary}
-              meta={`${item.publishDate} · ${item.readTime}`}
-              tags={item.keyPoints.slice(0, 2)}
-            />
-          ))}
+          {insightSlugs.map((slug) => {
+            const item = t.raw(`items.${slug}`) as Record<string, unknown>;
+            return (
+              <PublicContentCard
+                key={slug}
+                href={`/insights/${slug}`}
+                eyebrow={(item.category as string).toUpperCase()}
+                title={item.title as string}
+                summary={item.summary as string}
+                meta={`${item.publishDate} · ${item.readTime}`}
+                tags={(item.keyPoints as string[]).slice(0, 2)}
+              />
+            );
+          })}
         </div>
       </div>
     </PublicSiteShell>

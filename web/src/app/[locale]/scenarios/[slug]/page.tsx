@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 
 import {
   PublicDetailHero,
@@ -7,55 +8,62 @@ import {
   PublicRelatedLinks,
   PublicSiteShell,
 } from "@/components/public-site-shell";
-import {
-  architectures,
-  getScenarioBySlug,
-} from "@/lib/public-content";
+import { architectureSlugs } from "@/lib/public-content";
 
 export default async function ScenarioDetailPage({
   params,
 }: {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ slug: string; locale: string }>;
 }) {
-  const { slug } = await params;
-  const scenario = getScenarioBySlug(slug);
+  const { slug, locale } = await params;
+  const t = await getTranslations({ locale, namespace: "Scenarios" });
+  const tArch = await getTranslations({ locale, namespace: "Architectures" });
 
-  if (!scenario) {
+  const item = t.raw(`items.${slug}`) as Record<string, unknown> | undefined;
+  if (!item) {
     notFound();
   }
 
-  const relatedArchitectures = architectures.filter((a) =>
-    scenario.relatedArchitectureSlugs.includes(a.slug),
-  );
+  const relatedSlugs = item.relatedArchitectureSlugs as string[];
+  const relatedArchitectures = relatedSlugs
+    .map((s) => {
+      const arch = tArch.raw(`items.${s}`) as Record<string, unknown> | undefined;
+      if (!arch) return null;
+      return { slug: s, title: arch.title as string, summary: arch.summary as string };
+    })
+    .filter((a): a is { slug: string; title: string; summary: string } => a !== null);
+
+  const metrics = (item.metrics as { label: string; value: string }[]) || [];
+  const phases = (item.phases as { title: string; description: string }[]) || [];
 
   return (
-    <PublicSiteShell ctaHref="/architecture" ctaLabel="View Architectures">
+    <PublicSiteShell ctaHref="/architecture" ctaLabel={t("viewArchitectures")}>
       <div className="space-y-8">
         <PublicDetailHero
           backHref="/scenarios"
-          backLabel="All Scenarios"
-          eyebrow={scenario.eyebrow.toUpperCase()}
-          title={scenario.title}
-          summary={scenario.summary}
-          meta={[scenario.industry, scenario.businessOutcome]}
-          tags={scenario.tags}
+          backLabel={t("allScenarios")}
+          eyebrow={(item.eyebrow as string).toUpperCase()}
+          title={item.title as string}
+          summary={item.summary as string}
+          meta={[item.industry as string, item.businessOutcome as string]}
+          tags={item.tags as string[]}
         />
 
         <PublicMetricStrip
-          items={scenario.metrics.map((m) => ({
+          items={metrics.map((m) => ({
             value: m.value,
             label: m.label,
           }))}
         />
 
         <PublicProseSection
-          title="Transformation Phases"
-          items={scenario.phases}
+          title={t("phases")}
+          items={phases}
         />
 
         {relatedArchitectures.length > 0 && (
           <PublicRelatedLinks
-            title="Related Architectures"
+            title={t("relatedArchitectures")}
             links={relatedArchitectures.map((a) => ({
               href: `/architecture/${a.slug}`,
               label: a.title,

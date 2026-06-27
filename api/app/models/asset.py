@@ -24,6 +24,11 @@ class Asset(Base):
 
     content_schema_version: Mapped[int] = mapped_column(nullable=False, default=1)
     content_blocks: Mapped[list[dict]] = mapped_column(JSON, nullable=False, default=list)
+    shared_fields: Mapped[dict] = mapped_column(JSON, nullable=False, default=dict)
+    sales_fields: Mapped[dict] = mapped_column(JSON, nullable=False, default=dict)
+    delivery_fields: Mapped[dict] = mapped_column(JSON, nullable=False, default=dict)
+    delivery_allowed_roles: Mapped[list[str]] = mapped_column(JSON, nullable=False, default=list)
+    delivery_allowed_users: Mapped[list[str]] = mapped_column(JSON, nullable=False, default=list)
 
     visibility: Mapped[str] = mapped_column(String(20), nullable=False, default="public")
     allowed_roles: Mapped[list[str]] = mapped_column(JSON, nullable=False, default=list)

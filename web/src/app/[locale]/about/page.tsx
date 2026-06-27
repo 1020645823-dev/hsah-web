@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { getTranslations } from "next-intl/server";
 
 import {
   PublicBulletSection,
@@ -7,29 +8,36 @@ import {
   PublicSectionHero,
   PublicSiteShell,
 } from "@/components/public-site-shell";
-import { aboutHighlights } from "@/lib/public-content";
+import { aboutHighlightKeys } from "@/lib/public-content";
 
-export default function AboutPage() {
+export default async function AboutPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "About" });
+
   return (
-    <PublicSiteShell ctaHref="/community" ctaLabel="Join Community">
+    <PublicSiteShell ctaHref="/community" ctaLabel={t("joinCommunity")}>
       <div className="space-y-8">
         <PublicSectionHero
-          eyebrow="ABOUT"
-          title="A public content layer that helps teams align before they commit to build."
-          summary="The hub connects scenario framing, architecture direction, editorial insight, and community participation so teams can move from curiosity to execution with less ambiguity."
+          eyebrow={t("eyebrow")}
+          title={t("title")}
+          summary={t("summary")}
           actions={
             <>
               <Link
                 href="/assets"
                 className="inline-flex h-11 items-center justify-center rounded-md bg-primary px-6 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
               >
-                Explore Assets
+                {t("exploreAssets")}
               </Link>
               <Link
                 href="/insights"
                 className="inline-flex h-11 items-center justify-center rounded-md border border-border bg-background px-6 text-sm font-medium text-foreground transition-colors hover:bg-muted"
               >
-                Read Insights
+                {t("readInsights")}
               </Link>
             </>
           }
@@ -37,57 +45,57 @@ export default function AboutPage() {
 
         <PublicMetricStrip
           items={[
-            { value: "Scenario-led", label: "Discovery approach" },
-            { value: "Reference-first", label: "Architecture posture" },
-            { value: "Editorial", label: "Content mode" },
-            { value: "Community-backed", label: "Learning model" },
+            { value: t("metrics.discoveryApproach.value"), label: t("metrics.discoveryApproach.label") },
+            { value: t("metrics.architecturePosture.value"), label: t("metrics.architecturePosture.label") },
+            { value: t("metrics.contentMode.value"), label: t("metrics.contentMode.label") },
+            { value: t("metrics.learningModel.value"), label: t("metrics.learningModel.label") },
           ]}
         />
 
         <div className="grid gap-5 md:grid-cols-3">
-          {aboutHighlights.map((item) => (
+          {aboutHighlightKeys.map((key) => (
             <div
-              key={item.title}
+              key={key}
               className="rounded-2xl border border-border bg-card p-6 shadow-[var(--shadow-card)]"
             >
-              <div className="text-lg font-semibold text-foreground">{item.title}</div>
-              <div className="mt-3 text-sm leading-6 text-muted-foreground">{item.description}</div>
+              <div className="text-lg font-semibold text-foreground">{t(`highlights.${key}.title`)}</div>
+              <div className="mt-3 text-sm leading-6 text-muted-foreground">{t(`highlights.${key}.description`)}</div>
             </div>
           ))}
         </div>
 
         <div className="grid gap-6 xl:grid-cols-[1.05fr_0.95fr]">
           <PublicBulletSection
-            title="How the platform is used"
+            title={t("howUsedTitle")}
             items={[
-              "Stakeholders browse scenarios to align on business value and workflow change.",
-              "Architecture teams use reference patterns to reduce design churn before delivery begins.",
-              "Program leaders share insight articles to align controls, ownership, and rollout expectations.",
-              "Working groups and labs create a repeatable feedback loop across teams and sectors.",
+              t("howUsedItems.0"),
+              t("howUsedItems.1"),
+              t("howUsedItems.2"),
+              t("howUsedItems.3"),
             ]}
           />
           <PublicRelatedLinks
-            title="Start from the section that fits your need"
+            title={t("startFromSection")}
             links={[
               {
                 href: "/scenarios",
-                label: "Start with scenarios",
-                description: "Use business journeys when the problem statement is still forming.",
+                label: t("startWithScenarios.label"),
+                description: t("startWithScenarios.description"),
               },
               {
                 href: "/architecture",
-                label: "Start with architecture",
-                description: "Use reference views when the delivery model and controls need alignment.",
+                label: t("startWithArchitecture.label"),
+                description: t("startWithArchitecture.description"),
               },
               {
                 href: "/community",
-                label: "Start with community",
-                description: "Use programs and labs when teams need peer exchange and practical review.",
+                label: t("startWithCommunity.label"),
+                description: t("startWithCommunity.description"),
               },
               {
                 href: "/assets",
-                label: "Go to assets",
-                description: "Use the asset library when the team is ready for implementation-oriented exploration.",
+                label: t("goToAssets.label"),
+                description: t("goToAssets.description"),
               },
             ]}
           />

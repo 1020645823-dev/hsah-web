@@ -1,47 +1,23 @@
 import { notFound } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 
 import { PublicSiteShell, PublicDetailHero } from "@/components/public-site-shell";
-import { ContentBlockRenderer } from "@/components/content-block-renderer";
-import type { ContentBlock } from "@/lib/admin-content-blocks";
-
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8000";
-
-type AssetDetail = {
-  id: string;
-  slug: string;
-  title: string;
-  subtitle: string | null;
-  short_description: string;
-  cloud_providers: string[];
-  industries: string[];
-  technologies: string[];
-  asset_type: string;
-  status: string;
-  visibility: string;
-  content_blocks: ContentBlock[];
-};
-
-async function fetchAsset(slug: string): Promise<AssetDetail | null> {
-  try {
-    const res = await fetch(`${API_BASE_URL}/api/v1/assets/${slug}`, { cache: "no-store" });
-    if (!res.ok) return null;
-    return (await res.json()) as AssetDetail;
-  } catch {
-    return null;
-  }
-}
+import { PublicAssetDetailClient } from "@/components/public-asset-detail-client";
+import { fetchPublicAssetDetail } from "@/lib/public-assets";
 
 export default async function AssetDetailPage({
   params,
 }: {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ slug: string; locale: string }>;
 }) {
-  const { slug } = await params;
-  const asset = await fetchAsset(slug);
+  const { slug, locale } = await params;
+  const t = await getTranslations({ locale, namespace: "AssetDetail" });
+  const assetResult = await fetchPublicAssetDetail(slug);
 
-  if (!asset) {
+  if (!assetResult.ok) {
     notFound();
   }
+  const asset = assetResult.data;
 
   const metaItems: string[] = [
     asset.asset_type,
@@ -52,11 +28,11 @@ export default async function AssetDetailPage({
   ].filter(Boolean);
 
   return (
-    <PublicSiteShell ctaHref="/assets" ctaLabel="Explore Assets">
+    <PublicSiteShell ctaHref="/assets" ctaLabel={t("exploreAssets")}>
       <div className="space-y-8">
         <PublicDetailHero
           backHref="/assets"
-          backLabel="Back to Assets"
+          backLabel={t("backToAssets")}
           eyebrow={asset.asset_type.toUpperCase()}
           title={asset.title}
           summary={asset.subtitle || asset.short_description}
@@ -64,7 +40,7 @@ export default async function AssetDetailPage({
           tags={asset.technologies}
         />
 
-        <ContentBlockRenderer blocks={asset.content_blocks} />
+        <PublicAssetDetailClient slug={slug} initialAsset={asset} />
       </div>
     </PublicSiteShell>
   );

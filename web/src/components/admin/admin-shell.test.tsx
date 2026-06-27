@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { render, screen } from "@/test-utils";
 import "@testing-library/jest-dom/vitest";
 
 vi.mock("next/link", () => ({
@@ -11,7 +11,12 @@ vi.mock("next/link", () => ({
 }));
 
 vi.mock("next/navigation", () => ({
+  useRouter: () => ({ push: vi.fn(), replace: vi.fn(), back: vi.fn() }),
   usePathname: () => "/admin/assets",
+  useParams: () => ({ locale: "en" }),
+  redirect: vi.fn(),
+  permanentRedirect: vi.fn(),
+  notFound: vi.fn(),
 }));
 
 import { AdminShell } from "./admin-shell";
@@ -24,8 +29,8 @@ describe("AdminShell", () => {
       </AdminShell>,
     );
 
-    expect(screen.getByRole("navigation", { name: "Admin sections" })).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: "Overview" })).toBeInTheDocument();
+    expect(screen.getByLabelText("Admin modules")).toBeInTheDocument();
+    expect(screen.getAllByText("Overview").length).toBeGreaterThanOrEqual(1);
     expect(screen.getByRole("link", { name: "Assets" })).toHaveAttribute("href", "/admin/assets");
     expect(screen.getByText("Page body")).toBeInTheDocument();
   });

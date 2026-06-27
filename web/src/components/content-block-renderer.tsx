@@ -2,7 +2,7 @@
 
 import { Info, AlertTriangle, AlertCircle, Lightbulb } from "lucide-react";
 import Image from "next/image";
-import type { ContentBlock } from "@/lib/admin-content-blocks";
+import { normalizeContentAudience, type ContentBlock } from "@/lib/admin-content-blocks";
 
 const calloutVariantStyles = {
   info: {
@@ -162,11 +162,20 @@ function CalloutBlock({
 
 interface ContentBlockRendererProps {
   blocks: ContentBlock[];
+  mode?: "sales" | "delivery";
 }
 
-export function ContentBlockRenderer({ blocks }: ContentBlockRendererProps) {
+function matchesMode(block: ContentBlock, mode: "sales" | "delivery") {
+  const audience = normalizeContentAudience(block.audience);
+  if (mode === "delivery") {
+    return audience === "shared" || audience === "delivery";
+  }
+  return audience === "shared" || audience === "sales";
+}
+
+export function ContentBlockRenderer({ blocks, mode = "sales" }: ContentBlockRendererProps) {
   const visibleBlocks = blocks
-    .filter((b) => b.visible)
+    .filter((b) => b.visible && matchesMode(b, mode))
     .sort((a, b) => a.order - b.order);
 
   return (

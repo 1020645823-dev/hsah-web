@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { TagInput } from "./tag-input";
 import { ContentBlockEditor } from "./content-blocks/content-block-editor";
 import { AssetVideoManager } from "./asset-video-manager";
@@ -51,6 +52,7 @@ function FieldError({ message }: { message?: string }) {
 }
 
 export function AssetEditorForm({ mode, assetId, token }: AssetEditorFormProps) {
+  const t = useTranslations("Admin");
   const router = useRouter();
   const [draft, setDraft] = useState<AssetEditorDraft>(INITIAL_DRAFT);
   const [initialDraft, setInitialDraft] = useState<AssetEditorDraft>(INITIAL_DRAFT);
@@ -153,12 +155,12 @@ export function AssetEditorForm({ mode, assetId, token }: AssetEditorFormProps) 
   }
 
   function handleCancel() {
-    if (isDirty && !confirm("有未保存的变更，确定要离开吗？")) return;
+    if (isDirty && !confirm(t("assetEditorForm.unsavedChangesConfirm"))) return;
     router.push("/admin/assets");
   }
 
   if (loading) {
-    return <div className="p-8 text-center text-sm text-[var(--color-text-secondary)]">加载中…</div>;
+    return <div className="p-8 text-center text-sm text-[var(--color-text-secondary)]">{t("assetEditorForm.loading")}</div>;
   }
 
   if (loadError) {
@@ -168,46 +170,46 @@ export function AssetEditorForm({ mode, assetId, token }: AssetEditorFormProps) 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className={cardClass}>
-        <h3 className="mb-4 text-base font-semibold text-[var(--color-text-primary)]">基本信息</h3>
+        <h3 className="mb-4 text-base font-semibold text-[var(--color-text-primary)]">{t("assetEditorForm.basicInfo")}</h3>
         <div className="space-y-4">
           <div>
-            <Label required>Slug</Label>
+            <Label required>{t("assetEditorForm.slug")}</Label>
             <input
               className={inputClass}
               value={draft.slug}
               onChange={(e) => updateField("slug", e.target.value)}
-              placeholder="asset-slug"
+              placeholder={t("assetEditorForm.slugPlaceholder")}
             />
             <FieldError message={errors.slug} />
           </div>
           <div>
-            <Label required>标题</Label>
+            <Label required>{t("assetEditorForm.title")}</Label>
             <input
               className={inputClass}
               value={draft.title}
               onChange={(e) => updateField("title", e.target.value)}
-              placeholder="资产标题"
+              placeholder={t("assetEditorForm.titlePlaceholder")}
             />
             <FieldError message={errors.title} />
           </div>
           <div>
-            <Label>副标题</Label>
+            <Label>{t("assetEditorForm.subtitle")}</Label>
             <input
               className={inputClass}
               value={draft.subtitle}
               onChange={(e) => updateField("subtitle", e.target.value)}
-              placeholder="可选副标题"
+              placeholder={t("assetEditorForm.subtitlePlaceholder")}
             />
             <FieldError message={errors.subtitle} />
           </div>
           <div>
-            <Label required>简短描述</Label>
+            <Label required>{t("assetEditorForm.shortDescription")}</Label>
             <textarea
               className={inputClass}
               rows={3}
               value={draft.shortDescription}
               onChange={(e) => updateField("shortDescription", e.target.value)}
-              placeholder="资产的简短描述"
+              placeholder={t("assetEditorForm.shortDescriptionPlaceholder")}
             />
             <FieldError message={errors.shortDescription} />
           </div>
@@ -215,32 +217,32 @@ export function AssetEditorForm({ mode, assetId, token }: AssetEditorFormProps) 
       </div>
 
       <div className={cardClass}>
-        <h3 className="mb-4 text-base font-semibold text-[var(--color-text-primary)]">分类标签</h3>
+        <h3 className="mb-4 text-base font-semibold text-[var(--color-text-primary)]">{t("assetEditorForm.tags")}</h3>
         <div className="space-y-4">
           <div>
-            <Label required>云厂商</Label>
+            <Label required>{t("assetEditorForm.cloudProviders")}</Label>
             <TagInput
               value={draft.cloudProviders}
               onChange={(v) => updateField("cloudProviders", v as AssetEditorDraft["cloudProviders"])}
-              placeholder="输入云厂商，回车添加"
+              placeholder={t("assetEditorForm.cloudProvidersPlaceholder")}
             />
             <FieldError message={errors.cloudProviders} />
           </div>
           <div>
-            <Label>行业</Label>
+            <Label>{t("assetEditorForm.industries")}</Label>
             <TagInput
               value={draft.industries}
               onChange={(v) => updateField("industries", v as AssetEditorDraft["industries"])}
-              placeholder="输入行业，回车添加"
+              placeholder={t("assetEditorForm.industriesPlaceholder")}
             />
             <FieldError message={errors.industries} />
           </div>
           <div>
-            <Label>技术</Label>
+            <Label>{t("assetEditorForm.technologies")}</Label>
             <TagInput
               value={draft.technologies}
               onChange={(v) => updateField("technologies", v as AssetEditorDraft["technologies"])}
-              placeholder="输入技术，回车添加"
+              placeholder={t("assetEditorForm.technologiesPlaceholder")}
             />
             <FieldError message={errors.technologies} />
           </div>
@@ -248,10 +250,10 @@ export function AssetEditorForm({ mode, assetId, token }: AssetEditorFormProps) 
       </div>
 
       <div className={cardClass}>
-        <h3 className="mb-4 text-base font-semibold text-[var(--color-text-primary)]">类型与状态</h3>
+        <h3 className="mb-4 text-base font-semibold text-[var(--color-text-primary)]">{t("assetEditorForm.typeAndStatus")}</h3>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
           <div>
-            <Label required>资产类型</Label>
+            <Label required>{t("assetEditorForm.assetType")}</Label>
             <select
               className={selectClass}
               value={draft.assetType}
@@ -266,7 +268,7 @@ export function AssetEditorForm({ mode, assetId, token }: AssetEditorFormProps) 
             <FieldError message={errors.assetType} />
           </div>
           <div>
-            <Label required>状态</Label>
+            <Label required>{t("assetEditorForm.status")}</Label>
             <select
               className={selectClass}
               value={draft.status}
@@ -281,7 +283,7 @@ export function AssetEditorForm({ mode, assetId, token }: AssetEditorFormProps) 
             <FieldError message={errors.status} />
           </div>
           <div>
-            <Label required>可见性</Label>
+            <Label required>{t("assetEditorForm.visibility")}</Label>
             <select
               className={selectClass}
               value={draft.visibility}
@@ -299,24 +301,24 @@ export function AssetEditorForm({ mode, assetId, token }: AssetEditorFormProps) 
       </div>
 
       <div className={cardClass}>
-        <h3 className="mb-4 text-base font-semibold text-[var(--color-text-primary)]">访问控制</h3>
+        <h3 className="mb-4 text-base font-semibold text-[var(--color-text-primary)]">{t("assetEditorForm.accessControl")}</h3>
         <div className="space-y-4">
           <div>
-            <Label required>允许角色</Label>
+            <Label required>{t("assetEditorForm.allowedRoles")}</Label>
             <TagInput
               value={draft.allowedRoles}
               onChange={(v) => updateField("allowedRoles", v as AssetEditorDraft["allowedRoles"])}
               suggestions={roleSuggestions}
-              placeholder="输入角色，回车添加"
+              placeholder={t("assetEditorForm.allowedRolesPlaceholder")}
             />
             <FieldError message={errors.allowedRoles} />
           </div>
           <div>
-            <Label required>允许用户</Label>
+            <Label required>{t("assetEditorForm.allowedUsers")}</Label>
             <TagInput
               value={draft.allowedUsers}
               onChange={(v) => updateField("allowedUsers", v as AssetEditorDraft["allowedUsers"])}
-              placeholder="输入用户，回车添加"
+              placeholder={t("assetEditorForm.allowedUsersPlaceholder")}
             />
             <FieldError message={errors.allowedUsers} />
           </div>
@@ -324,10 +326,10 @@ export function AssetEditorForm({ mode, assetId, token }: AssetEditorFormProps) 
       </div>
 
       <div className={cardClass}>
-        <h3 className="mb-4 text-base font-semibold text-[var(--color-text-primary)]">Shared Detail</h3>
+        <h3 className="mb-4 text-base font-semibold text-[var(--color-text-primary)]">{t("assetEditorForm.sharedDetail")}</h3>
         <div className="space-y-4">
           <div>
-            <Label>介绍文字</Label>
+            <Label>{t("assetEditorForm.introduction")}</Label>
             <textarea
               className={inputClass}
               rows={4}
@@ -337,11 +339,11 @@ export function AssetEditorForm({ mode, assetId, token }: AssetEditorFormProps) 
                   ...draft.sharedFields,
                   introduction: e.target.value,
                 })}
-              placeholder="面向客户和交付团队共享的资产介绍"
+              placeholder={t("assetEditorForm.introductionPlaceholder")}
             />
           </div>
           <div>
-            <Label>适用业务</Label>
+            <Label>{t("assetEditorForm.useCases")}</Label>
             <TagInput
               value={draft.sharedFields.useCases}
               onChange={(v) =>
@@ -349,12 +351,12 @@ export function AssetEditorForm({ mode, assetId, token }: AssetEditorFormProps) 
                   ...draft.sharedFields,
                   useCases: v as string[],
                 })}
-              placeholder="输入适用业务，回车添加"
+              placeholder={t("assetEditorForm.useCasesPlaceholder")}
             />
           </div>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
-              <Label>Live Demo 链接</Label>
+              <Label>{t("assetEditorForm.liveDemoUrl")}</Label>
               <input
                 className={inputClass}
                 value={draft.sharedFields.liveDemoUrl}
@@ -368,7 +370,7 @@ export function AssetEditorForm({ mode, assetId, token }: AssetEditorFormProps) 
             </div>
           </div>
           <div>
-            <Label>视频内容管理</Label>
+            <Label>{t("assetEditorForm.videoManagement")}</Label>
             <div className="mt-2">
               <AssetVideoManager
                 videos={draft.sharedFields.videos}
@@ -384,10 +386,10 @@ export function AssetEditorForm({ mode, assetId, token }: AssetEditorFormProps) 
       </div>
 
       <div className={cardClass}>
-        <h3 className="mb-4 text-base font-semibold text-[var(--color-text-primary)]">Sales Detail</h3>
+        <h3 className="mb-4 text-base font-semibold text-[var(--color-text-primary)]">{t("assetEditorForm.salesDetail")}</h3>
         <div className="space-y-4">
           <div>
-            <Label>价值概述</Label>
+            <Label>{t("assetEditorForm.valueSummary")}</Label>
             <textarea
               className={inputClass}
               rows={4}
@@ -397,11 +399,11 @@ export function AssetEditorForm({ mode, assetId, token }: AssetEditorFormProps) 
                   ...draft.salesFields,
                   valueSummary: e.target.value,
                 })}
-              placeholder="面向售前展示的价值概述"
+              placeholder={t("assetEditorForm.valueSummaryPlaceholder")}
             />
           </div>
           <div>
-            <Label>差异化亮点</Label>
+            <Label>{t("assetEditorForm.differentiators")}</Label>
             <TagInput
               value={draft.salesFields.differentiators}
               onChange={(v) =>
@@ -409,11 +411,11 @@ export function AssetEditorForm({ mode, assetId, token }: AssetEditorFormProps) 
                   ...draft.salesFields,
                   differentiators: v as string[],
                 })}
-              placeholder="输入亮点，回车添加"
+              placeholder={t("assetEditorForm.differentiatorsPlaceholder")}
             />
           </div>
           <div>
-            <Label>业务结果</Label>
+            <Label>{t("assetEditorForm.outcomes")}</Label>
             <TagInput
               value={draft.salesFields.outcomes}
               onChange={(v) =>
@@ -421,17 +423,17 @@ export function AssetEditorForm({ mode, assetId, token }: AssetEditorFormProps) 
                   ...draft.salesFields,
                   outcomes: v as string[],
                 })}
-              placeholder="输入结果，回车添加"
+              placeholder={t("assetEditorForm.outcomesPlaceholder")}
             />
           </div>
         </div>
       </div>
 
       <div className={cardClass}>
-        <h3 className="mb-4 text-base font-semibold text-[var(--color-text-primary)]">Delivery Detail</h3>
+        <h3 className="mb-4 text-base font-semibold text-[var(--color-text-primary)]">{t("assetEditorForm.deliveryDetail")}</h3>
         <div className="space-y-4">
           <div>
-            <Label>实施说明</Label>
+            <Label>{t("assetEditorForm.implementationSummary")}</Label>
             <textarea
               className={inputClass}
               rows={4}
@@ -441,11 +443,11 @@ export function AssetEditorForm({ mode, assetId, token }: AssetEditorFormProps) 
                   ...draft.deliveryFields,
                   implementationSummary: e.target.value,
                 })}
-              placeholder="面向交付团队的实施说明"
+              placeholder={t("assetEditorForm.implementationSummaryPlaceholder")}
             />
           </div>
           <div>
-            <Label>前置条件</Label>
+            <Label>{t("assetEditorForm.prerequisites")}</Label>
             <TagInput
               value={draft.deliveryFields.prerequisites}
               onChange={(v) =>
@@ -453,11 +455,11 @@ export function AssetEditorForm({ mode, assetId, token }: AssetEditorFormProps) 
                   ...draft.deliveryFields,
                   prerequisites: v as string[],
                 })}
-              placeholder="输入前置条件，回车添加"
+              placeholder={t("assetEditorForm.prerequisitesPlaceholder")}
             />
           </div>
           <div>
-            <Label>落地步骤</Label>
+            <Label>{t("assetEditorForm.rolloutSteps")}</Label>
             <TagInput
               value={draft.deliveryFields.rolloutSteps}
               onChange={(v) =>
@@ -465,31 +467,31 @@ export function AssetEditorForm({ mode, assetId, token }: AssetEditorFormProps) 
                   ...draft.deliveryFields,
                   rolloutSteps: v as string[],
                 })}
-              placeholder="输入落地步骤，回车添加"
+              placeholder={t("assetEditorForm.rolloutStepsPlaceholder")}
             />
           </div>
           <div>
-            <Label>Delivery 允许角色</Label>
+            <Label>{t("assetEditorForm.deliveryAllowedRoles")}</Label>
             <TagInput
               value={draft.deliveryAllowedRoles}
               onChange={(v) => updateField("deliveryAllowedRoles", v as string[])}
               suggestions={roleSuggestions}
-              placeholder="输入 Delivery 角色，回车添加"
+              placeholder={t("assetEditorForm.deliveryAllowedRolesPlaceholder")}
             />
           </div>
           <div>
-            <Label>Delivery 允许用户</Label>
+            <Label>{t("assetEditorForm.deliveryAllowedUsers")}</Label>
             <TagInput
               value={draft.deliveryAllowedUsers}
               onChange={(v) => updateField("deliveryAllowedUsers", v as string[])}
-              placeholder="输入 Delivery 用户邮箱，回车添加"
+              placeholder={t("assetEditorForm.deliveryAllowedUsersPlaceholder")}
             />
           </div>
         </div>
       </div>
 
       <div className={cardClass}>
-        <h3 className="mb-4 text-base font-semibold text-[var(--color-text-primary)]">内容块</h3>
+        <h3 className="mb-4 text-base font-semibold text-[var(--color-text-primary)]">{t("assetEditorForm.contentBlocks")}</h3>
         <ContentBlockEditor
           blocks={draft.contentBlocks}
           onChange={(blocks: ContentBlock[]) => updateField("contentBlocks", blocks)}
@@ -509,14 +511,14 @@ export function AssetEditorForm({ mode, assetId, token }: AssetEditorFormProps) 
           onClick={handleCancel}
           className="rounded-lg border border-[rgb(212_218_245_/12%)] px-6 py-2 text-sm font-medium text-[var(--color-text-primary)] hover:bg-white/5"
         >
-          取消
+          {t("assetEditorForm.cancel")}
         </button>
         <button
           type="submit"
           disabled={!isDirty || submitting}
           className="rounded-lg bg-[var(--color-electric-purple)] px-6 py-2 text-sm font-medium text-white disabled:opacity-50"
         >
-          {submitting ? "保存中…" : "保存"}
+          {submitting ? t("assetEditorForm.saving") : t("assetEditorForm.save")}
         </button>
       </div>
     </form>
