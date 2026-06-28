@@ -7,7 +7,7 @@ import {
   PublicSectionHero,
   PublicSiteShell,
 } from "@/components/public-site-shell";
-import { scenarioSlugs } from "@/lib/public-content";
+import { getMessageItemKey, scenarioSlugs } from "@/lib/public-content";
 
 export default async function ScenariosPage({
   params,
@@ -53,7 +53,7 @@ export default async function ScenariosPage({
 
         <div className="grid gap-5 lg:grid-cols-3">
           {scenarioSlugs.map((slug) => {
-            const item = t.raw(`items.${slug}`) as Record<string, unknown>;
+            const item = t.raw(`items.${getMessageItemKey(slug)}`) as Record<string, unknown>;
             return (
               <PublicContentCard
                 key={slug}

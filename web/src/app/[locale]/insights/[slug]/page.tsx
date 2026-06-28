@@ -7,6 +7,7 @@ import {
   PublicProseSection,
   PublicSiteShell,
 } from "@/components/public-site-shell";
+import { getMessageItemKey } from "@/lib/public-content";
 
 export default async function InsightDetailPage({
   params,
@@ -16,7 +17,7 @@ export default async function InsightDetailPage({
   const { slug, locale } = await params;
   const t = await getTranslations({ locale, namespace: "Insights" });
 
-  const item = t.raw(`items.${slug}`) as Record<string, unknown> | undefined;
+  const item = t.raw(`items.${getMessageItemKey(slug)}`) as Record<string, unknown> | undefined;
   if (!item) {
     notFound();
   }

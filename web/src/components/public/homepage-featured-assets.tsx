@@ -37,7 +37,7 @@ export function HomepageFeaturedAssets() {
               <h3 className="mt-4 text-2xl font-semibold tracking-tight">{item.title as string}</h3>
               <p className="mt-3 max-w-2xl text-sm leading-6 text-muted-foreground">{item.summary as string}</p>
               <div className="mt-4 flex flex-wrap gap-2">
-                {(item.tags as string[]).slice(0, 2).map((tag) => (
+                {((item.tags as string[] | undefined) ?? []).slice(0, 2).map((tag) => (
                   <span key={tag} className="rounded-md border border-border bg-secondary px-3 py-1 text-xs text-secondary-foreground">
                     {tag}
                   </span>

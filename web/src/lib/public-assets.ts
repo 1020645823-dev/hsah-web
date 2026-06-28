@@ -1,6 +1,6 @@
 import { parseApiError, type ApiErrorInfo } from "./api-errors";
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8000";
+const API_BASE_URL = process.env.INTERNAL_API_BASE_URL ?? process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8000";
 
 export const DEFAULT_PUBLIC_ASSET_LIMIT = 12;
 const MAX_PUBLIC_ASSET_LIMIT = 100;

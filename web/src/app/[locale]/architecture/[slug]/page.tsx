@@ -8,7 +8,7 @@ import {
   PublicRelatedLinks,
   PublicSiteShell,
 } from "@/components/public-site-shell";
-import { scenarioSlugs } from "@/lib/public-content";
+import { getMessageItemKey } from "@/lib/public-content";
 
 export default async function ArchitectureDetailPage({
   params,
@@ -19,7 +19,7 @@ export default async function ArchitectureDetailPage({
   const t = await getTranslations({ locale, namespace: "Architectures" });
   const tScen = await getTranslations({ locale, namespace: "Scenarios" });
 
-  const item = t.raw(`items.${slug}`) as Record<string, unknown> | undefined;
+  const item = t.raw(`items.${getMessageItemKey(slug)}`) as Record<string, unknown> | undefined;
   if (!item) {
     notFound();
   }
@@ -27,7 +27,7 @@ export default async function ArchitectureDetailPage({
   const relatedSlugs = item.relatedScenarioSlugs as string[];
   const relatedScenarios = relatedSlugs
     .map((s) => {
-      const scen = tScen.raw(`items.${s}`) as Record<string, unknown> | undefined;
+      const scen = tScen.raw(`items.${getMessageItemKey(s)}`) as Record<string, unknown> | undefined;
       if (!scen) return null;
       return { slug: s, title: scen.title as string, summary: scen.summary as string };
     })

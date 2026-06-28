@@ -7,7 +7,7 @@ import {
   PublicSectionHero,
   PublicSiteShell,
 } from "@/components/public-site-shell";
-import { architectureSlugs } from "@/lib/public-content";
+import { architectureSlugs, getMessageItemKey } from "@/lib/public-content";
 
 export default async function ArchitecturePage({
   params,
@@ -53,7 +53,7 @@ export default async function ArchitecturePage({
 
         <div className="grid gap-5 lg:grid-cols-2">
           {architectureSlugs.map((slug) => {
-            const item = t.raw(`items.${slug}`) as Record<string, unknown>;
+            const item = t.raw(`items.${getMessageItemKey(slug)}`) as Record<string, unknown>;
             return (
               <PublicContentCard
                 key={slug}

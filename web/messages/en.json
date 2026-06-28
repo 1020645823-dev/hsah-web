@@ -76,6 +76,14 @@
     "ctaLabel": "Sign in"
   },
   "Assets": {
+    "ctaLabel": "Sign in",
+    "backToAssets": "Back to Assets",
+    "emptyClearDescription": "Clear the active filters or return to featured assets to see all available content.",
+    "emptyClearTitle": "No assets matched the current filters.",
+    "exploreAssets": "Explore Assets",
+    "nextPage": "Next page",
+    "pageIndicator": "Page {currentPage} of {totalPages}",
+    "previousPage": "Previous page",
     "eyebrow": "ASSET LIBRARY",
     "title": "Asset Library",
     "summary": "Search reusable demos, architectures, and implementation references.",
@@ -90,19 +98,12 @@
     "listView": "List view",
     "emptyTitle": "No matching assets found",
     "emptyDescription": "Adjust the search terms or clear filters to see available assets.",
-    "emptyClearTitle": "No assets matched the current filters.",
-    "emptyClearDescription": "Clear the active filters or return to featured assets to see all available content.",
     "cloud": "Cloud",
     "industry": "Industry",
     "technology": "Technology",
     "assetType": "Asset type",
     "published": "Published",
-    "draft": "Draft",
-    "pageIndicator": "Page {currentPage} of {totalPages}",
-    "previousPage": "Previous page",
-    "nextPage": "Next page",
-    "backToAssets": "Back to Assets",
-    "exploreAssets": "Explore Assets"
+    "draft": "Draft"
   },
   "AssetDetail": {
     "sharedContext": "Shared context",
@@ -246,6 +247,7 @@
     "aboutPlatform": "About the platform"
   },
   "ContentLanes": {
+    "browseAll": "Browse all",
     "eyebrow": "CONTENT LANES",
     "title": "Start from what your role needs",
     "summary": "Four content lanes help teams move from business questions to reusable implementation assets.",

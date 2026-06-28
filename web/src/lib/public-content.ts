@@ -119,6 +119,10 @@ export const aboutHighlightKeys = [
   "workingCommunity",
 ] as const;
 
+export function getMessageItemKey(slug: string): string {
+  return slug.replace(/-([a-z])/g, (_, letter: string) => letter.toUpperCase());
+}
+
 export function getHomepageFeaturedAssetSlugs(): readonly string[] {
   return featuredAssetSlugs;
 }

@@ -9,51 +9,52 @@ export type ErrorAlertProps = {
   onDismiss?: () => void;
 };
 
+const iconMap: Record<string, typeof AlertTriangle> = {
+  "alert-triangle": AlertTriangle,
+  "wifi-off": WifiOff,
+  "lock": Lock,
+  "shield-alert": ShieldAlert,
+};
+
 const categoryStyles: Record<
   ApiErrorInfo["category"],
-  { border: string; bg: string; text: string; icon: typeof AlertTriangle }
+  { border: string; bg: string; text: string }
 > = {
   network: {
     border: "border-amber-500/30",
     bg: "bg-amber-500/10",
     text: "text-amber-400",
-    icon: WifiOff,
   },
   server: {
     border: "border-red-500/30",
     bg: "bg-red-500/10",
     text: "text-red-400",
-    icon: AlertTriangle,
   },
   auth: {
     border: "border-blue-500/30",
     bg: "bg-blue-500/10",
     text: "text-blue-400",
-    icon: Lock,
   },
   forbidden: {
     border: "border-orange-500/30",
     bg: "bg-orange-500/10",
     text: "text-orange-400",
-    icon: ShieldAlert,
   },
   client: {
     border: "border-red-500/30",
     bg: "bg-red-500/10",
     text: "text-red-400",
-    icon: AlertTriangle,
   },
   unknown: {
     border: "border-red-500/30",
     bg: "bg-red-500/10",
     text: "text-red-400",
-    icon: AlertTriangle,
   },
 };
 
 export function ErrorAlert({ error, onRetry, onDismiss }: ErrorAlertProps) {
   const styles = categoryStyles[error.category];
-  const Icon = styles.icon;
+  const Icon = iconMap[error.iconName] || AlertTriangle;
 
   return (
     <div

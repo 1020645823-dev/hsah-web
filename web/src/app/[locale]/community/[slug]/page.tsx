@@ -7,6 +7,7 @@ import {
   PublicRelatedLinks,
   PublicSiteShell,
 } from "@/components/public-site-shell";
+import { getMessageItemKey } from "@/lib/public-content";
 
 export default async function CommunityDetailPage({
   params,
@@ -16,7 +17,7 @@ export default async function CommunityDetailPage({
   const { slug, locale } = await params;
   const t = await getTranslations({ locale, namespace: "Community" });
 
-  const item = t.raw(`items.${slug}`) as Record<string, unknown> | undefined;
+  const item = t.raw(`items.${getMessageItemKey(slug)}`) as Record<string, unknown> | undefined;
   if (!item) {
     notFound();
   }

@@ -72,9 +72,18 @@
     "valueTitle": "先对齐利益相关方，再进入实施细节。",
     "valueSummary": "首页现在阐明产品定位、展示真实精选资产，并在用户进入资产库前将每个角色引导到最相关的内容通道。",
     "goToLibrary": "前往资产库",
-    "browseScenarios": "浏览场景"
+    "browseScenarios": "浏览场景",
+    "ctaLabel": "Sign in"
   },
   "Assets": {
+    "ctaLabel": "登录",
+    "backToAssets": "返回资产库",
+    "emptyClearDescription": "清除活动筛选条件或返回精选资产以查看所有可用内容。",
+    "emptyClearTitle": "没有资产匹配当前筛选条件。",
+    "exploreAssets": "探索资产",
+    "nextPage": "下一页",
+    "pageIndicator": "第 {currentPage} 页，共 {totalPages} 页",
+    "previousPage": "上一页",
     "eyebrow": "资产库",
     "title": "资产库",
     "summary": "搜索可复用演示、架构和实施参考。",
@@ -125,7 +134,8 @@
   "NotFound": {
     "title": "页面未找到",
     "description": "该页面可能已移动，或链接不再可用。",
-    "backHome": "返回首页"
+    "backHome": "返回首页",
+    "descriptionAlt": "The page you are looking for does not exist or has been moved."
   },
   "Login": {
     "productName": "Hyperscaler Asset Hub",
@@ -178,13 +188,63 @@
         "title": "实践型社区",
         "description": "运营、架构和产品团队跨行业共享方法、证据点与交付模式。"
       }
+    },
+    "exploreAssets": "Explore Assets",
+    "goToAssets": {
+      "description": "Use the asset library when the team is ready for implementation-oriented exploration.",
+      "label": "Go to assets"
+    },
+    "howUsedItems": [
+      "Stakeholders browse scenarios to align on business value and workflow change.",
+      "Architecture teams use reference patterns to reduce design churn before delivery begins.",
+      "Program leaders share insight articles to align controls, ownership, and rollout expectations.",
+      "Working groups and labs create a repeatable feedback loop across teams and sectors."
+    ],
+    "howUsedTitle": "How the platform is used",
+    "metrics": {
+      "architecturePosture": {
+        "label": "Architecture posture",
+        "value": "Reference-first"
+      },
+      "contentMode": {
+        "label": "Content mode",
+        "value": "Editorial"
+      },
+      "discoveryApproach": {
+        "label": "Discovery approach",
+        "value": "Scenario-led"
+      },
+      "learningModel": {
+        "label": "Learning model",
+        "value": "Community-backed"
+      }
+    },
+    "startFromSection": "Start from the section that fits your need",
+    "startWithArchitecture": {
+      "description": "Use reference views when the delivery model and controls need alignment.",
+      "label": "Start with architecture"
+    },
+    "startWithCommunity": {
+      "description": "Use programs and labs when teams need peer exchange and practical review.",
+      "label": "Start with community"
+    },
+    "startWithScenarios": {
+      "description": "Use business journeys when the problem statement is still forming.",
+      "label": "Start with scenarios"
     }
   },
   "Footer": {
     "productSummary": "场景、架构、洞察和社区实践的统一入口，用于加速 AI 交付资产复用。",
     "navigation": "导航",
     "resources": "资源",
-    "copyright": "© 2026 Hyperscaler Asset Hub。保留所有权利。"
+    "copyright": "© 2026 Hyperscaler Asset Hub。保留所有权利。",
+    "aboutHub": "ABOUT THE HUB",
+    "aboutHubDescription": "Discover scenario-led content, reference architecture thinking, and implementation-ready delivery assets from one branded platform.",
+    "aboutPlatform": "About the platform",
+    "assetLibrary": "Asset Library",
+    "sections": "SECTIONS",
+    "signIn": "Sign in",
+    "startHere": "START HERE"
   },
   "ContentLanes": {
     "eyebrow": "内容通道",
@@ -242,7 +302,9 @@
     "checking": "正在检查访问权限",
     "redirecting": "正在跳转到登录页",
     "protectedRoute": "受保护路由",
-    "adminRequired": "需要后台访问权限才能继续。"
+    "adminRequired": "需要后台访问权限才能继续。",
+    "checkingMessage": "Checking your session before loading admin tools.",
+    "signinRequired": "You need to sign in before accessing admin routes."
   },
   "PublicSite": {
     "skipToContent": "跳到正文",
@@ -254,7 +316,8 @@
       "metrics": "指标",
       "details": "详情",
       "related": "相关内容"
-    }
+    },
+    "brandTagline": "AI delivery content platform"
   },
   "FilterToolbar": {
     "filters": "筛选",
@@ -897,23 +960,174 @@
       "description": "内容资产、发布状态与治理操作。",
       "newAsset": "新建资产",
       "editAsset": "编辑资产",
-      "assetList": "资产列表"
+      "assetList": "资产列表",
+      "allAssets": "All assets",
+      "archive": "Archive",
+      "archiveSuccess": "Asset archived",
+      "batchDeletePartial": "{deleted} assets deleted, {failed} failed",
+      "batchDeleteSuccess": "{deleted} assets deleted",
+      "columnActions": "Actions",
+      "columnCloud": "Cloud",
+      "columnStatus": "Status",
+      "columnTitle": "Title",
+      "columnType": "Type",
+      "columnVisibility": "Visibility",
+      "confirmBatchDelete": "Confirm batch delete",
+      "confirmBatchDeleteMessage": "Are you sure you want to delete {count} selected assets? This action cannot be undone.",
+      "confirmDelete": "Confirm delete",
+      "confirmDeleteGeneric": "Are you sure you want to delete this asset?",
+      "confirmDeleteMessage": "Are you sure you want to delete asset \"{title}\"? This action cannot be undone.",
+      "createDescription": "Create a new asset entry.",
+      "createNew": "Create new asset",
+      "createNewAsset": "Create New Asset",
+      "created": "Created",
+      "deleteSuccess": "Asset deleted",
+      "descriptionShort": "Content assets, publishing status, and governance actions.",
+      "editDescription": "Edit asset entry.",
+      "empty": "No assets found",
+      "eyebrow": "ASSETS",
+      "noAssetsDescription": "Get started by creating a new asset.",
+      "noAssetsFound": "No assets found",
+      "publish": "Publish",
+      "publishFailed": "Publish failed, please complete required fields.",
+      "publishFailedFields": "Publish failed, please complete: {fields}",
+      "publishSuccess": "Asset published",
+      "restore": "Restore",
+      "restoreSuccess": "Asset restored to draft",
+      "status": "Status",
+      "summary": "Manage discovery, publication, and lifecycle for reusable platform assets.",
+      "totalAssets": "Total assets",
+      "totalAssetsDescription": "Content assets governed through operations and publishing controls.",
+      "type": "Type",
+      "unpublish": "Unpublish",
+      "unpublishSuccess": "Asset reverted to draft"
     },
     "roles": {
       "title": "角色",
-      "description": "角色定义、职责边界与授权范围。"
+      "description": "角色定义、职责边界与授权范围。",
+      "availableUsers": "AVAILABLE USERS",
+      "backToAdmin": "Back",
+      "batchDeleteFailed": "Batch delete failed: {count} roles could not be deleted",
+      "batchDeleteSuccess": "{count} roles deleted",
+      "boundPolicies": "BOUND POLICIES",
+      "confirmBatchDelete": "Confirm batch delete",
+      "confirmBatchDeleteMessage": "Are you sure you want to delete {count} selected roles? This action cannot be undone.",
+      "confirmDeleteRole": "Are you sure you want to delete this role?",
+      "createRole": "Create Role",
+      "creating": "Creating...",
+      "deleting": "Deleting...",
+      "descriptionLong": "View role definitions, permission sets, and policy bindings. Fields align with known API keys while preserving the raw response for debugging.",
+      "descriptionPlaceholder": "Describe the ownership boundary and permission intent for this role.",
+      "description_label": "Description",
+      "editRole": "Edit Role",
+      "noPermissionList": "No permission list returned",
+      "noPolicyMetadata": "No policy metadata",
+      "noRolesDescription": "No roles available.",
+      "noRolesFound": "No roles found",
+      "noUsersLoaded": "No users loaded.",
+      "overview": "Overview",
+      "overviewDescription": "When the API returns an inconsistent schema, the page still shows raw JSON for field mapping debugging.",
+      "permissionCount": "{count} permissions",
+      "permissions": "PERMISSIONS",
+      "roleCount": "ROLE COUNT",
+      "roleCreated": "Role created successfully.",
+      "roleDeleted": "Role deleted successfully.",
+      "roleName": "Role Name",
+      "roleUpdated": "Role updated successfully.",
+      "selectAll": "Select all ({selected}/{total})",
+      "updated": "UPDATED",
+      "updating": "Updating...",
+      "userIds": "User IDs",
+      "viewRawResponse": "View raw role response"
     },
     "users": {
       "title": "用户",
-      "description": "账号活跃度、可用性与 MFA 视图。"
+      "description": "账号活跃度、可用性与 MFA 视图。",
+      "actions": "Actions",
+      "active": "Active",
+      "batchDeleteFailed": "Batch delete failed: {count} users could not be deleted",
+      "batchDeleteSuccess": "{count} users deleted",
+      "confirmBatchDelete": "Confirm batch delete",
+      "confirmBatchDeleteMessage": "Are you sure you want to delete {count} selected users? This action cannot be undone.",
+      "confirmDelete": "Confirm delete",
+      "confirmDeleteGeneric": "Are you sure you want to delete this user?",
+      "confirmDeleteMessage": "Are you sure you want to delete user \"{email}\"? This action cannot be undone.",
+      "createUser": "Create user",
+      "disabled": "Disabled",
+      "email": "Email",
+      "enabled": "Enabled",
+      "fetchFailed": "Failed to fetch user list. Please check your network connection.",
+      "noUsers": "No users yet",
+      "noUsersDescription": "Click the \"Create user\" button above to add the first user.",
+      "status": "Status",
+      "twoFactor": "2FA",
+      "userCreated": "User created successfully",
+      "userDeleted": "User deleted successfully",
+      "userUpdated": "User updated successfully"
     },
     "templates": {
       "title": "模板",
-      "description": "模板库、结构复用与内容基线。"
+      "description": "模板库、结构复用与内容基线。",
+      "backToAdmin": "Back",
+      "blockCount": "{count} content blocks",
+      "builtin": "Built-in",
+      "cancel": "Cancel",
+      "contentTemplates": "Content templates",
+      "createFailed": "Failed to create",
+      "createFromCurrent": "Create from current content",
+      "createSuccess": "Template created",
+      "deleteFailed": "Failed to delete",
+      "deleteSuccess": "Template deleted",
+      "descriptionLong": "Manage content templates for quickly creating asset content blocks.",
+      "descriptionPlaceholder": "Description (optional)",
+      "loadFailed": "Failed to load",
+      "loading": "Loading...",
+      "noTemplates": "No templates yet",
+      "save": "Save",
+      "saveAsTemplate": "Save as template",
+      "saving": "Saving...",
+      "templateName": "Template name",
+      "updateFailed": "Failed to update",
+      "updateSuccess": "Template updated"
     },
     "policies": {
       "title": "策略",
-      "description": "访问规则、条件组合与执行口径。"
+      "description": "访问规则、条件组合与执行口径。",
+      "actions": "ACTIONS",
+      "backToAdmin": "Back",
+      "batchDeleteFailed": "Batch delete failed: {count} policies could not be deleted",
+      "batchDeleteSuccess": "{count} policies deleted",
+      "conditions": "CONDITIONS",
+      "confirm": "Confirm",
+      "confirmBatchDelete": "Confirm batch delete",
+      "confirmBatchDeleteMessage": "Are you sure you want to delete {count} selected policies? This action cannot be undone.",
+      "createPolicy": "Create Policy",
+      "createWithWizard": "Create with Wizard",
+      "creating": "Creating...",
+      "descriptionLong": "View policy scope, subject ranges, resource constraints, and condition summaries. The raw response is preserved for continued field mapping refinement.",
+      "editPolicy": "Edit Policy",
+      "effect": "Effect",
+      "noActions": "No actions",
+      "noConditions": "No conditions",
+      "noPoliciesDescription": "No policies available.",
+      "noPoliciesFound": "No policies found",
+      "noResources": "No resources",
+      "noRoleSuggestions": "No role suggestions loaded.",
+      "noSubjectScope": "No subject scope",
+      "permissions": "Permissions",
+      "policyCreated": "Policy created successfully.",
+      "policyDeleted": "Policy deleted successfully.",
+      "policyName": "Policy Name",
+      "policyUpdated": "Policy updated successfully.",
+      "resourceType": "Resource Type",
+      "resourceVisibility": "Resource Visibility",
+      "resources": "RESOURCES",
+      "roleNames": "Role Names",
+      "selectAll": "Select all ({selected}/{total})",
+      "subjects": "SUBJECTS",
+      "updated": "UPDATED",
+      "updating": "Updating...",
+      "viewRawResponse": "View raw policy response"
     },
     "policyWizard": {
       "title": "策略向导",
@@ -921,16 +1135,82 @@
       "steps": {
         "scope": "范围",
         "conditions": "条件",
-        "review": "审阅"
-      }
+        "review": "审阅",
+        "basics": "Basics",
+        "permissions": "Permissions",
+        "scopeReview": "Scope & Review",
+        "template": "Template"
+      },
+      "allowPublicRead": "Allow Public Asset Read",
+      "allowPublicReadDescription": "Allow reading public assets.",
+      "back": "Back",
+      "backToPolicies": "Back to Policies",
+      "blank": "Blank",
+      "blankDescription": "Start from scratch with effect, permissions, and scope.",
+      "chooseTemplate": "Choose Template",
+      "currentDraft": "CURRENT DRAFT",
+      "currentPermissions": "CURRENT PERMISSIONS",
+      "currentRoles": "CURRENT ROLES",
+      "denyPublicWrite": "Deny Public Asset Write",
+      "denyPublicWriteDescription": "Deny writing public assets.",
+      "denyRestrictedRead": "Deny Restricted Asset Read",
+      "denyRestrictedReadDescription": "Deny reading restricted assets.",
+      "descriptionLong": "Create access policies step by step: Template → Basics → Permissions → Scope & Review.",
+      "draftSyncNote": "Drafts sync across steps; Next/Submit are enabled or disabled based on current step validation.",
+      "invalidRoleNames": "Contains invalid role names: {names}. Please refresh the role list or correct and retry.",
+      "invalidRoleNamesGeneric": "Contains invalid role names. Please refresh the role list or correct and retry.",
+      "next": "Next",
+      "noContent": "No content yet",
+      "noRolesFromApi": "Role API returned no data. You can still enter role_names manually.",
+      "permissionsLabel": "Permissions (comma-separated)",
+      "policyAlreadyExists": "Policy name already exists. Please choose a different name.",
+      "policyCreated": "Policy created successfully.",
+      "preloadedRoles": "Preloaded {count} roles for role_names suggestions.",
+      "preloadingRoles": "Preloading role list...",
+      "previewPayload": "Preview create payload (JSON)",
+      "roleNamesLabel": "Role Names (comma-separated)",
+      "selected": "Selected",
+      "submit": "Submit",
+      "submitting": "Submitting..."
     },
     "matrix": {
       "title": "矩阵",
-      "description": "角色与权限矩阵联查视图。"
+      "description": "角色与权限矩阵联查视图。",
+      "backToAdmin": "Back",
+      "columns": "Columns",
+      "descriptionLong": "Aggregate effective permission results by role and policy in real time, with support for resource_type, resource_visibility, and permission search. Select a cell to view matching policy sources.",
+      "noMatrixData": "No matrix data available",
+      "permissionSearch": "Permission search",
+      "policies": "POLICIES",
+      "policiesDescription": "Resolved policy effect, permission, role scope, and resource context for matrix aggregation.",
+      "refreshMatrix": "Refresh matrix",
+      "resourceTypeFilter": "Resource type",
+      "resourceVisibilityFilter": "Resource visibility",
+      "roles": "ROLES",
+      "rolesDescription": "Deduplicated by role name as matrix column headers, directly reflecting the current Admin role set.",
+      "rows": "Rows",
+      "selectCellHint": "Select a cell to view matching policies"
     },
     "simulator": {
       "title": "模拟器",
-      "description": "鉴权请求验证与策略回放。"
+      "description": "鉴权请求验证与策略回放。",
+      "action": "Action",
+      "allowed": "Allowed",
+      "backToAdmin": "Back",
+      "conditions": "Conditions",
+      "denied": "Denied",
+      "descriptionLong": "Test authorization requests against current policies in real time. Adjust inputs to observe how role, resource, and condition combinations resolve to Allow or Deny.",
+      "errorDescription": "The simulation could not be completed. Check the request format and try again.",
+      "errorTitle": "Simulation error",
+      "matchedPolicies": "Matched policies",
+      "noMatchedPolicies": "No policies matched this request.",
+      "noResult": "No result yet. Build a request and run the simulation.",
+      "requestBuilder": "Request Builder",
+      "resource": "Resource",
+      "result": "Result",
+      "runSimulation": "Run simulation",
+      "simulating": "Simulating...",
+      "subject": "Subject"
     },
     "assetEditor": {
       "title": "资产编辑器",
@@ -940,15 +1220,56 @@
         "title": "标题",
         "subtitle": "副标题",
         "shortDescription": "简短描述",
-        "assetType": "资产类型"
-      }
+        "assetType": "资产类型",
+        "cloud": "Cloud",
+        "demoUrl": "Demo URL",
+        "differentiators": "Differentiators",
+        "documentationUrl": "Documentation URL",
+        "industry": "Industry",
+        "outcomes": "Outcomes",
+        "prerequisites": "Prerequisites",
+        "rolloutSteps": "Rollout steps",
+        "salesValue": "Sales value",
+        "status": "Status",
+        "tags": "Tags",
+        "technology": "Technology",
+        "useCases": "Use cases",
+        "visibility": "Visibility"
+      },
+      "addBlock": "Add block",
+      "archiveAsset": "Archive asset",
+      "backToAdmin": "Back to admin",
+      "blockTypes": {
+        "code": "Code",
+        "image": "Image",
+        "link": "Link",
+        "text": "Text",
+        "video": "Video"
+      },
+      "confirmDelete": "Confirm delete",
+      "confirmDeleteMessage": "Are you sure you want to delete this asset? This action cannot be undone.",
+      "contentBlocks": "Content blocks",
+      "deleteAsset": "Delete asset",
+      "deliveryLens": "Delivery lens",
+      "manageVideos": "Manage videos",
+      "publishAsset": "Publish asset",
+      "restoreAsset": "Restore asset",
+      "salesLens": "Sales lens",
+      "saveDraft": "Save draft",
+      "unpublishAsset": "Unpublish asset",
+      "videos": "Videos"
     },
     "videoManager": {
       "title": "视频管理",
       "description": "管理演示视频、海报图、说明和主视频标记。",
       "addVideo": "新增视频",
       "setPrimary": "设为主视频",
-      "removeVideo": "删除视频"
+      "removeVideo": "删除视频",
+      "dragToReorder": "Drag to reorder",
+      "noVideos": "No videos added yet.",
+      "posterUrl": "Poster URL",
+      "primary": "Primary",
+      "videoUrl": "Video URL"
     },
     "shell": {
       "brand": "HSAH 后台",
@@ -964,7 +1285,10 @@
       "roles": "角色",
       "policies": "策略",
       "matrix": "矩阵",
-      "simulator": "模拟器"
+      "simulator": "模拟器",
+      "navLabel": "Admin modules",
+      "workspaceDescription": "Continuously manage assets, templates, identities, and access controls.",
+      "workspaceTitle": "Operations workspace"
     },
     "topbar": {
       "workspaceLabel": "后台工作区",
@@ -972,7 +1296,11 @@
       "quickJump": "跨后台界面快速跳转",
       "protectedRoutesActive": "受保护路由已启用",
       "openLibrary": "打开资产库",
-      "breadcrumb": "面包屑"
+      "breadcrumb": "面包屑",
+      "login": "Login",
+      "logout": "Logout",
+      "mobileMenuPlaceholder": "Menu",
+      "toggleMenu": "Toggle menu"
     },
     "layout": {
       "defaultTitle": "后台",
@@ -1062,7 +1390,17 @@
       "saving": "保存中...",
       "cancel": "取消",
       "templateName": "模板名称",
-      "descriptionPlaceholder": "描述（可选）"
+      "descriptionPlaceholder": "描述（可选）",
+      "cancelDelete": "Cancel",
+      "confirmDelete": "Confirm delete",
+      "createFailed": "Failed to create template",
+      "delete": "Delete",
+      "deleteFailed": "Failed to delete template",
+      "edit": "Edit",
+      "loadFailed": "Failed to load templates",
+      "namePlaceholder": "Template name",
+      "saveAsTemplate": "Save as template",
+      "updateFailed": "Failed to update template"
     },
     "permissionMatrix": {
       "permissionHeader": "权限",
@@ -1121,5 +1459,22 @@
       "builtin": "内置",
       "blockCount": "{count} 个内容块"
     }
+  },
+  "Auth": {
+    "authentication": "Authentication",
+    "goToPublicLibrary": "Go to public library",
+    "libraryReturnPath": "Library return path",
+    "libraryReturnPathDesc": "You can always return to the public library after authentication.",
+    "publicLibraryAvailable": "Public library remains available for discovery.",
+    "redirectingToSignIn": "Redirecting to sign in",
+    "workspaceContext": "Workspace context",
+    "workspaceContextDesc": "Keep the current workspace in focus while the session is restored."
+  },
+  "ErrorBoundary": {
+    "backToHome": "Back to home",
+    "errorDetails": "Error details",
+    "reloadPage": "Reload page",
+    "somethingWentWrong": "Something went wrong",
+    "unexpectedError": "An unexpected error occurred. Please try reloading the page or return home."
   }
 }

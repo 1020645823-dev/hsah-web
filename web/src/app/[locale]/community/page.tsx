@@ -7,7 +7,7 @@ import {
   PublicSectionHero,
   PublicSiteShell,
 } from "@/components/public-site-shell";
-import { communitySlugs } from "@/lib/public-content";
+import { communitySlugs, getMessageItemKey } from "@/lib/public-content";
 
 export default async function CommunityPage({
   params,
@@ -53,7 +53,7 @@ export default async function CommunityPage({
 
         <div className="grid gap-5 lg:grid-cols-3">
           {communitySlugs.map((slug) => {
-            const item = t.raw(`items.${slug}`) as Record<string, unknown>;
+            const item = t.raw(`items.${getMessageItemKey(slug)}`) as Record<string, unknown>;
             return (
               <PublicContentCard
                 key={slug}

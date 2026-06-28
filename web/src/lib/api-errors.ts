@@ -1,5 +1,3 @@
-import { AlertTriangle, WifiOff, Lock, ShieldAlert } from "lucide-react";
-
 export type ApiErrorCategory = "network" | "server" | "auth" | "forbidden" | "client" | "unknown";
 
 export interface ApiErrorInfo {
@@ -7,7 +5,7 @@ export interface ApiErrorInfo {
   status?: number;
   message: string;
   userMessage: string;
-  icon: typeof AlertTriangle;
+  iconName: string;
   retryable: boolean;
 }
 
@@ -57,35 +55,35 @@ export function parseApiError(data: unknown, status?: number): ApiErrorInfo {
   const category = categorizeError(status);
   const message = pickMessage(data, status);
 
-  const map: Record<ApiErrorCategory, { userMessage: string; icon: typeof AlertTriangle; retryable: boolean }> = {
+  const map: Record<ApiErrorCategory, { userMessage: string; iconName: string; retryable: boolean }> = {
     network: {
       userMessage: "网络连接异常，请检查网络后重试。",
-      icon: WifiOff,
+      iconName: "wifi-off",
       retryable: true,
     },
     server: {
       userMessage: "服务器暂时不可用，请稍后重试。",
-      icon: AlertTriangle,
+      iconName: "alert-triangle",
       retryable: true,
     },
     auth: {
       userMessage: "登录已过期，请重新登录。",
-      icon: Lock,
+      iconName: "lock",
       retryable: false,
     },
     forbidden: {
       userMessage: "您没有权限执行此操作。",
-      icon: ShieldAlert,
+      iconName: "shield-alert",
       retryable: false,
     },
     client: {
       userMessage: message,
-      icon: AlertTriangle,
+      iconName: "alert-triangle",
       retryable: false,
     },
     unknown: {
       userMessage: "发生未知错误，请稍后重试。",
-      icon: AlertTriangle,
+      iconName: "alert-triangle",
       retryable: true,
     },
   };
@@ -97,7 +95,7 @@ export function parseApiError(data: unknown, status?: number): ApiErrorInfo {
     status,
     message,
     userMessage: category === "client" ? message : mapped.userMessage,
-    icon: mapped.icon,
+    iconName: mapped.iconName,
     retryable: mapped.retryable,
   };
 }
