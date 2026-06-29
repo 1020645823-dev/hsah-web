@@ -40,26 +40,32 @@ MAX_SIZE_BYTES: dict[str, int] = {
 PRESIGN_EXPIRES = timedelta(hours=1)
 
 
-def _build_client(endpoint: str) -> Minio:
+def _build_client(endpoint: str, *, region: str | None = None) -> Minio:
     return Minio(
         endpoint,
         access_key=settings.minio_access_key,
         secret_key=settings.minio_secret_key,
         secure=settings.minio_secure,
+        region=region,
     )
 
 
-# Internal client for data-plane operations (put/remove).
-_internal_client = _build_client(settings.minio_endpoint)
-# External client for presigned URLs (browser-reachable host).
-_external_client = _build_client(settings.minio_external_endpoint)
+# Client for data-plane operations (put/remove), reaching MinIO over the
+# internal network (e.g. minio:9000 inside Docker).
+_client = _build_client(settings.minio_endpoint)
+# Separate client for presigned URLs. Its endpoint is the browser-reachable
+# host (e.g. localhost:9000) so the signed URL points where the browser can
+# follow it. Pinning the region avoids a network call to discover the bucket
+# region at signing time — the external endpoint may be unreachable from the
+# API container, but with a fixed region the SDK never needs to contact it.
+_presign_client = _build_client(settings.minio_external_endpoint, region="us-east-1")
 
 
 def ensure_bucket() -> None:
     """Create the bucket if it does not already exist."""
     try:
-        if not _internal_client.bucket_exists(settings.minio_bucket):
-            _internal_client.make_bucket(settings.minio_bucket)
+        if not _client.bucket_exists(settings.minio_bucket):
+            _client.make_bucket(settings.minio_bucket)
     except S3Error:
         # MinIO may not be ready on the very first startup event; the upload
         # endpoints will surface connection errors per-request instead.
@@ -98,7 +104,7 @@ def upload_file(kind: str, content_type: str, data: bytes) -> str:
 
     from io import BytesIO
 
-    _internal_client.put_object(
+    _client.put_object(
         bucket_name=settings.minio_bucket,
         object_name=storage_key,
         data=BytesIO(data),
@@ -109,8 +115,13 @@ def upload_file(kind: str, content_type: str, data: bytes) -> str:
 
 
 def get_presigned_url(storage_key: str, expires: timedelta = PRESIGN_EXPIRES) -> str:
-    """Return a browser-reachable presigned GET URL for the object."""
-    return _external_client.presigned_get_object(
+    """Return a browser-reachable presigned GET URL for the object.
+
+    Signed via the external endpoint so the host in the URL (and thus the
+    ``host`` header covered by the AWS V4 signature) matches what the browser
+    will actually request.
+    """
+    return _presign_client.presigned_get_object(
         bucket_name=settings.minio_bucket,
         object_name=storage_key,
         expires=expires,
@@ -120,7 +131,7 @@ def get_presigned_url(storage_key: str, expires: timedelta = PRESIGN_EXPIRES) ->
 def delete_object(storage_key: str) -> None:
     """Delete an object from MinIO, ignoring missing objects."""
     try:
-        _internal_client.remove_object(settings.minio_bucket, storage_key)
+        _client.remove_object(settings.minio_bucket, storage_key)
     except S3Error:
         pass
 
