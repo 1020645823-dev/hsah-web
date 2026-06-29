@@ -18,6 +18,26 @@ services:
     networks:
       - hsah-network
 
+  minio:
+    image: minio/minio
+    container_name: hsah-minio
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ACCESS_KEY:-minioadmin}
+      MINIO_ROOT_PASSWORD: ${MINIO_SECRET_KEY:-minioadmin}
+    ports:
+      - "${MINIO_PORT:-9000}:9000"
+      - "${MINIO_CONSOLE_PORT:-9001}:9001"
+    volumes:
+      - minio_data:/data
+    networks:
+      - hsah-network
+    command: server /data --console-address ":9001"
+    healthcheck:
+      test: ["CMD", "mc", "ready", "local"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
   api:
     build:
       context: ./api
@@ -30,10 +50,18 @@ services:
       ACCESS_TOKEN_EXPIRE_MINUTES: ${ACCESS_TOKEN_EXPIRE_MINUTES:-30}
       ADMIN_EMAIL: ${ADMIN_EMAIL:-admin@hsah.local}
       ADMIN_PASSWORD: ${ADMIN_PASSWORD:-Admin@123}
+      MINIO_ENDPOINT: ${MINIO_INTERNAL_ENDPOINT:-minio:9000}
+      MINIO_EXTERNAL_ENDPOINT: ${MINIO_EXTERNAL_ENDPOINT:-localhost:9000}
+      MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY:-minioadmin}
+      MINIO_SECRET_KEY: ${MINIO_SECRET_KEY:-minioadmin}
+      MINIO_BUCKET: ${MINIO_BUCKET:-hsah}
+      MINIO_SECURE: ${MINIO_SECURE:-false}
     ports:
       - "${API_PORT:-8000}:8000"
     depends_on:
       postgres:
+        condition: service_healthy
+      minio:
         condition: service_healthy
     volumes:
       - ./api:/app
@@ -63,6 +91,7 @@ services:
 
 volumes:
   postgres_data:
+  minio_data:
 
 networks:
   hsah-network:

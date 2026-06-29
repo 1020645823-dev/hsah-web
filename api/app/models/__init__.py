@@ -1,6 +1,7 @@
 from app.models.access_policy import AccessPolicy
 from app.models.analytics_event import AnalyticsEvent
 from app.models.asset import Asset
+from app.models.asset_attachment import AssetAttachment
 from app.models.asset_collection import AssetCollection, AssetCollectionItem
 from app.models.asset_engagement import AssetFavorite, AssetFeedback
 from app.models.asset_quality import AssetQualityScore
@@ -14,6 +15,7 @@ from app.models.user import User
 __all__ = [
     "User",
     "Asset",
+    "AssetAttachment",
     "Role",
     "AccessPolicy",
     "user_roles",

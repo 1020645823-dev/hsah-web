@@ -1486,6 +1486,20 @@
       "description": "Description",
       "descriptionPlaceholder": "Short description of the video"
     },
+    "assetAttachments": {
+      "title": "Attachments",
+      "dropOrClick": "Drag files here, or click to select",
+      "supportedHint": "Images, videos, and PDF / PPT / Word documents",
+      "uploading": "Uploading…",
+      "loading": "Loading attachments…",
+      "empty": "No attachments yet. Uploaded files will appear here.",
+      "download": "Download",
+      "delete": "Delete",
+      "deleteConfirm": "Delete attachment \"{name}\"?",
+      "unsupportedType": "Unsupported file type: {name}",
+      "tooLarge": "\"{name}\" exceeds the size limit",
+      "saveFirstHint": "Save the asset first, then upload attachments."
+    },
     "templateManager": {
       "title": "Templates",
       "createFromCurrent": "Create from current content",

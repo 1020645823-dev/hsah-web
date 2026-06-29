@@ -1472,6 +1472,20 @@
       "description": "描述",
       "descriptionPlaceholder": "视频简介"
     },
+    "assetAttachments": {
+      "title": "附件",
+      "dropOrClick": "拖拽文件到此处，或点击选择",
+      "supportedHint": "支持图片、视频及 PDF / PPT / Word 文档",
+      "uploading": "上传中…",
+      "loading": "加载附件…",
+      "empty": "暂无附件，上传后将显示在此处。",
+      "download": "下载",
+      "delete": "删除",
+      "deleteConfirm": "确定要删除附件「{name}」吗？",
+      "unsupportedType": "不支持的文件类型：{name}",
+      "tooLarge": "文件「{name}」超出大小限制",
+      "saveFirstHint": "请先保存资产后再上传附件。"
+    },
     "templateManager": {
       "title": "模板",
       "createFromCurrent": "从当前内容创建",

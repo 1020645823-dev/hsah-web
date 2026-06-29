@@ -6,6 +6,7 @@ import { useTranslations } from "next-intl";
 import { TagInput } from "./tag-input";
 import { ContentBlockEditor } from "./content-blocks/content-block-editor";
 import { AssetVideoManager } from "./asset-video-manager";
+import { AssetAttachmentsManager } from "./asset-attachments-manager";
 import type { ContentBlock } from "@/lib/admin-content-blocks";
 import type { AssetVideoDraft } from "@/lib/admin-asset-editor";
 import {
@@ -498,6 +499,24 @@ export function AssetEditorForm({ mode, assetId, token }: AssetEditorFormProps) 
           errors={blockErrors}
         />
       </div>
+
+      {mode === "edit" && assetId ? (
+        <div className={cardClass}>
+          <h3 className="mb-4 text-base font-semibold text-[var(--color-text-primary)]">
+            {t("assetAttachments.title")}
+          </h3>
+          <AssetAttachmentsManager assetId={assetId} token={token} />
+        </div>
+      ) : (
+        <div className={cardClass}>
+          <h3 className="mb-2 text-base font-semibold text-[var(--color-text-primary)]">
+            {t("assetAttachments.title")}
+          </h3>
+          <p className="text-sm text-[var(--color-text-secondary)]">
+            {t("assetAttachments.saveFirstHint")}
+          </p>
+        </div>
+      )}
 
       {submitError && (
         <div className="rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-500">

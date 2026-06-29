@@ -6,6 +6,7 @@ from app.api.v1.router import router as v1_router
 from app.core.config import settings
 from app.scripts.seed_admin import seed as seed_admin
 from app.scripts.seed_templates import seed as seed_templates
+from app.services.storage import ensure_bucket as ensure_minio_bucket
 
 app = FastAPI(title="Hyperscaler Asset Hub API", version="0.1.0")
 
@@ -37,5 +38,6 @@ def version() -> dict[str, str]:
 
 @app.on_event("startup")
 def startup_event() -> None:
+    ensure_minio_bucket()
     seed_admin()
     seed_templates()
