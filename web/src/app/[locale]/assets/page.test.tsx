@@ -6,6 +6,8 @@ import AssetsPage from "./page";
 
 const mocks = vi.hoisted(() => ({
   fetchPublicAssets: vi.fn(),
+  fetchPublicCollections: vi.fn(),
+  fetchRecommendedAssets: vi.fn(),
   parseAssetQueryFromSearchParams: vi.fn(),
   assetsClientProps: vi.fn(),
   publicSiteShellProps: vi.fn(),
@@ -17,6 +19,8 @@ vi.mock("next-intl/server", () => ({
 
 vi.mock("@/lib/public-assets", () => ({
   fetchPublicAssets: mocks.fetchPublicAssets,
+  fetchPublicCollections: mocks.fetchPublicCollections,
+  fetchRecommendedAssets: mocks.fetchRecommendedAssets,
   parseAssetQueryFromSearchParams: mocks.parseAssetQueryFromSearchParams,
 }));
 
@@ -52,9 +56,13 @@ vi.mock("@/components/error-alert", () => ({
 describe("AssetsPage", () => {
   beforeEach(() => {
     mocks.fetchPublicAssets.mockReset();
+    mocks.fetchPublicCollections.mockReset();
+    mocks.fetchRecommendedAssets.mockReset();
     mocks.parseAssetQueryFromSearchParams.mockReset();
     mocks.assetsClientProps.mockReset();
     mocks.publicSiteShellProps.mockReset();
+    mocks.fetchPublicCollections.mockResolvedValue({ ok: true, data: [] });
+    mocks.fetchRecommendedAssets.mockResolvedValue({ ok: true, data: [] });
   });
 
   it("parses search params, fetches first page data, and renders the client shell", async () => {
@@ -96,6 +104,8 @@ describe("AssetsPage", () => {
     expect(mocks.assetsClientProps).toHaveBeenCalledWith({
       initialResponse: { items: [], total: 0, limit: 12, offset: 24 },
       initialQuery: { q: "agent", cloud: "aws", limit: 12, offset: 24 },
+      collections: [],
+      recommended: [],
     });
     expect(mocks.publicSiteShellProps).toHaveBeenCalledWith({
       ctaHref: "/auth/login",

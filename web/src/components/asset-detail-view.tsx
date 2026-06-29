@@ -9,12 +9,18 @@ import { ContentBlockRenderer } from "@/components/content-block-renderer";
 import { normalizeContentAudience, type ContentBlock } from "@/lib/admin-content-blocks";
 import { cn } from "@/lib/utils";
 import { AssetVideoPlayer, type VideoItem } from "@/components/asset-video-player";
+import { RelatedAssets } from "@/components/public/related-assets";
+import { AssetFeedbackForm } from "@/components/public/asset-feedback-form";
+import { AccessRequestForm } from "@/components/public/access-request-form";
+import { AssetEngagementBar } from "@/components/public/asset-engagement-bar";
 
 type AssetMode = "sales" | "delivery";
 type DeliveryAccess = "granted" | "signin_required" | "request_access";
 
 type AssetDetailViewProps = {
   blocks: ContentBlock[];
+  assetId?: string;
+  authToken?: string | null;
   deliveryAccess?: DeliveryAccess;
   sharedFields?: {
     introduction?: string;
@@ -256,6 +262,8 @@ function DeliveryDetailPanel({
 
 export function AssetDetailView({
   blocks,
+  assetId,
+  authToken,
   deliveryAccess = "request_access",
   sharedFields = {},
   salesFields = {},
@@ -268,6 +276,17 @@ export function AssetDetailView({
     [blocks, deliveryAccess, deliveryFields],
   );
 
+  const EngagementSection = assetId ? (
+    <div className="space-y-6 border-t border-border/60 pt-6">
+      <AssetEngagementBar assetId={assetId} token={authToken} />
+      {deliveryAccess === "request_access" && (
+        <AccessRequestForm assetId={assetId} token={authToken} />
+      )}
+      <AssetFeedbackForm assetId={assetId} token={authToken} />
+      <RelatedAssets assetId={assetId} />
+    </div>
+  ) : null;
+
   if (!showDeliveryMode) {
     return (
       <div className="space-y-6">
@@ -277,6 +296,7 @@ export function AssetDetailView({
         )}
         <SalesDetailPanel salesFields={salesFields} />
         <ContentBlockRenderer blocks={blocks} mode="sales" />
+        {EngagementSection}
       </div>
     );
   }
@@ -316,6 +336,7 @@ export function AssetDetailView({
           <ContentBlockRenderer blocks={blocks} mode={mode} />
         </div>
       )}
+      {EngagementSection}
     </div>
   );
 }

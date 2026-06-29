@@ -68,9 +68,9 @@
         "label": "统一公共入口"
       }
     },
-  "valueEyebrow": "平台价值",
-  "valueTitle": "在深入实施细节前先对齐利益相关方",
-  "valueSummary": "从业务成果出发，走通场景，再落到可复用架构，最后才打开资产库。",
+    "valueEyebrow": "平台价值",
+    "valueTitle": "在深入实施细节前先对齐利益相关方",
+    "valueSummary": "从业务成果出发，走通场景，再落到可复用架构，最后才打开资产库。",
     "goToLibrary": "前往资产库",
     "browseScenarios": "浏览场景",
     "joinCommunity": "加入社区",
@@ -104,7 +104,12 @@
     "technology": "技术",
     "assetType": "资产类型",
     "published": "已发布",
-    "draft": "草稿"
+    "draft": "草稿",
+    "collectionsTitle": "专题集合",
+    "collectionsSummary": "按主题、行业或方案领域策划的资产分组。",
+    "collectionItemCount": "{count} 个资产",
+    "recommendedTitle": "推荐资产",
+    "collectionEmpty": "该专题暂无可展示的已发布资产。"
   },
   "AssetDetail": {
     "sharedContext": "共享上下文",
@@ -125,7 +130,30 @@
     "controlledDeliveryContent": "受控交付内容",
     "deliveryAccessTitle": "交付实施访问权限",
     "signinRequiredDescription": "使用获批角色登录以查看运行手册、部署步骤和交付说明。",
-    "requestAccessDescription": "申请交付访问权限以查看运行手册、部署步骤和交付说明。"
+    "requestAccessDescription": "申请交付访问权限以查看运行手册、部署步骤和交付说明。",
+    "relatedAssets": "相关资产",
+    "feedbackType": "反馈类型",
+    "feedbackTypeQuestion": "咨询",
+    "feedbackTypeProblem": "问题",
+    "feedbackTypePraise": "好评",
+    "feedbackTypeOther": "其他",
+    "feedbackMessage": "内容",
+    "feedbackSubmit": "提交反馈",
+    "feedbackSubmitted": "感谢反馈，我们已收到。",
+    "accessRequestTitle": "申请访问交付内容",
+    "accessRequestPurpose": "你将如何使用？",
+    "accessRequestRole": "你的角色",
+    "accessRequestSubmit": "申请访问",
+    "accessRequestSubmitted": "访问申请已提交，我们会尽快处理。",
+    "accessRequestApproved": "访问已通过，现在可以查看交付内容。",
+    "accessRequestSignIn": "请先登录后再申请访问。",
+    "accessRequestSignInLink": "登录",
+    "favorite": "收藏",
+    "favorited": "已收藏",
+    "favoriteSignIn": "请登录后再收藏该资产。",
+    "share": "分享",
+    "shared": "链接已复制",
+    "shareFailed": "复制链接失败，请手动复制。"
   },
   "VideoPlayer": {
     "demoVideo": "演示视频",
@@ -1475,6 +1503,76 @@
       "apply": "应用",
       "builtin": "内置",
       "blockCount": "{count} 个内容块"
+    },
+    "operations": {
+      "totalAssets": "资产总数",
+      "publishedAssets": "已发布",
+      "reviewingAssets": "审核中",
+      "lowQualityAssets": "低质量",
+      "pendingAccessRequests": "待处理访问申请",
+      "taskQueueLabel": "工作队列",
+      "taskQueue": "待处理任务",
+      "noTasks": "暂无待处理任务，一切就绪。",
+      "recentActivityLabel": "动态",
+      "recentActivity": "近期运营动态",
+      "noActivity": "暂无近期动态。"
+    },
+    "accessRequests": {
+      "eyebrow": "访问申请",
+      "title": "访问申请队列",
+      "summary": "审核并处理用户对受限交付内容的访问申请。",
+      "empty": "当前视图没有访问申请。",
+      "approve": "通过",
+      "reject": "拒绝",
+      "reasonRequired": "拒绝申请时必须填写原因。",
+      "status": "状态",
+      "purpose": "用途",
+      "role": "角色",
+      "requestedAt": "申请时间"
+    },
+    "analytics": {
+      "eyebrow": "数据分析",
+      "title": "运营指标看板",
+      "summary": "内容、体验、流程、质量与治理运营指标。",
+      "contentSection": "内容",
+      "experienceSection": "体验",
+      "workflowSection": "流程",
+      "qualitySection": "质量",
+      "governanceSection": "治理",
+      "loading": "正在加载指标…",
+      "noData": "暂无数据。"
+    },
+    "audit": {
+      "eyebrow": "审计日志",
+      "title": "审计日志",
+      "summary": "摘要",
+      "empty": "没有符合当前筛选的审计记录。",
+      "action": "动作",
+      "resourceType": "资源",
+      "actor": "操作人",
+      "timestamp": "时间"
+    },
+    "quality": {
+      "label": "内容质量",
+      "title": "发布就绪检查",
+      "score": "分数",
+      "bandReady": "就绪",
+      "bandNeedsWork": "需完善",
+      "bandBlocked": "不达标",
+      "missing": "缺失项",
+      "warnings": "建议",
+      "refresh": "重新检查",
+      "noMissing": "核心要求已全部满足。"
+    },
+    "reviewActions": {
+      "submitReview": "提交审核",
+      "approve": "通过",
+      "reject": "驳回",
+      "publish": "发布",
+      "unpublish": "下线",
+      "archive": "归档",
+      "rejectReasonPrompt": "驳回原因",
+      "confirmReject": "驳回资产"
     }
   },
   "Auth": {

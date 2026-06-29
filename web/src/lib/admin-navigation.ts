@@ -1,7 +1,9 @@
 import type { LucideIcon } from "lucide-react";
 import {
+  Activity,
   Blocks,
   FileText,
+  Inbox,
   LayoutDashboard,
   LayoutTemplate,
   Package,
@@ -59,6 +61,18 @@ export const adminNavigation = [
     label: "Matrix",
     description: "角色与权限矩阵联查视图。",
     icon: Blocks,
+  },
+  {
+    href: "/admin/access-requests",
+    label: "Access Requests",
+    description: "处理用户对受限交付内容的访问申请。",
+    icon: Inbox,
+  },
+  {
+    href: "/admin/analytics",
+    label: "Analytics",
+    description: "内容、体验、流程与治理运营指标。",
+    icon: Activity,
   },
   {
     href: "/admin/simulator",

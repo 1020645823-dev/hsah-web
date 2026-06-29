@@ -8,7 +8,7 @@ afterEach(() => {
 
 // Mock next/navigation for next-intl and components that use useRouter/usePathname
 vi.mock("next/navigation", () => ({
-  useRouter: () => ({ push: vi.fn(), replace: vi.fn(), back: vi.fn() }),
+  useRouter: () => ({ push: vi.fn(), replace: vi.fn(), back: vi.fn(), refresh: vi.fn() }),
   usePathname: () => "/",
   useParams: () => ({ locale: "en" }),
   useSearchParams: () => new URLSearchParams(),

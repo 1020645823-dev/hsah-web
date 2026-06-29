@@ -43,6 +43,8 @@ export function PublicAssetDetailClient({
   return (
     <AssetDetailView
       blocks={toContentBlocks(asset.content_blocks)}
+      assetId={asset.id}
+      authToken={typeof window === "undefined" ? null : getStoredAdminToken()}
       deliveryAccess={asset.delivery_access ?? undefined}
       sharedFields={{
         introduction: sharedFields.introduction,

@@ -8,6 +8,7 @@ import { useTranslations } from "next-intl";
 import { PageHeader } from "@/components/product/page-header";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ErrorAlert } from "@/components/error-alert";
+import { OperationsWorkbench } from "@/components/admin/operations-workbench";
 import { adminRequest, getStoredAdminToken } from "@/lib/admin";
 import { parseApiError, type ApiErrorInfo } from "@/lib/api-errors";
 import { adminNavigation } from "@/lib/admin-navigation";
@@ -233,6 +234,8 @@ export default function AdminPage() {
           </Card>
         </div>
       </section>
+
+      {token ? <OperationsWorkbench token={token} /> : null}
     </div>
   );
 }

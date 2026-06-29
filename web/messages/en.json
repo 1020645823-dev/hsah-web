@@ -104,7 +104,12 @@
     "technology": "Technology",
     "assetType": "Asset type",
     "published": "Published",
-    "draft": "Draft"
+    "draft": "Draft",
+    "collectionsTitle": "Collections",
+    "collectionsSummary": "Curated groupings of assets by theme, industry, or solution area.",
+    "collectionItemCount": "{count, plural, one {# asset} other {# assets}}",
+    "recommendedTitle": "Recommended",
+    "collectionEmpty": "This collection has no published assets yet."
   },
   "AssetDetail": {
     "sharedContext": "Shared context",
@@ -125,7 +130,30 @@
     "controlledDeliveryContent": "Controlled delivery content",
     "deliveryAccessTitle": "Delivery implementation access",
     "signinRequiredDescription": "Sign in with an approved role to review runbooks, deployment steps, and delivery notes.",
-    "requestAccessDescription": "Request delivery access to review runbooks, deployment steps, and delivery notes."
+    "requestAccessDescription": "Request delivery access to review runbooks, deployment steps, and delivery notes.",
+    "relatedAssets": "Related assets",
+    "feedbackType": "Feedback type",
+    "feedbackTypeQuestion": "Question",
+    "feedbackTypeProblem": "Problem",
+    "feedbackTypePraise": "Praise",
+    "feedbackTypeOther": "Other",
+    "feedbackMessage": "Message",
+    "feedbackSubmit": "Submit feedback",
+    "feedbackSubmitted": "Thanks - your feedback was submitted.",
+    "accessRequestTitle": "Request access to delivery content",
+    "accessRequestPurpose": "How will you use this?",
+    "accessRequestRole": "Your role",
+    "accessRequestSubmit": "Request access",
+    "accessRequestSubmitted": "Your access request was submitted. We will review it shortly.",
+    "accessRequestApproved": "Access approved. You can now view delivery content.",
+    "accessRequestSignIn": "You need to sign in to request access.",
+    "accessRequestSignInLink": "Sign in",
+    "favorite": "Save",
+    "favorited": "Saved",
+    "favoriteSignIn": "Sign in to save this asset.",
+    "share": "Share",
+    "shared": "Link copied",
+    "shareFailed": "Could not copy the link. Please copy it manually."
   },
   "VideoPlayer": {
     "demoVideo": "Demo video",
@@ -256,11 +284,24 @@
         "summary": "Reshape service operations around grounded copilots, policy-aware automation, and continuous quality loops.",
         "industry": "Telecommunications",
         "businessOutcome": "Cut handle times while raising first-contact resolution across digital and voice channels.",
-        "tags": ["Contact center", "Agent assist", "Knowledge grounding"],
+        "tags": [
+          "Contact center",
+          "Agent assist",
+          "Knowledge grounding"
+        ],
         "metrics": [
-          { "label": "Average handle time", "value": "-28%" },
-          { "label": "First-contact resolution", "value": "+17 pts" },
-          { "label": "Knowledge reuse", "value": "3.2x" }
+          {
+            "label": "Average handle time",
+            "value": "-28%"
+          },
+          {
+            "label": "First-contact resolution",
+            "value": "+17 pts"
+          },
+          {
+            "label": "Knowledge reuse",
+            "value": "3.2x"
+          }
         ],
         "phases": [
           {
@@ -276,7 +317,10 @@
             "description": "Track intake quality, escalation handling, and sentiment recovery through a weekly improvement loop."
           }
         ],
-        "relatedArchitectureSlugs": ["agentic-service-mesh", "knowledge-governance-fabric"]
+        "relatedArchitectureSlugs": [
+          "agentic-service-mesh",
+          "knowledge-governance-fabric"
+        ]
       },
       "regulatedRiskCaseOrchestration": {
         "slug": "regulated-risk-case-orchestration",
@@ -285,11 +329,24 @@
         "summary": "Coordinate document review, analyst workbenches, and human approval for high-trust financial workflows.",
         "industry": "Banking",
         "businessOutcome": "Shorten risk review cycles without weakening traceability, approval, and policy control.",
-        "tags": ["Risk operations", "Human-in-the-loop", "Policy control"],
+        "tags": [
+          "Risk operations",
+          "Human-in-the-loop",
+          "Policy control"
+        ],
         "metrics": [
-          { "label": "Case cycle time", "value": "-41%" },
-          { "label": "Analyst throughput", "value": "+22%" },
-          { "label": "Audit readiness", "value": "99.5%" }
+          {
+            "label": "Case cycle time",
+            "value": "-41%"
+          },
+          {
+            "label": "Analyst throughput",
+            "value": "+22%"
+          },
+          {
+            "label": "Audit readiness",
+            "value": "99.5%"
+          }
         ],
         "phases": [
           {
@@ -305,7 +362,10 @@
             "description": "Persist every decision, exception, and supporting artifact for downstream audit and model governance."
           }
         ],
-        "relatedArchitectureSlugs": ["trust-control-plane", "knowledge-governance-fabric"]
+        "relatedArchitectureSlugs": [
+          "trust-control-plane",
+          "knowledge-governance-fabric"
+        ]
       },
       "fieldServiceKnowledgeAcceleration": {
         "slug": "field-service-knowledge-acceleration",
@@ -314,11 +374,24 @@
         "summary": "Give technicians multimodal guidance, parts intelligence, and completion capture inside the workflow.",
         "industry": "Industrial",
         "businessOutcome": "Raise first-time fix rates and compress ramp time for newly trained field teams.",
-        "tags": ["Field service", "Visual assist", "Work instructions"],
+        "tags": [
+          "Field service",
+          "Visual assist",
+          "Work instructions"
+        ],
         "metrics": [
-          { "label": "First-time fix", "value": "+13 pts" },
-          { "label": "Ramp time", "value": "-35%" },
-          { "label": "Repeat visits", "value": "-18%" }
+          {
+            "label": "First-time fix",
+            "value": "+13 pts"
+          },
+          {
+            "label": "Ramp time",
+            "value": "-35%"
+          },
+          {
+            "label": "Repeat visits",
+            "value": "-18%"
+          }
         ],
         "phases": [
           {
@@ -334,7 +407,9 @@
             "description": "Turn job outcomes and technician feedback into updated content and better dispatch logic."
           }
         ],
-        "relatedArchitectureSlugs": ["edge-inference-backbone"]
+        "relatedArchitectureSlugs": [
+          "edge-inference-backbone"
+        ]
       }
     }
   },
@@ -360,7 +435,11 @@
         "eyebrow": "Reference architecture",
         "summary": "A modular orchestration pattern for copilots and automation that decouples policy, memory, routing, and execution.",
         "focus": "Enterprise service operations",
-        "tags": ["Orchestration", "Observability", "Human approval"],
+        "tags": [
+          "Orchestration",
+          "Observability",
+          "Human approval"
+        ],
         "layers": [
           {
             "title": "Experience layer",
@@ -389,7 +468,9 @@
           "Use a shared trace identifier between orchestration and downstream systems.",
           "Treat confidence thresholds as a business control, not just a model setting."
         ],
-        "relatedScenarioSlugs": ["intelligent-customer-operations"]
+        "relatedScenarioSlugs": [
+          "intelligent-customer-operations"
+        ]
       },
       "knowledgeGovernanceFabric": {
         "slug": "knowledge-governance-fabric",
@@ -397,7 +478,11 @@
         "eyebrow": "Reference architecture",
         "summary": "A governed content pipeline for high-trust retrieval that emphasizes freshness, lineage, and approval.",
         "focus": "Knowledge-intensive regulated workflows",
-        "tags": ["RAG", "Lineage", "Content lifecycle"],
+        "tags": [
+          "RAG",
+          "Lineage",
+          "Content lifecycle"
+        ],
         "layers": [
           {
             "title": "Source intake",
@@ -426,7 +511,10 @@
           "Separate draft, approved, and retired knowledge states in storage and in the experience.",
           "Hold the business accountable for content freshness, not just the platform team."
         ],
-        "relatedScenarioSlugs": ["intelligent-customer-operations", "regulated-risk-case-orchestration"]
+        "relatedScenarioSlugs": [
+          "intelligent-customer-operations",
+          "regulated-risk-case-orchestration"
+        ]
       },
       "trustControlPlane": {
         "slug": "trust-control-plane",
@@ -434,7 +522,11 @@
         "eyebrow": "Reference architecture",
         "summary": "A horizontal control plane for evaluation, approval, policy enforcement, and operational risk management.",
         "focus": "High-assurance decision support",
-        "tags": ["Control plane", "Evaluation", "Assurance"],
+        "tags": [
+          "Control plane",
+          "Evaluation",
+          "Assurance"
+        ],
         "layers": [
           {
             "title": "Policy definition",
@@ -463,7 +555,9 @@
           "Treat evaluation datasets as governance assets and refresh them regularly.",
           "Give risk teams self-serve visibility without depending on engineering changes."
         ],
-        "relatedScenarioSlugs": ["regulated-risk-case-orchestration"]
+        "relatedScenarioSlugs": [
+          "regulated-risk-case-orchestration"
+        ]
       },
       "edgeInferenceBackbone": {
         "slug": "edge-inference-backbone",
@@ -471,7 +565,11 @@
         "eyebrow": "Reference architecture",
         "summary": "A resilient pattern for field and factory settings where local assisted intelligence tolerates connectivity loss.",
         "focus": "Field and frontline execution",
-        "tags": ["Edge", "Offline-first", "Device telemetry"],
+        "tags": [
+          "Edge",
+          "Offline-first",
+          "Device telemetry"
+        ],
         "layers": [
           {
             "title": "Device experience",
@@ -500,7 +598,9 @@
           "Version field job plays so different shifts never see ambiguous instructions.",
           "Treat sync success and content staleness as first-class health metrics."
         ],
-        "relatedScenarioSlugs": ["field-service-knowledge-acceleration"]
+        "relatedScenarioSlugs": [
+          "field-service-knowledge-acceleration"
+        ]
       }
     }
   },
@@ -640,8 +740,14 @@
           }
         ],
         "resources": [
-          { "label": "Request invite", "href": "/about" },
-          { "label": "See related insights", "href": "/insights" }
+          {
+            "label": "Request invite",
+            "href": "/about"
+          },
+          {
+            "label": "See related insights",
+            "href": "/insights"
+          }
         ]
       },
       "fieldAiPractitionerLab": {
@@ -667,8 +773,14 @@
           }
         ],
         "resources": [
-          { "label": "Explore scenarios", "href": "/scenarios" },
-          { "label": "See reference architecture", "href": "/architecture/edge-inference-backbone" }
+          {
+            "label": "Explore scenarios",
+            "href": "/scenarios"
+          },
+          {
+            "label": "See reference architecture",
+            "href": "/architecture/edge-inference-backbone"
+          }
         ]
       },
       "governedRagWorkingGroup": {
@@ -694,8 +806,14 @@
           }
         ],
         "resources": [
-          { "label": "Read the retrieval insight", "href": "/insights/designing-retrieval-for-high-trust-workflows" },
-          { "label": "Meet the team", "href": "/about" }
+          {
+            "label": "Read the retrieval insight",
+            "href": "/insights/designing-retrieval-for-high-trust-workflows"
+          },
+          {
+            "label": "Meet the team",
+            "href": "/about"
+          }
         ]
       }
     }
@@ -704,7 +822,7 @@
     "productSummary": "A unified entry point for scenarios, architectures, insights, and community practices that accelerate AI delivery asset reuse.",
     "navigation": "Navigation",
     "resources": "Resources",
-    "copyright": "\u00a9 2026 Hyperscaler Asset Hub. All rights reserved.",
+    "copyright": "© 2026 Hyperscaler Asset Hub. All rights reserved.",
     "aboutHub": "ABOUT THE HUB",
     "aboutHubDescription": "Discover scenario-led content, reference architecture thinking, and implementation-ready delivery assets from one branded platform.",
     "sections": "SECTIONS",
@@ -1076,7 +1194,7 @@
     "policyWizard": {
       "title": "Policy Wizard",
       "description": "Create and validate access policies through a guided flow.",
-      "descriptionLong": "Create access policies step by step: Template \u2192 Basics \u2192 Permissions \u2192 Scope & Review.",
+      "descriptionLong": "Create access policies step by step: Template → Basics → Permissions → Scope & Review.",
       "steps": {
         "template": "Template",
         "basics": "Basics",
@@ -1201,15 +1319,13 @@
       "manageVideos": "Manage videos"
     },
     "videoManager": {
-      "title": "Video Manager",
-      "description": "Manage demo videos, poster images, captions, and primary video flags.",
+      "title": "Title",
+      "description": "Description",
       "addVideo": "Add video",
       "setPrimary": "Set as primary",
       "removeVideo": "Remove video",
       "videoUrl": "Video URL",
       "posterUrl": "Poster URL",
-      "title": "Title",
-      "description": "Description",
       "primary": "Primary",
       "noVideos": "No videos added yet.",
       "dragToReorder": "Drag to reorder"
@@ -1401,6 +1517,76 @@
       "apply": "Apply",
       "builtin": "Built-in",
       "blockCount": "{count} content blocks"
+    },
+    "operations": {
+      "totalAssets": "Total assets",
+      "publishedAssets": "Published",
+      "reviewingAssets": "In review",
+      "lowQualityAssets": "Low quality",
+      "pendingAccessRequests": "Pending access requests",
+      "taskQueueLabel": "WORK QUEUE",
+      "taskQueue": "Tasks awaiting action",
+      "noTasks": "No pending tasks. Everything is up to date.",
+      "recentActivityLabel": "ACTIVITY",
+      "recentActivity": "Recent operations",
+      "noActivity": "No recent activity yet."
+    },
+    "accessRequests": {
+      "eyebrow": "ACCESS REQUESTS",
+      "title": "Access request queue",
+      "summary": "Review and decide on user requests for restricted delivery content.",
+      "empty": "No access requests in this view.",
+      "approve": "Approve",
+      "reject": "Reject",
+      "reasonRequired": "A reason is required when rejecting a request.",
+      "status": "Status",
+      "purpose": "Purpose",
+      "role": "Role",
+      "requestedAt": "Requested"
+    },
+    "analytics": {
+      "eyebrow": "ANALYTICS",
+      "title": "Operations analytics",
+      "summary": "Content, experience, workflow, quality, and governance indicators.",
+      "contentSection": "Content",
+      "experienceSection": "Experience",
+      "workflowSection": "Workflow",
+      "qualitySection": "Quality",
+      "governanceSection": "Governance",
+      "loading": "Loading metrics…",
+      "noData": "No data available yet."
+    },
+    "audit": {
+      "eyebrow": "AUDIT",
+      "title": "Audit log",
+      "summary": "Summary",
+      "empty": "No audit entries match the current filters.",
+      "action": "Action",
+      "resourceType": "Resource",
+      "actor": "Actor",
+      "timestamp": "When"
+    },
+    "quality": {
+      "label": "CONTENT QUALITY",
+      "title": "Readiness check",
+      "score": "Score",
+      "bandReady": "Ready",
+      "bandNeedsWork": "Needs work",
+      "bandBlocked": "Blocked",
+      "missing": "Missing requirements",
+      "warnings": "Suggestions",
+      "refresh": "Re-check",
+      "noMissing": "All core requirements are met."
+    },
+    "reviewActions": {
+      "submitReview": "Submit for review",
+      "approve": "Approve",
+      "reject": "Reject",
+      "publish": "Publish",
+      "unpublish": "Unpublish",
+      "archive": "Archive",
+      "rejectReasonPrompt": "Reason for rejection",
+      "confirmReject": "Reject asset"
     }
   }
 }

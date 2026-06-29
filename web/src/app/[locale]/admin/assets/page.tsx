@@ -115,7 +115,20 @@ export default function AdminAssetsPage() {
                     {t("assets.type")}: {asset.type}
                   </p>
                   <p>
-                    {t("assets.status")}: {asset.status}
+                    {t("assets.status")}:{" "}
+                    <span
+                      className={`inline-flex items-center rounded-md px-2 py-0.5 text-[11px] font-medium ${
+                        asset.status === "published"
+                          ? "bg-emerald-500/10 text-emerald-600 ring-1 ring-emerald-500/20"
+                          : asset.status === "reviewing"
+                            ? "bg-blue-500/10 text-blue-600 ring-1 ring-blue-500/20"
+                            : asset.status === "rejected"
+                              ? "bg-rose-500/10 text-rose-600 ring-1 ring-rose-500/20"
+                              : "bg-amber-500/10 text-amber-600 ring-1 ring-amber-500/20"
+                      }`}
+                    >
+                      {asset.status}
+                    </span>
                   </p>
                   <p>
                     {t("assets.created")}: {asset.created_at ? new Date(asset.created_at).toLocaleDateString() : "-"}

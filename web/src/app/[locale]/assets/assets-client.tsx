@@ -18,12 +18,18 @@ import {
   hasActiveAssetFilters,
   type PublicAssetListResponse,
   type PublicAssetQuery,
+  type PublicAssetSummary,
+  type PublicCollectionSummary,
 } from "@/lib/public-assets";
 import { AssetGridSkeleton, AssetListViewSkeleton } from "@/components/skeleton";
+import { AssetCollectionRail } from "@/components/public/asset-collection-rail";
+import { RecommendedAssetsRail } from "@/components/public/recommended-assets-rail";
 
 type AssetsClientProps = {
   initialResponse: PublicAssetListResponse;
   initialQuery: PublicAssetQuery;
+  collections?: PublicCollectionSummary[];
+  recommended?: PublicAssetSummary[];
 };
 
 type AssetFilterState = {
@@ -121,7 +127,12 @@ function TechBadge({ technology }: { technology: string }) {
   );
 }
 
-export function AssetsClient({ initialResponse, initialQuery }: AssetsClientProps) {
+export function AssetsClient({
+  initialResponse,
+  initialQuery,
+  collections = [],
+  recommended = [],
+}: AssetsClientProps) {
   const router = useRouter();
   const pathname = usePathname();
   const t = useTranslations("Assets");
@@ -230,6 +241,13 @@ export function AssetsClient({ initialResponse, initialQuery }: AssetsClientProp
           </button>
         }
       />
+
+      {!hasActiveAssetFilters(filters) && (collections.length > 0 || recommended.length > 0) ? (
+        <div className="space-y-10">
+          {recommended.length > 0 && <RecommendedAssetsRail assets={recommended} />}
+          {collections.length > 0 && <AssetCollectionRail collections={collections} />}
+        </div>
+      ) : null}
 
       <FilterToolbar
         resultsLabel={t("results", { count: initialResponse.total })}

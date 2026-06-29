@@ -1,7 +1,12 @@
 import { getTranslations } from "next-intl/server";
 
 import { PublicSiteShell } from "@/components/public-site-shell";
-import { fetchPublicAssets, parseAssetQueryFromSearchParams } from "@/lib/public-assets";
+import {
+  fetchPublicAssets,
+  fetchPublicCollections,
+  fetchRecommendedAssets,
+  parseAssetQueryFromSearchParams,
+} from "@/lib/public-assets";
 import { ErrorAlert } from "@/components/error-alert";
 
 import { AssetsClient } from "./assets-client";
@@ -18,7 +23,11 @@ export default async function AssetsPage({
 
   const resolvedSearchParams = await searchParams;
   const initialQuery = parseAssetQueryFromSearchParams(resolvedSearchParams);
-  const fetchResult = await fetchPublicAssets(initialQuery);
+  const [fetchResult, collectionsResult, recommendedResult] = await Promise.all([
+    fetchPublicAssets(initialQuery),
+    fetchPublicCollections(),
+    fetchRecommendedAssets(),
+  ]);
   const clientKey = JSON.stringify(initialQuery);
 
   if (!fetchResult.ok) {
@@ -31,9 +40,18 @@ export default async function AssetsPage({
     );
   }
 
+  const collections = collectionsResult.ok ? collectionsResult.data : [];
+  const recommended = recommendedResult.ok ? recommendedResult.data : [];
+
   return (
     <PublicSiteShell ctaHref="/auth/login" ctaLabel={t("ctaLabel")}>
-      <AssetsClient key={clientKey} initialResponse={fetchResult.data} initialQuery={initialQuery} />
+      <AssetsClient
+        key={clientKey}
+        initialResponse={fetchResult.data}
+        initialQuery={initialQuery}
+        collections={collections}
+        recommended={recommended}
+      />
     </PublicSiteShell>
   );
 }

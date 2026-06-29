@@ -10,6 +10,8 @@ import { ErrorAlert } from "@/components/error-alert";
 import { adminRequest, getStoredAdminToken } from "@/lib/admin";
 import { parseApiError, type ApiErrorInfo } from "@/lib/api-errors";
 import { AssetEditorForm } from "@/components/admin/asset-editor-form";
+import { AssetQualityPanel } from "@/components/admin/asset-quality-panel";
+import { AssetReviewActions } from "@/components/admin/asset-review-actions";
 import { AssetVideoManager } from "@/components/admin/asset-video-manager";
 
 import type { Asset } from "@/types/asset";
@@ -63,7 +65,7 @@ export default function AssetEditPage() {
       )}
 
       {asset && token && (
-        <div className="space-y-6">
+        <div className="grid gap-6 xl:grid-cols-[1.6fr_1fr]">
           <Card className="border-border/70 bg-card/90">
             <CardContent className="p-6">
               <AssetEditorForm
@@ -73,6 +75,10 @@ export default function AssetEditPage() {
               />
             </CardContent>
           </Card>
+          <div className="space-y-6">
+            <AssetReviewActions assetId={params.id} status={asset.status} token={token} />
+            <AssetQualityPanel assetId={params.id} token={token} />
+          </div>
         </div>
       )}
     </div>
