@@ -20,13 +20,12 @@ describe("AssetEngagementBar", () => {
     vi.clearAllMocks();
   });
 
-  it("prompts sign-in when favoriting without a token", async () => {
-    const user = userEvent.setup();
+  it("renders a sign-in link when no token instead of calling favorite", () => {
     render(<AssetEngagementBar assetId="a1" />);
 
-    await user.click(screen.getByRole("button", { name: "Save" }));
-
-    expect(screen.getByText("Sign in to save this asset.")).toBeInTheDocument();
+    // Anonymous Save links to login with a return path (rendered as a button-styled anchor).
+    const signInLink = screen.getByRole("button", { name: "Save" });
+    expect(signInLink).toHaveAttribute("href", "/auth/login?next=%2F");
     expect(mockAddFavorite).not.toHaveBeenCalled();
   });
 

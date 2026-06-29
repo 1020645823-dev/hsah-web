@@ -34,7 +34,7 @@ describe("AssetFeedbackForm", () => {
 
     await waitFor(() => {
       expect(
-        screen.getByText("Thanks — your feedback was submitted."),
+        screen.getByText("Thanks - your feedback was submitted."),
       ).toBeInTheDocument();
     });
     expect(mockSubmitFeedback).toHaveBeenCalledWith(

@@ -110,6 +110,11 @@ export function OperationsWorkbench({ token }: { token: string }) {
             <CardTitle className="text-xl text-foreground">{t("operations.taskQueue")}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
+            {tasks?.items?.length ? (
+              <p className="text-xs text-muted-foreground">
+                {t("operations.taskCount", { shown: tasks.items.length, total: tasks.total })}
+              </p>
+            ) : null}
             {!tasks?.items?.length ? (
               <p className="rounded-xl border border-border/70 bg-background/80 px-4 py-6 text-sm text-muted-foreground">
                 {t("operations.noTasks")}

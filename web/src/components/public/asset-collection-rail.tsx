@@ -25,9 +25,20 @@ export function AssetCollectionRail({ collections }: { collections: PublicCollec
           <Link
             key={collection.id}
             href={`/assets/collections/${collection.slug}`}
-            className="group flex flex-col rounded-2xl border border-border/60 bg-card p-5 shadow-[var(--shadow-card)] transition-all duration-200 hover:-translate-y-0.5 hover:border-border hover:shadow-[var(--shadow-card-hover)]"
+            className="group flex flex-col overflow-hidden rounded-2xl border border-border/60 bg-card shadow-[var(--shadow-card)] transition-all duration-200 hover:-translate-y-0.5 hover:border-border hover:shadow-[var(--shadow-card-hover)]"
           >
-            <div className="space-y-1">
+            {collection.cover_url ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={collection.cover_url}
+                alt=""
+                aria-hidden="true"
+                className="h-32 w-full object-cover"
+              />
+            ) : (
+              <div className="h-2 w-full bg-gradient-to-r from-primary/40 to-primary/10" />
+            )}
+            <div className="space-y-1 p-5">
               <h3 className="text-base font-semibold text-card-foreground transition-colors group-hover:text-primary">
                 {collection.title}
               </h3>
@@ -36,10 +47,10 @@ export function AssetCollectionRail({ collections }: { collections: PublicCollec
                   {collection.summary}
                 </p>
               )}
+              <p className="pt-2 text-xs font-medium text-muted-foreground">
+                {t("collectionItemCount", { count: collection.item_count })}
+              </p>
             </div>
-            <p className="mt-4 text-xs font-medium text-muted-foreground">
-              {t("collectionItemCount", { count: collection.item_count })}
-            </p>
           </Link>
         ))}
       </div>

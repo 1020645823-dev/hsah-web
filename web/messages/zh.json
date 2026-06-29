@@ -153,7 +153,13 @@
     "favoriteSignIn": "请登录后再收藏该资产。",
     "share": "分享",
     "shared": "链接已复制",
-    "shareFailed": "复制链接失败，请手动复制。"
+    "shareFailed": "复制链接失败，请手动复制。",
+    "myRequestsEyebrow": "访问申请",
+    "myRequestsTitle": "我的访问申请",
+    "myRequestsSummary": "查看你对交付内容访问申请的处理状态。",
+    "myRequestsEmpty": "你还没有提交任何访问申请。",
+    "myRequestsSignIn": "请登录后查看你的访问申请。",
+    "myRequestsLink": "查看我的申请"
   },
   "VideoPlayer": {
     "demoVideo": "演示视频",
@@ -1515,7 +1521,8 @@
       "noTasks": "暂无待处理任务，一切就绪。",
       "recentActivityLabel": "动态",
       "recentActivity": "近期运营动态",
-      "noActivity": "暂无近期动态。"
+      "noActivity": "暂无近期动态。",
+      "taskCount": "显示 {shown} / {total} 项任务"
     },
     "accessRequests": {
       "eyebrow": "访问申请",
@@ -1550,7 +1557,10 @@
       "action": "动作",
       "resourceType": "资源",
       "actor": "操作人",
-      "timestamp": "时间"
+      "timestamp": "时间",
+      "pageIndicator": "第 {currentPage} / {totalPages} 页",
+      "previous": "上一页",
+      "next": "下一页"
     },
     "quality": {
       "label": "内容质量",

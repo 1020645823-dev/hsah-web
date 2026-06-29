@@ -13,33 +13,39 @@ import { parseApiError, type ApiErrorInfo } from "@/lib/api-errors";
 import type { AuditLog } from "@/types/analytics";
 
 const RESOURCE_FILTERS = ["asset", "access_request", "role", "policy", "user"];
+const PAGE_SIZE = 20;
 
 export function AuditLogTable() {
   const t = useTranslations("Admin");
   const [token] = useState<string | null>(() => getStoredAdminToken());
   const [logs, setLogs] = useState<AuditLog[]>([]);
   const [resourceType, setResourceType] = useState<string>("");
+  const [offset, setOffset] = useState(0);
+  const [total, setTotal] = useState(0);
   const [error, setError] = useState<ApiErrorInfo | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     if (!token) return;
     let canceled = false;
-    fetchAuditLogs(token, { resourceType: resourceType || undefined, limit: 50 })
+    fetchAuditLogs(token, { resourceType: resourceType || undefined, limit: PAGE_SIZE, offset })
       .then((res) => {
         if (canceled) return;
         if (!res.ok) {
           setError(parseApiError(res.data, res.status));
           setLogs([]);
+          setTotal(0);
         } else {
           setError(null);
           setLogs(res.data.items);
+          setTotal(res.data.total);
         }
       })
       .catch(() => {
         if (canceled) return;
         setError(parseApiError(null, undefined));
         setLogs([]);
+        setTotal(0);
       })
       .finally(() => {
         if (!canceled) setIsLoading(false);
@@ -47,7 +53,15 @@ export function AuditLogTable() {
     return () => {
       canceled = true;
     };
-  }, [token, resourceType]);
+  }, [token, resourceType, offset]);
+
+  function changeFilter(value: string) {
+    setResourceType(value);
+    setOffset(0);
+  }
+
+  const currentPage = Math.floor(offset / PAGE_SIZE) + 1;
+  const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
 
   return (
     <div className="space-y-8">
@@ -70,7 +84,7 @@ export function AuditLogTable() {
           type="button"
           size="sm"
           variant={resourceType === "" ? "secondary" : "outline"}
-          onClick={() => setResourceType("")}
+          onClick={() => changeFilter("")}
         >
           All
         </Button>
@@ -80,7 +94,7 @@ export function AuditLogTable() {
             type="button"
             size="sm"
             variant={resourceType === value ? "secondary" : "outline"}
-            onClick={() => setResourceType(value)}
+            onClick={() => changeFilter(value)}
           >
             {value}
           </Button>
@@ -131,6 +145,34 @@ export function AuditLogTable() {
             </table>
           </CardContent>
         </Card>
+      )}
+
+      {!isLoading && logs.length > 0 && (
+        <div className="flex flex-wrap items-center justify-between gap-4 rounded-xl border border-border bg-card px-5 py-4">
+          <p className="text-sm text-muted-foreground">
+            {t("audit.pageIndicator", { currentPage, totalPages })}
+          </p>
+          <div className="flex items-center gap-3">
+            <Button
+              type="button"
+              size="sm"
+              variant="outline"
+              disabled={currentPage <= 1}
+              onClick={() => setOffset(Math.max(0, offset - PAGE_SIZE))}
+            >
+              {t("audit.previous")}
+            </Button>
+            <Button
+              type="button"
+              size="sm"
+              variant="outline"
+              disabled={currentPage >= totalPages}
+              onClick={() => setOffset(offset + PAGE_SIZE)}
+            >
+              {t("audit.next")}
+            </Button>
+          </div>
+        </div>
       )}
     </div>
   );

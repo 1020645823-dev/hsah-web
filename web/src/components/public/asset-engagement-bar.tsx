@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { Heart, Share2 } from "lucide-react";
 
@@ -10,7 +12,8 @@ import { parseApiError, type ApiErrorInfo } from "@/lib/api-errors";
 
 /**
  * Lightweight engagement bar with favorite (bookmark) and share actions.
- * Favorite requires auth; share uses the native Web Share API with a clipboard fallback.
+ * Favorite requires auth; anonymous users get a login link with a return path.
+ * Share uses the native Web Share API with a clipboard fallback.
  */
 export function AssetEngagementBar({
   assetId,
@@ -20,27 +23,18 @@ export function AssetEngagementBar({
   token?: string | null;
 }) {
   const t = useTranslations("AssetDetail");
+  const pathname = usePathname();
   const [isFavorite, setIsFavorite] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<ApiErrorInfo | null>(null);
   const [shared, setShared] = useState(false);
 
   async function toggleFavorite() {
-    if (!token) {
-      setError({
-        message: t("favoriteSignIn"),
-        category: "auth",
-        userMessage: t("favoriteSignIn"),
-        iconName: "lock",
-        retryable: false,
-      });
-      return;
-    }
     setBusy(true);
     setError(null);
     const res = isFavorite
-      ? await removeFavorite(assetId, token)
-      : await addFavorite(assetId, token);
+      ? await removeFavorite(assetId, token as string)
+      : await addFavorite(assetId, token as string);
     setBusy(false);
     if (!res.ok) {
       setError(parseApiError(res.error));
@@ -77,18 +71,32 @@ export function AssetEngagementBar({
     }
   }
 
+  const signInHref = `/auth/login?next=${encodeURIComponent(pathname || "/")}`;
+
   return (
     <div className="flex flex-wrap items-center gap-3">
-      <Button
-        type="button"
-        variant={isFavorite ? "secondary" : "outline"}
-        onClick={toggleFavorite}
-        disabled={busy}
-        aria-pressed={isFavorite}
-      >
-        <Heart className={isFavorite ? "fill-current" : ""} />
-        {isFavorite ? t("favorited") : t("favorite")}
-      </Button>
+      {token ? (
+        <Button
+          type="button"
+          variant={isFavorite ? "secondary" : "outline"}
+          onClick={toggleFavorite}
+          disabled={busy}
+          aria-pressed={isFavorite}
+        >
+          <Heart className={isFavorite ? "fill-current" : ""} />
+          {isFavorite ? t("favorited") : t("favorite")}
+        </Button>
+      ) : (
+        <Button
+          type="button"
+          variant="outline"
+          nativeButton={false}
+          render={<Link href={signInHref} />}
+        >
+          <Heart />
+          {t("favorite")}
+        </Button>
+      )}
 
       <Button type="button" variant="outline" onClick={share}>
         <Share2 />

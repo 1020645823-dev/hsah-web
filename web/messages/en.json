@@ -153,7 +153,13 @@
     "favoriteSignIn": "Sign in to save this asset.",
     "share": "Share",
     "shared": "Link copied",
-    "shareFailed": "Could not copy the link. Please copy it manually."
+    "shareFailed": "Could not copy the link. Please copy it manually.",
+    "myRequestsEyebrow": "ACCESS REQUESTS",
+    "myRequestsTitle": "My access requests",
+    "myRequestsSummary": "Track the status of your delivery-content access requests.",
+    "myRequestsEmpty": "You have not submitted any access requests yet.",
+    "myRequestsSignIn": "Sign in to view your access requests.",
+    "myRequestsLink": "View my requests"
   },
   "VideoPlayer": {
     "demoVideo": "Demo video",
@@ -1529,7 +1535,8 @@
       "noTasks": "No pending tasks. Everything is up to date.",
       "recentActivityLabel": "ACTIVITY",
       "recentActivity": "Recent operations",
-      "noActivity": "No recent activity yet."
+      "noActivity": "No recent activity yet.",
+      "taskCount": "Showing {shown} of {total} tasks"
     },
     "accessRequests": {
       "eyebrow": "ACCESS REQUESTS",
@@ -1564,7 +1571,10 @@
       "action": "Action",
       "resourceType": "Resource",
       "actor": "Actor",
-      "timestamp": "When"
+      "timestamp": "When",
+      "pageIndicator": "Page {currentPage} of {totalPages}",
+      "previous": "Previous",
+      "next": "Next"
     },
     "quality": {
       "label": "CONTENT QUALITY",
