@@ -26,11 +26,13 @@ export function AdminShell({ pageTitle, children }: AdminShellProps) {
 
   return (
     <div className="flex min-h-screen bg-background">
-      <AdminSidebar />
+      <div className="sticky top-0 hidden h-screen shrink-0 w-[280px] md:block">
+        <AdminSidebar />
+      </div>
       <div className="flex min-w-0 flex-1 flex-col">
         <AdminTopbar pageTitle={pageTitle} />
         <main className="flex-1">
-          <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">{children}</div>
+          <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8 lg:py-12">{children}</div>
         </main>
       </div>
     </div>

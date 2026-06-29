@@ -8,6 +8,7 @@ import { useTranslations } from "next-intl";
 
 import { EmptyState } from "@/components/empty-state";
 import { FilterToolbar } from "@/components/product/filter-toolbar";
+import { Input } from "@/components/ui/input";
 import { PageHeader } from "@/components/product/page-header";
 import {
   DEFAULT_PUBLIC_ASSET_LIMIT,
@@ -232,14 +233,6 @@ export function AssetsClient({
         eyebrow={t("eyebrow")}
         title={t("title")}
         summary={t("summary")}
-        actions={
-          <button
-            type="button"
-            className="inline-flex h-11 items-center rounded-lg border border-border px-4 text-sm text-muted-foreground transition-colors hover:border-primary/40 hover:text-foreground"
-          >
-            {t("savedFilters")}
-          </button>
-        }
       />
 
       {!hasActiveAssetFilters(filters) && (collections.length > 0 || recommended.length > 0) ? (
@@ -254,12 +247,12 @@ export function AssetsClient({
         persistentControl={
           <label className="space-y-2 text-sm text-foreground/70">
             <span>{t("searchLabel")}</span>
-            <input
+            <Input
               aria-label={t("searchLabel")}
               value={filters.q}
               onChange={(event) => updateField("q", event.target.value)}
               placeholder={t("searchPlaceholder")}
-              className="h-11 w-full rounded-xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-foreground/50 outline-none transition-colors focus:border-primary"
+              className="h-11 rounded-xl"
             />
           </label>
         }

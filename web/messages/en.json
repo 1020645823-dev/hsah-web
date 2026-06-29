@@ -835,7 +835,9 @@
     "startHere": "START HERE",
     "assetLibrary": "Asset Library",
     "signIn": "Sign in",
-    "aboutPlatform": "About the platform"
+    "aboutPlatform": "About the platform",
+    "rights": "© 2026 Hyperscaler Asset Hub. All rights reserved.",
+    "builtWith": "Next.js · FastAPI · PostgreSQL"
   },
   "ContentLanes": {
     "browseAll": "Browse all",
@@ -1353,7 +1355,8 @@
       "roles": "Roles",
       "policies": "Policies",
       "matrix": "Matrix",
-      "simulator": "Simulator"
+      "simulator": "Simulator",
+      "brand": "HSAH"
     },
     "topbar": {
       "workspaceLabel": "Admin workspace",
@@ -1365,7 +1368,11 @@
       "toggleMenu": "Toggle menu",
       "logout": "Logout",
       "login": "Login",
-      "mobileMenuPlaceholder": "Menu"
+      "mobileMenuPlaceholder": "Menu",
+      "adminHome": "Admin",
+      "accessRequests": "Access Requests",
+      "analytics": "Analytics",
+      "auditLogs": "Audit Logs"
     },
     "layout": {
       "defaultTitle": "Admin",

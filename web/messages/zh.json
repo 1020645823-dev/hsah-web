@@ -279,7 +279,9 @@
     "assetLibrary": "Asset Library",
     "sections": "SECTIONS",
     "signIn": "Sign in",
-    "startHere": "START HERE"
+    "startHere": "START HERE",
+    "rights": "© 2026 Hyperscaler Asset Hub. 保留所有权利。",
+    "builtWith": "Next.js · FastAPI · PostgreSQL"
   },
   "ContentLanes": {
     "browseAll": "浏览全部",
@@ -1339,7 +1341,8 @@
       "simulator": "模拟器",
       "navLabel": "Admin modules",
       "workspaceDescription": "Continuously manage assets, templates, identities, and access controls.",
-      "workspaceTitle": "Operations workspace"
+      "workspaceTitle": "Operations workspace",
+      "brand": "HSAH"
     },
     "topbar": {
       "workspaceLabel": "后台工作区",
@@ -1351,7 +1354,11 @@
       "login": "Login",
       "logout": "Logout",
       "mobileMenuPlaceholder": "Menu",
-      "toggleMenu": "Toggle menu"
+      "toggleMenu": "Toggle menu",
+      "adminHome": "管理后台",
+      "accessRequests": "访问申请",
+      "analytics": "运营指标",
+      "auditLogs": "审计日志"
     },
     "layout": {
       "defaultTitle": "后台",
