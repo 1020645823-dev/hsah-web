@@ -85,7 +85,7 @@ function LoginPageContent() {
   return (
     <div className="grid min-h-dvh bg-background lg:grid-cols-[1.15fr_0.85fr]">
       <section
-        className="relative hidden overflow-hidden bg-[var(--gradient-hero)] px-12 py-14 text-white lg:flex lg:flex-col lg:justify-between"
+        className="hero-gradient relative hidden overflow-hidden px-12 py-14 text-white lg:flex lg:flex-col lg:justify-between"
       >
         <div
           aria-hidden

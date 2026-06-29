@@ -182,3 +182,16 @@
     @apply font-sans;
   }
 }
+
+/*
+ * Hero gradient surface for the login split layout.
+ *
+ * `bg-[var(--gradient-hero)]` cannot render gradients: Tailwind emits
+ * `background-color`, which ignores gradient values, so the panel fell back to
+ * the page background (light) and white text became invisible. This utility
+ * uses `background-image` instead, which does accept gradients. The gradient is
+ * intentionally dark in both themes so the white hero copy stays readable.
+ */
+.hero-gradient {
+  background-image: var(--gradient-hero);
+}
