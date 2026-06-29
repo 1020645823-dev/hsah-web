@@ -2,8 +2,8 @@ from fastapi import APIRouter, Depends, Query
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
-from app.api.v1.auth import get_current_user
 from app.core.db import get_db
+from app.core.permissions import require_permission
 from app.models.access_request import AccessRequest
 from app.models.asset import Asset
 from app.models.asset_review import AssetReviewRecord
@@ -23,7 +23,7 @@ router = APIRouter(prefix="/admin/operations", tags=["admin-operations"])
 @router.get("/overview", response_model=OperationsOverview)
 def overview(
     db: Session = Depends(get_db),
-    _user: User = Depends(get_current_user),
+    _user: User = Depends(require_permission("analytics:read")),
 ) -> OperationsOverview:
     total = db.scalar(select(func.count()).select_from(Asset)) or 0
     published = db.scalar(select(func.count()).select_from(Asset).where(Asset.status == "published")) or 0
@@ -50,7 +50,7 @@ def tasks(
     limit: int = Query(default=20, ge=1, le=100),
     offset: int = Query(default=0, ge=0),
     db: Session = Depends(get_db),
-    _user: User = Depends(get_current_user),
+    _user: User = Depends(require_permission("analytics:read")),
 ) -> OperationsTasks:
     """Build a prioritized work queue from reviewing, rejected, blocked, and published assets."""
     priorities = {"reviewing": "high", "rejected": "high", "draft": "medium", "published": "low"}
@@ -91,7 +91,7 @@ def recent_activities(
     limit: int = Query(default=20, ge=1, le=100),
     offset: int = Query(default=0, ge=0),
     db: Session = Depends(get_db),
-    _user: User = Depends(get_current_user),
+    _user: User = Depends(require_permission("analytics:read")),
 ) -> RecentActivities:
     rows = db.execute(
         select(AssetReviewRecord, Asset)

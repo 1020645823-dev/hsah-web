@@ -2,8 +2,8 @@ from fastapi import APIRouter, Depends, Query
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
-from app.api.v1.auth import get_current_user
 from app.core.db import get_db
+from app.core.permissions import require_permission
 from app.models.asset import Asset
 from app.models.asset_engagement import AssetFavorite, AssetFeedback
 from app.models.access_request import AccessRequest
@@ -21,7 +21,7 @@ router = APIRouter(tags=["admin-analytics"])
 @router.get("/admin/analytics/overview", response_model=AnalyticsOverview)
 def analytics_overview(
     db: Session = Depends(get_db),
-    _user: User = Depends(get_current_user),
+    _user: User = Depends(require_permission("analytics:read")),
 ) -> AnalyticsOverview:
     return AnalyticsOverview(**build_overview(db))
 
@@ -30,7 +30,7 @@ def analytics_overview(
 def asset_performance(
     asset_id: str,
     db: Session = Depends(get_db),
-    _user: User = Depends(get_current_user),
+    _user: User = Depends(require_permission("analytics:read")),
 ) -> AssetPerformance:
     from app.api.v1.access_requests import _get_asset_or_404
 
@@ -70,7 +70,7 @@ def audit_logs(
     limit: int = Query(default=20, ge=1, le=100),
     offset: int = Query(default=0, ge=0),
     db: Session = Depends(get_db),
-    _user: User = Depends(get_current_user),
+    _user: User = Depends(require_permission("audit_log:read")),
 ) -> PaginatedResponse[AuditLogResponse]:
     stmt = select(AuditLog).order_by(AuditLog.created_at.desc())
     if action:

@@ -3,9 +3,12 @@ from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
 from app.core.db import get_db
+from app.core.permissions import require_permission
 from app.models.asset import Asset
 from app.models.asset_collection import AssetCollection, AssetCollectionItem
+from app.models.user import User
 from app.schemas.asset_collection import (
+    CollectionCreateRequest,
     CollectionDetail,
     CollectionItemSummary,
     CollectionSummary,
@@ -13,6 +16,7 @@ from app.schemas.asset_collection import (
 from app.services.asset_quality import evaluate_quality  # noqa: F401  (kept for parity)
 
 router = APIRouter(prefix="/assets/collections", tags=["asset-collections"])
+admin_router = APIRouter(prefix="/admin/collections", tags=["admin-collections"])
 
 
 def _to_summary(collection: AssetCollection, item_count: int) -> CollectionSummary:
@@ -93,3 +97,76 @@ def get_collection(slug: str, db: Session = Depends(get_db)) -> CollectionDetail
             for asset, position in rows
         ],
     )
+
+
+@admin_router.post("", response_model=CollectionSummary, status_code=status.HTTP_201_CREATED)
+def create_collection(
+    payload: CollectionCreateRequest,
+    db: Session = Depends(get_db),
+    _user: User = Depends(require_permission("collection:manage")),
+) -> CollectionSummary:
+    existing = db.scalar(select(AssetCollection).where(AssetCollection.slug == payload.slug))
+    if existing is not None:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail={"code": "slug_already_exists", "message": "Collection slug already exists"},
+        )
+    collection = AssetCollection(
+        slug=payload.slug,
+        title=payload.title,
+        summary=payload.summary,
+        cover_url=payload.cover_url,
+        is_visible=payload.is_visible,
+    )
+    db.add(collection)
+    db.commit()
+    db.refresh(collection)
+    return _to_summary(collection, 0)
+
+
+@admin_router.put("/{collection_id}", response_model=CollectionSummary)
+def update_collection(
+    collection_id: str,
+    payload: CollectionCreateRequest,
+    db: Session = Depends(get_db),
+    _user: User = Depends(require_permission("collection:manage")),
+) -> CollectionSummary:
+    try:
+        import uuid as _uuid
+
+        uid = _uuid.UUID(collection_id)
+    except ValueError as exc:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="collection_not_found") from exc
+
+    collection = db.scalar(select(AssetCollection).where(AssetCollection.id == uid))
+    if collection is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="collection_not_found")
+
+    duplicate = db.scalar(
+        select(AssetCollection).where(AssetCollection.slug == payload.slug, AssetCollection.id != uid)
+    )
+    if duplicate is not None:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail={"code": "slug_already_exists", "message": "Collection slug already exists"},
+        )
+
+    collection.slug = payload.slug
+    collection.title = payload.title
+    collection.summary = payload.summary
+    collection.cover_url = payload.cover_url
+    collection.is_visible = payload.is_visible
+    db.commit()
+    db.refresh(collection)
+
+    item_count = db.scalar(
+        select(func.count())
+        .select_from(AssetCollectionItem)
+        .join(Asset, AssetCollectionItem.asset_id == Asset.id)
+        .where(
+            AssetCollectionItem.collection_id == collection.id,
+            Asset.visibility == "public",
+            Asset.status == "published",
+        )
+    ) or 0
+    return _to_summary(collection, item_count)

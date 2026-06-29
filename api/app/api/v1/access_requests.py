@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session
 
 from app.api.v1.auth import get_current_user
 from app.core.db import get_db
+from app.core.permissions import require_permission
 from app.models.access_request import AccessRequest
 from app.models.asset import Asset
 from app.models.user import User
@@ -104,7 +105,7 @@ def list_access_requests(
     limit: int = Query(default=20, ge=1, le=100),
     offset: int = Query(default=0, ge=0),
     db: Session = Depends(get_db),
-    _user: User = Depends(get_current_user),
+    _user: User = Depends(require_permission("access_request:review")),
 ) -> PaginatedResponse[AccessRequestResponse]:
     stmt = select(AccessRequest).order_by(AccessRequest.created_at.desc())
     if status_ in {"pending", "approved", "rejected"}:
@@ -125,7 +126,7 @@ def approve_access_request(
     request_id: str,
     payload: AccessRequestDecision | None = None,
     db: Session = Depends(get_db),
-    user: User = Depends(get_current_user),
+    user: User = Depends(require_permission("access_request:review")),
 ) -> AccessRequestResponse:
     request = _get_request_or_404(request_id, db)
     reason = (payload.reason if payload else "")
@@ -155,7 +156,7 @@ def reject_access_request(
     request_id: str,
     payload: AccessRequestDecision,
     db: Session = Depends(get_db),
-    user: User = Depends(get_current_user),
+    user: User = Depends(require_permission("access_request:review")),
 ) -> AccessRequestResponse:
     request = _get_request_or_404(request_id, db)
     try:

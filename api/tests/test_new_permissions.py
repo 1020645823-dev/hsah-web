@@ -67,16 +67,17 @@ def test_permission_simulator_implicit_deny_for_unmapped_permission(db_session):
     email = f"deny-{datetime.now().timestamp()}@hsah.test"
     user, token = _auth_user(db_session, email, roles=["viewer"])
 
+    # Use a permission that no seeded policy grants.
     response = client.post(
         "/api/v1/admin/permissions/simulate",
         headers={"Authorization": f"Bearer {token}"},
         json={
-            "permission": "audit_log:read",
-            "resource_type": "audit_log",
+            "permission": "nonexistent:capability",
+            "resource_type": "unknown",
         },
     )
 
     assert response.status_code == 200
     body = response.json()
     assert body["decision"] == "implicit_deny"
-    assert "audit_log:read" in body["missing_permissions"]
+    assert "nonexistent:capability" in body["missing_permissions"]

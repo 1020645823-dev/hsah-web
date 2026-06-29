@@ -7,6 +7,7 @@ from app.api.v1.admin_assets import router as admin_assets_router
 from app.api.v1.admin_operations import router as admin_operations_router
 # IMPORTANT: collection and engagement routers sit under /assets/... and must be
 # registered before the assets router, otherwise GET /assets/{slug} shadows them.
+from app.api.v1.asset_collections import admin_router as admin_collections_router
 from app.api.v1.asset_collections import router as asset_collections_router
 from app.api.v1.asset_engagement import router as asset_engagement_router
 from app.api.v1.assets import router as assets_router
@@ -24,6 +25,7 @@ router.include_router(assets_router)
 router.include_router(access_requests_router)
 router.include_router(admin_router)
 router.include_router(admin_assets_router)
+router.include_router(admin_collections_router)
 router.include_router(admin_operations_router)
 router.include_router(admin_analytics_router)
 router.include_router(upload_router)

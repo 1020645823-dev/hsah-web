@@ -102,3 +102,65 @@ def test_collection_summary_item_count_only_counts_published(db_session):
     response = client.get("/api/v1/assets/collections")
     summary = next(c for c in response.json() if c["slug"] == "counted-col")
     assert summary["item_count"] == 1
+
+
+def _auth_headers() -> dict:
+    import uuid
+    from datetime import datetime
+
+    email = f"col-admin-{datetime.now().timestamp()}-{uuid.uuid4().hex}@hsah.test"
+    client.post("/api/v1/auth/register", json={"email": email, "password": "Password123!"})
+    token = client.post(
+        "/api/v1/auth/login", json={"email": email, "password": "Password123!"}
+    ).json()["access_token"]
+    return {"Authorization": f"Bearer {token}"}
+
+
+def test_admin_create_collection(db_session):
+    headers = _auth_headers()
+    response = client.post(
+        "/api/v1/admin/collections",
+        headers=headers,
+        json={
+            "slug": "new-collection",
+            "title": "New Collection",
+            "summary": "A curated set.",
+            "cover_url": "https://example.com/cover.png",
+            "is_visible": True,
+        },
+    )
+    assert response.status_code == 201
+    body = response.json()
+    assert body["slug"] == "new-collection"
+    assert body["cover_url"] == "https://example.com/cover.png"
+
+
+def test_admin_create_collection_rejects_duplicate_slug(db_session):
+    headers = _auth_headers()
+    _collection(db_session, "dup-slug")
+    response = client.post(
+        "/api/v1/admin/collections",
+        headers=headers,
+        json={"slug": "dup-slug", "title": "Dup", "summary": "", "is_visible": True},
+    )
+    assert response.status_code == 409
+
+
+def test_admin_update_collection(db_session):
+    headers = _auth_headers()
+    collection = _collection(db_session, "update-col")
+    response = client.put(
+        f"/api/v1/admin/collections/{collection.id}",
+        headers=headers,
+        json={
+            "slug": "update-col",
+            "title": "Updated Title",
+            "summary": "Updated summary.",
+            "cover_url": "https://example.com/new.png",
+            "is_visible": True,
+        },
+    )
+    assert response.status_code == 200
+    body = response.json()
+    assert body["title"] == "Updated Title"
+    assert body["cover_url"] == "https://example.com/new.png"

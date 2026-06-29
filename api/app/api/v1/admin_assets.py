@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session
 
 from app.api.v1.auth import get_current_user
 from app.core.db import get_db
+from app.core.permissions import require_permission
 from app.models.asset import Asset
 from app.models.asset_review import AssetReviewRecord
 from app.models.user import User
@@ -438,7 +439,7 @@ def quality_check(
 def submit_review(
     asset_id: str,
     db: Session = Depends(get_db),
-    user: User = Depends(get_current_user),
+    user: User = Depends(require_permission("asset:submit_review")),
 ) -> dict:
     return _perform_transition("submit_review", asset_id, db, user)
 
@@ -448,7 +449,7 @@ def approve_asset(
     asset_id: str,
     payload: ReviewActionRequest | None = None,
     db: Session = Depends(get_db),
-    user: User = Depends(get_current_user),
+    user: User = Depends(require_permission("asset:approve")),
 ) -> dict:
     return _perform_transition(
         "approve", asset_id, db, user, require_publishable=True, reason=(payload.reason if payload else "")
@@ -460,7 +461,7 @@ def reject_asset(
     asset_id: str,
     payload: ReviewActionRequest,
     db: Session = Depends(get_db),
-    user: User = Depends(get_current_user),
+    user: User = Depends(require_permission("asset:reject")),
 ) -> dict:
     return _perform_transition("reject", asset_id, db, user, reason=payload.reason)
 
@@ -469,7 +470,7 @@ def reject_asset(
 def publish_asset(
     asset_id: str,
     db: Session = Depends(get_db),
-    user: User = Depends(get_current_user),
+    user: User = Depends(require_permission("asset:publish")),
 ) -> dict:
     return _perform_transition("publish", asset_id, db, user, require_publishable=True)
 
@@ -478,7 +479,7 @@ def publish_asset(
 def unpublish_asset(
     asset_id: str,
     db: Session = Depends(get_db),
-    user: User = Depends(get_current_user),
+    user: User = Depends(require_permission("asset:archive")),
 ) -> dict:
     return _perform_transition("unpublish", asset_id, db, user)
 
@@ -487,7 +488,7 @@ def unpublish_asset(
 def archive_asset(
     asset_id: str,
     db: Session = Depends(get_db),
-    user: User = Depends(get_current_user),
+    user: User = Depends(require_permission("asset:archive")),
 ) -> dict:
     return _perform_transition("archive", asset_id, db, user)
 
@@ -496,7 +497,7 @@ def archive_asset(
 def restore_asset(
     asset_id: str,
     db: Session = Depends(get_db),
-    user: User = Depends(get_current_user),
+    user: User = Depends(require_permission("asset:archive")),
 ) -> dict:
     return _perform_transition("restore", asset_id, db, user)
 
