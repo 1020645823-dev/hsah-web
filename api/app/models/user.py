@@ -24,4 +24,3 @@ class User(Base):
     )
 
     roles: Mapped[list["Role"]] = relationship(secondary="user_roles", back_populates="users")
-    templates: Mapped[list["Template"]] = relationship("Template", back_populates="creator")

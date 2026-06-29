@@ -23,8 +23,6 @@ import { StatCardBlockEditor } from "./stat-card-block-editor";
 import { ImageBlockEditor } from "./image-block-editor";
 import { CodeSnippetBlockEditor } from "./code-snippet-block-editor";
 import { CalloutBlockEditor } from "./callout-block-editor";
-import { TemplateSelector } from "../template-selector";
-import { createTemplate } from "@/lib/admin-templates";
 import { BlockClipboardProvider, useBlockClipboard } from "./block-clipboard-context";
 import { BlockFilterBar, type FilterState } from "./block-filter-bar";
 import { GlobalSearchModal } from "./global-search-modal";
@@ -53,12 +51,6 @@ interface ContentBlockEditorProps {
 function ContentBlockEditorInner({ blocks, onChange, token, errors }: ContentBlockEditorProps) {
   const [editingBlockId, setEditingBlockId] = useState<string | null>(null);
   const [showAddMenu, setShowAddMenu] = useState(false);
-  const [showTemplateSelector, setShowTemplateSelector] = useState(false);
-  const [showSaveTemplateDialog, setShowSaveTemplateDialog] = useState(false);
-  const [templateName, setTemplateName] = useState("");
-  const [templateDescription, setTemplateDescription] = useState("");
-  const [savingTemplate, setSavingTemplate] = useState(false);
-  const [saveError, setSaveError] = useState<string | null>(null);
   const [filter, setFilter] = useState<FilterState>({ keyword: "", type: "all" });
   const [showGlobalSearch, setShowGlobalSearch] = useState(false);
   const [dismissedBlockIds, setDismissedBlockIds] = useState<string[]>([]);
@@ -85,34 +77,6 @@ function ContentBlockEditorInner({ blocks, onChange, token, errors }: ContentBlo
     onChange([...blocks, newBlock]);
     setEditingBlockId(newBlock.id);
     setShowAddMenu(false);
-  };
-
-  const handleApplyTemplate = (templateBlocks: ContentBlock[]) => {
-    const reordered = [...blocks, ...templateBlocks].map((b, idx) => ({
-      ...b,
-      order: idx,
-    }));
-    onChange(reordered);
-  };
-
-  const handleSaveTemplate = async () => {
-    if (!token || !templateName.trim() || blocks.length === 0) return;
-    setSavingTemplate(true);
-    setSaveError(null);
-    try {
-      await createTemplate(token, {
-        name: templateName.trim(),
-        description: templateDescription.trim() || undefined,
-        blocks,
-      });
-      setShowSaveTemplateDialog(false);
-      setTemplateName("");
-      setTemplateDescription("");
-    } catch (err) {
-      setSaveError(err instanceof Error ? err.message : "保存失败");
-    } finally {
-      setSavingTemplate(false);
-    }
   };
 
   const handleEditBlock = (blockId: string) => {
@@ -415,12 +379,6 @@ function ContentBlockEditorInner({ blocks, onChange, token, errors }: ContentBlo
         </button>
         {showAddMenu && (
           <div className="absolute top-full left-0 right-0 mt-2 border border-border/80 rounded-lg bg-card shadow-lg z-10">
-            <button
-              onClick={() => setShowTemplateSelector(true)}
-              className="w-full px-4 py-3 text-left text-sm hover:bg-input/40 transition-colors text-[var(--color-electric-purple)]"
-            >
-              从模板添加
-            </button>
             {token && (
               <button
                 onClick={() => setShowGlobalSearch(true)}
@@ -474,26 +432,6 @@ function ContentBlockEditorInner({ blocks, onChange, token, errors }: ContentBlo
         )}
       </div>
 
-      {token && blocks.length > 0 && (
-        <div className="flex justify-end">
-          <button
-            onClick={() => setShowSaveTemplateDialog(true)}
-            className="text-sm text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors"
-          >
-            保存为模板
-          </button>
-        </div>
-      )}
-
-      {token && (
-        <TemplateSelector
-          isOpen={showTemplateSelector}
-          onClose={() => setShowTemplateSelector(false)}
-          onApply={handleApplyTemplate}
-          token={token}
-        />
-      )}
-
       {token && (
         <GlobalSearchModal
           isOpen={showGlobalSearch}
@@ -501,55 +439,6 @@ function ContentBlockEditorInner({ blocks, onChange, token, errors }: ContentBlo
           onInsert={handleInsertFromSearch}
           token={token}
         />
-      )}
-
-      {showSaveTemplateDialog && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm"
-          onClick={(e) => {
-            if (e.target === e.currentTarget) setShowSaveTemplateDialog(false);
-          }}
-        >
-          <div className="w-full max-w-md rounded-2xl border border-border/80 bg-card p-6 shadow-2xl">
-            <h3 className="mb-4 text-lg font-semibold text-[var(--color-text-primary)]">
-              保存为模板
-            </h3>
-            <div className="space-y-3">
-              <input
-                value={templateName}
-                onChange={(e) => setTemplateName(e.target.value)}
-                className="w-full rounded-lg border border-border/80 bg-muted px-3 py-2 text-sm text-[var(--color-text-primary)] placeholder:text-[var(--color-text-tertiary)]"
-                placeholder="模板名称"
-              />
-              <input
-                value={templateDescription}
-                onChange={(e) => setTemplateDescription(e.target.value)}
-                className="w-full rounded-lg border border-border/80 bg-muted px-3 py-2 text-sm text-[var(--color-text-primary)] placeholder:text-[var(--color-text-tertiary)]"
-                placeholder="描述（可选）"
-              />
-              {saveError && (
-                <div className="rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-2 text-sm text-red-200">
-                  {saveError}
-                </div>
-              )}
-              <div className="flex gap-2 pt-2">
-                <button
-                  onClick={handleSaveTemplate}
-                  disabled={savingTemplate || !templateName.trim()}
-                  className="flex-1 rounded-lg bg-[rgb(123_63_242_/25%)] py-2 text-sm font-medium text-[var(--color-text-primary)] hover:bg-[rgb(123_63_242_/35%)] disabled:opacity-50 transition-colors"
-                >
-                  {savingTemplate ? "保存中..." : "保存"}
-                </button>
-                <button
-                  onClick={() => setShowSaveTemplateDialog(false)}
-                  className="rounded-lg bg-input/40 px-4 py-2 text-sm text-[var(--color-text-secondary)] hover:bg-input/60 transition-colors"
-                >
-                  取消
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
       )}
     </div>
   );

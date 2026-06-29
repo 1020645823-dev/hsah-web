@@ -56,11 +56,11 @@ describe("AdminPage", () => {
     expect(screen.getByText("Quick actions")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Create asset" })).toHaveAttribute(
       "href",
-      "/admin/assets/new",
+      "/admin/assets",
     );
-    expect(screen.getByRole("link", { name: "Policy simulator" })).toHaveAttribute(
+    expect(screen.getByRole("link", { name: "Access Matrix" })).toHaveAttribute(
       "href",
-      "/admin/simulator",
+      "/admin/access",
     );
   });
 });

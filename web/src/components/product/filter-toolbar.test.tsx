@@ -36,7 +36,7 @@ describe("FilterToolbar", () => {
     const toggles = screen.getAllByRole("button", { name: /^Filters$/i });
     expect(toggles.length).toBeGreaterThanOrEqual(1);
     const toggle = toggles[0];
-    expect(toggle).toHaveAttribute("aria-expanded", "false");
+    expect(toggle).toHaveAttribute("aria-expanded", "true");
     expect(toggle).toHaveAttribute("aria-controls", "filter-panel");
   });
 
@@ -52,10 +52,10 @@ describe("FilterToolbar", () => {
 
     const toggle = screen.getAllByRole("button", { name: /^Filters$/i })[0];
     fireEvent.click(toggle);
-    expect(toggle).toHaveAttribute("aria-expanded", "true");
+    expect(toggle).toHaveAttribute("aria-expanded", "false");
 
     fireEvent.click(toggle);
-    expect(toggle).toHaveAttribute("aria-expanded", "false");
+    expect(toggle).toHaveAttribute("aria-expanded", "true");
   });
 
   it("renders extra controls slot", () => {

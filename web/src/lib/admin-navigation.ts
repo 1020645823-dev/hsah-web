@@ -1,16 +1,5 @@
 import type { LucideIcon } from "lucide-react";
-import {
-  Activity,
-  Blocks,
-  FileText,
-  Inbox,
-  LayoutDashboard,
-  LayoutTemplate,
-  Package,
-  Search,
-  Shield,
-  User,
-} from "lucide-react";
+import { Activity, Inbox, LayoutDashboard, Package, Shield } from "lucide-react";
 
 export type AdminNavigationItem = {
   href: string;
@@ -33,34 +22,10 @@ export const adminNavigation = [
     icon: Package,
   },
   {
-    href: "/admin/templates",
-    label: "Templates",
-    description: "模板库、结构复用与内容基线。",
-    icon: LayoutTemplate,
-  },
-  {
-    href: "/admin/users",
-    label: "Users",
-    description: "账号活跃度、可用性与 MFA 视图。",
-    icon: User,
-  },
-  {
-    href: "/admin/roles",
-    label: "Roles",
-    description: "角色定义、职责边界与授权范围。",
+    href: "/admin/access",
+    label: "Access Matrix",
+    description: "用户、角色、策略与权限矩阵联查。",
     icon: Shield,
-  },
-  {
-    href: "/admin/policies",
-    label: "Policies",
-    description: "访问规则、条件组合与执行口径。",
-    icon: FileText,
-  },
-  {
-    href: "/admin/matrix",
-    label: "Matrix",
-    description: "角色与权限矩阵联查视图。",
-    icon: Blocks,
   },
   {
     href: "/admin/access-requests",
@@ -73,12 +38,6 @@ export const adminNavigation = [
     label: "Analytics",
     description: "内容、体验、流程与治理运营指标。",
     icon: Activity,
-  },
-  {
-    href: "/admin/simulator",
-    label: "Simulator",
-    description: "鉴权请求验证与策略回放。",
-    icon: Search,
   },
 ] as const satisfies readonly AdminNavigationItem[];
 

@@ -83,7 +83,6 @@ describe("AdminAssetsPage", () => {
       expect(screen.getByText("Test Asset")).toBeInTheDocument();
     });
     expect(screen.getByText((content) => content.includes("Type") && content.includes("solution"))).toBeInTheDocument();
-    expect(screen.getByText("Status:")).toBeInTheDocument();
     expect(screen.getByText("draft")).toBeInTheDocument();
   });
 

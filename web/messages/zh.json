@@ -937,19 +937,35 @@
       "title": "运营概览",
       "summary": "在一个工作区监控内容健康、近期工作和访问控制界面。"
     },
+    "access": {
+      "eyebrow": "访问控制",
+      "title": "访问矩阵",
+      "summary": "在一个视图里查看用户、角色、策略与权限矩阵。",
+      "tabMatrix": "矩阵",
+      "tabUsers": "用户",
+      "tabRoles": "角色",
+      "tabPolicies": "策略",
+      "matrixDescription": "根据当前角色定义计算的权限矩阵。",
+      "role": "角色",
+      "allowed": "允许",
+      "denied": "拒绝",
+      "noRoles": "尚未定义角色。",
+      "users": { "title": "用户", "total": "用户总数", "empty": "暂无用户。" },
+      "roles": { "title": "角色", "total": "角色总数", "empty": "暂无角色。", "permissions": "权限数", "created": "创建时间" },
+      "policies": { "title": "策略", "total": "策略总数", "empty": "暂无策略。", "effect": "效果", "created": "创建时间" },
+      "createUser": "新建用户",
+      "createRole": "新建角色",
+      "createPolicy": "新建策略"
+    },
     "quickAction": {
       "title": "快捷操作",
       "createAsset": {
         "title": "创建资产",
         "description": "启动新资产草稿并进入内容治理流程。"
       },
-      "manageTemplates": {
-        "title": "管理模板",
-        "description": "更新可复用模板，统一结构与块级基线。"
-      },
-      "policySimulator": {
-        "title": "策略模拟器",
-        "description": "快速验证一条鉴权请求在当前策略下的结果。"
+      "accessMatrix": {
+        "title": "访问矩阵",
+        "description": "在一个视图里查看用户、角色、策略与权限矩阵。"
       }
     },
     "recentDrafts": {
@@ -959,15 +975,15 @@
         "description": "集中处理待发布资产、补齐元数据并推进上线。",
         "cta": "审阅资产"
       },
-      "templateBaselineRefresh": {
-        "title": "模板基线刷新",
-        "description": "确保新资产默认继承统一模板与内容块结构。",
-        "cta": "打开模板"
-      },
       "policyReviewWindow": {
         "title": "策略审阅窗口",
         "description": "联动角色与策略页面，收敛访问控制变更风险。",
         "cta": "检查策略"
+      },
+      "accessReview": {
+        "title": "权限复核",
+        "description": "审计角色与策略，收紧权限范围。",
+        "cta": "复核权限"
       }
     },
     "kpi": {
@@ -1118,31 +1134,6 @@
       "userDeleted": "User deleted successfully",
       "userUpdated": "User updated successfully"
     },
-    "templates": {
-      "title": "模板",
-      "description": "模板库、结构复用与内容基线。",
-      "backToAdmin": "Back",
-      "blockCount": "{count} content blocks",
-      "builtin": "Built-in",
-      "cancel": "Cancel",
-      "contentTemplates": "Content templates",
-      "createFailed": "Failed to create",
-      "createFromCurrent": "Create from current content",
-      "createSuccess": "Template created",
-      "deleteFailed": "Failed to delete",
-      "deleteSuccess": "Template deleted",
-      "descriptionLong": "Manage content templates for quickly creating asset content blocks.",
-      "descriptionPlaceholder": "Description (optional)",
-      "loadFailed": "Failed to load",
-      "loading": "Loading...",
-      "noTemplates": "No templates yet",
-      "save": "Save",
-      "saveAsTemplate": "Save as template",
-      "saving": "Saving...",
-      "templateName": "Template name",
-      "updateFailed": "Failed to update",
-      "updateSuccess": "Template updated"
-    },
     "policies": {
       "title": "策略",
       "description": "访问规则、条件组合与执行口径。",
@@ -1244,27 +1235,6 @@
       "rows": "Rows",
       "selectCellHint": "Select a cell to view matching policies"
     },
-    "simulator": {
-      "title": "模拟器",
-      "description": "鉴权请求验证与策略回放。",
-      "action": "Action",
-      "allowed": "Allowed",
-      "backToAdmin": "Back",
-      "conditions": "Conditions",
-      "denied": "Denied",
-      "descriptionLong": "Test authorization requests against current policies in real time. Adjust inputs to observe how role, resource, and condition combinations resolve to Allow or Deny.",
-      "errorDescription": "The simulation could not be completed. Check the request format and try again.",
-      "errorTitle": "Simulation error",
-      "matchedPolicies": "Matched policies",
-      "noMatchedPolicies": "No policies matched this request.",
-      "noResult": "No result yet. Build a request and run the simulation.",
-      "requestBuilder": "Request Builder",
-      "resource": "Resource",
-      "result": "Result",
-      "runSimulation": "Run simulation",
-      "simulating": "Simulating...",
-      "subject": "Subject"
-    },
     "assetEditor": {
       "title": "资产编辑器",
       "description": "编辑资产元数据、内容块、销售与交付信息。",
@@ -1335,6 +1305,7 @@
       "ariaLabel": "后台模块",
       "overview": "概览",
       "assets": "资产",
+      "access": "访问矩阵",
       "templates": "模板",
       "users": "用户",
       "roles": "角色",
@@ -1486,29 +1457,6 @@
       "tooLarge": "文件「{name}」超出大小限制",
       "saveFirstHint": "请先保存资产后再上传附件。"
     },
-    "templateManager": {
-      "title": "模板",
-      "createFromCurrent": "从当前内容创建",
-      "loading": "加载中...",
-      "empty": "暂无模板",
-      "builtin": "内置",
-      "blockCount": "{count} 个内容块",
-      "save": "保存",
-      "saving": "保存中...",
-      "cancel": "取消",
-      "templateName": "模板名称",
-      "descriptionPlaceholder": "描述（可选）",
-      "cancelDelete": "Cancel",
-      "confirmDelete": "Confirm delete",
-      "createFailed": "Failed to create template",
-      "delete": "Delete",
-      "deleteFailed": "Failed to delete template",
-      "edit": "Edit",
-      "loadFailed": "Failed to load templates",
-      "namePlaceholder": "Template name",
-      "saveAsTemplate": "Save as template",
-      "updateFailed": "Failed to update template"
-    },
     "permissionMatrix": {
       "permissionHeader": "权限",
       "emptyFilter": "无匹配结果",
@@ -1557,14 +1505,6 @@
     },
     "tagInput": {
       "removeTag": "移除 {tag}"
-    },
-    "templateSelector": {
-      "title": "选择模板",
-      "loading": "加载中...",
-      "empty": "暂无可用模板",
-      "apply": "应用",
-      "builtin": "内置",
-      "blockCount": "{count} 个内容块"
     },
     "operations": {
       "totalAssets": "资产总数",

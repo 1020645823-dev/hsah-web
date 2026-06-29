@@ -9,7 +9,6 @@ from app.models.asset_review import AssetReviewRecord
 from app.models.audit_log import AuditLog
 from app.models.access_request import AccessRequest
 from app.models.role import Role, user_roles
-from app.models.template import Template
 from app.models.user import User
 
 __all__ = [
@@ -19,7 +18,6 @@ __all__ = [
     "Role",
     "AccessPolicy",
     "user_roles",
-    "Template",
     "AssetReviewRecord",
     "AssetQualityScore",
     "AssetCollection",

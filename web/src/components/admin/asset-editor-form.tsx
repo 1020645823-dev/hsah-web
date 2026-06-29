@@ -27,6 +27,8 @@ type AssetEditorFormProps = {
   mode: "create" | "edit";
   assetId?: string;
   token: string;
+  /** Called after a successful create when rendered outside the full-page flow (e.g. a drawer). */
+  onCreated?: () => void;
 };
 
 const inputClass =
@@ -52,7 +54,7 @@ function FieldError({ message }: { message?: string }) {
   return <p className="mt-1 text-xs text-red-500">{message}</p>;
 }
 
-export function AssetEditorForm({ mode, assetId, token }: AssetEditorFormProps) {
+export function AssetEditorForm({ mode, assetId, token, onCreated }: AssetEditorFormProps) {
   const t = useTranslations("Admin");
   const router = useRouter();
   const [draft, setDraft] = useState<AssetEditorDraft>(INITIAL_DRAFT);
@@ -150,6 +152,10 @@ export function AssetEditorForm({ mode, assetId, token }: AssetEditorFormProps) 
     if (!res.ok) {
       setBlockErrors(parseContentBlockValidationErrors(res.data));
       setSubmitError((res as { message: string }).message);
+      return;
+    }
+    if (!isEdit && onCreated) {
+      onCreated();
       return;
     }
     router.push("/admin/assets");

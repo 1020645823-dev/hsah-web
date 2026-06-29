@@ -954,19 +954,35 @@
       "title": "Operations overview",
       "summary": "Monitor content health, recent work, and access-control surfaces from one workspace."
     },
+    "access": {
+      "eyebrow": "Access control",
+      "title": "Access Matrix",
+      "summary": "Users, roles, policies, and the permission matrix in a single view.",
+      "tabMatrix": "Matrix",
+      "tabUsers": "Users",
+      "tabRoles": "Roles",
+      "tabPolicies": "Policies",
+      "matrixDescription": "Role-permission matrix computed from current role definitions.",
+      "role": "Role",
+      "allowed": "Allowed",
+      "denied": "Denied",
+      "noRoles": "No roles defined yet.",
+      "users": { "title": "Users", "total": "Total users", "empty": "No users yet." },
+      "roles": { "title": "Roles", "total": "Total roles", "empty": "No roles yet.", "permissions": "Permissions", "created": "Created" },
+      "policies": { "title": "Policies", "total": "Total policies", "empty": "No policies yet.", "effect": "Effect", "created": "Created" },
+      "createUser": "New user",
+      "createRole": "New role",
+      "createPolicy": "New policy"
+    },
     "quickAction": {
       "title": "Quick actions",
       "createAsset": {
         "title": "Create asset",
         "description": "Start a new asset draft and move into the content governance flow."
       },
-      "manageTemplates": {
-        "title": "Manage templates",
-        "description": "Update reusable templates to standardize structure and block-level baselines."
-      },
-      "policySimulator": {
-        "title": "Policy simulator",
-        "description": "Quickly validate an authorization request against current policies."
+      "accessMatrix": {
+        "title": "Access Matrix",
+        "description": "Review users, roles, policies, and the permission matrix in one place."
       }
     },
     "recentDrafts": {
@@ -976,15 +992,15 @@
         "description": "Process assets awaiting publication, complete metadata, and move them toward launch.",
         "cta": "Review assets"
       },
-      "templateBaselineRefresh": {
-        "title": "Template baseline refresh",
-        "description": "Ensure new assets inherit standard templates and content block structures by default.",
-        "cta": "Open templates"
-      },
       "policyReviewWindow": {
         "title": "Policy review window",
         "description": "Coordinate roles and policy pages to reduce access-control change risk.",
         "cta": "Inspect policies"
+      },
+      "accessReview": {
+        "title": "Access review",
+        "description": "Audit roles and policies to keep permissions tight.",
+        "cta": "Review access"
       }
     },
     "kpi": {
@@ -1135,31 +1151,6 @@
       "batchDeleteFailed": "Batch delete failed: {count} users could not be deleted",
       "batchDeleteSuccess": "{count} users deleted"
     },
-    "templates": {
-      "title": "Templates",
-      "description": "Template library, structural reuse, and content baselines.",
-      "descriptionLong": "Manage content templates for quickly creating asset content blocks.",
-      "backToAdmin": "Back",
-      "contentTemplates": "Content templates",
-      "createFromCurrent": "Create from current content",
-      "saveAsTemplate": "Save as template",
-      "templateName": "Template name",
-      "descriptionPlaceholder": "Description (optional)",
-      "builtin": "Built-in",
-      "blockCount": "{count} content blocks",
-      "noTemplates": "No templates yet",
-      "loading": "Loading...",
-      "save": "Save",
-      "saving": "Saving...",
-      "cancel": "Cancel",
-      "createSuccess": "Template created",
-      "updateSuccess": "Template updated",
-      "deleteSuccess": "Template deleted",
-      "loadFailed": "Failed to load",
-      "deleteFailed": "Failed to delete",
-      "updateFailed": "Failed to update",
-      "createFailed": "Failed to create"
-    },
     "policies": {
       "title": "Policies",
       "description": "Access rules, condition combinations, and execution semantics.",
@@ -1258,27 +1249,6 @@
       "resourceVisibilityFilter": "Resource visibility",
       "refreshMatrix": "Refresh matrix"
     },
-    "simulator": {
-      "title": "Policy Simulator",
-      "description": "Validate authorization requests and replay policy decisions.",
-      "descriptionLong": "Test authorization requests against current policies in real time. Adjust inputs to observe how role, resource, and condition combinations resolve to Allow or Deny.",
-      "backToAdmin": "Back",
-      "requestBuilder": "Request Builder",
-      "subject": "Subject",
-      "action": "Action",
-      "resource": "Resource",
-      "conditions": "Conditions",
-      "runSimulation": "Run simulation",
-      "simulating": "Simulating...",
-      "result": "Result",
-      "allowed": "Allowed",
-      "denied": "Denied",
-      "noResult": "No result yet. Build a request and run the simulation.",
-      "matchedPolicies": "Matched policies",
-      "noMatchedPolicies": "No policies matched this request.",
-      "errorTitle": "Simulation error",
-      "errorDescription": "The simulation could not be completed. Check the request format and try again."
-    },
     "assetEditor": {
       "title": "Asset Editor",
       "description": "Edit asset metadata, content blocks, sales, and delivery information.",
@@ -1352,6 +1322,7 @@
       "navLabel": "Admin modules",
       "overview": "Overview",
       "assets": "Assets",
+      "access": "Access Matrix",
       "templates": "Templates",
       "users": "Users",
       "roles": "Roles",
@@ -1500,29 +1471,6 @@
       "tooLarge": "\"{name}\" exceeds the size limit",
       "saveFirstHint": "Save the asset first, then upload attachments."
     },
-    "templateManager": {
-      "title": "Templates",
-      "createFromCurrent": "Create from current content",
-      "loading": "Loading...",
-      "empty": "No templates yet",
-      "builtin": "Built-in",
-      "blockCount": "{count} content blocks",
-      "save": "Save",
-      "saving": "Saving...",
-      "cancel": "Cancel",
-      "templateName": "Template name",
-      "descriptionPlaceholder": "Description (optional)",
-      "edit": "Edit",
-      "delete": "Delete",
-      "confirmDelete": "Confirm delete",
-      "cancelDelete": "Cancel",
-      "saveAsTemplate": "Save as template",
-      "namePlaceholder": "Template name",
-      "loadFailed": "Failed to load templates",
-      "deleteFailed": "Failed to delete template",
-      "updateFailed": "Failed to update template",
-      "createFailed": "Failed to create template"
-    },
     "permissionMatrix": {
       "permissionHeader": "Permission",
       "emptyFilter": "No matching results",
@@ -1571,14 +1519,6 @@
     },
     "tagInput": {
       "removeTag": "Remove {tag}"
-    },
-    "templateSelector": {
-      "title": "Select template",
-      "loading": "Loading...",
-      "empty": "No templates available",
-      "apply": "Apply",
-      "builtin": "Built-in",
-      "blockCount": "{count} content blocks"
     },
     "operations": {
       "totalAssets": "Total assets",

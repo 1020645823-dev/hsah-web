@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
@@ -75,10 +75,10 @@ export function AdminTopbar({ pageTitle }: { pageTitle: string }) {
             {[
               { href: `/${locale}/admin`, label: t("topbar.adminHome") },
               { href: `/${locale}/admin/assets`, label: t("sidebar.assets") },
+              { href: `/${locale}/admin/access`, label: t("sidebar.access") },
               { href: `/${locale}/admin/access-requests`, label: t("topbar.accessRequests") },
               { href: `/${locale}/admin/analytics`, label: t("topbar.analytics") },
               { href: `/${locale}/admin/audit-logs`, label: t("topbar.auditLogs") },
-              { href: `/${locale}/admin/users`, label: t("sidebar.users") },
             ].map((item) => (
               <Link
                 key={item.href}

@@ -13,7 +13,6 @@ from app.api.v1.asset_engagement import router as asset_engagement_router
 from app.api.v1.assets import router as assets_router
 from app.api.v1.asset_attachments import router as asset_attachments_router
 from app.api.v1.auth import router as auth_router
-from app.api.v1.templates import router as templates_router
 from app.api.v1.upload import router as upload_router
 
 router = APIRouter()
@@ -31,7 +30,6 @@ router.include_router(admin_collections_router)
 router.include_router(admin_operations_router)
 router.include_router(admin_analytics_router)
 router.include_router(upload_router)
-router.include_router(templates_router)
 
 
 @router.get("/health")

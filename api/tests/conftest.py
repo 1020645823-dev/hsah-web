@@ -8,7 +8,6 @@ from sqlalchemy.pool import StaticPool
 import app.models
 import app.scripts.seed_assets as seed_assets_module
 import app.scripts.seed_policies as seed_policies_module
-import app.scripts.seed_templates as seed_templates_module
 from app.core import db as db_module
 from app.models.base import Base
 
@@ -28,11 +27,9 @@ def setup_test_db() -> Generator[None, None, None]:
 
     db_module.SessionLocal = TestingSessionLocal
     seed_assets_module.SessionLocal = TestingSessionLocal
-    seed_templates_module.SessionLocal = TestingSessionLocal
     seed_policies_module.SessionLocal = TestingSessionLocal
 
     seed_assets_module.seed()
-    seed_templates_module.seed()
     seed_policies_module.seed()
 
     yield
