@@ -81,7 +81,7 @@ export function CalloutBlockEditor({ config, onChange, errors }: CalloutBlockEdi
                 className={`flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm transition-colors ${
                   isSelected
                     ? "border-2 border-[var(--color-electric-purple)] bg-[var(--color-electric-purple)]/10 text-[var(--color-text-primary)]"
-                    : "border border-[rgb(212_218_245_/12%)] bg-[rgb(255_255_255_/5%)] text-[var(--color-text-secondary)] hover:border-[rgb(255_255_255_/20%)] hover:bg-[rgb(255_255_255_/2%)]"
+                    : "border border-border bg-input/40 text-[var(--color-text-secondary)] hover:border-border hover:bg-input/25"
                 }`}
                 data-testid={`callout-variant-${variant.value}`}
                 aria-label={variant.label}
@@ -103,7 +103,7 @@ export function CalloutBlockEditor({ config, onChange, errors }: CalloutBlockEdi
           type="text"
           value={config.title || ""}
           onChange={(e) => handleTitleChange(e.target.value)}
-          className="w-full rounded-lg border border-[rgb(212_218_245_/12%)] bg-[rgb(255_255_255_/5%)] px-3 py-2 text-sm text-[var(--color-text-primary)] placeholder:text-[var(--color-text-secondary)] focus:border-[var(--color-electric-purple)] focus:outline-none"
+          className="w-full rounded-lg border border-border bg-input/40 px-3 py-2 text-sm text-[var(--color-text-primary)] placeholder:text-[var(--color-text-secondary)] focus:border-[var(--color-electric-purple)] focus:outline-none"
           placeholder="输入标题..."
           data-testid="callout-title-input"
         />
@@ -117,7 +117,7 @@ export function CalloutBlockEditor({ config, onChange, errors }: CalloutBlockEdi
         <textarea
           value={config.content}
           onChange={(e) => handleContentChange(e.target.value)}
-          className="w-full rounded-lg border border-[rgb(212_218_245_/12%)] bg-[rgb(255_255_255_/5%)] px-3 py-2 text-sm text-[var(--color-text-primary)] placeholder:text-[var(--color-text-secondary)] focus:border-[var(--color-electric-purple)] focus:outline-none min-h-[100px] resize-y"
+          className="w-full rounded-lg border border-border bg-input/40 px-3 py-2 text-sm text-[var(--color-text-primary)] placeholder:text-[var(--color-text-secondary)] focus:border-[var(--color-electric-purple)] focus:outline-none min-h-[100px] resize-y"
           placeholder="输入内容..."
           data-testid="callout-content-textarea"
         />

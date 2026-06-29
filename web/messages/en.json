@@ -1324,7 +1324,9 @@
       "salesLens": "Sales lens",
       "deliveryLens": "Delivery lens",
       "videos": "Videos",
-      "manageVideos": "Manage videos"
+      "manageVideos": "Manage videos",
+      "eyebrow": "Asset Management",
+      "summary": "Edit asset metadata, tags, sales & delivery details, content blocks, and videos."
     },
     "videoManager": {
       "title": "Title",
@@ -1435,7 +1437,36 @@
       "cancel": "Cancel",
       "save": "Save",
       "saving": "Saving...",
-      "required": "Required"
+      "required": "Required",
+      "cloudProviders": "Cloud providers",
+      "cloudProvidersPlaceholder": "e.g. aws, azure, gcp",
+      "industries": "Industries",
+      "industriesPlaceholder": "e.g. financial-services, healthcare",
+      "technologies": "Technologies",
+      "technologiesPlaceholder": "e.g. genai, kubernetes",
+      "typeAndStatus": "Type & status",
+      "accessControl": "Access control",
+      "allowedRoles": "Allowed roles",
+      "allowedRolesPlaceholder": "Add roles allowed to access",
+      "allowedUsers": "Allowed users",
+      "allowedUsersPlaceholder": "Add users allowed to access",
+      "sharedDetail": "Shared detail",
+      "introduction": "Introduction",
+      "introductionPlaceholder": "Briefly describe the core value of this asset",
+      "liveDemoUrl": "Live demo URL",
+      "videoManagement": "Video management",
+      "salesDetail": "Sales detail",
+      "valueSummary": "Value summary",
+      "valueSummaryPlaceholder": "Summarize the business value this asset delivers",
+      "deliveryDetail": "Delivery detail",
+      "implementationSummary": "Implementation summary",
+      "implementationSummaryPlaceholder": "Outline how it is implemented and key steps",
+      "deliveryAllowedRoles": "Delivery allowed roles",
+      "deliveryAllowedRolesPlaceholder": "Add roles allowed for delivery",
+      "deliveryAllowedUsers": "Delivery allowed users",
+      "deliveryAllowedUsersPlaceholder": "Add users allowed for delivery",
+      "loading": "Loading…",
+      "unsavedChangesConfirm": "You have unsaved changes. Are you sure you want to leave?"
     },
     "assetVideoManager": {
       "title": "Video Manager",
@@ -1449,7 +1480,11 @@
       "videoTitle": "Title",
       "videoDescription": "Description",
       "noVideos": "No videos added yet.",
-      "dragToReorder": "Drag to reorder"
+      "dragToReorder": "Drag to reorder",
+      "titlePlaceholder": "Video title",
+      "posterUrlPlaceholder": "https://example.com/poster.jpg",
+      "description": "Description",
+      "descriptionPlaceholder": "Short description of the video"
     },
     "templateManager": {
       "title": "Templates",
@@ -1604,6 +1639,14 @@
       "archive": "Archive",
       "rejectReasonPrompt": "Reason for rejection",
       "confirmReject": "Reject asset"
+    },
+    "common": {
+      "unauthorized": "You are not authorized to view this page. Please sign in with an admin account."
+    },
+    "newAsset": {
+      "eyebrow": "Asset Management",
+      "title": "New Asset",
+      "summary": "Create a new asset entry with basic info, tags, access control, sales & delivery details, and content blocks."
     }
   }
 }

@@ -59,7 +59,7 @@ export function CodeSnippetBlockEditor({ config, onChange, errors }: CodeSnippet
             语言
           </label>
           <select
-            className="w-full rounded-lg border border-[rgb(212_218_245_/12%)] bg-[rgb(255_255_255_/5%)] px-3 py-2 text-sm text-[var(--color-text-primary)] focus:border-[var(--color-electric-purple)] focus:outline-none"
+            className="w-full rounded-lg border border-border bg-input/40 px-3 py-2 text-sm text-[var(--color-text-primary)] focus:border-[var(--color-electric-purple)] focus:outline-none"
             value={language}
             onChange={(e) => handleLanguageChange(e.target.value)}
             data-testid="code-snippet-language-select"
@@ -78,7 +78,7 @@ export function CodeSnippetBlockEditor({ config, onChange, errors }: CodeSnippet
             文件名
           </label>
           <input
-            className="w-full rounded-lg border border-[rgb(212_218_245_/12%)] bg-[rgb(255_255_255_/5%)] px-3 py-2 text-sm text-[var(--color-text-primary)] placeholder:text-[var(--color-text-secondary)] focus:border-[var(--color-electric-purple)] focus:outline-none"
+            className="w-full rounded-lg border border-border bg-input/40 px-3 py-2 text-sm text-[var(--color-text-primary)] placeholder:text-[var(--color-text-secondary)] focus:border-[var(--color-electric-purple)] focus:outline-none"
             value={filename}
             onChange={(e) => handleFilenameChange(e.target.value)}
             placeholder="例如 demo.py"
@@ -90,7 +90,7 @@ export function CodeSnippetBlockEditor({ config, onChange, errors }: CodeSnippet
         <label className="flex items-center gap-2 pt-5 text-sm text-[var(--color-text-secondary)] select-none">
           <input
             type="checkbox"
-            className="h-4 w-4 rounded border-[rgb(212_218_245_/12%)] bg-[rgb(255_255_255_/5%)] accent-[var(--color-electric-purple)]"
+            className="h-4 w-4 rounded border-border bg-input/40 accent-[var(--color-electric-purple)]"
             checked={showLineNumbers}
             onChange={handleToggleLineNumbers}
             data-testid="code-snippet-line-numbers-checkbox"
@@ -103,10 +103,10 @@ export function CodeSnippetBlockEditor({ config, onChange, errors }: CodeSnippet
         <label className="text-xs font-medium text-[var(--color-text-secondary)]">
           代码
         </label>
-        <div className="flex rounded-lg border border-[rgb(212_218_245_/12%)] bg-[rgb(255_255_255_/5%)] focus-within:border-[var(--color-electric-purple)]">
+        <div className="flex rounded-lg border border-border bg-input/40 focus-within:border-[var(--color-electric-purple)]">
           {showLineNumbers && (
             <div
-              className="shrink-0 select-none border-r border-[rgb(212_218_245_/12%)] px-3 py-2 text-right text-xs leading-6 text-[var(--color-text-secondary)]"
+              className="shrink-0 select-none border-r border-border px-3 py-2 text-right text-xs leading-6 text-[var(--color-text-secondary)]"
               data-testid="code-snippet-line-numbers"
               aria-hidden
             >
@@ -132,19 +132,19 @@ export function CodeSnippetBlockEditor({ config, onChange, errors }: CodeSnippet
           预览
         </label>
         <div
-          className="rounded-lg border border-[rgb(212_218_245_/12%)] bg-[rgb(255_255_255_/5%)] px-4 py-3"
+          className="rounded-lg border border-border bg-input/40 px-4 py-3"
           data-testid="code-snippet-preview"
         >
           <div className="mb-2 flex items-center gap-2 text-xs text-[var(--color-text-secondary)]">
             <span
-              className="rounded bg-[rgb(255_255_255_/8%)] px-1.5 py-0.5"
+              className="rounded bg-input/50 px-1.5 py-0.5"
               data-testid="code-snippet-preview-language"
             >
               {language}
             </span>
             {filename ? (
               <span
-                className="rounded bg-[rgb(255_255_255_/8%)] px-1.5 py-0.5"
+                className="rounded bg-input/50 px-1.5 py-0.5"
                 data-testid="code-snippet-preview-filename"
               >
                 {filename}

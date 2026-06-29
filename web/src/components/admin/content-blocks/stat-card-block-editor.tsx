@@ -60,7 +60,7 @@ export function StatCardBlockEditor({ config, onChange, errors }: StatCardBlockE
           <div key={index} className="space-y-1" data-testid={`stat-card-item-${index}`}>
             <div className="flex items-center gap-2">
               <input
-                className="flex-1 rounded-lg border border-[rgb(212_218_245_/12%)] bg-[rgb(255_255_255_/5%)] px-3 py-2 text-sm text-[var(--color-text-primary)] placeholder:text-[var(--color-text-secondary)] focus:border-[var(--color-electric-purple)] focus:outline-none"
+                className="flex-1 rounded-lg border border-border bg-input/40 px-3 py-2 text-sm text-[var(--color-text-primary)] placeholder:text-[var(--color-text-secondary)] focus:border-[var(--color-electric-purple)] focus:outline-none"
                 type="text"
                 value={item.label}
                 onChange={(e) => handleItemChange(index, "label", e.target.value)}
@@ -68,7 +68,7 @@ export function StatCardBlockEditor({ config, onChange, errors }: StatCardBlockE
                 data-testid={`stat-card-item-label-${index}`}
               />
               <input
-                className="flex-1 rounded-lg border border-[rgb(212_218_245_/12%)] bg-[rgb(255_255_255_/5%)] px-3 py-2 text-sm text-[var(--color-text-primary)] placeholder:text-[var(--color-text-secondary)] focus:border-[var(--color-electric-purple)] focus:outline-none"
+                className="flex-1 rounded-lg border border-border bg-input/40 px-3 py-2 text-sm text-[var(--color-text-primary)] placeholder:text-[var(--color-text-secondary)] focus:border-[var(--color-electric-purple)] focus:outline-none"
                 type="text"
                 value={item.value}
                 onChange={(e) => handleItemChange(index, "value", e.target.value)}
@@ -78,7 +78,7 @@ export function StatCardBlockEditor({ config, onChange, errors }: StatCardBlockE
               <button
                 type="button"
                 onClick={() => handleDeleteItem(index)}
-                className="shrink-0 rounded-lg p-2 text-[var(--color-text-secondary)] hover:bg-[rgb(255_255_255_/5%)] hover:text-red-400 transition-colors"
+                className="shrink-0 rounded-lg p-2 text-[var(--color-text-secondary)] hover:bg-input/40 hover:text-red-400 transition-colors"
                 data-testid={`stat-card-item-delete-${index}`}
                 aria-label={`删除第 ${index + 1} 项`}
               >
@@ -102,7 +102,7 @@ export function StatCardBlockEditor({ config, onChange, errors }: StatCardBlockE
       <button
         type="button"
         onClick={handleAddItem}
-        className="flex w-full items-center justify-center gap-1.5 rounded-lg border-2 border-dashed border-[rgb(255_255_255_/10%)] py-2.5 text-sm text-[var(--color-text-secondary)] hover:border-[rgb(255_255_255_/20%)] hover:bg-[rgb(255_255_255_/2%)] transition-colors"
+        className="flex w-full items-center justify-center gap-1.5 rounded-lg border-2 border-dashed border-border/80 py-2.5 text-sm text-[var(--color-text-secondary)] hover:border-border hover:bg-input/25 transition-colors"
         data-testid="stat-card-add-item"
       >
         <Plus className="h-4 w-4" />

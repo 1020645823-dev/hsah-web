@@ -60,13 +60,13 @@ export function BlockFilterBar({ onFilterChange }: BlockFilterBarProps) {
           value={keyword}
           onChange={handleKeywordChange}
           placeholder="搜索内容..."
-          className="w-full pl-9 pr-3 py-2 bg-[rgb(255_255_255_/5%)] border border-[rgb(255_255_255_/10%)] rounded text-sm text-[var(--color-text-primary)] placeholder:text-[var(--color-text-secondary)] focus:outline-none focus:border-[rgb(139_92_246_/60%)]"
+          className="w-full pl-9 pr-3 py-2 bg-input/40 border border-border/80 rounded text-sm text-[var(--color-text-primary)] placeholder:text-[var(--color-text-secondary)] focus:outline-none focus:border-[rgb(139_92_246_/60%)]"
         />
       </div>
       <select
         value={type}
         onChange={handleTypeChange}
-        className="px-3 py-2 bg-[rgb(255_255_255_/5%)] border border-[rgb(255_255_255_/10%)] rounded text-sm text-[var(--color-text-primary)] focus:outline-none focus:border-[rgb(139_92_246_/60%)]"
+        className="px-3 py-2 bg-input/40 border border-border/80 rounded text-sm text-[var(--color-text-primary)] focus:outline-none focus:border-[rgb(139_92_246_/60%)]"
       >
         {TYPE_OPTIONS.map((option) => (
           <option key={option.value} value={option.value}>
@@ -77,7 +77,7 @@ export function BlockFilterBar({ onFilterChange }: BlockFilterBarProps) {
       {hasActiveFilter && (
         <button
           onClick={handleClear}
-          className="flex items-center gap-1 px-3 py-2 text-sm border border-[rgb(255_255_255_/10%)] rounded hover:bg-[rgb(255_255_255_/5%)] text-[var(--color-text-primary)]"
+          className="flex items-center gap-1 px-3 py-2 text-sm border border-border/80 rounded hover:bg-input/40 text-[var(--color-text-primary)]"
         >
           <X className="w-4 h-4" />
           清除

@@ -19,7 +19,7 @@ interface TiptapEditorProps {
 }
 
 const toolbarButtonClass =
-  "p-1.5 rounded-md text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[rgb(255_255_255_/8%)] transition-colors";
+  "p-1.5 rounded-md text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-input/50 transition-colors";
 
 const activeButtonClass =
   "text-[var(--color-electric-purple)] bg-[rgb(123_63_242_/12%)]";
@@ -42,7 +42,7 @@ export function TiptapEditor({ content, onChange }: TiptapEditorProps) {
 
   if (!editor) {
     return (
-      <div className="w-full rounded-lg border border-[rgb(212_218_245_/12%)] bg-[rgb(255_255_255_/5%)] px-3 py-2 text-sm text-[var(--color-text-primary)] min-h-[200px]">
+      <div className="w-full rounded-lg border border-border bg-input/40 px-3 py-2 text-sm text-[var(--color-text-primary)] min-h-[200px]">
         加载中...
       </div>
     );
@@ -70,7 +70,7 @@ export function TiptapEditor({ content, onChange }: TiptapEditorProps) {
 
   return (
     <div className="w-full">
-      <div className="flex flex-wrap items-center gap-1 rounded-t-lg border border-b-0 border-[rgb(212_218_245_/12%)] bg-[rgb(255_255_255_/5%)] px-2 py-1.5">
+      <div className="flex flex-wrap items-center gap-1 rounded-t-lg border border-b-0 border-border bg-input/40 px-2 py-1.5">
         <button
           type="button"
           onClick={toggleBold}
@@ -89,7 +89,7 @@ export function TiptapEditor({ content, onChange }: TiptapEditorProps) {
         >
           <Italic className="h-4 w-4" />
         </button>
-        <div className="mx-1 h-4 w-px bg-[rgb(255_255_255_/10%)]" />
+        <div className="mx-1 h-4 w-px bg-input/60" />
         <button
           type="button"
           onClick={toggleH1}
@@ -108,7 +108,7 @@ export function TiptapEditor({ content, onChange }: TiptapEditorProps) {
         >
           <Heading2 className="h-4 w-4" />
         </button>
-        <div className="mx-1 h-4 w-px bg-[rgb(255_255_255_/10%)]" />
+        <div className="mx-1 h-4 w-px bg-input/60" />
         <button
           type="button"
           onClick={toggleBulletList}
@@ -127,7 +127,7 @@ export function TiptapEditor({ content, onChange }: TiptapEditorProps) {
         >
           <ListOrdered className="h-4 w-4" />
         </button>
-        <div className="mx-1 h-4 w-px bg-[rgb(255_255_255_/10%)]" />
+        <div className="mx-1 h-4 w-px bg-input/60" />
         <button
           type="button"
           onClick={toggleLink}
@@ -140,7 +140,7 @@ export function TiptapEditor({ content, onChange }: TiptapEditorProps) {
       </div>
       <EditorContent
         editor={editor}
-        className="w-full rounded-b-lg border border-[rgb(212_218_245_/12%)] bg-[rgb(255_255_255_/5%)] px-3 py-2 text-sm text-[var(--color-text-primary)] min-h-[200px] focus-within:border-[var(--color-electric-purple)] focus-within:outline-none [&_.ProseMirror]:outline-none [&_.ProseMirror]:min-h-[200px] [&_.ProseMirror_p]:my-1 [&_.ProseMirror_h1]:text-xl [&_.ProseMirror_h1]:font-semibold [&_.ProseMirror_h1]:my-2 [&_.ProseMirror_h2]:text-lg [&_.ProseMirror_h2]:font-semibold [&_.ProseMirror_h2]:my-2 [&_.ProseMirror_ul]:list-disc [&_.ProseMirror_ul]:pl-5 [&_.ProseMirror_ol]:list-decimal [&_.ProseMirror_ol]:pl-5 [&_.ProseMirror_li]:my-0.5 [&_.ProseMirror_a]:text-[var(--color-electric-purple)] [&_.ProseMirror_a]:underline [&_.ProseMirror_strong]:font-bold [&_.ProseMirror_em]:italic"
+        className="w-full rounded-b-lg border border-border bg-input/40 px-3 py-2 text-sm text-[var(--color-text-primary)] min-h-[200px] focus-within:border-[var(--color-electric-purple)] focus-within:outline-none [&_.ProseMirror]:outline-none [&_.ProseMirror]:min-h-[200px] [&_.ProseMirror_p]:my-1 [&_.ProseMirror_h1]:text-xl [&_.ProseMirror_h1]:font-semibold [&_.ProseMirror_h1]:my-2 [&_.ProseMirror_h2]:text-lg [&_.ProseMirror_h2]:font-semibold [&_.ProseMirror_h2]:my-2 [&_.ProseMirror_ul]:list-disc [&_.ProseMirror_ul]:pl-5 [&_.ProseMirror_ol]:list-decimal [&_.ProseMirror_ol]:pl-5 [&_.ProseMirror_li]:my-0.5 [&_.ProseMirror_a]:text-[var(--color-electric-purple)] [&_.ProseMirror_a]:underline [&_.ProseMirror_strong]:font-bold [&_.ProseMirror_em]:italic"
       />
     </div>
   );

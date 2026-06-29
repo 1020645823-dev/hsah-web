@@ -10,7 +10,7 @@ type AssetVideoManagerProps = {
 };
 
 const inputClass =
-  "w-full rounded-lg border border-[rgb(212_218_245_/12%)] bg-[rgb(255_255_255_/5%)] px-3 py-2 text-sm text-[var(--color-text-primary)] focus:border-[var(--color-electric-purple)] focus:outline-none";
+  "w-full rounded-lg border border-border bg-input/40 px-3 py-2 text-sm text-[var(--color-text-primary)] focus:border-[var(--color-electric-purple)] focus:outline-none";
 
 function randomId() {
   return Math.random().toString(36).slice(2, 10) + Date.now().toString(36);
@@ -66,7 +66,7 @@ export function AssetVideoManager({ videos, onChange }: AssetVideoManagerProps) 
       {videos.map((video, index) => (
         <div
           key={video.id}
-          className="rounded-xl border border-[rgb(212_218_245_/12%)] bg-[rgb(18_18_26_/50%)] p-4 space-y-3"
+          className="rounded-xl border border-border bg-muted/70 p-4 space-y-3"
         >
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
@@ -84,7 +84,7 @@ export function AssetVideoManager({ videos, onChange }: AssetVideoManagerProps) 
                 <button
                   type="button"
                   onClick={() => setPrimary(index)}
-                  className="rounded-md border border-[rgb(212_218_245_/12%)] px-2.5 py-1 text-xs text-[var(--color-text-secondary)] transition-colors hover:bg-white/5"
+                  className="rounded-md border border-border px-2.5 py-1 text-xs text-[var(--color-text-secondary)] transition-colors hover:bg-white/5"
                 >
                   {t("assetVideoManager.setPrimary")}
                 </button>
@@ -144,7 +144,7 @@ export function AssetVideoManager({ videos, onChange }: AssetVideoManagerProps) 
       <button
         type="button"
         onClick={addVideo}
-        className="flex w-full items-center justify-center gap-2 rounded-xl border border-dashed border-[rgb(212_218_245_/20%)] py-3 text-sm text-[var(--color-text-secondary)] transition-colors hover:border-[var(--color-electric-purple)] hover:text-[var(--color-text-primary)]"
+        className="flex w-full items-center justify-center gap-2 rounded-xl border border-dashed border-border py-3 text-sm text-[var(--color-text-secondary)] transition-colors hover:border-[var(--color-electric-purple)] hover:text-[var(--color-text-primary)]"
       >
         <Plus className="size-4" />
         {t("assetVideoManager.addVideo")}

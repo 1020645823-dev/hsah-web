@@ -72,14 +72,14 @@ export function GlobalSearchModal({ isOpen, onClose, onInsert, token }: GlobalSe
         if (e.target === e.currentTarget) onClose();
       }}
     >
-      <div className="w-full max-w-2xl max-h-[80vh] flex flex-col rounded-2xl border border-[rgb(255_255_255_/10%)] bg-[rgb(18_18_26_/95%)] shadow-2xl">
-        <div className="flex items-center justify-between p-4 border-b border-[rgb(255_255_255_/10%)]">
+      <div className="w-full max-w-2xl max-h-[80vh] flex flex-col rounded-2xl border border-border/80 bg-card shadow-2xl">
+        <div className="flex items-center justify-between p-4 border-b border-border/80">
           <h3 className="text-lg font-semibold text-[var(--color-text-primary)]">
             全局搜索内容块
           </h3>
           <button
             onClick={onClose}
-            className="p-1 rounded hover:bg-[rgb(255_255_255_/10%)] transition-colors"
+            className="p-1 rounded hover:bg-input/60 transition-colors"
             aria-label="Close"
           >
             <X className="w-5 h-5 text-[var(--color-text-secondary)]" />
@@ -95,7 +95,7 @@ export function GlobalSearchModal({ isOpen, onClose, onInsert, token }: GlobalSe
               onChange={(e) => setKeyword(e.target.value)}
               onKeyDown={handleKeyDown}
               placeholder="输入关键词搜索..."
-              className="w-full pl-9 pr-3 py-2 bg-[rgb(255_255_255_/5%)] border border-[rgb(255_255_255_/10%)] rounded text-sm text-[var(--color-text-primary)] placeholder:text-[var(--color-text-secondary)] focus:outline-none focus:border-[rgb(139_92_246_/60%)]"
+              className="w-full pl-9 pr-3 py-2 bg-input/40 border border-border/80 rounded text-sm text-[var(--color-text-primary)] placeholder:text-[var(--color-text-secondary)] focus:outline-none focus:border-[rgb(139_92_246_/60%)]"
             />
           </div>
         </div>
@@ -124,7 +124,7 @@ export function GlobalSearchModal({ isOpen, onClose, onInsert, token }: GlobalSe
               {results.map((result, index) => (
                 <div
                   key={`${result.asset_id}-${result.block.id}-${index}`}
-                  className="rounded-lg border border-[rgb(255_255_255_/10%)] bg-[rgb(255_255_255_/3%)] p-4"
+                  className="rounded-lg border border-border/80 bg-input/30 p-4"
                 >
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex-1 min-w-0">
@@ -132,7 +132,7 @@ export function GlobalSearchModal({ isOpen, onClose, onInsert, token }: GlobalSe
                         <span className="text-sm font-medium text-[var(--color-text-primary)]">
                           {result.asset_name}
                         </span>
-                        <span className="text-xs px-2 py-0.5 rounded bg-[rgb(255_255_255_/10%)] text-[var(--color-text-secondary)]">
+                        <span className="text-xs px-2 py-0.5 rounded bg-input/60 text-[var(--color-text-secondary)]">
                           {result.block.type}
                         </span>
                         <span className="text-xs text-[var(--color-text-tertiary)]">

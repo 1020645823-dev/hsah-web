@@ -91,7 +91,7 @@ export function TemplateSelector({ isOpen, onClose, onApply, token }: TemplateSe
         if (event.target === event.currentTarget) onClose();
       }}
     >
-      <div className="relative w-full max-w-3xl max-h-[80vh] overflow-y-auto rounded-2xl border border-[rgb(255_255_255_/10%)] bg-[rgb(18_18_26_/95%)] p-6 shadow-2xl">
+      <div className="relative w-full max-w-3xl max-h-[80vh] overflow-y-auto rounded-2xl border border-border/80 bg-card p-6 shadow-2xl">
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-3">
             <LayoutTemplate className="h-5 w-5 text-[var(--color-electric-purple)]" />
@@ -102,7 +102,7 @@ export function TemplateSelector({ isOpen, onClose, onApply, token }: TemplateSe
           <button
             onClick={onClose}
             aria-label="Close"
-            className="rounded-lg p-2 text-[var(--color-text-secondary)] hover:bg-[rgb(255_255_255_/5%)] hover:text-[var(--color-text-primary)] transition-colors"
+            className="rounded-lg p-2 text-[var(--color-text-secondary)] hover:bg-input/40 hover:text-[var(--color-text-primary)] transition-colors"
           >
             <X className="h-5 w-5" />
           </button>
@@ -131,7 +131,7 @@ export function TemplateSelector({ isOpen, onClose, onApply, token }: TemplateSe
             {templates.map((template) => (
               <div
                 key={template.id}
-                className="rounded-xl border border-[rgb(255_255_255_/10%)] bg-[rgb(255_255_255_/3%)] p-4 hover:border-[rgb(123_63_242_/40%)] transition-colors"
+                className="rounded-xl border border-border/80 bg-input/30 p-4 hover:border-[rgb(123_63_242_/40%)] transition-colors"
               >
                 <div className="flex items-start justify-between mb-2">
                   <h3 className="font-medium text-[var(--color-text-primary)]">

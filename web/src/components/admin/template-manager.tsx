@@ -160,7 +160,7 @@ export function TemplateManager({ token, initialBlocks }: TemplateManagerProps) 
           {t("templateManager.loading")}
         </div>
       ) : templates.length === 0 ? (
-        <div className="rounded-xl border border-[rgb(255_255_255_/10%)] bg-[rgb(255_255_255_/3%)] py-12 text-center text-sm text-[var(--color-text-secondary)]">
+        <div className="rounded-xl border border-border/80 bg-input/30 py-12 text-center text-sm text-[var(--color-text-secondary)]">
           {t("templateManager.empty")}
         </div>
       ) : (
@@ -168,20 +168,20 @@ export function TemplateManager({ token, initialBlocks }: TemplateManagerProps) 
           {templates.map((template) => (
             <div
               key={template.id}
-              className="rounded-xl border border-[rgb(255_255_255_/10%)] bg-[rgb(255_255_255_/3%)] p-4"
+              className="rounded-xl border border-border/80 bg-input/30 p-4"
             >
               {editingId === template.id ? (
                 <div className="space-y-3">
                   <input
                     value={editForm.name}
                     onChange={(e) => setEditForm((f) => ({ ...f, name: e.target.value }))}
-                    className="w-full rounded-lg border border-[rgb(255_255_255_/10%)] bg-[rgb(18_18_26_/80%)] px-3 py-2 text-sm text-[var(--color-text-primary)] placeholder:text-[var(--color-text-tertiary)]"
+                    className="w-full rounded-lg border border-border/80 bg-muted px-3 py-2 text-sm text-[var(--color-text-primary)] placeholder:text-[var(--color-text-tertiary)]"
                     placeholder={t("templateManager.namePlaceholder")}
                   />
                   <input
                     value={editForm.description}
                     onChange={(e) => setEditForm((f) => ({ ...f, description: e.target.value }))}
-                    className="w-full rounded-lg border border-[rgb(255_255_255_/10%)] bg-[rgb(18_18_26_/80%)] px-3 py-2 text-sm text-[var(--color-text-primary)] placeholder:text-[var(--color-text-tertiary)]"
+                    className="w-full rounded-lg border border-border/80 bg-muted px-3 py-2 text-sm text-[var(--color-text-primary)] placeholder:text-[var(--color-text-tertiary)]"
                     placeholder={t("templateManager.descriptionPlaceholder")}
                   />
                   <div className="flex gap-2">
@@ -195,7 +195,7 @@ export function TemplateManager({ token, initialBlocks }: TemplateManagerProps) 
                     </button>
                     <button
                       onClick={() => setEditingId(null)}
-                      className="flex items-center gap-1 rounded-lg bg-[rgb(255_255_255_/5%)] px-3 py-1.5 text-sm text-[var(--color-text-secondary)] hover:bg-[rgb(255_255_255_/10%)] transition-colors"
+                      className="flex items-center gap-1 rounded-lg bg-input/40 px-3 py-1.5 text-sm text-[var(--color-text-secondary)] hover:bg-input/60 transition-colors"
                     >
                       <X className="h-3.5 w-3.5" />
                       {t("templateManager.cancel")}
@@ -238,7 +238,7 @@ export function TemplateManager({ token, initialBlocks }: TemplateManagerProps) 
                     <div className="flex items-center gap-1">
                       <button
                         onClick={() => startEdit(template)}
-                        className="rounded-lg p-2 text-[var(--color-text-secondary)] hover:bg-[rgb(255_255_255_/5%)] hover:text-[var(--color-text-primary)] transition-colors"
+                        className="rounded-lg p-2 text-[var(--color-text-secondary)] hover:bg-input/40 hover:text-[var(--color-text-primary)] transition-colors"
                         title={t("templateManager.edit")}
                       >
                         <Pencil className="h-4 w-4" />
@@ -254,7 +254,7 @@ export function TemplateManager({ token, initialBlocks }: TemplateManagerProps) 
                           </button>
                           <button
                             onClick={() => setDeleteConfirmId(null)}
-                            className="rounded-lg p-2 text-[var(--color-text-secondary)] hover:bg-[rgb(255_255_255_/5%)] transition-colors"
+                            className="rounded-lg p-2 text-[var(--color-text-secondary)] hover:bg-input/40 transition-colors"
                             title={t("templateManager.cancelDelete")}
                           >
                             <X className="h-4 w-4" />
@@ -285,7 +285,7 @@ export function TemplateManager({ token, initialBlocks }: TemplateManagerProps) 
             if (e.target === e.currentTarget) setShowCreateDialog(false);
           }}
         >
-          <div className="w-full max-w-md rounded-2xl border border-[rgb(255_255_255_/10%)] bg-[rgb(18_18_26_/95%)] p-6 shadow-2xl">
+          <div className="w-full max-w-md rounded-2xl border border-border/80 bg-card p-6 shadow-2xl">
             <h3 className="mb-4 text-lg font-semibold text-[var(--color-text-primary)]">
               {t("templateManager.saveAsTemplate")}
             </h3>
@@ -293,13 +293,13 @@ export function TemplateManager({ token, initialBlocks }: TemplateManagerProps) 
               <input
                 value={createForm.name}
                 onChange={(e) => setCreateForm((f) => ({ ...f, name: e.target.value }))}
-                className="w-full rounded-lg border border-[rgb(255_255_255_/10%)] bg-[rgb(18_18_26_/80%)] px-3 py-2 text-sm text-[var(--color-text-primary)] placeholder:text-[var(--color-text-tertiary)]"
+                className="w-full rounded-lg border border-border/80 bg-muted px-3 py-2 text-sm text-[var(--color-text-primary)] placeholder:text-[var(--color-text-tertiary)]"
                 placeholder={t("templateManager.namePlaceholder")}
               />
               <input
                 value={createForm.description}
                 onChange={(e) => setCreateForm((f) => ({ ...f, description: e.target.value }))}
-                className="w-full rounded-lg border border-[rgb(255_255_255_/10%)] bg-[rgb(18_18_26_/80%)] px-3 py-2 text-sm text-[var(--color-text-primary)] placeholder:text-[var(--color-text-tertiary)]"
+                className="w-full rounded-lg border border-border/80 bg-muted px-3 py-2 text-sm text-[var(--color-text-primary)] placeholder:text-[var(--color-text-tertiary)]"
                 placeholder={t("templateManager.descriptionPlaceholder")}
               />
               <div className="flex gap-2 pt-2">
@@ -312,7 +312,7 @@ export function TemplateManager({ token, initialBlocks }: TemplateManagerProps) 
                 </button>
                 <button
                   onClick={() => setShowCreateDialog(false)}
-                  className="rounded-lg bg-[rgb(255_255_255_/5%)] px-4 py-2 text-sm text-[var(--color-text-secondary)] hover:bg-[rgb(255_255_255_/10%)] transition-colors"
+                  className="rounded-lg bg-input/40 px-4 py-2 text-sm text-[var(--color-text-secondary)] hover:bg-input/60 transition-colors"
                 >
                   {t("templateManager.cancel")}
                 </button>

@@ -206,7 +206,7 @@ function ContentBlockEditorInner({ blocks, onChange, token, errors }: ContentBlo
             aria-label="Audience"
             value={audience}
             onChange={(event) => handleBlockAudienceChange(block.id, event.target.value as ContentAudience)}
-            className="w-full rounded-lg border border-[rgb(255_255_255_/10%)] bg-[rgb(255_255_255_/5%)] px-3 py-2 text-sm text-[var(--color-text-primary)] focus:outline-none focus:border-[rgb(139_92_246_/60%)]"
+            className="w-full rounded-lg border border-border/80 bg-input/40 px-3 py-2 text-sm text-[var(--color-text-primary)] focus:outline-none focus:border-[rgb(139_92_246_/60%)]"
           >
             <option value="shared">Shared</option>
             <option value="sales">Sales</option>
@@ -409,22 +409,22 @@ function ContentBlockEditorInner({ blocks, onChange, token, errors }: ContentBlo
       <div className="relative">
         <button
           onClick={() => setShowAddMenu(!showAddMenu)}
-          className="w-full py-3 border-2 border-dashed border-[rgb(255_255_255_/10%)] rounded-lg text-[var(--color-text-secondary)] hover:border-[rgb(255_255_255_/20%)] hover:bg-[rgb(255_255_255_/2%)] transition-colors"
+          className="w-full py-3 border-2 border-dashed border-border/80 rounded-lg text-[var(--color-text-secondary)] hover:border-border hover:bg-input/25 transition-colors"
         >
           + 添加内容块
         </button>
         {showAddMenu && (
-          <div className="absolute top-full left-0 right-0 mt-2 border border-[rgb(255_255_255_/10%)] rounded-lg bg-[rgb(18_18_26_/95%)] shadow-lg z-10">
+          <div className="absolute top-full left-0 right-0 mt-2 border border-border/80 rounded-lg bg-card shadow-lg z-10">
             <button
               onClick={() => setShowTemplateSelector(true)}
-              className="w-full px-4 py-3 text-left text-sm hover:bg-[rgb(255_255_255_/5%)] transition-colors text-[var(--color-electric-purple)]"
+              className="w-full px-4 py-3 text-left text-sm hover:bg-input/40 transition-colors text-[var(--color-electric-purple)]"
             >
               从模板添加
             </button>
             {token && (
               <button
                 onClick={() => setShowGlobalSearch(true)}
-                className="w-full px-4 py-3 text-left text-sm hover:bg-[rgb(255_255_255_/5%)] transition-colors text-[var(--color-electric-purple)]"
+                className="w-full px-4 py-3 text-left text-sm hover:bg-input/40 transition-colors text-[var(--color-electric-purple)]"
               >
                 从其他资产搜索
               </button>
@@ -435,38 +435,38 @@ function ContentBlockEditorInner({ blocks, onChange, token, errors }: ContentBlo
                   handlePaste();
                   setShowAddMenu(false);
                 }}
-                className="w-full px-4 py-3 text-left text-sm hover:bg-[rgb(255_255_255_/5%)] transition-colors"
+                className="w-full px-4 py-3 text-left text-sm hover:bg-input/40 transition-colors"
               >
                 粘贴
               </button>
             )}
             <button
               onClick={() => handleAddBlock("text")}
-              className="w-full px-4 py-3 text-left text-sm hover:bg-[rgb(255_255_255_/5%)] transition-colors"
+              className="w-full px-4 py-3 text-left text-sm hover:bg-input/40 transition-colors"
             >
               文本块
             </button>
             <button
               onClick={() => handleAddBlock("stat_card")}
-              className="w-full px-4 py-3 text-left text-sm hover:bg-[rgb(255_255_255_/5%)] transition-colors"
+              className="w-full px-4 py-3 text-left text-sm hover:bg-input/40 transition-colors"
             >
               统计卡片
             </button>
             <button
               onClick={() => handleAddBlock("image")}
-              className="w-full px-4 py-3 text-left text-sm hover:bg-[rgb(255_255_255_/5%)] transition-colors"
+              className="w-full px-4 py-3 text-left text-sm hover:bg-input/40 transition-colors"
             >
               图片
             </button>
             <button
               onClick={() => handleAddBlock("code_snippet")}
-              className="w-full px-4 py-3 text-left text-sm hover:bg-[rgb(255_255_255_/5%)] transition-colors"
+              className="w-full px-4 py-3 text-left text-sm hover:bg-input/40 transition-colors"
             >
               代码片段
             </button>
             <button
               onClick={() => handleAddBlock("callout")}
-              className="w-full px-4 py-3 text-left text-sm hover:bg-[rgb(255_255_255_/5%)] transition-colors"
+              className="w-full px-4 py-3 text-left text-sm hover:bg-input/40 transition-colors"
             >
               提示框
             </button>
@@ -510,7 +510,7 @@ function ContentBlockEditorInner({ blocks, onChange, token, errors }: ContentBlo
             if (e.target === e.currentTarget) setShowSaveTemplateDialog(false);
           }}
         >
-          <div className="w-full max-w-md rounded-2xl border border-[rgb(255_255_255_/10%)] bg-[rgb(18_18_26_/95%)] p-6 shadow-2xl">
+          <div className="w-full max-w-md rounded-2xl border border-border/80 bg-card p-6 shadow-2xl">
             <h3 className="mb-4 text-lg font-semibold text-[var(--color-text-primary)]">
               保存为模板
             </h3>
@@ -518,13 +518,13 @@ function ContentBlockEditorInner({ blocks, onChange, token, errors }: ContentBlo
               <input
                 value={templateName}
                 onChange={(e) => setTemplateName(e.target.value)}
-                className="w-full rounded-lg border border-[rgb(255_255_255_/10%)] bg-[rgb(18_18_26_/80%)] px-3 py-2 text-sm text-[var(--color-text-primary)] placeholder:text-[var(--color-text-tertiary)]"
+                className="w-full rounded-lg border border-border/80 bg-muted px-3 py-2 text-sm text-[var(--color-text-primary)] placeholder:text-[var(--color-text-tertiary)]"
                 placeholder="模板名称"
               />
               <input
                 value={templateDescription}
                 onChange={(e) => setTemplateDescription(e.target.value)}
-                className="w-full rounded-lg border border-[rgb(255_255_255_/10%)] bg-[rgb(18_18_26_/80%)] px-3 py-2 text-sm text-[var(--color-text-primary)] placeholder:text-[var(--color-text-tertiary)]"
+                className="w-full rounded-lg border border-border/80 bg-muted px-3 py-2 text-sm text-[var(--color-text-primary)] placeholder:text-[var(--color-text-tertiary)]"
                 placeholder="描述（可选）"
               />
               {saveError && (
@@ -542,7 +542,7 @@ function ContentBlockEditorInner({ blocks, onChange, token, errors }: ContentBlo
                 </button>
                 <button
                   onClick={() => setShowSaveTemplateDialog(false)}
-                  className="rounded-lg bg-[rgb(255_255_255_/5%)] px-4 py-2 text-sm text-[var(--color-text-secondary)] hover:bg-[rgb(255_255_255_/10%)] transition-colors"
+                  className="rounded-lg bg-input/40 px-4 py-2 text-sm text-[var(--color-text-secondary)] hover:bg-input/60 transition-colors"
                 >
                   取消
                 </button>

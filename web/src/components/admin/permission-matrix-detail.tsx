@@ -27,7 +27,7 @@ function describeReason(reason: MatrixCell["reason"], t: (key: string) => string
 function getDecisionTone(decision: MatrixCell["decision"]) {
   if (decision === "deny") return "bg-red-500/12 text-red-200";
   if (decision === "allow") return "bg-emerald-500/12 text-emerald-200";
-  return "bg-[rgb(212_218_245_/10%)] text-[var(--color-text-primary)]";
+  return "bg-muted/80 text-[var(--color-text-primary)]";
 }
 
 export function PermissionMatrixDetail({ selection }: PermissionMatrixDetailProps) {
@@ -35,13 +35,13 @@ export function PermissionMatrixDetail({ selection }: PermissionMatrixDetailProp
 
   if (!selection) {
     return (
-      <Card className="border-[rgb(212_218_245_/12%)] bg-[rgb(18_18_26_/70%)] backdrop-blur-[24px]">
+      <Card className="border-border bg-muted backdrop-blur-[24px]">
         <CardHeader>
           <CardTitle className="text-[var(--color-text-primary)]">{t("permissionMatrixDetail.title")}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4 text-sm leading-6 text-[var(--color-text-secondary)]">
           <div>{t("permissionMatrixDetail.emptyDescription")}</div>
-          <div className="rounded-2xl border border-[rgb(212_218_245_/10%)] bg-black/10 px-4 py-3 text-xs tracking-[0.12em] text-[var(--color-periwinkle)]">
+          <div className="rounded-2xl border border-border/80 bg-black/10 px-4 py-3 text-xs tracking-[0.12em] text-[var(--color-periwinkle)]">
             {t("permissionMatrixDetail.clickHint")}
           </div>
         </CardContent>
@@ -50,7 +50,7 @@ export function PermissionMatrixDetail({ selection }: PermissionMatrixDetailProp
   }
 
   return (
-    <Card className="border-[rgb(212_218_245_/12%)] bg-[rgb(18_18_26_/70%)] backdrop-blur-[24px]">
+    <Card className="border-border bg-muted backdrop-blur-[24px]">
       <CardHeader className="space-y-4">
         <div className="flex items-start justify-between gap-3">
           <div className="space-y-2">
@@ -87,7 +87,7 @@ export function PermissionMatrixDetail({ selection }: PermissionMatrixDetailProp
               {selection.matchedPolicies.map((policy) => (
                 <div
                   key={policy.id}
-                  className="rounded-2xl border border-[rgb(212_218_245_/10%)] bg-black/10 px-4 py-3"
+                  className="rounded-2xl border border-border/80 bg-black/10 px-4 py-3"
                 >
                   <div className="flex items-center justify-between gap-3">
                     <div className="text-sm text-[var(--color-text-primary)]">{policy.name}</div>
@@ -100,7 +100,7 @@ export function PermissionMatrixDetail({ selection }: PermissionMatrixDetailProp
               ))}
             </div>
           ) : (
-            <div className="rounded-2xl border border-[rgb(212_218_245_/10%)] bg-black/10 px-4 py-3 text-sm text-[var(--color-text-secondary)]">
+            <div className="rounded-2xl border border-border/80 bg-black/10 px-4 py-3 text-sm text-[var(--color-text-secondary)]">
               {t("permissionMatrixDetail.noPolicies")}
             </div>
           )}
@@ -113,19 +113,19 @@ export function PermissionMatrixDetail({ selection }: PermissionMatrixDetailProp
           <div className="grid gap-3 sm:grid-cols-3">
             <Link
               href="/admin/roles"
-              className="rounded-2xl border border-[rgb(212_218_245_/10%)] bg-black/10 px-4 py-3 text-sm text-[var(--color-text-primary)] transition-colors hover:border-[rgb(123_63_242_/35%)]"
+              className="rounded-2xl border border-border/80 bg-black/10 px-4 py-3 text-sm text-[var(--color-text-primary)] transition-colors hover:border-[rgb(123_63_242_/35%)]"
             >
               {t("permissionMatrixDetail.openRoles")}
             </Link>
             <Link
               href="/admin/policies"
-              className="rounded-2xl border border-[rgb(212_218_245_/10%)] bg-black/10 px-4 py-3 text-sm text-[var(--color-text-primary)] transition-colors hover:border-[rgb(123_63_242_/35%)]"
+              className="rounded-2xl border border-border/80 bg-black/10 px-4 py-3 text-sm text-[var(--color-text-primary)] transition-colors hover:border-[rgb(123_63_242_/35%)]"
             >
               {t("permissionMatrixDetail.openPolicies")}
             </Link>
             <Link
               href="/admin/simulator"
-              className="rounded-2xl border border-[rgb(212_218_245_/10%)] bg-black/10 px-4 py-3 text-sm text-[var(--color-text-primary)] transition-colors hover:border-[rgb(123_63_242_/35%)]"
+              className="rounded-2xl border border-border/80 bg-black/10 px-4 py-3 text-sm text-[var(--color-text-primary)] transition-colors hover:border-[rgb(123_63_242_/35%)]"
             >
               {t("permissionMatrixDetail.openSimulator")}
             </Link>

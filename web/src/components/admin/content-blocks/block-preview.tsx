@@ -107,7 +107,7 @@ export function BlockPreview({ block }: BlockPreviewProps) {
           alt={alt || "图片"}
           width={48}
           height={48}
-          className="h-12 w-12 rounded object-cover border border-[rgb(255_255_255_/10%)]"
+          className="h-12 w-12 rounded object-cover border border-border/80"
           unoptimized
         />
         <div className="text-sm text-[var(--color-text-primary)] truncate max-w-[200px]">
@@ -129,7 +129,7 @@ export function BlockPreview({ block }: BlockPreviewProps) {
     const lines = code.split("\n").slice(0, 3);
     return (
       <div className="space-y-1">
-        <span className="inline-block rounded bg-[rgb(255_255_255_/8%)] px-1.5 py-0.5 text-xs text-[var(--color-text-secondary)]">
+        <span className="inline-block rounded bg-input/50 px-1.5 py-0.5 text-xs text-[var(--color-text-secondary)]">
           {language}
         </span>
         <pre className="overflow-hidden text-xs font-mono text-[var(--color-text-primary)] leading-5 max-h-[60px]">

@@ -97,7 +97,7 @@ export function ImageBlockEditor({ config, onChange, token, errors }: ImageBlock
             <LinkIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[var(--color-text-secondary)]" />
             <input
               type="url"
-              className="w-full rounded-lg border border-[rgb(212_218_245_/12%)] bg-[rgb(255_255_255_/5%)] pl-9 pr-3 py-2 text-sm text-[var(--color-text-primary)] placeholder:text-[var(--color-text-secondary)] focus:border-[var(--color-electric-purple)] focus:outline-none"
+              className="w-full rounded-lg border border-border bg-input/40 pl-9 pr-3 py-2 text-sm text-[var(--color-text-primary)] placeholder:text-[var(--color-text-secondary)] focus:border-[var(--color-electric-purple)] focus:outline-none"
               value={config.url}
               onChange={(e) => handleUrlChange(e.target.value)}
               placeholder="https://example.com/image.jpg"
@@ -108,7 +108,7 @@ export function ImageBlockEditor({ config, onChange, token, errors }: ImageBlock
             type="button"
             onClick={() => fileInputRef.current?.click()}
             disabled={uploading}
-            className="flex items-center gap-1.5 rounded-lg border border-[rgb(212_218_245_/12%)] bg-[rgb(255_255_255_/5%)] px-3 py-2 text-sm text-[var(--color-text-primary)] hover:bg-[rgb(255_255_255_/10%)] disabled:opacity-50 transition-colors"
+            className="flex items-center gap-1.5 rounded-lg border border-border bg-input/40 px-3 py-2 text-sm text-[var(--color-text-primary)] hover:bg-input/60 disabled:opacity-50 transition-colors"
             data-testid="image-block-upload-button"
           >
             <Upload className="h-4 w-4" />
@@ -140,7 +140,7 @@ export function ImageBlockEditor({ config, onChange, token, errors }: ImageBlock
         </label>
         <input
           type="text"
-          className="w-full rounded-lg border border-[rgb(212_218_245_/12%)] bg-[rgb(255_255_255_/5%)] px-3 py-2 text-sm text-[var(--color-text-primary)] placeholder:text-[var(--color-text-secondary)] focus:border-[var(--color-electric-purple)] focus:outline-none"
+          className="w-full rounded-lg border border-border bg-input/40 px-3 py-2 text-sm text-[var(--color-text-primary)] placeholder:text-[var(--color-text-secondary)] focus:border-[var(--color-electric-purple)] focus:outline-none"
           value={config.alt}
           onChange={(e) => handleAltChange(e.target.value)}
           placeholder="图片描述"
@@ -155,7 +155,7 @@ export function ImageBlockEditor({ config, onChange, token, errors }: ImageBlock
         </label>
         <input
           type="text"
-          className="w-full rounded-lg border border-[rgb(212_218_245_/12%)] bg-[rgb(255_255_255_/5%)] px-3 py-2 text-sm text-[var(--color-text-primary)] placeholder:text-[var(--color-text-secondary)] focus:border-[var(--color-electric-purple)] focus:outline-none"
+          className="w-full rounded-lg border border-border bg-input/40 px-3 py-2 text-sm text-[var(--color-text-primary)] placeholder:text-[var(--color-text-secondary)] focus:border-[var(--color-electric-purple)] focus:outline-none"
           value={config.caption ?? ""}
           onChange={(e) => handleCaptionChange(e.target.value)}
           placeholder="图片说明"
@@ -184,7 +184,7 @@ export function ImageBlockEditor({ config, onChange, token, errors }: ImageBlock
           <label className="text-xs font-medium text-[var(--color-text-secondary)]">
             预览
           </label>
-          <div className="rounded-lg border border-[rgb(212_218_245_/12%)] bg-[rgb(255_255_255_/5%)] p-4">
+          <div className="rounded-lg border border-border bg-input/40 p-4">
             <div className="flex justify-center">
                 <Image
                   src={config.url}
@@ -207,7 +207,7 @@ export function ImageBlockEditor({ config, onChange, token, errors }: ImageBlock
 
       {!config.url && (
         <div
-          className="flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-[rgb(255_255_255_/10%)] py-8 text-[var(--color-text-secondary)]"
+          className="flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-border/80 py-8 text-[var(--color-text-secondary)]"
           data-testid="image-block-empty-state"
         >
           <ImageIcon className="mb-2 h-8 w-8" />

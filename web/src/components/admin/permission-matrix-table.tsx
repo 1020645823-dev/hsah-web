@@ -26,7 +26,7 @@ function getCellTone(decision: MatrixCell["decision"], selected: boolean) {
 
   return selected
     ? "border-[rgb(167_139_250_/70%)] bg-[rgb(123_63_242_/20%)] text-[var(--color-text-primary)] shadow-[0_0_0_1px_rgba(167,139,250,0.3)]"
-    : "border-[rgb(212_218_245_/12%)] bg-[rgb(255_255_255_/4%)] text-[var(--color-text-secondary)] hover:border-[rgb(123_63_242_/35%)]";
+    : "border-border bg-input/35 text-[var(--color-text-secondary)] hover:border-[rgb(123_63_242_/35%)]";
 }
 
 function getDecisionLabel(decision: MatrixCell["decision"], t: (key: string) => string) {
@@ -46,24 +46,24 @@ export function PermissionMatrixTable({
 
   if (permissionKeys.length === 0 || roleNames.length === 0) {
     return (
-      <div className="rounded-2xl border border-[rgb(212_218_245_/10%)] bg-black/10 px-4 py-8 text-sm text-[var(--color-text-secondary)]">
+      <div className="rounded-2xl border border-border/80 bg-black/10 px-4 py-8 text-sm text-[var(--color-text-secondary)]">
         {t("permissionMatrix.emptyFilter")}
       </div>
     );
   }
 
   return (
-    <div className="overflow-x-auto rounded-3xl border border-[rgb(212_218_245_/10%)] bg-black/10">
+    <div className="overflow-x-auto rounded-3xl border border-border/80 bg-black/10">
       <table className="min-w-full border-separate border-spacing-0">
         <thead>
           <tr>
-            <th className="sticky left-0 z-20 min-w-[220px] border-b border-[rgb(212_218_245_/10%)] bg-[rgb(16_16_24_/96%)] px-4 py-3 text-left text-xs tracking-[0.14em] text-[var(--color-text-tertiary)] backdrop-blur">
+            <th className="sticky left-0 z-20 min-w-[220px] border-b border-border/80 bg-card px-4 py-3 text-left text-xs tracking-[0.14em] text-[var(--color-text-tertiary)] backdrop-blur">
               {t("permissionMatrix.permissionHeader")}
             </th>
             {roleNames.map((roleName) => (
               <th
                 key={roleName}
-                className="min-w-[148px] border-b border-[rgb(212_218_245_/10%)] bg-[rgb(16_16_24_/92%)] px-3 py-3 text-center text-xs tracking-[0.14em] text-[var(--color-text-tertiary)] backdrop-blur"
+                className="min-w-[148px] border-b border-border/80 bg-muted px-3 py-3 text-center text-xs tracking-[0.14em] text-[var(--color-text-tertiary)] backdrop-blur"
               >
                 {roleName}
               </th>
@@ -73,7 +73,7 @@ export function PermissionMatrixTable({
         <tbody>
           {permissionKeys.map((permissionKey) => (
             <tr key={permissionKey}>
-              <th className="sticky left-0 z-10 border-b border-[rgb(212_218_245_/8%)] bg-[rgb(16_16_24_/96%)] px-4 py-3 text-left align-middle backdrop-blur">
+              <th className="sticky left-0 z-10 border-b border-border/70 bg-card px-4 py-3 text-left align-middle backdrop-blur">
                 <div className="text-sm font-medium text-[var(--color-text-primary)]">{permissionKey}</div>
               </th>
               {roleNames.map((roleName) => {
@@ -82,7 +82,7 @@ export function PermissionMatrixTable({
                   return (
                     <td
                       key={`${permissionKey}:${roleName}`}
-                      className="border-b border-[rgb(212_218_245_/8%)] px-3 py-3"
+                      className="border-b border-border/70 px-3 py-3"
                     />
                   );
                 }
@@ -93,7 +93,7 @@ export function PermissionMatrixTable({
                 return (
                   <td
                     key={`${permissionKey}:${roleName}`}
-                    className="border-b border-[rgb(212_218_245_/8%)] px-3 py-3"
+                    className="border-b border-border/70 px-3 py-3"
                   >
                     <button
                       type="button"

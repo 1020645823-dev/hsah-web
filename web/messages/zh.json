@@ -1310,7 +1310,9 @@
       "salesLens": "Sales lens",
       "saveDraft": "Save draft",
       "unpublishAsset": "Unpublish asset",
-      "videos": "Videos"
+      "videos": "Videos",
+      "eyebrow": "资产管理",
+      "summary": "编辑资产元数据、标签、销售与交付信息、内容块与视频。"
     },
     "videoManager": {
       "title": "视频管理",
@@ -1421,7 +1423,36 @@
       "cancel": "取消",
       "save": "保存",
       "saving": "保存中...",
-      "required": "必填"
+      "required": "必填",
+      "cloudProviders": "云平台",
+      "cloudProvidersPlaceholder": "例如 aws、azure、gcp",
+      "industries": "行业",
+      "industriesPlaceholder": "例如 financial-services、healthcare",
+      "technologies": "技术",
+      "technologiesPlaceholder": "例如 genai、kubernetes",
+      "typeAndStatus": "类型与状态",
+      "accessControl": "访问控制",
+      "allowedRoles": "允许的角色",
+      "allowedRolesPlaceholder": "添加允许访问的角色",
+      "allowedUsers": "允许的用户",
+      "allowedUsersPlaceholder": "添加允许访问的用户",
+      "sharedDetail": "共享详情",
+      "introduction": "简介",
+      "introductionPlaceholder": "简要介绍该资产的核心价值",
+      "liveDemoUrl": "在线演示 URL",
+      "videoManagement": "视频管理",
+      "salesDetail": "销售详情",
+      "valueSummary": "价值概要",
+      "valueSummaryPlaceholder": "概括该资产带来的业务价值",
+      "deliveryDetail": "交付详情",
+      "implementationSummary": "实施概要",
+      "implementationSummaryPlaceholder": "概述实施方式与关键步骤",
+      "deliveryAllowedRoles": "交付允许的角色",
+      "deliveryAllowedRolesPlaceholder": "添加交付时允许的角色",
+      "deliveryAllowedUsers": "交付允许的用户",
+      "deliveryAllowedUsersPlaceholder": "添加交付时允许的用户",
+      "loading": "加载中…",
+      "unsavedChangesConfirm": "有未保存的更改，确定要离开吗？"
     },
     "assetVideoManager": {
       "title": "视频管理",
@@ -1435,7 +1466,11 @@
       "videoTitle": "标题",
       "videoDescription": "描述",
       "noVideos": "尚未添加视频。",
-      "dragToReorder": "拖动以重新排序"
+      "dragToReorder": "拖动以重新排序",
+      "titlePlaceholder": "视频标题",
+      "posterUrlPlaceholder": "https://example.com/poster.jpg",
+      "description": "描述",
+      "descriptionPlaceholder": "视频简介"
     },
     "templateManager": {
       "title": "模板",
@@ -1590,6 +1625,14 @@
       "archive": "归档",
       "rejectReasonPrompt": "驳回原因",
       "confirmReject": "驳回资产"
+    },
+    "common": {
+      "unauthorized": "您没有权限访问此页面，请使用管理员账号登录。"
+    },
+    "newAsset": {
+      "eyebrow": "资产管理",
+      "title": "新建资产",
+      "summary": "创建一个新的资产条目，填写基本信息、标签、访问控制、销售与交付详情，以及内容块。"
     }
   },
   "Auth": {

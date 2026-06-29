@@ -55,18 +55,20 @@
   --brand-600: #3f4fb8;
   --brand-100: #e8ebff;
 
-  /* Legacy public-shell variables kept during the redesign transition. */
+  /* Legacy public-shell variables kept during the redesign transition.
+     These resolve to light-mode-appropriate values here and are overridden
+     under .dark so admin components read correctly in both themes. */
   --color-deep-indigo: #1c1967;
-  --color-periwinkle: #d4daf5;
+  --color-periwinkle: #3f4fb8;
   --color-electric-purple: #3f4fb8;
   --color-accent-magenta: #5260c9;
   --color-void-black: #0a0a0f;
-  --color-surface-dark: #12121a;
-  --color-surface-mid: #1e1e2e;
-  --color-border-subtle: #2a2a3c;
-  --color-text-primary: #f0f0f5;
-  --color-text-secondary: #a0a0b8;
-  --color-text-tertiary: #7a7a95;
+  --color-surface-dark: #f6f7fb;
+  --color-surface-mid: #eef1f7;
+  --color-border-subtle: #d8deea;
+  --color-text-primary: #111827;
+  --color-text-secondary: #4a5568;
+  --color-text-tertiary: #6b7280;
 
   --background: #f6f7fb;
   --foreground: #111827;
@@ -126,6 +128,19 @@
 }
 
 .dark {
+  /* Legacy public-shell variables for dark mode. */
+  --color-deep-indigo: #1c1967;
+  --color-periwinkle: #d4daf5;
+  --color-electric-purple: #6b6ef9;
+  --color-accent-magenta: #5260c9;
+  --color-void-black: #0a0a0f;
+  --color-surface-dark: #12121a;
+  --color-surface-mid: #1e1e2e;
+  --color-border-subtle: #2a2a3c;
+  --color-text-primary: #f7f8fc;
+  --color-text-secondary: #9aa3b2;
+  --color-text-tertiary: #6b7280;
+
   --background: #090b14;
   --foreground: #f7f8fc;
   --card: #111420;

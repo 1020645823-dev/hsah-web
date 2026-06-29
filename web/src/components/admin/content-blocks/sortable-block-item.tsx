@@ -62,7 +62,7 @@ export function SortableBlockItem({
     ? "border-red-500/40"
     : isEditing
       ? "border-[rgb(139_92_246_/60%)]"
-      : "border-[rgb(255_255_255_/10%)]";
+      : "border-border/80";
 
   const opacity = isDragging
     ? "opacity-50"
@@ -74,7 +74,7 @@ export function SortableBlockItem({
     <div
       ref={setNodeRef}
       style={style}
-      className={`border ${borderColor} rounded-lg p-4 bg-[rgb(255_255_255_/2%)] ${opacity}`}
+      className={`border ${borderColor} rounded-lg p-4 bg-input/25 ${opacity}`}
       data-testid={`block-item-${block.id}`}
     >
       <div
@@ -104,7 +104,7 @@ export function SortableBlockItem({
           <button
             onClick={() => onMoveUp(block.id)}
             disabled={index === 0}
-            className="px-2 py-1 text-xs border border-[rgb(255_255_255_/10%)] rounded hover:bg-[rgb(255_255_255_/5%)] disabled:opacity-30 disabled:cursor-not-allowed"
+            className="px-2 py-1 text-xs border border-border/80 rounded hover:bg-input/40 disabled:opacity-30 disabled:cursor-not-allowed"
             aria-label="Move up"
           >
             ↑
@@ -112,14 +112,14 @@ export function SortableBlockItem({
           <button
             onClick={() => onMoveDown(block.id)}
             disabled={index === totalCount - 1}
-            className="px-2 py-1 text-xs border border-[rgb(255_255_255_/10%)] rounded hover:bg-[rgb(255_255_255_/5%)] disabled:opacity-30 disabled:cursor-not-allowed"
+            className="px-2 py-1 text-xs border border-border/80 rounded hover:bg-input/40 disabled:opacity-30 disabled:cursor-not-allowed"
             aria-label="Move down"
           >
             ↓
           </button>
           <button
             onClick={() => onToggleVisibility(block.id)}
-            className="px-2 py-1 text-xs border border-[rgb(255_255_255_/10%)] rounded hover:bg-[rgb(255_255_255_/5%)]"
+            className="px-2 py-1 text-xs border border-border/80 rounded hover:bg-input/40"
             aria-label="Toggle visibility"
           >
             {block.visible ? "👁" : "👁‍🗨"}
@@ -127,21 +127,21 @@ export function SortableBlockItem({
           <button
             onClick={() => onCopy(block.id)}
             title="复制"
-            className="px-2 py-1 text-xs border border-[rgb(255_255_255_/10%)] rounded hover:bg-[rgb(255_255_255_/5%)]"
+            className="px-2 py-1 text-xs border border-border/80 rounded hover:bg-input/40"
             aria-label="Copy block"
           >
             <Copy className="w-3 h-3" />
           </button>
           <button
             onClick={() => onEdit(block.id)}
-            className="px-2 py-1 text-xs border border-[rgb(255_255_255_/10%)] rounded hover:bg-[rgb(255_255_255_/5%)]"
+            className="px-2 py-1 text-xs border border-border/80 rounded hover:bg-input/40"
             aria-label="Edit block"
           >
             ✎
           </button>
           <button
             onClick={() => onDelete(block.id)}
-            className="px-2 py-1 text-xs border border-[rgb(255_255_255_/10%)] rounded hover:bg-[rgb(255_255_255_/5%)]"
+            className="px-2 py-1 text-xs border border-border/80 rounded hover:bg-input/40"
             aria-label="Delete block"
           >
             ✕
@@ -150,7 +150,7 @@ export function SortableBlockItem({
       </div>
 
       {isEditing && children ? (
-        <div className="mt-4 pt-4 border-t border-[rgb(255_255_255_/10%)]">
+        <div className="mt-4 pt-4 border-t border-border/80">
           {children}
         </div>
       ) : (

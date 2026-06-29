@@ -104,7 +104,7 @@ export function TextBlockEditor({ config, onChange, errors }: TextBlockEditorPro
           预览
         </label>
         <div
-          className="w-full rounded-lg border border-[rgb(212_218_245_/12%)] bg-[rgb(255_255_255_/5%)] px-4 py-3 text-sm text-[var(--color-text-primary)] min-h-[200px] overflow-auto"
+          className="w-full rounded-lg border border-border bg-input/40 px-4 py-3 text-sm text-[var(--color-text-primary)] min-h-[200px] overflow-auto"
           data-testid="text-block-editor-preview"
         >
           {previewHtml ? (

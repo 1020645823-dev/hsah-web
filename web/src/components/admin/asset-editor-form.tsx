@@ -29,13 +29,13 @@ type AssetEditorFormProps = {
 };
 
 const inputClass =
-  "w-full rounded-lg border border-[rgb(212_218_245_/12%)] bg-[rgb(255_255_255_/5%)] px-3 py-2 text-sm text-[var(--color-text-primary)] focus:border-[var(--color-electric-purple)] focus:outline-none";
+  "w-full rounded-lg border border-border bg-input/40 px-3 py-2 text-sm text-[var(--color-text-primary)] focus:border-[var(--color-electric-purple)] focus:outline-none";
 
 const selectClass =
-  "w-full rounded-lg border border-[rgb(212_218_245_/12%)] bg-[rgb(18_18_26_/90%)] px-3 py-2 text-sm text-[var(--color-text-primary)] focus:border-[var(--color-electric-purple)] focus:outline-none";
+  "w-full rounded-lg border border-border bg-muted px-3 py-2 text-sm text-[var(--color-text-primary)] focus:border-[var(--color-electric-purple)] focus:outline-none";
 
 const cardClass =
-  "rounded-2xl border border-[rgb(212_218_245_/12%)] bg-[rgb(18_18_26_/70%)] p-6 backdrop-blur-[24px]";
+  "rounded-2xl border border-border bg-muted p-6 backdrop-blur-[24px]";
 
 function Label({ children, required }: { children: React.ReactNode; required?: boolean }) {
   return (
@@ -509,7 +509,7 @@ export function AssetEditorForm({ mode, assetId, token }: AssetEditorFormProps) 
         <button
           type="button"
           onClick={handleCancel}
-          className="rounded-lg border border-[rgb(212_218_245_/12%)] px-6 py-2 text-sm font-medium text-[var(--color-text-primary)] hover:bg-white/5"
+          className="rounded-lg border border-border px-6 py-2 text-sm font-medium text-[var(--color-text-primary)] hover:bg-white/5"
         >
           {t("assetEditorForm.cancel")}
         </button>
