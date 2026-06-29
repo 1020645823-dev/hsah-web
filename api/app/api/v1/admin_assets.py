@@ -7,6 +7,7 @@ from sqlalchemy.orm import Session
 from app.api.v1.auth import get_current_user
 from app.core.db import get_db
 from app.models.asset import Asset
+from app.models.asset_review import AssetReviewRecord
 from app.models.user import User
 from app.schemas.asset import (
     AssetCreateRequest,
@@ -15,6 +16,15 @@ from app.schemas.asset import (
     SalesAssetFields,
     SharedAssetFields,
 )
+from app.schemas.asset_quality import QualityCheckResponse
+from app.schemas.asset_review import AssetReviewRecordResponse, ReviewActionRequest
+from app.services.asset_quality import evaluate_quality, missing_requirements
+from app.services.asset_review import (
+    InvalidTransitionError,
+    MissingRequirementsError,
+    record_transition,
+)
+from app.services.audit_log import write as write_audit_log
 from app.services.content_blocks import ContentBlockValidationError, normalize_blocks
 
 router = APIRouter(prefix="/admin/assets", tags=["admin-assets"])
@@ -245,28 +255,6 @@ def _commit_and_refresh_asset(asset: Asset, db: Session) -> dict:
     return _to_detail(asset)
 
 
-def _validate_publishable(asset: Asset) -> list[str]:
-    fields: list[str] = []
-    if not asset.slug.strip():
-        fields.append("slug")
-    if not asset.title.strip():
-        fields.append("title")
-    if not asset.short_description.strip():
-        fields.append("short_description")
-    if not asset.cloud_providers:
-        fields.append("cloud_providers")
-
-    visible_blocks = [
-        block
-        for block in asset.content_blocks or []
-        if isinstance(block, dict) and block.get("visible", True)
-    ]
-    if not visible_blocks:
-        fields.append("content_blocks")
-
-    return fields
-
-
 # ---------------------------------------------------------------------------
 # Endpoints
 # ---------------------------------------------------------------------------
@@ -362,59 +350,182 @@ def create_asset(
     return _to_detail(asset)
 
 
-@router.post("/{asset_id}/publish")
-def publish_asset(
-    asset_id: str,
-    db: Session = Depends(get_db),
-    _user: User = Depends(get_current_user),
-) -> dict:
-    asset = _get_asset_or_404(asset_id, db)
-    fields = _validate_publishable(asset)
-    if fields:
-        raise HTTPException(
+def _handle_transition_error(action: str, asset: Asset, exc: Exception) -> HTTPException:
+    if isinstance(exc, InvalidTransitionError):
+        return HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail={
+                "code": "invalid_transition",
+                "message": f"Action '{action}' not allowed from status '{asset.status}'",
+            },
+        )
+    if isinstance(exc, MissingRequirementsError):
+        return HTTPException(
             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
             detail={
                 "code": "publish_validation_failed",
                 "message": "Asset is not ready to publish",
-                "fields": fields,
+                "fields": exc.fields,
             },
         )
+    if isinstance(exc, ValueError) and str(exc) == "reason_required":
+        return HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail={"code": "reason_required", "message": "A reason is required for this action"},
+        )
+    return HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="transition_failed")
 
-    asset.status = "published"
+
+def _perform_transition(
+    action: str,
+    asset_id: str,
+    db: Session,
+    user: User,
+    *,
+    reason: str = "",
+    require_publishable: bool = False,
+) -> dict:
+    asset = _get_asset_or_404(asset_id, db)
+    if require_publishable:
+        missing = missing_requirements(asset)
+        if missing:
+            raise HTTPException(
+                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                detail={
+                    "code": "publish_validation_failed",
+                    "message": "Asset is not ready to publish",
+                    "fields": missing,
+                },
+            )
+    try:
+        record_transition(
+            db, asset, action, actor_user_id=user.id, reason=reason
+        )
+    except (InvalidTransitionError, MissingRequirementsError, ValueError) as exc:
+        raise _handle_transition_error(action, asset, exc) from exc
+
+    write_audit_log(
+        db,
+        action=f"asset.{action}",
+        resource_type="asset",
+        actor_user_id=user.id,
+        resource_id=str(asset.id),
+        summary=f"{action}: {asset.title}",
+        details={"from_status": asset.status, "reason": reason} if reason else {},
+    )
     return _commit_and_refresh_asset(asset, db)
+
+
+@router.get("/{asset_id}/quality-check", response_model=QualityCheckResponse)
+def quality_check(
+    asset_id: str,
+    db: Session = Depends(get_db),
+    _user: User = Depends(get_current_user),
+) -> QualityCheckResponse:
+    asset = _get_asset_or_404(asset_id, db)
+    result = evaluate_quality(asset)
+    return QualityCheckResponse(
+        asset_id=str(asset.id),
+        score=result.score,
+        band=result.band,
+        missing=result.missing,
+        warnings=result.warnings,
+        is_publishable=result.is_publishable,
+    )
+
+
+@router.post("/{asset_id}/submit-review")
+def submit_review(
+    asset_id: str,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
+) -> dict:
+    return _perform_transition("submit_review", asset_id, db, user)
+
+
+@router.post("/{asset_id}/approve")
+def approve_asset(
+    asset_id: str,
+    payload: ReviewActionRequest | None = None,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
+) -> dict:
+    return _perform_transition(
+        "approve", asset_id, db, user, require_publishable=True, reason=(payload.reason if payload else "")
+    )
+
+
+@router.post("/{asset_id}/reject")
+def reject_asset(
+    asset_id: str,
+    payload: ReviewActionRequest,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
+) -> dict:
+    return _perform_transition("reject", asset_id, db, user, reason=payload.reason)
+
+
+@router.post("/{asset_id}/publish")
+def publish_asset(
+    asset_id: str,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
+) -> dict:
+    return _perform_transition("publish", asset_id, db, user, require_publishable=True)
 
 
 @router.post("/{asset_id}/unpublish")
 def unpublish_asset(
     asset_id: str,
     db: Session = Depends(get_db),
-    _user: User = Depends(get_current_user),
+    user: User = Depends(get_current_user),
 ) -> dict:
-    asset = _get_asset_or_404(asset_id, db)
-    asset.status = "draft"
-    return _commit_and_refresh_asset(asset, db)
+    return _perform_transition("unpublish", asset_id, db, user)
 
 
 @router.post("/{asset_id}/archive")
 def archive_asset(
     asset_id: str,
     db: Session = Depends(get_db),
-    _user: User = Depends(get_current_user),
+    user: User = Depends(get_current_user),
 ) -> dict:
-    asset = _get_asset_or_404(asset_id, db)
-    asset.status = "archived"
-    return _commit_and_refresh_asset(asset, db)
+    return _perform_transition("archive", asset_id, db, user)
 
 
 @router.post("/{asset_id}/restore")
 def restore_asset(
     asset_id: str,
     db: Session = Depends(get_db),
-    _user: User = Depends(get_current_user),
+    user: User = Depends(get_current_user),
 ) -> dict:
+    return _perform_transition("restore", asset_id, db, user)
+
+
+@router.get("/{asset_id}/review-history", response_model=list[AssetReviewRecordResponse])
+def review_history(
+    asset_id: str,
+    db: Session = Depends(get_db),
+    _user: User = Depends(get_current_user),
+) -> list[AssetReviewRecordResponse]:
     asset = _get_asset_or_404(asset_id, db)
-    asset.status = "draft"
-    return _commit_and_refresh_asset(asset, db)
+    records = db.scalars(
+        select(AssetReviewRecord)
+        .where(AssetReviewRecord.asset_id == asset.id)
+        .order_by(AssetReviewRecord.created_at.desc(), AssetReviewRecord.id.desc())
+    ).all()
+    return [
+        AssetReviewRecordResponse(
+            id=str(r.id),
+            asset_id=str(r.asset_id),
+            actor_user_id=str(r.actor_user_id) if r.actor_user_id else None,
+            action=r.action,
+            from_status=r.from_status,
+            to_status=r.to_status,
+            reason=r.reason,
+            created_at=r.created_at,
+        )
+        for r in records
+    ]
 
 
 @router.put("/{asset_id}")
