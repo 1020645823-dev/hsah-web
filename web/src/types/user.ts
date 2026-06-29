@@ -1,8 +1,6 @@
 export type User = {
   id: string;
-  name: string;
   email: string;
-  role: string;
-  mfa_enabled: boolean;
-  status: string;
+  is_active: boolean;
+  two_factor_enabled: boolean;
 };

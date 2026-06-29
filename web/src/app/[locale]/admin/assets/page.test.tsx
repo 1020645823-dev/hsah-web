@@ -59,7 +59,7 @@ describe("AdminAssetsPage", () => {
   it("renders the page header and create asset button", async () => {
     mockAdminRequest.mockResolvedValue({
       ok: true,
-      data: { assets: [] },
+      data: { items: [] },
     });
 
     render(<AdminAssetsPage />);
@@ -74,7 +74,7 @@ describe("AdminAssetsPage", () => {
     const asset = buildAsset({ id: "asset-1", title: "Test Asset" });
     mockAdminRequest.mockResolvedValue({
       ok: true,
-      data: { assets: [asset] },
+      data: { items: [asset] },
     });
 
     render(<AdminAssetsPage />);
@@ -89,7 +89,7 @@ describe("AdminAssetsPage", () => {
   it("shows empty state when no assets", async () => {
     mockAdminRequest.mockResolvedValue({
       ok: true,
-      data: { assets: [] },
+      data: { items: [] },
     });
 
     render(<AdminAssetsPage />);

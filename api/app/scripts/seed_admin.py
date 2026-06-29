@@ -33,6 +33,7 @@ SUPER_ADMIN_ROLE = "super_admin"
 
 # Permissions actually enforced via `require_permission(...)` across the API.
 SUPER_ADMIN_PERMISSIONS = [
+    "asset:read",
     "asset:submit_review",
     "asset:approve",
     "asset:reject",
@@ -45,6 +46,31 @@ SUPER_ADMIN_PERMISSIONS = [
 ]
 
 SUPER_ADMIN_POLICY_NAME = "super-admin-allow"
+
+# Built-in standard content-publishing roles. Each is created with a matching
+# allow policy. Names starting with these identifiers are protected from deletion.
+BUILTIN_ROLES: dict[str, dict] = {
+    SUPER_ADMIN_ROLE: {
+        "description": "Built-in super administrator with full permissions",
+        "policy": SUPER_ADMIN_POLICY_NAME,
+        "permissions": SUPER_ADMIN_PERMISSIONS,
+    },
+    "editor": {
+        "description": "Built-in editor: author and publish content",
+        "policy": "builtin-editor-allow",
+        "permissions": ["asset:read", "asset:submit_review", "asset:publish", "collection:manage"],
+    },
+    "reviewer": {
+        "description": "Built-in reviewer: review and approve content",
+        "policy": "builtin-reviewer-allow",
+        "permissions": ["asset:read", "asset:submit_review", "asset:approve", "asset:reject"],
+    },
+    "viewer": {
+        "description": "Built-in viewer: read non-public content",
+        "policy": "builtin-viewer-allow",
+        "permissions": ["asset:read"],
+    },
+}
 
 
 def _run_migrations() -> None:
@@ -76,15 +102,35 @@ def seed() -> None:
 
     try:
         with SessionLocal() as db:
-            # 1. Ensure role.
-            role = db.scalar(select(Role).where(Role.name == SUPER_ADMIN_ROLE))
-            if role is None:
-                role = Role(
-                    name=SUPER_ADMIN_ROLE,
-                    description="Built-in super administrator with full permissions",
-                )
-                db.add(role)
-                db.flush()
+            # 1. Ensure all built-in roles + their allow policies.
+            super_admin_role: Role | None = None
+            for role_name, spec in BUILTIN_ROLES.items():
+                role = db.scalar(select(Role).where(Role.name == role_name))
+                if role is None:
+                    role = Role(name=role_name, description=spec["description"])
+                    db.add(role)
+                    db.flush()
+                elif role.description != spec["description"]:
+                    role.description = spec["description"]
+                if role_name == SUPER_ADMIN_ROLE:
+                    super_admin_role = role
+
+                policy = db.scalar(select(AccessPolicy).where(AccessPolicy.name == spec["policy"]))
+                if policy is None:
+                    db.add(
+                        AccessPolicy(
+                            name=spec["policy"],
+                            effect="allow",
+                            permissions=spec["permissions"],
+                            role_names=[role_name],
+                            resource_type=None,
+                            resource_visibility=None,
+                        )
+                    )
+                else:
+                    policy.effect = "allow"
+                    policy.permissions = spec["permissions"]
+                    policy.role_names = [role_name]
 
             # 2. Ensure user (create or reset password + activate).
             user = db.scalar(select(User).where(User.email == admin_email))
@@ -103,30 +149,10 @@ def seed() -> None:
                 db.flush()
                 print(f"[seed_admin] super admin already exists, refreshed: {admin_email}", flush=True)
 
-            # 3. Bind role (idempotent).
-            if role not in user.roles:
-                user.roles.append(role)
+            # 3. Bind super_admin role (idempotent).
+            if super_admin_role is not None and super_admin_role not in user.roles:
+                user.roles.append(super_admin_role)
                 db.flush()
-
-            # 4. Ensure allow-all policy scoped to the super admin role.
-            policy = db.scalar(
-                select(AccessPolicy).where(AccessPolicy.name == SUPER_ADMIN_POLICY_NAME)
-            )
-            if policy is None:
-                db.add(
-                    AccessPolicy(
-                        name=SUPER_ADMIN_POLICY_NAME,
-                        effect="allow",
-                        permissions=SUPER_ADMIN_PERMISSIONS,
-                        role_names=[SUPER_ADMIN_ROLE],
-                        resource_type=None,
-                        resource_visibility=None,
-                    )
-                )
-            else:
-                policy.effect = "allow"
-                policy.permissions = SUPER_ADMIN_PERMISSIONS
-                policy.role_names = [SUPER_ADMIN_ROLE]
 
             db.commit()
     except Exception as exc:  # pragma: no cover - defensive

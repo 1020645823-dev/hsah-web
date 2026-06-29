@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 
 from app.api.v1.auth import get_optional_user
 from app.core.db import get_db
+from app.core.permissions import user_has_permission
 from app.models.asset import Asset
 from app.models.asset_attachment import AssetAttachment
 from app.models.user import User
@@ -13,6 +14,13 @@ from app.schemas.common import PaginatedResponse
 from app.services import storage
 
 router = APIRouter(prefix="/assets", tags=["assets"])
+
+
+def _can_read_restricted(db: Session, user: User | None) -> bool:
+    """A user with the asset:read permission (granted via policy) may see
+    restricted/internal assets in addition to public ones. Anonymous users and
+    users without the permission can only see public assets."""
+    return user is not None and user_has_permission(db, user, "asset:read")
 
 
 def _normalize_shared_fields(asset: Asset) -> dict:
@@ -42,9 +50,12 @@ def _asset_summary(a: Asset) -> AssetSummary:
     )
 
 
-def _get_public_asset_or_404(slug: str, db: Session) -> Asset:
+def _get_public_asset_or_404(slug: str, db: Session, user: User | None = None) -> Asset:
     asset = db.scalar(select(Asset).where(Asset.slug == slug))
-    if asset is None or asset.visibility != "public" or asset.status != "published":
+    if asset is None or asset.status != "published":
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
+    # Public assets are visible to everyone; non-public assets require asset:read.
+    if asset.visibility != "public" and not _can_read_restricted(db, user):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
     return asset
 
@@ -60,11 +71,12 @@ def list_assets(
     limit: int = Query(default=20, ge=1, le=100),
     offset: int = Query(default=0, ge=0),
     db: Session = Depends(get_db),
+    user: User | None = Depends(get_optional_user),
 ) -> PaginatedResponse[AssetSummary]:
-    stmt = select(Asset).where(
-        Asset.visibility == "public",
-        Asset.status == "published",
-    )
+    stmt = select(Asset).where(Asset.status == "published")
+    # Without asset:read, only public assets are visible.
+    if not _can_read_restricted(db, user):
+        stmt = stmt.where(Asset.visibility == "public")
 
     if q:
         like = f"%{q.strip()}%"
@@ -98,12 +110,13 @@ def list_assets(
 def recommended(
     limit: int = Query(default=6, ge=1, le=20),
     db: Session = Depends(get_db),
+    user: User | None = Depends(get_optional_user),
 ) -> list[AssetSummary]:
+    stmt = select(Asset).where(Asset.status == "published")
+    if not _can_read_restricted(db, user):
+        stmt = stmt.where(Asset.visibility == "public")
     rows = db.scalars(
-        select(Asset)
-        .where(Asset.visibility == "public", Asset.status == "published")
-        .order_by(Asset.updated_at.desc())
-        .limit(limit)
+        stmt.order_by(Asset.updated_at.desc()).limit(limit)
     ).all()
     return [_asset_summary(a) for a in rows]
 
@@ -114,7 +127,7 @@ def get_asset(
     db: Session = Depends(get_db),
     user: User | None = Depends(get_optional_user),
 ) -> AssetDetail:
-    asset = _get_public_asset_or_404(slug, db)
+    asset = _get_public_asset_or_404(slug, db, user)
 
     # Record an anonymous or authenticated view event for analytics.
     from app.models.analytics_event import AnalyticsEvent
@@ -149,13 +162,14 @@ def get_asset(
 def list_public_attachments(
     slug: str,
     db: Session = Depends(get_db),
+    user: User | None = Depends(get_optional_user),
 ) -> list[AssetAttachmentWithUrl]:
     """Public attachment listing for a published asset (document/video kinds).
 
     Used by the detail page to render the file-attachments tab. Files live in the
     default MinIO bucket; URLs are presigned on demand.
     """
-    asset = _get_public_asset_or_404(slug, db)
+    asset = _get_public_asset_or_404(slug, db, user)
     rows = db.scalars(
         select(AssetAttachment)
         .where(AssetAttachment.asset_id == asset.id)

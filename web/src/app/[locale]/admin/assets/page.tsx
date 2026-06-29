@@ -37,14 +37,14 @@ export default function AdminAssetsPage() {
 
   function loadAssets() {
     if (!token) return;
-    adminRequest<{ assets: Asset[] }>("/api/v1/admin/assets", token, { method: "GET" })
+    adminRequest<{ items: Asset[]; total: number }>("/api/v1/admin/assets", token, { method: "GET" })
       .then((data) => {
         if (!data.ok) {
           setError(parseApiError(data.data, data.status));
           setAssets([]);
         } else {
           setError(null);
-          setAssets(data.data.assets ?? []);
+          setAssets(data.data.items ?? []);
         }
       })
       .catch(() => {

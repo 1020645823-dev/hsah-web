@@ -992,7 +992,19 @@
       },
       "createUser": "New user",
       "createRole": "New role",
-      "createPolicy": "New policy"
+      "createPolicy": "New policy",
+      "edit": "Edit",
+      "delete": "Delete",
+      "editUser": "Edit user",
+      "editRole": "Edit role",
+      "editPolicy": "Edit policy",
+      "builtin": "Built-in",
+      "anyRole": "Any role",
+      "roleNamesHint": "Leave empty to match any role.",
+      "add": "Add",
+      "deleteFailed": "Delete failed",
+      "confirmDelete": "Confirm delete",
+      "confirmDeleteMessage": "Are you sure you want to delete \"{name}\"? This action cannot be undone."
     },
     "quickAction": {
       "title": "Quick actions",

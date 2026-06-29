@@ -27,7 +27,7 @@ export default function AssetEditPage() {
   useEffect(() => {
     if (!token) return;
     let canceled = false;
-    adminRequest<{ asset: Asset }>(`/api/v1/admin/assets/${params.id}`, token, { method: "GET" })
+    adminRequest<Asset>(`/api/v1/admin/assets/${params.id}`, token, { method: "GET" })
       .then((data) => {
         if (canceled) return;
         if (!data.ok) {
@@ -35,7 +35,7 @@ export default function AssetEditPage() {
           setAsset(null);
         } else {
           setError(null);
-          setAsset(data.data.asset ?? null);
+          setAsset(data.data ?? null);
         }
       })
       .catch(() => {

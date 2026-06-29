@@ -25,8 +25,12 @@ from app.schemas.rbac import (
     UserCreateRequest,
     UserUpdateRequest,
 )
+from app.scripts.seed_admin import BUILTIN_ROLES
 
 router = APIRouter(prefix="/admin", tags=["admin"])
+
+# Names of roles that are seeded on startup and must not be deleted.
+BUILTIN_ROLE_NAMES: set[str] = set(BUILTIN_ROLES.keys())
 
 
 def _serialize_role(role: Role) -> RoleResponse:
@@ -312,6 +316,11 @@ def delete_role(
     role = db.scalar(select(Role).where(Role.id == role_id))
     if role is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="role_not_found")
+    if role.name in BUILTIN_ROLE_NAMES:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail={"code": "builtin_role_protected", "message": "Built-in roles cannot be deleted"},
+        )
     db.delete(role)
     db.commit()
     return None
