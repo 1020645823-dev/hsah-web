@@ -27,11 +27,8 @@ def _published_asset(db_session, slug: str) -> Asset:
         technologies=[],
         asset_type="solution",
         status="published",
-        content_schema_version=1,
-        content_blocks=[{"type": "text", "config": {"markdown": "x"}, "visible": True}],
         shared_fields={},
         sales_fields={},
-        delivery_fields={},
     )
     db_session.add(asset)
     db_session.commit()

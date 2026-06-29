@@ -159,7 +159,11 @@
     "myRequestsSummary": "查看你对交付内容访问申请的处理状态。",
     "myRequestsEmpty": "你还没有提交任何访问申请。",
     "myRequestsSignIn": "请登录后查看你的访问申请。",
-    "myRequestsLink": "查看我的申请"
+    "myRequestsLink": "查看我的申请",
+    "mediaVideos": "在线视频",
+    "mediaDocuments": "文件附件",
+    "noVideos": "暂无视频。",
+    "noDocuments": "暂无文件附件。"
   },
   "VideoPlayer": {
     "demoVideo": "演示视频",
@@ -950,9 +954,25 @@
       "allowed": "允许",
       "denied": "拒绝",
       "noRoles": "尚未定义角色。",
-      "users": { "title": "用户", "total": "用户总数", "empty": "暂无用户。" },
-      "roles": { "title": "角色", "total": "角色总数", "empty": "暂无角色。", "permissions": "权限数", "created": "创建时间" },
-      "policies": { "title": "策略", "total": "策略总数", "empty": "暂无策略。", "effect": "效果", "created": "创建时间" },
+      "users": {
+        "title": "用户",
+        "total": "用户总数",
+        "empty": "暂无用户。"
+      },
+      "roles": {
+        "title": "角色",
+        "total": "角色总数",
+        "empty": "暂无角色。",
+        "permissions": "权限数",
+        "created": "创建时间"
+      },
+      "policies": {
+        "title": "策略",
+        "total": "策略总数",
+        "empty": "暂无策略。",
+        "effect": "效果",
+        "created": "创建时间"
+      },
       "createUser": "新建用户",
       "createRole": "新建角色",
       "createPolicy": "新建策略"
@@ -1339,10 +1359,9 @@
       "contentLabel": "后台内容"
     },
     "assetEditorForm": {
-      "title": "资产编辑器",
-      "slug": "Slug",
+      "title": "标题",
+      "slug": "URL 标识",
       "slugPlaceholder": "例如 my-asset-slug",
-      "titleLabel": "标题",
       "titlePlaceholder": "输入资产标题",
       "subtitle": "副标题",
       "subtitlePlaceholder": "输入副标题",
@@ -1396,11 +1415,11 @@
       "saving": "保存中...",
       "required": "必填",
       "cloudProviders": "云平台",
-      "cloudProvidersPlaceholder": "例如 aws、azure、gcp",
+      "cloudProvidersPlaceholder": "选择云平台",
       "industries": "行业",
-      "industriesPlaceholder": "例如 financial-services、healthcare",
+      "industriesPlaceholder": "选择行业",
       "technologies": "技术",
-      "technologiesPlaceholder": "例如 genai、kubernetes",
+      "technologiesPlaceholder": "选择技术",
       "typeAndStatus": "类型与状态",
       "accessControl": "访问控制",
       "allowedRoles": "允许的角色",
@@ -1423,7 +1442,11 @@
       "deliveryAllowedUsers": "交付允许的用户",
       "deliveryAllowedUsersPlaceholder": "添加交付时允许的用户",
       "loading": "加载中…",
-      "unsavedChangesConfirm": "有未保存的更改，确定要离开吗？"
+      "unsavedChangesConfirm": "有未保存的更改，确定要离开吗？",
+      "slugHint": "用于详情页地址，如 /assets/your-slug，仅限小写字母、数字与连字符。",
+      "mediaLabel": "视频与附件",
+      "mediaVideos": "在线视频",
+      "mediaAttachments": "文件附件"
     },
     "assetVideoManager": {
       "title": "视频管理",
@@ -1441,7 +1464,14 @@
       "titlePlaceholder": "视频标题",
       "posterUrlPlaceholder": "https://example.com/poster.jpg",
       "description": "描述",
-      "descriptionPlaceholder": "视频简介"
+      "descriptionPlaceholder": "视频简介",
+      "or": "或",
+      "upload": "上传",
+      "uploadHint": "支持 MP4/WebM/MOV，最大 500 MB。",
+      "uploadedFrom": "已上传",
+      "invalidType": "不支持的视频类型，请使用 MP4/WebM/MOV。",
+      "tooLarge": "视频超过 500 MB 限制。",
+      "uploadFailed": "上传失败，请重试。"
     },
     "assetAttachments": {
       "title": "附件",
@@ -1587,6 +1617,49 @@
       "eyebrow": "资产管理",
       "title": "新建资产",
       "summary": "创建一个新的资产条目，填写基本信息、标签、访问控制、销售与交付详情，以及内容块。"
+    },
+    "taxonomy": {
+      "cloud": {
+        "aws": "AWS",
+        "azure": "Microsoft Azure",
+        "gcp": "Google Cloud",
+        "aliyun": "阿里云",
+        "huaweicloud": "华为云",
+        "tencentcloud": "腾讯云",
+        "baidubce": "百度智能云",
+        "oracle": "Oracle Cloud",
+        "ibm-cloud": "IBM Cloud",
+        "volcengine": "火山引擎"
+      },
+      "industry": {
+        "financial-services": "金融服务",
+        "healthcare": "医疗健康",
+        "manufacturing": "制造",
+        "retail": "零售",
+        "telecommunications": "电信",
+        "energy": "能源",
+        "public-sector": "政府与公共服务",
+        "consumer-goods": "消费品",
+        "transportation-logistics": "交通物流",
+        "high-tech": "高科技",
+        "media": "媒体",
+        "education": "教育",
+        "natural-resources": "自然资源"
+      },
+      "technology": {
+        "genai": "GenAI",
+        "ai-ml": "AI / 机器学习",
+        "kubernetes": "Kubernetes",
+        "cloud-native": "云原生",
+        "microservices": "微服务",
+        "serverless": "Serverless",
+        "data-platform": "数据中台",
+        "big-data": "大数据",
+        "observability": "可观测性",
+        "security-compliance": "安全合规",
+        "iot": "物联网",
+        "blockchain": "区块链"
+      }
     }
   },
   "Auth": {

@@ -29,11 +29,8 @@ def test_audit_log_written_on_asset_transition(db_session):
         technologies=[],
         asset_type="solution",
         status="draft",
-        content_schema_version=1,
-        content_blocks=[{"type": "text", "config": {"markdown": "x"}, "visible": True}],
         shared_fields={},
         sales_fields={},
-        delivery_fields={},
     )
     db_session.add(asset)
     db_session.commit()
@@ -60,11 +57,8 @@ def test_audit_logs_endpoint_supports_filters(db_session):
         technologies=[],
         asset_type="solution",
         status="draft",
-        content_schema_version=1,
-        content_blocks=[{"type": "text", "config": {"markdown": "x"}, "visible": True}],
         shared_fields={},
         sales_fields={},
-        delivery_fields={},
     )
     db_session.add(asset)
     db_session.commit()

@@ -32,11 +32,9 @@ export type PublicAssetSummary = {
 
 export type PublicAssetDetail = PublicAssetSummary & {
   visibility: string;
-  content_blocks: Array<Record<string, unknown>>;
   shared_fields: {
     introduction?: string;
     use_cases?: string[];
-    demo_video_url?: string | null;
     live_demo_url?: string | null;
     videos?: Array<{
       id: string;
@@ -52,12 +50,6 @@ export type PublicAssetDetail = PublicAssetSummary & {
     differentiators?: string[];
     outcomes?: string[];
   };
-  delivery_fields: {
-    implementation_summary?: string;
-    prerequisites?: string[];
-    rollout_steps?: string[];
-  } | null;
-  delivery_access?: "granted" | "signin_required" | "request_access" | null;
 };
 
 export type PublicAssetListResponse = {

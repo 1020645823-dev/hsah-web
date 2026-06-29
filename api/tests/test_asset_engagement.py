@@ -27,11 +27,8 @@ def _published_asset(db_session, slug: str) -> Asset:
         technologies=["python"],
         asset_type="solution",
         status="published",
-        content_schema_version=1,
-        content_blocks=[{"type": "text", "config": {"markdown": "x"}, "visible": True}],
         shared_fields={},
         sales_fields={},
-        delivery_fields={},
     )
     db_session.add(asset)
     db_session.commit()
@@ -108,11 +105,8 @@ def test_related_assets_match_by_provider(db_session):
         technologies=["python"],
         asset_type="solution",
         status="published",
-        content_schema_version=1,
-        content_blocks=[{"type": "text", "config": {}, "visible": True}],
         shared_fields={},
         sales_fields={},
-        delivery_fields={},
     )
     db_session.add(similar)
     db_session.commit()

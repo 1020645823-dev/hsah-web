@@ -25,7 +25,6 @@ def test_shared_asset_fields_includes_videos():
     data = {
         "introduction": "Intro",
         "use_cases": ["uc1"],
-        "demo_video_url": "https://example.com/old.mp4",
         "live_demo_url": "https://example.com/live",
         "videos": [
             {"id": "v1", "title": "Main", "video_url": "https://example.com/v1.mp4", "is_primary": True},

@@ -28,3 +28,28 @@ async def upload_image(file: UploadFile, _user=Depends(get_current_user)):
     storage_key = storage.upload_file("image", file.content_type, content)
     url = storage.get_presigned_url(storage_key)
     return {"url": url, "storage_key": storage_key}
+
+
+@router.post("/videos")
+async def upload_video(file: UploadFile, _user=Depends(get_current_user)):
+    """Upload a video file to MinIO and return a presigned playback URL.
+
+    Used by the asset editor's local-video-upload mode. The returned URL is
+    stored on the asset's shared_fields.videos[].video_url so the public detail
+    page can play it back. Files live in the default bucket under videos/.
+    """
+    kind = storage.kind_for_content_type(file.content_type)
+    if kind != "video":
+        raise HTTPException(
+            status_code=400,
+            detail={"code": "invalid_file_type", "message": "仅支持 mp4/webm/mov 视频格式"},
+        )
+    content = await file.read()
+    try:
+        storage.validate_file("video", file.content_type, len(content))
+    except ValueError as exc:
+        raise HTTPException(status_code=413, detail={"code": "file_too_large", "message": str(exc)}) from exc
+
+    storage_key = storage.upload_file("video", file.content_type, content)
+    url = storage.get_presigned_url(storage_key)
+    return {"url": url, "storage_key": storage_key}

@@ -163,16 +163,16 @@ function LoginPageContent() {
                     {t("adminReturnSummary")}
                   </p>
                   <dl className="grid gap-2 text-[13px] text-foreground/70 sm:grid-cols-2">
-                    <div className="rounded-xl bg-background/80 px-3 py-2.5">
-                      <dt className="text-[11px] font-semibold tracking-[0.16em] text-foreground/45 uppercase">
+                    <div className="rounded-xl bg-muted/60 px-3 py-2.5">
+                      <dt className="text-[11px] font-semibold tracking-[0.16em] text-foreground/55 uppercase">
                         {t("workspace")}
                       </dt>
                       <dd className="mt-1 font-medium text-foreground">
                         {t("adminWorkspace")}
                       </dd>
                     </div>
-                    <div className="rounded-xl bg-background/80 px-3 py-2.5">
-                      <dt className="text-[11px] font-semibold tracking-[0.16em] text-foreground/45 uppercase">
+                    <div className="rounded-xl bg-muted/60 px-3 py-2.5">
+                      <dt className="text-[11px] font-semibold tracking-[0.16em] text-foreground/55 uppercase">
                         {t("targetPath")}
                       </dt>
                       <dd className="mt-1 font-mono text-[12px] text-foreground">

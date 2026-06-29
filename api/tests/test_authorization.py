@@ -134,11 +134,8 @@ def test_asset_publish_requires_permission(db_session):
         technologies=[],
         asset_type="solution",
         status="draft",
-        content_schema_version=1,
-        content_blocks=[{"type": "text", "config": {"markdown": "x"}, "visible": True}],
         shared_fields={},
         sales_fields={},
-        delivery_fields={},
     )
     db_session.add(asset)
     db_session.add(

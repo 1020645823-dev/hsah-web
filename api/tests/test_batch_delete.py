@@ -28,9 +28,6 @@ def _asset_payload(slug: str | None = None) -> dict:
         "asset_type": "solution",
         "status": "draft",
         "visibility": "public",
-        "allowed_roles": [],
-        "allowed_users": [],
-        "content_blocks": [],
     }
 
 

@@ -29,11 +29,8 @@ def _seed_publishable_asset(db_session, slug: str = "reviewable-asset") -> Asset
         technologies=["python"],
         asset_type="solution",
         status="draft",
-        content_schema_version=1,
-        content_blocks=[{"type": "text", "config": {"markdown": "Body"}, "visible": True}],
         shared_fields={},
         sales_fields={},
-        delivery_fields={},
     )
     db_session.add(asset)
     db_session.commit()
@@ -115,11 +112,8 @@ def test_publish_blocked_asset_returns_missing_fields(db_session):
         technologies=[],
         asset_type="solution",
         status="draft",
-        content_schema_version=1,
-        content_blocks=[],
         shared_fields={},
         sales_fields={},
-        delivery_fields={},
     )
     db_session.add(asset)
     db_session.commit()

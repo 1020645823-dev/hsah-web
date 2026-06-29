@@ -159,7 +159,11 @@
     "myRequestsSummary": "Track the status of your delivery-content access requests.",
     "myRequestsEmpty": "You have not submitted any access requests yet.",
     "myRequestsSignIn": "Sign in to view your access requests.",
-    "myRequestsLink": "View my requests"
+    "myRequestsLink": "View my requests",
+    "mediaVideos": "Online videos",
+    "mediaDocuments": "File attachments",
+    "noVideos": "No videos yet.",
+    "noDocuments": "No file attachments yet."
   },
   "VideoPlayer": {
     "demoVideo": "Demo video",
@@ -967,9 +971,25 @@
       "allowed": "Allowed",
       "denied": "Denied",
       "noRoles": "No roles defined yet.",
-      "users": { "title": "Users", "total": "Total users", "empty": "No users yet." },
-      "roles": { "title": "Roles", "total": "Total roles", "empty": "No roles yet.", "permissions": "Permissions", "created": "Created" },
-      "policies": { "title": "Policies", "total": "Total policies", "empty": "No policies yet.", "effect": "Effect", "created": "Created" },
+      "users": {
+        "title": "Users",
+        "total": "Total users",
+        "empty": "No users yet."
+      },
+      "roles": {
+        "title": "Roles",
+        "total": "Total roles",
+        "empty": "No roles yet.",
+        "permissions": "Permissions",
+        "created": "Created"
+      },
+      "policies": {
+        "title": "Policies",
+        "total": "Total policies",
+        "empty": "No policies yet.",
+        "effect": "Effect",
+        "created": "Created"
+      },
       "createUser": "New user",
       "createRole": "New role",
       "createPolicy": "New policy"
@@ -1353,10 +1373,9 @@
       "contentLabel": "Admin content"
     },
     "assetEditorForm": {
-      "title": "Asset Editor",
-      "slug": "Slug",
+      "title": "Title",
+      "slug": "URL identifier",
       "slugPlaceholder": "e.g. my-asset-slug",
-      "titleLabel": "Title",
       "titlePlaceholder": "Enter asset title",
       "subtitle": "Subtitle",
       "subtitlePlaceholder": "Enter subtitle",
@@ -1410,11 +1429,11 @@
       "saving": "Saving...",
       "required": "Required",
       "cloudProviders": "Cloud providers",
-      "cloudProvidersPlaceholder": "e.g. aws, azure, gcp",
+      "cloudProvidersPlaceholder": "Select cloud providers",
       "industries": "Industries",
-      "industriesPlaceholder": "e.g. financial-services, healthcare",
+      "industriesPlaceholder": "Select industries",
       "technologies": "Technologies",
-      "technologiesPlaceholder": "e.g. genai, kubernetes",
+      "technologiesPlaceholder": "Select technologies",
       "typeAndStatus": "Type & status",
       "accessControl": "Access control",
       "allowedRoles": "Allowed roles",
@@ -1437,7 +1456,11 @@
       "deliveryAllowedUsers": "Delivery allowed users",
       "deliveryAllowedUsersPlaceholder": "Add users allowed for delivery",
       "loading": "Loading…",
-      "unsavedChangesConfirm": "You have unsaved changes. Are you sure you want to leave?"
+      "unsavedChangesConfirm": "You have unsaved changes. Are you sure you want to leave?",
+      "slugHint": "Used in the detail page URL, e.g. /assets/your-slug. Lowercase letters, digits and hyphens only.",
+      "mediaLabel": "Videos & attachments",
+      "mediaVideos": "Online videos",
+      "mediaAttachments": "File attachments"
     },
     "assetVideoManager": {
       "title": "Video Manager",
@@ -1455,7 +1478,14 @@
       "titlePlaceholder": "Video title",
       "posterUrlPlaceholder": "https://example.com/poster.jpg",
       "description": "Description",
-      "descriptionPlaceholder": "Short description of the video"
+      "descriptionPlaceholder": "Short description of the video",
+      "or": "or",
+      "upload": "Upload",
+      "uploadHint": "MP4/WebM/MOV, up to 500 MB.",
+      "uploadedFrom": "Uploaded",
+      "invalidType": "Unsupported video type. Use MP4, WebM, or MOV.",
+      "tooLarge": "Video exceeds the 500 MB limit.",
+      "uploadFailed": "Upload failed, please try again."
     },
     "assetAttachments": {
       "title": "Attachments",
@@ -1601,6 +1631,49 @@
       "eyebrow": "Asset Management",
       "title": "New Asset",
       "summary": "Create a new asset entry with basic info, tags, access control, sales & delivery details, and content blocks."
+    },
+    "taxonomy": {
+      "cloud": {
+        "aws": "AWS",
+        "azure": "Microsoft Azure",
+        "gcp": "Google Cloud",
+        "aliyun": "Alibaba Cloud",
+        "huaweicloud": "Huawei Cloud",
+        "tencentcloud": "Tencent Cloud",
+        "baidubce": "Baidu Cloud",
+        "oracle": "Oracle Cloud",
+        "ibm-cloud": "IBM Cloud",
+        "volcengine": "Volcengine"
+      },
+      "industry": {
+        "financial-services": "Financial services",
+        "healthcare": "Healthcare",
+        "manufacturing": "Manufacturing",
+        "retail": "Retail",
+        "telecommunications": "Telecommunications",
+        "energy": "Energy",
+        "public-sector": "Government & public sector",
+        "consumer-goods": "Consumer goods",
+        "transportation-logistics": "Transportation & logistics",
+        "high-tech": "High tech",
+        "media": "Media",
+        "education": "Education",
+        "natural-resources": "Natural resources"
+      },
+      "technology": {
+        "genai": "GenAI",
+        "ai-ml": "AI / ML",
+        "kubernetes": "Kubernetes",
+        "cloud-native": "Cloud native",
+        "microservices": "Microservices",
+        "serverless": "Serverless",
+        "data-platform": "Data platform",
+        "big-data": "Big data",
+        "observability": "Observability",
+        "security-compliance": "Security & compliance",
+        "iot": "IoT",
+        "blockchain": "Blockchain"
+      }
     }
   }
 }

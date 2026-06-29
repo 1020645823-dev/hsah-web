@@ -39,11 +39,8 @@ def test_operations_tasks_includes_blocked_asset(db_session):
         technologies=[],
         asset_type="solution",
         status="draft",
-        content_schema_version=1,
-        content_blocks=[],
         shared_fields={},
         sales_fields={},
-        delivery_fields={},
     )
     db_session.add(asset)
     db_session.commit()
@@ -68,11 +65,8 @@ def test_operations_tasks_excludes_published(db_session):
         technologies=["python"],
         asset_type="solution",
         status="published",
-        content_schema_version=1,
-        content_blocks=[{"type": "text", "config": {"markdown": "x"}, "visible": True}],
         shared_fields={"videos": [{"id": "v", "title": "t", "video_url": "u"}]},
         sales_fields={"value_summary": "v"},
-        delivery_fields={},
     )
     db_session.add(asset)
     db_session.commit()
@@ -94,11 +88,8 @@ def test_recent_activities_returns_review_records(db_session):
         technologies=["python"],
         asset_type="solution",
         status="draft",
-        content_schema_version=1,
-        content_blocks=[{"type": "text", "config": {"markdown": "x"}, "visible": True}],
         shared_fields={"videos": [{"id": "v", "title": "t", "video_url": "u"}]},
         sales_fields={"value_summary": "v"},
-        delivery_fields={},
     )
     db_session.add(asset)
     db_session.commit()

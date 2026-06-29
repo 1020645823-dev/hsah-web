@@ -22,17 +22,10 @@ class Asset(Base):
     asset_type: Mapped[str] = mapped_column(String(40), nullable=False, default="solution")
     status: Mapped[str] = mapped_column(String(20), nullable=False, default="preview")
 
-    content_schema_version: Mapped[int] = mapped_column(nullable=False, default=1)
-    content_blocks: Mapped[list[dict]] = mapped_column(JSON, nullable=False, default=list)
     shared_fields: Mapped[dict] = mapped_column(JSON, nullable=False, default=dict)
     sales_fields: Mapped[dict] = mapped_column(JSON, nullable=False, default=dict)
-    delivery_fields: Mapped[dict] = mapped_column(JSON, nullable=False, default=dict)
-    delivery_allowed_roles: Mapped[list[str]] = mapped_column(JSON, nullable=False, default=list)
-    delivery_allowed_users: Mapped[list[str]] = mapped_column(JSON, nullable=False, default=list)
 
     visibility: Mapped[str] = mapped_column(String(20), nullable=False, default="public")
-    allowed_roles: Mapped[list[str]] = mapped_column(JSON, nullable=False, default=list)
-    allowed_users: Mapped[list[str]] = mapped_column(JSON, nullable=False, default=list)
 
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(

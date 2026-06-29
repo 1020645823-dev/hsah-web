@@ -19,11 +19,8 @@ def _full_asset(**overrides) -> Asset:
         technologies=["python"],
         asset_type="solution",
         status="draft",
-        content_schema_version=1,
-        content_blocks=[{"type": "text", "config": {"markdown": "Body"}, "visible": True}],
         shared_fields={"videos": [{"id": "v1", "title": "Demo", "video_url": "http://x/y"}]},
         sales_fields={"value_summary": "Value"},
-        delivery_fields={},
     )
     base.update(overrides)
     return Asset(**base)
@@ -53,10 +50,11 @@ def test_missing_cloud_providers_blocks_publish():
     assert evaluate_quality(asset).is_publishable is False
 
 
-def test_no_visible_content_blocks_blocks_publish():
-    asset = _full_asset(content_blocks=[{"type": "text", "config": {}, "visible": False}])
+def test_missing_title_blocks_publish():
+    asset = _full_asset(title="   ")
     result = evaluate_quality(asset)
-    assert "content_blocks" in result.missing
+    assert result.band == BLOCKED_BAND
+    assert "title" in result.missing
     assert result.is_publishable is False
 
 
@@ -66,4 +64,7 @@ def test_needs_work_when_warnings_present():
     assert result.band == NEEDS_WORK_BAND
     assert result.is_publishable is True  # publishable but with warnings
     assert "industries" in result.warnings
+    assert "technologies" in result.warnings
     assert "videos" in result.warnings
+    assert "sales_fields" in result.warnings
+    assert "access_configuration" not in result.warnings

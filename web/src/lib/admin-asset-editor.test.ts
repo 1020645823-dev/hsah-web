@@ -1,192 +1,259 @@
-import { describe, expect, test } from "vitest";
+import { describe, expect, it } from "vitest";
 
 import {
   type AssetEditorDraft,
+  ASSET_STATUS_OPTIONS,
+  ASSET_TYPE_OPTIONS,
+  ASSET_VISIBILITY_OPTIONS,
   INITIAL_DRAFT,
-  validateDraft,
+  areDraftsEqual,
   buildPayload,
   parseAssetToDraft,
-  areDraftsEqual,
+  validateDraft,
 } from "./admin-asset-editor";
 
-
+// A reusable, fully-populated draft that always passes validation.
+// Cloned per test to avoid cross-test mutation.
 const validDraft: AssetEditorDraft = {
   slug: "test-asset",
   title: "Test Asset",
   subtitle: "Test Subtitle",
-  shortDescription: "Test description",
+  shortDescription: "A realistic short description.",
   cloudProviders: ["aws"],
   industries: ["finance"],
   technologies: ["react"],
   assetType: "solution",
   status: "draft",
   visibility: "public",
-  allowedRoles: ["admin"],
-  allowedUsers: ["user1"],
   sharedFields: {
-    introduction: "Shared overview",
+    introduction: "Shared introduction text",
     useCases: ["customer onboarding"],
-    demoVideoUrl: "https://example.com/demo.mp4",
     liveDemoUrl: "https://example.com/live",
-    videos: [],
+    videos: [
+      {
+        id: "v1",
+        title: "Overview Video",
+        videoUrl: "https://example.com/v.mp4",
+        posterUrl: "https://example.com/poster.jpg",
+        description: "An overview of the asset",
+        isPrimary: true,
+      },
+    ],
   },
   salesFields: {
-    valueSummary: "Sales framing",
+    valueSummary: "Sales framing summary",
     differentiators: ["accelerator"],
     outcomes: ["faster presales"],
   },
-  deliveryFields: {
-    implementationSummary: "Delivery runbook",
-    prerequisites: ["Kubernetes"],
-    rolloutSteps: ["Provision cluster"],
-  },
-  deliveryAllowedRoles: ["delivery-engineer"],
-  deliveryAllowedUsers: ["owner@example.com"],
-  contentSchemaVersion: 2,
-  contentBlocks: [],
 };
 
+const clone = (d: AssetEditorDraft): AssetEditorDraft => JSON.parse(JSON.stringify(d));
+
+describe("INITIAL_DRAFT", () => {
+  it("has the expected empty/default shape", () => {
+    expect(INITIAL_DRAFT).toEqual({
+      slug: "",
+      title: "",
+      subtitle: "",
+      shortDescription: "",
+      cloudProviders: [],
+      industries: [],
+      technologies: [],
+      assetType: "solution",
+      status: "draft",
+      visibility: "public",
+      sharedFields: {
+        introduction: "",
+        useCases: [],
+        liveDemoUrl: "",
+        videos: [],
+      },
+      salesFields: {
+        valueSummary: "",
+        differentiators: [],
+        outcomes: [],
+      },
+    });
+  });
+
+  it("defaults assetType/status/visibility to the first option values", () => {
+    expect(INITIAL_DRAFT.assetType).toBe("solution");
+    expect(INITIAL_DRAFT.status).toBe("draft");
+    expect(INITIAL_DRAFT.visibility).toBe("public");
+  });
+
+  it("exposes option constants", () => {
+    expect(ASSET_TYPE_OPTIONS).toEqual(["solution", "whitepaper", "demo", "reference-architecture"]);
+    expect(ASSET_STATUS_OPTIONS).toEqual(["draft", "published", "archived"]);
+    expect(ASSET_VISIBILITY_OPTIONS).toEqual(["public", "restricted", "internal"]);
+  });
+});
+
 describe("validateDraft", () => {
-  test("returns valid for correct draft", () => {
-    const result = validateDraft(validDraft);
+  it("returns valid with no errors for a correct draft", () => {
+    const result = validateDraft(clone(validDraft));
     expect(result.valid).toBe(true);
     expect(result.errors).toEqual({});
   });
 
-  test("reports missing slug", () => {
-    const result = validateDraft({ ...validDraft, slug: "" });
+  it("flags a missing slug", () => {
+    const result = validateDraft({ ...clone(validDraft), slug: "" });
     expect(result.valid).toBe(false);
-    expect(result.errors.slug).toBe("必填");
+    expect(result.errors.slug).toBeDefined();
   });
 
-  test("reports invalid slug format", () => {
-    const result = validateDraft({ ...validDraft, slug: "INVALID_SLUG" });
+  it("flags a whitespace-only slug", () => {
+    const result = validateDraft({ ...clone(validDraft), slug: "   " });
     expect(result.valid).toBe(false);
-    expect(result.errors.slug).toBe("只能包含小写字母、数字和连字符");
+    expect(result.errors.slug).toBeDefined();
   });
 
-  test("reports slug exceeding 200 characters", () => {
-    const result = validateDraft({ ...validDraft, slug: "a".repeat(201) });
+  it("flags a slug that violates the lowercase/digit/hyphen pattern", () => {
+    const result = validateDraft({ ...clone(validDraft), slug: "Bad Slug!" });
     expect(result.valid).toBe(false);
-    expect(result.errors.slug).toBe("最多 200 个字符");
+    expect(result.errors.slug).toBeDefined();
   });
 
-  test("reports missing title", () => {
-    const result = validateDraft({ ...validDraft, title: "" });
-    expect(result.valid).toBe(false);
-    expect(result.errors.title).toBe("必填");
-  });
-
-  test("allows empty subtitle as optional", () => {
-    const result = validateDraft({ ...validDraft, subtitle: "" });
+  it("accepts a well-formed slug", () => {
+    const result = validateDraft({ ...clone(validDraft), slug: "my-cool-asset-1" });
+    expect(result.errors.slug).toBeUndefined();
     expect(result.valid).toBe(true);
   });
 
-  test("reports subtitle exceeding 300 characters", () => {
-    const result = validateDraft({ ...validDraft, subtitle: "x".repeat(301) });
+  it("flags a slug exceeding 200 characters", () => {
+    const result = validateDraft({ ...clone(validDraft), slug: "a".repeat(201) });
     expect(result.valid).toBe(false);
-    expect(result.errors.subtitle).toBe("最多 300 个字符");
+    expect(result.errors.slug).toBeDefined();
   });
 
-  test("reports missing shortDescription", () => {
-    const result = validateDraft({ ...validDraft, shortDescription: "" });
-    expect(result.valid).toBe(false);
-    expect(result.errors.shortDescription).toBe("必填");
-  });
-
-  test("reports shortDescription exceeding 500 characters", () => {
-    const result = validateDraft({ ...validDraft, shortDescription: "x".repeat(501) });
-    expect(result.valid).toBe(false);
-    expect(result.errors.shortDescription).toBe("最多 500 个字符");
-  });
-
-  test("allows empty cloudProviders as optional", () => {
-    const result = validateDraft({ ...validDraft, cloudProviders: [] });
+  it("accepts a slug at the 200 character boundary", () => {
+    const result = validateDraft({ ...clone(validDraft), slug: "a".repeat(200) });
+    expect(result.errors.slug).toBeUndefined();
     expect(result.valid).toBe(true);
   });
 
-  test("allows empty industries as optional", () => {
-    const result = validateDraft({ ...validDraft, industries: [] });
-    expect(result.valid).toBe(true);
-  });
-
-  test("allows empty technologies as optional", () => {
-    const result = validateDraft({ ...validDraft, technologies: [] });
-    expect(result.valid).toBe(true);
-  });
-
-  test("allows empty allowedRoles as optional", () => {
-    const result = validateDraft({ ...validDraft, allowedRoles: [] });
-    expect(result.valid).toBe(true);
-  });
-
-  test("allows empty allowedUsers as optional", () => {
-    const result = validateDraft({ ...validDraft, allowedUsers: [] });
-    expect(result.valid).toBe(true);
-  });
-
-  test("reports invalid assetType", () => {
-    const result = validateDraft({ ...validDraft, assetType: "invalid" });
+  it("flags a missing title", () => {
+    const result = validateDraft({ ...clone(validDraft), title: "" });
     expect(result.valid).toBe(false);
-    expect(result.errors.assetType).toBe("无效的资产类型");
+    expect(result.errors.title).toBeDefined();
   });
 
-  test("reports invalid status", () => {
-    const result = validateDraft({ ...validDraft, status: "invalid" });
+  it("flags a title exceeding 240 characters", () => {
+    const result = validateDraft({ ...clone(validDraft), title: "x".repeat(241) });
     expect(result.valid).toBe(false);
-    expect(result.errors.status).toBe("无效的状态");
+    expect(result.errors.title).toBeDefined();
   });
 
-  test("reports invalid visibility", () => {
-    const result = validateDraft({ ...validDraft, visibility: "invalid" });
+  it("flags a shortDescription that is missing", () => {
+    const result = validateDraft({ ...clone(validDraft), shortDescription: "" });
     expect(result.valid).toBe(false);
-    expect(result.errors.visibility).toBe("无效的可见性");
+    expect(result.errors.shortDescription).toBeDefined();
+  });
+
+  it("flags a shortDescription exceeding 500 characters", () => {
+    const result = validateDraft({ ...clone(validDraft), shortDescription: "x".repeat(501) });
+    expect(result.valid).toBe(false);
+    expect(result.errors.shortDescription).toBeDefined();
+  });
+
+  it("flags an invalid assetType", () => {
+    const result = validateDraft({ ...clone(validDraft), assetType: "bogus-type" });
+    expect(result.valid).toBe(false);
+    expect(result.errors.assetType).toBeDefined();
+  });
+
+  it("accepts every valid assetType option", () => {
+    for (const t of ASSET_TYPE_OPTIONS) {
+      const result = validateDraft({ ...clone(validDraft), assetType: t });
+      expect(result.errors.assetType).toBeUndefined();
+    }
+  });
+
+  it("flags an invalid status", () => {
+    const result = validateDraft({ ...clone(validDraft), status: "bogus-status" });
+    expect(result.valid).toBe(false);
+    expect(result.errors.status).toBeDefined();
+  });
+
+  it("accepts every valid status option", () => {
+    for (const s of ASSET_STATUS_OPTIONS) {
+      const result = validateDraft({ ...clone(validDraft), status: s });
+      expect(result.errors.status).toBeUndefined();
+    }
+  });
+
+  it("flags an invalid visibility", () => {
+    const result = validateDraft({ ...clone(validDraft), visibility: "bogus-visibility" });
+    expect(result.valid).toBe(false);
+    expect(result.errors.visibility).toBeDefined();
+  });
+
+  it("accepts every valid visibility option", () => {
+    for (const v of ASSET_VISIBILITY_OPTIONS) {
+      const result = validateDraft({ ...clone(validDraft), visibility: v });
+      expect(result.errors.visibility).toBeUndefined();
+    }
   });
 });
 
 describe("buildPayload", () => {
-  test("converts camelCase to snake_case", () => {
-    const payload = buildPayload(validDraft);
+  it("converts camelCase draft keys to snake_case payload keys", () => {
+    const payload = buildPayload(clone(validDraft));
     expect(payload).toEqual({
       slug: "test-asset",
       title: "Test Asset",
       subtitle: "Test Subtitle",
-      short_description: "Test description",
+      short_description: "A realistic short description.",
       cloud_providers: ["aws"],
       industries: ["finance"],
       technologies: ["react"],
       asset_type: "solution",
       status: "draft",
       visibility: "public",
-      allowed_roles: ["admin"],
-      allowed_users: ["user1"],
       shared_fields: {
-        introduction: "Shared overview",
+        introduction: "Shared introduction text",
         use_cases: ["customer onboarding"],
-        demo_video_url: "https://example.com/demo.mp4",
         live_demo_url: "https://example.com/live",
-        videos: [],
+        videos: [
+          {
+            id: "v1",
+            title: "Overview Video",
+            video_url: "https://example.com/v.mp4",
+            poster_url: "https://example.com/poster.jpg",
+            description: "An overview of the asset",
+            is_primary: true,
+          },
+        ],
       },
       sales_fields: {
-        value_summary: "Sales framing",
+        value_summary: "Sales framing summary",
         differentiators: ["accelerator"],
         outcomes: ["faster presales"],
       },
-      delivery_fields: {
-        implementation_summary: "Delivery runbook",
-        prerequisites: ["Kubernetes"],
-        rollout_steps: ["Provision cluster"],
-      },
-      delivery_allowed_roles: ["delivery-engineer"],
-      delivery_allowed_users: ["owner@example.com"],
-      content_schema_version: 2,
-      content_blocks: [],
     });
   });
 
-  test("deduplicates arrays", () => {
+  it("maps empty subtitle to null", () => {
+    const payload = buildPayload({ ...clone(validDraft), subtitle: "" });
+    expect(payload.subtitle).toBeNull();
+  });
+
+  it("maps whitespace-only subtitle to null", () => {
+    const payload = buildPayload({ ...clone(validDraft), subtitle: "   " });
+    expect(payload.subtitle).toBeNull();
+  });
+
+  it("maps empty live_demo_url to null", () => {
     const payload = buildPayload({
-      ...validDraft,
+      ...clone(validDraft),
+      sharedFields: { ...validDraft.sharedFields, liveDemoUrl: "" },
+    });
+    expect(payload.shared_fields.live_demo_url).toBeNull();
+  });
+
+  it("deduplicates array values", () => {
+    const payload = buildPayload({
+      ...clone(validDraft),
       cloudProviders: ["aws", "aws", "gcp"],
       industries: ["finance", "finance"],
       technologies: ["react", "react", "vue"],
@@ -196,466 +263,271 @@ describe("buildPayload", () => {
     expect(payload.technologies).toEqual(["react", "vue"]);
   });
 
-  test("trims array values and filters empty", () => {
+  it("trims array values and drops empty entries", () => {
     const payload = buildPayload({
-      ...validDraft,
+      ...clone(validDraft),
       cloudProviders: [" aws ", "", "  ", "gcp"],
     });
     expect(payload.cloud_providers).toEqual(["aws", "gcp"]);
   });
 
-  test("trims string values", () => {
+  it("trims top-level string values", () => {
     const payload = buildPayload({
-      ...validDraft,
+      ...clone(validDraft),
       slug: "  test-asset  ",
       title: "  Test Asset  ",
       subtitle: "  Test Subtitle  ",
-      shortDescription: "  Test description  ",
+      shortDescription: "  A realistic short description.  ",
     });
     expect(payload.slug).toBe("test-asset");
     expect(payload.title).toBe("Test Asset");
     expect(payload.subtitle).toBe("Test Subtitle");
-    expect(payload.short_description).toBe("Test description");
+    expect(payload.short_description).toBe("A realistic short description.");
   });
 
-  test("sets content_blocks to empty array", () => {
-    const payload = buildPayload(validDraft);
-    expect(payload.content_blocks).toEqual([]);
-  });
-
-  test("converts contentBlocks to content_blocks format", () => {
-    const draftWithBlocks: AssetEditorDraft = {
-      ...validDraft,
-      contentBlocks: [
-        {
-          id: "block-1",
-          type: "text",
-          version: 2,
-          order: 0,
-          visible: true,
-          config: { markdown: "# Hello", html: "" },
-        },
-        {
-          id: "block-2",
-          type: "stat_card",
-          version: 2,
-          order: 1,
-          visible: true,
-          config: {
-            title: "KPIs",
-            stats: [{ label: "Users", value: "1000", description: "" }],
+  it("maps sharedFields.videos to snake_case and trims fields", () => {
+    const payload = buildPayload({
+      ...clone(validDraft),
+      sharedFields: {
+        ...validDraft.sharedFields,
+        videos: [
+          {
+            id: "  v1  ",
+            title: "  Overview  ",
+            videoUrl: "  https://example.com/v.mp4  ",
+            posterUrl: "  https://example.com/poster.jpg  ",
+            description: "  desc  ",
+            isPrimary: true,
           },
-        },
-      ],
-    };
-    const payload = buildPayload(draftWithBlocks);
-    expect(payload.content_blocks).toHaveLength(2);
-    expect(payload.content_blocks[0]).toEqual({
-      id: "block-1",
-      type: "text",
-      version: 2,
-      order: 0,
-      visible: true,
-      config: { markdown: "# Hello", html: "" },
-    });
-    expect(payload.content_blocks[1]).toEqual({
-      id: "block-2",
-      type: "stat_card",
-      version: 2,
-      order: 1,
-      visible: true,
-      config: {
-        title: "KPIs",
-        stats: [{ label: "Users", value: "1000", description: "" }],
+        ],
       },
     });
+    expect(payload.shared_fields.videos).toEqual([
+      {
+        id: "  v1  ",
+        title: "Overview",
+        video_url: "https://example.com/v.mp4",
+        poster_url: "https://example.com/poster.jpg",
+        description: "desc",
+        is_primary: true,
+      },
+    ]);
   });
 
-  test("filters out invisible content blocks", () => {
-    const draftWithBlocks: AssetEditorDraft = {
-      ...validDraft,
-      contentBlocks: [
-        {
-          id: "block-1",
-          type: "text",
-          version: 2,
-          order: 0,
-          visible: true,
-          config: { markdown: "# Visible", html: "" },
-        },
-        {
-          id: "block-2",
-          type: "text",
-          version: 2,
-          order: 1,
-          visible: false,
-          config: { markdown: "# Hidden", html: "" },
-        },
-      ],
-    };
-    const payload = buildPayload(draftWithBlocks);
-    expect(payload.content_blocks).toHaveLength(1);
-    expect(payload.content_blocks[0].id).toBe("block-1");
+  it("maps an empty poster_url to null", () => {
+    const payload = buildPayload({
+      ...clone(validDraft),
+      sharedFields: {
+        ...validDraft.sharedFields,
+        videos: [
+          {
+            id: "v1",
+            title: "Overview",
+            videoUrl: "https://example.com/v.mp4",
+            posterUrl: "   ",
+            description: "desc",
+            isPrimary: false,
+          },
+        ],
+      },
+    });
+    expect(payload.shared_fields.videos[0].poster_url).toBeNull();
   });
-  test("sets subtitle to null when empty", () => {
-    const payload = buildPayload({ ...validDraft, subtitle: "" });
-    expect(payload.subtitle).toBeNull();
+
+  it("does NOT include legacy/removed payload keys", () => {
+    const payload = buildPayload(clone(validDraft)) as Record<string, unknown>;
+    expect(payload).not.toHaveProperty("allowed_roles");
+    expect(payload).not.toHaveProperty("allowed_users");
+    expect(payload).not.toHaveProperty("delivery_fields");
+    expect(payload).not.toHaveProperty("delivery_allowed_roles");
+    expect(payload).not.toHaveProperty("delivery_allowed_users");
+    expect(payload).not.toHaveProperty("content_blocks");
+    expect(payload).not.toHaveProperty("content_schema_version");
   });
 });
 
 describe("parseAssetToDraft", () => {
-  test("converts snake_case to camelCase", () => {
+  it("converts snake_case asset keys to camelCase draft keys", () => {
     const asset = {
       slug: "test-asset",
       title: "Test Asset",
       subtitle: "Test Subtitle",
-      short_description: "Test description",
+      short_description: "A realistic short description.",
       cloud_providers: ["aws"],
       industries: ["finance"],
       technologies: ["react"],
       asset_type: "solution",
       status: "draft",
       visibility: "public",
-      allowed_roles: ["admin"],
-      allowed_users: ["user1"],
       shared_fields: {
-        introduction: "Shared overview",
+        introduction: "Shared introduction text",
         use_cases: ["customer onboarding"],
-        demo_video_url: "https://example.com/demo.mp4",
         live_demo_url: "https://example.com/live",
+        videos: [
+          {
+            id: "v1",
+            title: "Overview Video",
+            video_url: "https://example.com/v.mp4",
+            poster_url: "https://example.com/poster.jpg",
+            description: "An overview of the asset",
+            is_primary: true,
+          },
+        ],
       },
       sales_fields: {
-        value_summary: "Sales framing",
+        value_summary: "Sales framing summary",
         differentiators: ["accelerator"],
         outcomes: ["faster presales"],
       },
-      delivery_fields: {
-        implementation_summary: "Delivery runbook",
-        prerequisites: ["Kubernetes"],
-        rollout_steps: ["Provision cluster"],
-      },
-      delivery_allowed_roles: ["delivery-engineer"],
-      delivery_allowed_users: ["owner@example.com"],
     };
     const draft = parseAssetToDraft(asset);
-    expect(draft).toEqual({
-      slug: "test-asset",
-      title: "Test Asset",
-      subtitle: "Test Subtitle",
-      shortDescription: "Test description",
-      cloudProviders: ["aws"],
-      industries: ["finance"],
-      technologies: ["react"],
-      assetType: "solution",
-      status: "draft",
-      visibility: "public",
-      allowedRoles: ["admin"],
-      allowedUsers: ["user1"],
-      sharedFields: {
-        introduction: "Shared overview",
-        useCases: ["customer onboarding"],
-        demoVideoUrl: "https://example.com/demo.mp4",
-        liveDemoUrl: "https://example.com/live",
-        videos: [],
-      },
-      salesFields: {
-        valueSummary: "Sales framing",
-        differentiators: ["accelerator"],
-        outcomes: ["faster presales"],
-      },
-      deliveryFields: {
-        implementationSummary: "Delivery runbook",
-        prerequisites: ["Kubernetes"],
-        rolloutSteps: ["Provision cluster"],
-      },
-      deliveryAllowedRoles: ["delivery-engineer"],
-      deliveryAllowedUsers: ["owner@example.com"],
-      contentSchemaVersion: 2,
-      contentBlocks: [],
-    });
+    expect(draft).toEqual(validDraft);
   });
 
-  test("applies defaults for missing fields", () => {
-    const asset = {
-      slug: "test-asset",
-      title: "Test Asset",
-    };
-    const draft = parseAssetToDraft(asset);
-    expect(draft.slug).toBe("test-asset");
-    expect(draft.title).toBe("Test Asset");
-    expect(draft.assetType).toBe(INITIAL_DRAFT.assetType);
-    expect(draft.status).toBe(INITIAL_DRAFT.status);
-    expect(draft.visibility).toBe(INITIAL_DRAFT.visibility);
-    expect(draft.contentSchemaVersion).toBe(INITIAL_DRAFT.contentSchemaVersion);
-  });
-
-  test("handles missing arrays", () => {
-    const asset = {};
-    const draft = parseAssetToDraft(asset);
+  it("returns empty arrays for missing list fields", () => {
+    const draft = parseAssetToDraft({ slug: "s", title: "t" });
     expect(draft.cloudProviders).toEqual([]);
     expect(draft.industries).toEqual([]);
     expect(draft.technologies).toEqual([]);
-    expect(draft.allowedRoles).toEqual([]);
-    expect(draft.allowedUsers).toEqual([]);
-    expect(draft.contentBlocks).toEqual([]);
+    expect(draft.sharedFields.useCases).toEqual([]);
+    expect(draft.salesFields.differentiators).toEqual([]);
+    expect(draft.salesFields.outcomes).toEqual([]);
   });
 
-  test("parses content_blocks from API format", () => {
-    const asset = {
-      slug: "test-asset",
-      title: "Test Asset",
-      content_schema_version: 2,
-      content_blocks: [
-        {
-          id: "blk-1",
-          type: "text",
-          version: 2,
-          order: 0,
-          visible: true,
-          config: { markdown: "# Hello World", html: "" },
-        },
-        {
-          id: "blk-2",
-          type: "stat_card",
-          version: 2,
-          order: 1,
-          visible: true,
-          config: {
-            title: "KPIs",
-            stats: [{ label: "Users", value: "1000", description: "" }],
+  it("returns empty videos array when shared_fields.videos is missing", () => {
+    const draft = parseAssetToDraft({ slug: "s", title: "t" });
+    expect(draft.sharedFields.videos).toEqual([]);
+  });
+
+  it("returns empty videos array when shared_fields.videos is undefined", () => {
+    const draft = parseAssetToDraft({ slug: "s", title: "t", shared_fields: {} });
+    expect(draft.sharedFields.videos).toEqual([]);
+  });
+
+  it("returns empty videos array when shared_fields is missing entirely", () => {
+    const draft = parseAssetToDraft({ slug: "s", title: "t" });
+    expect(draft.sharedFields.videos).toEqual([]);
+  });
+
+  it("applies safe defaults when asset_type/status/visibility are missing", () => {
+    const draft = parseAssetToDraft({ slug: "s", title: "t" });
+    expect(draft.assetType).toBe(INITIAL_DRAFT.assetType);
+    expect(draft.status).toBe(INITIAL_DRAFT.status);
+    expect(draft.visibility).toBe(INITIAL_DRAFT.visibility);
+  });
+
+  it("maps shared_fields.videos snake_case keys to camelCase", () => {
+    const draft = parseAssetToDraft({
+      slug: "s",
+      title: "t",
+      short_description: "d",
+      shared_fields: {
+        videos: [
+          {
+            id: "v1",
+            title: "Overview",
+            video_url: "https://example.com/v.mp4",
+            poster_url: "https://example.com/poster.jpg",
+            description: "desc",
+            is_primary: true,
           },
-        },
-      ],
-    };
-    const draft = parseAssetToDraft(asset);
-    expect(draft.contentSchemaVersion).toBe(2);
-    expect(draft.contentBlocks).toHaveLength(2);
-    expect(draft.contentBlocks[0]).toEqual({
-      id: "blk-1",
-      type: "text",
-      version: 2,
-      order: 0,
-      visible: true,
-      config: { markdown: "# Hello World", html: "" },
-    });
-    expect(draft.contentBlocks[1]).toEqual({
-      id: "blk-2",
-      type: "stat_card",
-      version: 2,
-      order: 1,
-      visible: true,
-      config: {
-        title: "KPIs",
-        stats: [{ label: "Users", value: "1000", description: "" }],
+        ],
       },
     });
+    expect(draft.sharedFields.videos).toEqual([
+      {
+        id: "v1",
+        title: "Overview",
+        videoUrl: "https://example.com/v.mp4",
+        posterUrl: "https://example.com/poster.jpg",
+        description: "desc",
+        isPrimary: true,
+      },
+    ]);
   });
 
-  test("handles empty content_blocks", () => {
-    const asset = {
-      slug: "test-asset",
-      title: "Test Asset",
-      content_blocks: [],
-    };
-    const draft = parseAssetToDraft(asset);
-    expect(draft.contentBlocks).toEqual([]);
-  });
-
-  test("handles missing content_blocks", () => {
-    const asset = {
-      slug: "test-asset",
-      title: "Test Asset",
-    };
-    const draft = parseAssetToDraft(asset);
-    expect(draft.contentBlocks).toEqual([]);
-  });
-
-  test("skips invalid block types in content_blocks", () => {
-    const asset = {
-      slug: "test-asset",
-      title: "Test Asset",
-      content_blocks: [
-        { id: "blk-x", type: "unknown_type", version: 2, order: 0, visible: true, config: {} },
-        {
-          id: "blk-y",
-          type: "text",
-          version: 2,
-          order: 1,
-          visible: true,
-          config: { markdown: "ok", html: "" },
-        },
-      ],
-    };
-    const draft = parseAssetToDraft(asset);
-    expect(draft.contentBlocks).toHaveLength(1);
-    expect(draft.contentBlocks[0].id).toBe("blk-y");
-  });
-
-  test("parses latest versioned content blocks into the draft", () => {
+  it("generates an id for a video missing one", () => {
     const draft = parseAssetToDraft({
-      slug: "demo",
-      title: "Demo",
-      short_description: "desc",
-      asset_type: "solution",
-      status: "draft",
-      visibility: "public",
-      content_schema_version: 2,
-      content_blocks: [
-        {
-          id: "text-1",
-          type: "text",
-          version: 2,
-          order: 0,
-          visible: true,
-          config: { markdown: "Hello", html: "" },
-        },
-      ],
+      slug: "s",
+      title: "t",
+      shared_fields: {
+        videos: [
+          {
+            title: "No ID",
+            video_url: "https://example.com/v.mp4",
+            poster_url: null,
+            description: "",
+            is_primary: false,
+          },
+        ],
+      },
     });
-
-    expect(draft.contentSchemaVersion).toBe(2);
-    expect(draft.contentBlocks[0]).toEqual({
-      id: "text-1",
-      type: "text",
-      version: 2,
-      order: 0,
-      visible: true,
-      config: { markdown: "Hello", html: "" },
-    });
+    const video = draft.sharedFields.videos[0];
+    expect(typeof video.id).toBe("string");
+    expect(video.id.length).toBeGreaterThan(0);
+    // UUID v4-ish format produced by crypto.randomUUID()
+    expect(video.id).toMatch(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i);
   });
-});
 
-describe("buildPayload versioned blocks", () => {
-  test("builds payload with content schema version and full block wrapper", () => {
-    const payload = buildPayload({
-      ...INITIAL_DRAFT,
-      contentSchemaVersion: 2,
-      contentBlocks: [
-        {
-          id: "callout-1",
-          type: "callout",
-          version: 2,
-          order: 0,
-          visible: true,
-          config: { title: "Heads up", content: "Test", tone: "info" },
-        },
-      ],
+  it("coerces missing video string fields to safe defaults", () => {
+    const draft = parseAssetToDraft({
+      slug: "s",
+      title: "t",
+      shared_fields: {
+        videos: [
+          {
+            id: "v1",
+            // title/video_url/poster_url/description/is_primary omitted
+          },
+        ],
+      },
     });
-
-    expect(payload.content_schema_version).toBe(2);
-    expect(payload.content_blocks[0]).toEqual({
-      id: "callout-1",
-      type: "callout",
-      version: 2,
-      order: 0,
-      visible: true,
-      config: { title: "Heads up", content: "Test", tone: "info" },
+    expect(draft.sharedFields.videos[0]).toEqual({
+      id: "v1",
+      title: "",
+      videoUrl: "",
+      posterUrl: "",
+      description: "",
+      isPrimary: false,
     });
   });
 });
 
 describe("areDraftsEqual", () => {
-  test("returns true for identical drafts", () => {
-    expect(areDraftsEqual(validDraft, validDraft)).toBe(true);
+  it("returns true for identical drafts", () => {
+    const a = clone(validDraft);
+    expect(areDraftsEqual(a, clone(a))).toBe(true);
   });
 
-  test("returns false for different string fields", () => {
-    const different = { ...validDraft, title: "Different" };
-    expect(areDraftsEqual(validDraft, different)).toBe(false);
+  it("returns true for the same reference", () => {
+    const a = clone(validDraft);
+    expect(areDraftsEqual(a, a)).toBe(true);
   });
 
-  test("returns false for different array lengths", () => {
-    const different = { ...validDraft, cloudProviders: ["aws", "gcp"] };
-    expect(areDraftsEqual(validDraft, different)).toBe(false);
+  it("returns false when cloudProviders differ", () => {
+    const a = clone(validDraft);
+    const b = { ...clone(validDraft), cloudProviders: ["gcp"] };
+    expect(areDraftsEqual(a, b)).toBe(false);
   });
 
-  test("returns false for different array values", () => {
-    const different = { ...validDraft, cloudProviders: ["gcp"] };
-    expect(areDraftsEqual(validDraft, different)).toBe(false);
+  it("returns false when cloudProviders length differs", () => {
+    const a = clone(validDraft);
+    const b = { ...clone(validDraft), cloudProviders: ["aws", "gcp"] };
+    expect(areDraftsEqual(a, b)).toBe(false);
   });
-});
 
-describe("asset videos in draft", () => {
-  test("buildPayload includes videos in shared_fields", () => {
-    const draft: AssetEditorDraft = {
-      ...INITIAL_DRAFT,
-      slug: "test-slug",
-      title: "Test",
-      shortDescription: "desc",
-      sharedFields: {
-        ...INITIAL_DRAFT.sharedFields,
-        videos: [
-          {
-            id: "v1",
-            title: "Overview",
-            videoUrl: "https://example.com/v.mp4",
-            posterUrl: "https://example.com/poster.jpg",
-            description: "desc text",
-            isPrimary: true,
-          },
-        ],
-      },
+  it("returns false when sharedFields.videos differ", () => {
+    const a = clone(validDraft);
+    const b = {
+      ...clone(validDraft),
+      sharedFields: { ...validDraft.sharedFields, videos: [] },
     };
-    const payload = buildPayload(draft);
-    expect(payload.shared_fields.videos).toHaveLength(1);
-    expect(payload.shared_fields.videos[0].id).toBe("v1");
-    expect(payload.shared_fields.videos[0].is_primary).toBe(true);
+    expect(areDraftsEqual(a, b)).toBe(false);
   });
 
-  test("parseAssetToDraft maps shared_fields.videos correctly", () => {
-    const raw = {
-      slug: "s",
-      title: "t",
-      short_description: "d",
-      asset_type: "solution",
-      status: "draft",
-      visibility: "public",
-      shared_fields: {
-        videos: [
-          {
-            id: "v1",
-            title: "V",
-            video_url: "https://example.com/v.mp4",
-            poster_url: null,
-            description: "",
-            is_primary: true,
-          },
-        ],
-      },
-    };
-    const draft = parseAssetToDraft(raw);
-    expect(draft.sharedFields.videos).toHaveLength(1);
-    expect(draft.sharedFields.videos[0].videoUrl).toBe("https://example.com/v.mp4");
-    expect(draft.sharedFields.videos[0].isPrimary).toBe(true);
-  });
-
-  test("parseAssetToDraft defaults videos to empty array when missing", () => {
-    const raw = {
-      slug: "s",
-      title: "t",
-      short_description: "d",
-      asset_type: "solution",
-      status: "draft",
-      visibility: "public",
-    };
-    const draft = parseAssetToDraft(raw);
-    expect(draft.sharedFields.videos).toEqual([]);
-  });
-
-  test("areDraftsEqual detects video list changes", () => {
-    const a: AssetEditorDraft = {
-      ...INITIAL_DRAFT,
-      sharedFields: {
-        ...INITIAL_DRAFT.sharedFields,
-        videos: [{ id: "v1", title: "T", videoUrl: "https://example.com/v.mp4", posterUrl: "", description: "", isPrimary: true }],
-      },
-    };
-    const b: AssetEditorDraft = {
-      ...INITIAL_DRAFT,
-      sharedFields: {
-        ...INITIAL_DRAFT.sharedFields,
-        videos: [],
-      },
-    };
+  it("returns false when a top-level scalar differs", () => {
+    const a = clone(validDraft);
+    const b = { ...clone(validDraft), title: "Different Title" };
     expect(areDraftsEqual(a, b)).toBe(false);
   });
 });

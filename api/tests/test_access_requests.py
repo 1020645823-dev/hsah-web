@@ -27,13 +27,9 @@ def _restricted_asset(db_session, slug: str) -> Asset:
         technologies=[],
         asset_type="solution",
         status="published",
-        content_schema_version=1,
-        content_blocks=[],
+        visibility="restricted",
         shared_fields={},
         sales_fields={},
-        delivery_fields={"implementation_summary": "secret"},
-        delivery_allowed_roles=["delivery"],
-        delivery_allowed_users=[],
     )
     db_session.add(asset)
     db_session.commit()
