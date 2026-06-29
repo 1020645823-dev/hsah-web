@@ -1,6 +1,8 @@
-import { render, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import "@testing-library/jest-dom/vitest";
 import { describe, expect, it } from "vitest";
+
+import { render } from "@/test-utils";
 
 import { AuthRedirectPanel } from "./auth-redirect-panel";
 

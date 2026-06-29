@@ -28,13 +28,13 @@ export default async function ScenariosPage({
             <>
               <Link
                 href="/architecture"
-                className="inline-flex h-11 items-center justify-center rounded-md bg-primary px-6 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
+                className="inline-flex h-11 items-center justify-center rounded-lg bg-primary px-6 text-sm font-semibold text-primary-foreground transition-all hover:bg-primary/90 active:translate-y-px"
               >
                 {t("viewArchitectures")}
               </Link>
               <Link
                 href="/community"
-                className="inline-flex h-11 items-center justify-center rounded-md border border-border bg-background px-6 text-sm font-medium text-foreground transition-colors hover:bg-muted"
+                className="inline-flex h-11 items-center justify-center rounded-lg border border-border bg-background px-6 text-sm font-medium text-foreground transition-all hover:bg-muted active:translate-y-px"
               >
                 {t("joinCommunity")}
               </Link>
@@ -45,9 +45,9 @@ export default async function ScenariosPage({
         <PublicMetricStrip
           items={[
             { value: `${scenarioSlugs.length}`, label: t("allScenarios") },
-            { value: "3", label: t("phases") },
-            { value: t("businessOutcome"), label: t("industry") },
-            { value: t("phases"), label: t("businessOutcome") },
+            { value: "3", label: t("phasesPerScenario") },
+            { value: "3", label: t("industriesServed") },
+            { value: "3", label: t("outcomesTracked") },
           ]}
         />
 

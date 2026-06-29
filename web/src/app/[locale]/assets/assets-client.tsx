@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { List, LayoutGrid, ArrowUpRight, SearchX } from "lucide-react";
 import { useMemo, useState } from "react";
+import { useTranslations } from "next-intl";
 
 import { EmptyState } from "@/components/empty-state";
 import { FilterToolbar } from "@/components/product/filter-toolbar";
@@ -37,11 +38,11 @@ type AssetFilterState = {
   view: "grid" | "list";
 };
 
-type SortOption = { value: AssetFilterState["sort"]; label: string };
+type SortOption = { value: AssetFilterState["sort"]; labelKey: "sortTitle" | "sortRecentlyUpdated" };
 
 const SORT_OPTIONS: readonly SortOption[] = [
-  { value: "title", label: "Title" },
-  { value: "updated_at", label: "Recently updated" },
+  { value: "title", labelKey: "sortTitle" },
+  { value: "updated_at", labelKey: "sortRecentlyUpdated" },
 ];
 
 function toFilterState(query: PublicAssetQuery): AssetFilterState {
@@ -88,15 +89,15 @@ function StatusBadge({ status }: { status: string }) {
   const isPublished = status === "published";
   return (
     <span
-      className={`inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-medium ${
+      className={`inline-flex items-center rounded-md px-2 py-0.5 text-[11px] font-medium ${
         isPublished
-          ? "bg-emerald-500/10 text-emerald-400 ring-1 ring-emerald-500/20"
-          : "bg-amber-500/10 text-amber-400 ring-1 ring-amber-500/20"
+          ? "bg-emerald-500/10 text-emerald-600 ring-1 ring-emerald-500/20 dark:text-emerald-400"
+          : "bg-amber-500/10 text-amber-600 ring-1 ring-amber-500/20 dark:text-amber-400"
       }`}
     >
       <span
         className={`mr-1.5 inline-block h-1 w-1 rounded-full ${
-          isPublished ? "bg-emerald-400" : "bg-amber-400"
+          isPublished ? "bg-emerald-500 dark:bg-emerald-400" : "bg-amber-500 dark:bg-amber-400"
         }`}
       />
       {status}
@@ -106,7 +107,7 @@ function StatusBadge({ status }: { status: string }) {
 
 function CloudBadge({ provider }: { provider: string }) {
   return (
-    <span className="inline-flex items-center rounded-full border border-border/60 bg-muted/40 px-2.5 py-1 text-xs font-medium text-muted-foreground transition-colors hover:bg-muted/60">
+    <span className="inline-flex items-center rounded-md border border-border/60 bg-muted/40 px-2 py-0.5 text-[11px] font-medium text-muted-foreground transition-colors hover:bg-muted/60">
       {provider.toUpperCase()}
     </span>
   );
@@ -114,7 +115,7 @@ function CloudBadge({ provider }: { provider: string }) {
 
 function TechBadge({ technology }: { technology: string }) {
   return (
-    <span className="inline-flex items-center rounded-full bg-primary/8 px-2.5 py-1 text-xs font-medium text-primary ring-1 ring-primary/15 transition-colors hover:bg-primary/12">
+    <span className="inline-flex items-center rounded-md bg-primary/8 px-2 py-0.5 text-[11px] font-medium text-primary ring-1 ring-primary/15 transition-colors hover:bg-primary/12">
       {technology}
     </span>
   );
@@ -123,6 +124,8 @@ function TechBadge({ technology }: { technology: string }) {
 export function AssetsClient({ initialResponse, initialQuery }: AssetsClientProps) {
   const router = useRouter();
   const pathname = usePathname();
+  const t = useTranslations("Assets");
+  const tCommon = useTranslations("Common");
   const [filters, setFilters] = useState<AssetFilterState>(() => toFilterState(initialQuery));
 
   const [isLoading, setIsLoading] = useState(false);
@@ -215,29 +218,29 @@ export function AssetsClient({ initialResponse, initialQuery }: AssetsClientProp
   return (
     <div className="space-y-8">
       <PageHeader
-        eyebrow="ASSET LIBRARY"
-        title="Asset Library"
-        summary="Search reusable demos, architectures, and implementation references."
+        eyebrow={t("eyebrow")}
+        title={t("title")}
+        summary={t("summary")}
         actions={
           <button
             type="button"
-              className="inline-flex h-11 items-center rounded-lg border border-border px-4 text-sm text-muted-foreground transition-colors hover:border-primary/40 hover:text-foreground"
+            className="inline-flex h-11 items-center rounded-lg border border-border px-4 text-sm text-muted-foreground transition-colors hover:border-primary/40 hover:text-foreground"
           >
-            Saved filters
+            {t("savedFilters")}
           </button>
         }
       />
 
       <FilterToolbar
-        resultsLabel={`${initialResponse.total} results`}
+        resultsLabel={t("results", { count: initialResponse.total })}
         persistentControl={
           <label className="space-y-2 text-sm text-foreground/70">
-            <span>Search assets</span>
+            <span>{t("searchLabel")}</span>
             <input
-              aria-label="Search assets"
+              aria-label={t("searchLabel")}
               value={filters.q}
               onChange={(event) => updateField("q", event.target.value)}
-              placeholder="Search by title or description"
+              placeholder={t("searchPlaceholder")}
               className="h-11 w-full rounded-xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-foreground/50 outline-none transition-colors focus:border-primary"
             />
           </label>
@@ -249,7 +252,7 @@ export function AssetsClient({ initialResponse, initialQuery }: AssetsClientProp
               onClick={clearFilters}
               className="h-11 rounded-lg border border-border px-4 text-sm text-foreground transition-colors hover:bg-muted"
             >
-              Clear filters
+              {tCommon("clearFilters")}
             </button>
           ) : undefined
         }
@@ -257,62 +260,62 @@ export function AssetsClient({ initialResponse, initialQuery }: AssetsClientProp
           <button
             type="button"
             onClick={applyFilters}
-            className="inline-flex h-11 items-center rounded-lg bg-primary px-4 text-sm font-medium text-primary-foreground transition-colors hover:opacity-90"
+            className="inline-flex h-11 items-center rounded-lg bg-primary px-4 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
           >
-            Apply filters
+            {tCommon("applyFilters")}
           </button>
         }
         extraControls={
           <div className="flex flex-wrap items-center gap-3">
-              <label className="flex min-w-0 flex-1 items-center gap-2 text-sm text-muted-foreground sm:flex-none">
-                <span>Sort by</span>
-                <select
-                  aria-label="Sort by"
-                  value={filters.sort}
-                  onChange={(event) => changeSort(event.target.value as AssetFilterState["sort"])}
-                  className="h-11 min-w-0 flex-1 rounded-lg border border-border bg-background px-3 text-sm text-foreground outline-none transition-colors focus:border-primary sm:flex-none"
-                >
-                  {SORT_OPTIONS.map((option) => (
-                    <option key={option.value} value={option.value}>
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
-              </label>
-              <div className="flex items-center gap-1 rounded-lg border border-border p-1">
-                <button
-                  type="button"
-                  aria-label="Grid view"
-                  onClick={() => changeView("grid")}
-                  className={`inline-flex size-11 items-center justify-center rounded-md transition-colors sm:size-8 ${
-                    filters.view === "grid" ? "bg-muted text-foreground" : "text-muted-foreground hover:text-foreground"
-                  }`}
-                >
-                  <LayoutGrid className="h-4 w-4" />
-                </button>
-                <button
-                  type="button"
-                  aria-label="List view"
-                  onClick={() => changeView("list")}
-                  className={`inline-flex size-11 items-center justify-center rounded-md transition-colors sm:size-8 ${
-                    filters.view === "list" ? "bg-muted text-foreground" : "text-muted-foreground hover:text-foreground"
-                  }`}
-                >
-                  <List className="h-4 w-4" />
-                </button>
-              </div>
+            <label className="flex min-w-0 flex-1 items-center gap-2 text-sm text-muted-foreground sm:flex-none">
+              <span>{t("sortBy")}</span>
+              <select
+                aria-label={t("sortBy")}
+                value={filters.sort}
+                onChange={(event) => changeSort(event.target.value as AssetFilterState["sort"])}
+                className="h-11 min-w-0 flex-1 rounded-lg border border-border bg-background px-3 text-sm text-foreground outline-none transition-colors focus:border-primary sm:flex-none"
+              >
+                {SORT_OPTIONS.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {t(option.labelKey)}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <div className="flex items-center gap-1 rounded-lg border border-border p-1">
+              <button
+                type="button"
+                aria-label={t("gridView")}
+                onClick={() => changeView("grid")}
+                className={`inline-flex size-11 items-center justify-center rounded-md transition-colors sm:size-8 ${
+                  filters.view === "grid" ? "bg-muted text-foreground" : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                <LayoutGrid className="h-4 w-4" />
+              </button>
+              <button
+                type="button"
+                aria-label={t("listView")}
+                onClick={() => changeView("list")}
+                className={`inline-flex size-11 items-center justify-center rounded-md transition-colors sm:size-8 ${
+                  filters.view === "list" ? "bg-muted text-foreground" : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                <List className="h-4 w-4" />
+              </button>
             </div>
+          </div>
         }
       >
         <label className="space-y-2 text-sm text-foreground/70">
-          <span>Cloud</span>
+          <span>{t("cloud")}</span>
           <select
-            aria-label="Cloud"
+            aria-label={t("cloud")}
             value={filters.cloud}
             onChange={(event) => updateField("cloud", event.target.value)}
             className="h-11 w-full rounded-xl border border-border bg-background px-4 text-sm text-foreground outline-none transition-colors focus:border-primary"
           >
-            <option value="">All clouds</option>
+            <option value="">{tCommon("allClouds")}</option>
             {cloudOptions.map((option) => (
               <option key={option} value={option}>
                 {option.toUpperCase()}
@@ -322,14 +325,14 @@ export function AssetsClient({ initialResponse, initialQuery }: AssetsClientProp
         </label>
 
         <label className="space-y-2 text-sm text-foreground/70">
-          <span>Industry</span>
+          <span>{t("industry")}</span>
           <select
-            aria-label="Industry"
+            aria-label={t("industry")}
             value={filters.industry}
             onChange={(event) => updateField("industry", event.target.value)}
             className="h-11 w-full rounded-xl border border-border bg-background px-4 text-sm text-foreground outline-none transition-colors focus:border-primary"
           >
-            <option value="">All industries</option>
+            <option value="">{tCommon("allIndustries")}</option>
             {industryOptions.map((option) => (
               <option key={option} value={option}>
                 {option}
@@ -339,14 +342,14 @@ export function AssetsClient({ initialResponse, initialQuery }: AssetsClientProp
         </label>
 
         <label className="space-y-2 text-sm text-foreground/70">
-          <span>Technology</span>
+          <span>{t("technology")}</span>
           <select
-            aria-label="Technology"
+            aria-label={t("technology")}
             value={filters.tech}
             onChange={(event) => updateField("tech", event.target.value)}
             className="h-11 w-full rounded-xl border border-border bg-background px-4 text-sm text-foreground outline-none transition-colors focus:border-primary"
           >
-            <option value="">All technologies</option>
+            <option value="">{tCommon("allTechnologies")}</option>
             {techOptions.map((option) => (
               <option key={option} value={option}>
                 {option}
@@ -356,14 +359,14 @@ export function AssetsClient({ initialResponse, initialQuery }: AssetsClientProp
         </label>
 
         <label className="space-y-2 text-sm text-foreground/70">
-          <span>Asset type</span>
+          <span>{t("assetType")}</span>
           <select
-            aria-label="Asset type"
+            aria-label={t("assetType")}
             value={filters.assetType}
             onChange={(event) => updateField("assetType", event.target.value)}
             className="h-11 w-full rounded-xl border border-border bg-background px-4 text-sm text-foreground outline-none transition-colors focus:border-primary"
           >
-            <option value="">All asset types</option>
+            <option value="">{tCommon("allAssetTypes")}</option>
             {assetTypeOptions.map((option) => (
               <option key={option} value={option}>
                 {option}
@@ -380,19 +383,19 @@ export function AssetsClient({ initialResponse, initialQuery }: AssetsClientProp
           <AssetListViewSkeleton count={initialResponse.limit} />
         )
       ) : initialResponse.items.length === 0 ? (
-        <div className="rounded-[28px] border border-border bg-card shadow-[var(--shadow-card)]">
+        <div className="rounded-2xl border border-border bg-card shadow-[var(--shadow-card)]">
           <EmptyState
             icon={SearchX}
-            title="No assets matched the current filters."
-            description="Clear the active filters or return to featured assets to see all available content."
+            title={t("emptyClearTitle")}
+            description={t("emptyClearDescription")}
             actions={[
               {
-                label: "Clear filters",
+                label: tCommon("clearFilters"),
                 onClick: clearFilters,
                 variant: "outline",
               },
               {
-                label: "Browse all",
+                label: tCommon("browseAll"),
                 onClick: () => router.push("/assets"),
               },
             ]}
@@ -428,14 +431,14 @@ export function AssetsClient({ initialResponse, initialQuery }: AssetsClientProp
                   <TechBadge key={technology} technology={technology} />
                 ))}
                 {asset.technologies.length > 2 && (
-                  <span className="inline-flex items-center rounded-full bg-muted/40 px-2.5 py-1 text-xs font-medium text-muted-foreground">
+                  <span className="inline-flex items-center rounded-md bg-muted/40 px-2 py-0.5 text-[11px] font-medium text-muted-foreground">
                     +{asset.technologies.length - 2}
                   </span>
                 )}
               </div>
 
               <div className="mt-4 flex items-center gap-1.5 text-xs font-medium text-primary opacity-0 transition-opacity duration-200 group-hover:opacity-100">
-                <span>View details</span>
+                <span>{tCommon("viewDetails")}</span>
                 <ArrowUpRight className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
               </div>
             </Link>
@@ -467,7 +470,7 @@ export function AssetsClient({ initialResponse, initialQuery }: AssetsClientProp
                     <TechBadge key={technology} technology={technology} />
                   ))}
                   {asset.technologies.length > 2 && (
-                    <span className="inline-flex items-center rounded-full bg-muted/40 px-2 py-0.5 text-[11px] font-medium text-muted-foreground">
+                    <span className="inline-flex items-center rounded-md bg-muted/40 px-2 py-0.5 text-[11px] font-medium text-muted-foreground">
                       +{asset.technologies.length - 2}
                     </span>
                   )}
@@ -485,26 +488,26 @@ export function AssetsClient({ initialResponse, initialQuery }: AssetsClientProp
 
       <div className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-border bg-card px-5 py-4 shadow-[var(--shadow-card)]">
         <div className="text-sm text-muted-foreground">
-          Page {currentPage} of {totalPages}
+          {t("pageIndicator", { currentPage, totalPages })}
         </div>
         <div className="flex items-center gap-3">
           <button
             type="button"
-            aria-label="Previous page"
+            aria-label={t("previousPage")}
             onClick={() => goToPage(currentPage - 1)}
             disabled={currentPage <= 1}
-            className="h-11 rounded-md border border-border px-4 text-sm text-foreground transition-colors hover:bg-muted disabled:cursor-not-allowed disabled:opacity-40"
+            className="h-11 rounded-lg border border-border px-4 text-sm text-foreground transition-colors hover:bg-muted disabled:cursor-not-allowed disabled:opacity-40"
           >
-            Previous
+            {tCommon("previous")}
           </button>
           <button
             type="button"
-            aria-label="Next page"
+            aria-label={t("nextPage")}
             onClick={() => goToPage(currentPage + 1)}
             disabled={currentPage >= totalPages}
-            className="h-11 rounded-md border border-border px-4 text-sm text-foreground transition-colors hover:bg-muted disabled:cursor-not-allowed disabled:opacity-40"
+            className="h-11 rounded-lg border border-border px-4 text-sm text-foreground transition-colors hover:bg-muted disabled:cursor-not-allowed disabled:opacity-40"
           >
-            Next
+            {tCommon("next")}
           </button>
         </div>
       </div>

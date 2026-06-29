@@ -1,6 +1,7 @@
 import { describe, expect, it, vi, beforeEach, afterEach } from "vitest";
-import { render, screen, cleanup } from "@testing-library/react";
+import { screen, cleanup } from "@testing-library/react";
 import "@testing-library/jest-dom/vitest";
+import { render } from "@/test-utils";
 import { ErrorBoundary } from "./error-boundary";
 
 const ThrowError = ({ message }: { message: string }) => {

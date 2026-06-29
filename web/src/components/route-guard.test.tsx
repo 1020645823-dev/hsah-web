@@ -1,6 +1,8 @@
 import { describe, expect, it, vi, beforeEach } from "vitest";
-import { render, screen, waitFor } from "@testing-library/react";
+import { screen, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom/vitest";
+
+import { render } from "@/test-utils";
 
 const { mockUseAuth, mockReplace, mockPush } = vi.hoisted(() => ({
   mockUseAuth: vi.fn(),

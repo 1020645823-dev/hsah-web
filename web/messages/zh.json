@@ -68,11 +68,12 @@
         "label": "统一公共入口"
       }
     },
-    "valueEyebrow": "平台价值",
-    "valueTitle": "先对齐利益相关方，再进入实施细节。",
-    "valueSummary": "首页现在阐明产品定位、展示真实精选资产，并在用户进入资产库前将每个角色引导到最相关的内容通道。",
+  "valueEyebrow": "平台价值",
+  "valueTitle": "在深入实施细节前先对齐利益相关方",
+  "valueSummary": "从业务成果出发，走通场景，再落到可复用架构，最后才打开资产库。",
     "goToLibrary": "前往资产库",
     "browseScenarios": "浏览场景",
+    "joinCommunity": "加入社区",
     "ctaLabel": "Sign in"
   },
   "Assets": {
@@ -247,6 +248,7 @@
     "startHere": "START HERE"
   },
   "ContentLanes": {
+    "browseAll": "浏览全部",
     "eyebrow": "内容通道",
     "title": "从你的角色需要出发",
     "summary": "四条内容通道帮助团队从业务问题推进到可复用实施资产。",
@@ -303,8 +305,8 @@
     "redirecting": "正在跳转到登录页",
     "protectedRoute": "受保护路由",
     "adminRequired": "需要后台访问权限才能继续。",
-    "checkingMessage": "Checking your session before loading admin tools.",
-    "signinRequired": "You need to sign in before accessing admin routes."
+    "checkingMessage": "正在加载后台工具前检查您的会话。",
+    "signinRequired": "访问后台路由前需要先登录。"
   },
   "PublicSite": {
     "skipToContent": "跳到正文",
@@ -317,7 +319,9 @@
       "details": "详情",
       "related": "相关内容"
     },
-    "brandTagline": "AI delivery content platform"
+    "brandTagline": "AI 交付内容平台",
+    "openMenu": "打开菜单",
+    "closeMenu": "关闭菜单"
   },
   "FilterToolbar": {
     "filters": "筛选",
@@ -346,6 +350,9 @@
     "businessOutcome": "业务成果",
     "industry": "行业",
     "phases": "阶段",
+    "phasesPerScenario": "阶段/场景",
+    "industriesServed": "覆盖行业",
+    "outcomesTracked": "可量化成果",
     "items": {
       "intelligentCustomerOperations": {
         "slug": "intelligent-customer-operations",
@@ -495,6 +502,9 @@
     "layers": "层级",
     "governance": "治理",
     "deploymentNotes": "部署说明",
+    "aboutPlatform": "关于平台",
+    "industriesCovered": "覆盖行业",
+    "focusAreas": "控制域",
     "items": {
       "agenticServiceMesh": {
         "slug": "agentic-service-mesh",
@@ -680,6 +690,10 @@
     "keyPoints": "关键要点",
     "published": "发布日期",
     "readTime": "阅读时间",
+    "joinCommunity": "加入社区",
+    "topicsCovered": "覆盖主题",
+    "readTimeLabel": "分钟/篇",
+    "keyPointsPerInsight": "要点/篇",
     "items": {
       "fromPrototypesToGovernedAiProducts": {
         "slug": "from-prototypes-to-governed-ai-products",
@@ -776,6 +790,9 @@
     "audience": "适合人群",
     "location": "地点",
     "format": "形式",
+    "formatsOffered": "项目形式",
+    "deliveryModes": "交付模式",
+    "cadence": "频次",
     "items": {
       "buildersRoundtableQ3": {
         "slug": "builders-roundtable-q3",
@@ -1461,20 +1478,20 @@
     }
   },
   "Auth": {
-    "authentication": "Authentication",
-    "goToPublicLibrary": "Go to public library",
-    "libraryReturnPath": "Library return path",
-    "libraryReturnPathDesc": "You can always return to the public library after authentication.",
-    "publicLibraryAvailable": "Public library remains available for discovery.",
-    "redirectingToSignIn": "Redirecting to sign in",
-    "workspaceContext": "Workspace context",
-    "workspaceContextDesc": "Keep the current workspace in focus while the session is restored."
+    "authentication": "身份认证",
+    "goToPublicLibrary": "前往公共资产库",
+    "libraryReturnPath": "资产库返回路径",
+    "libraryReturnPathDesc": "完成身份认证后，您随时可以返回公共资产库。",
+    "publicLibraryAvailable": "公共资产库仍可用于内容发现。",
+    "redirectingToSignIn": "正在跳转到登录页",
+    "workspaceContext": "工作区上下文",
+    "workspaceContextDesc": "在会话恢复期间保持当前工作区焦点。"
   },
   "ErrorBoundary": {
-    "backToHome": "Back to home",
-    "errorDetails": "Error details",
-    "reloadPage": "Reload page",
-    "somethingWentWrong": "Something went wrong",
-    "unexpectedError": "An unexpected error occurred. Please try reloading the page or return home."
+    "backToHome": "返回首页",
+    "errorDetails": "错误详情",
+    "reloadPage": "重新加载页面",
+    "somethingWentWrong": "出错了",
+    "unexpectedError": "发生了意外错误。请重新加载页面或返回首页。"
   }
 }

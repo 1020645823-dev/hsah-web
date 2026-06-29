@@ -8,32 +8,32 @@ const calloutVariantStyles = {
   info: {
     border: "border-l-blue-500",
     icon: Info,
-    iconColor: "text-blue-400",
+    iconColor: "text-blue-600 dark:text-blue-400",
     bg: "bg-blue-500/5",
   },
   warning: {
-    border: "border-l-yellow-500",
+    border: "border-l-amber-500",
     icon: AlertTriangle,
-    iconColor: "text-yellow-400",
-    bg: "bg-yellow-500/5",
+    iconColor: "text-amber-600 dark:text-amber-400",
+    bg: "bg-amber-500/5",
   },
   error: {
     border: "border-l-red-500",
     icon: AlertCircle,
-    iconColor: "text-red-400",
+    iconColor: "text-red-600 dark:text-red-400",
     bg: "bg-red-500/5",
   },
   success: {
-    border: "border-l-green-500",
+    border: "border-l-emerald-500",
     icon: Lightbulb,
-    iconColor: "text-green-400",
-    bg: "bg-green-500/5",
+    iconColor: "text-emerald-600 dark:text-emerald-400",
+    bg: "bg-emerald-500/5",
   },
   tip: {
-    border: "border-l-green-500",
+    border: "border-l-emerald-500",
     icon: Lightbulb,
-    iconColor: "text-green-400",
-    bg: "bg-green-500/5",
+    iconColor: "text-emerald-600 dark:text-emerald-400",
+    bg: "bg-emerald-500/5",
   },
 };
 
@@ -41,7 +41,7 @@ function TextBlock({ html, markdown }: { html?: string; markdown?: string }) {
   const content = html || markdown || "";
   return (
     <div
-      className="prose-invert max-w-none space-y-2 text-sm leading-7 text-[var(--color-text-secondary)] [&_h1]:text-2xl [&_h1]:font-semibold [&_h1]:text-[var(--color-text-primary)] [&_h2]:text-xl [&_h2]:font-semibold [&_h2]:text-[var(--color-text-primary)] [&_h3]:text-lg [&_h3]:font-medium [&_h3]:text-[var(--color-text-primary)] [&_ul]:list-disc [&_ul]:pl-5 [&_li]:my-1 [&_a]:text-[var(--color-electric-purple)] [&_a]:underline [&_strong]:text-[var(--color-text-primary)]"
+      className="prose max-w-none space-y-2 text-sm leading-7 text-muted-foreground [&_h1]:text-2xl [&_h1]:font-semibold [&_h1]:text-foreground [&_h2]:text-xl [&_h2]:font-semibold [&_h2]:text-foreground [&_h3]:text-lg [&_h3]:font-medium [&_h3]:text-foreground [&_ul]:list-disc [&_ul]:pl-5 [&_li]:my-1 [&_a]:text-primary [&_a]:underline [&_strong]:text-foreground"
       dangerouslySetInnerHTML={{ __html: content }}
     />
   );
@@ -53,10 +53,10 @@ function StatCardBlock({ items }: { items: Array<{ label: string; value: string 
       {items.map((item, idx) => (
         <div
           key={idx}
-          className="rounded-2xl border border-[rgb(212_218_245_/12%)] bg-[rgb(18_18_26_/72%)] px-5 py-5 shadow-[var(--shadow-card)] backdrop-blur-[24px]"
+          className="rounded-2xl border border-border bg-card px-5 py-5 shadow-[var(--shadow-card)]"
         >
-          <div className="text-2xl font-semibold text-[var(--color-text-primary)]">{item.value}</div>
-          <div className="mt-2 text-sm text-[var(--color-text-secondary)]">{item.label}</div>
+          <div className="text-2xl font-semibold text-foreground">{item.value}</div>
+          <div className="mt-2 text-sm text-muted-foreground">{item.label}</div>
         </div>
       ))}
     </div>
@@ -81,12 +81,12 @@ function ImageBlock({
         alt={alt}
         width={800}
         height={600}
-        className="rounded-lg border border-[rgb(212_218_245_/12%)] bg-[rgb(18_18_26_/72%)]"
+        className="rounded-lg border border-border bg-muted"
         style={{ maxWidth: width ? `${width}%` : "100%", height: "auto" }}
         unoptimized
       />
       {caption ? (
-        <figcaption className="text-center text-sm text-[var(--color-text-tertiary)]">{caption}</figcaption>
+        <figcaption className="text-center text-sm text-muted-foreground">{caption}</figcaption>
       ) : null}
     </figure>
   );
@@ -105,11 +105,11 @@ function CodeSnippetBlock({
 }) {
   const lines = code.split("\n");
   return (
-    <div className="overflow-hidden rounded-xl border border-[rgb(212_218_245_/12%)] bg-[rgb(10_12_18_/90%)]">
-      <div className="flex items-center justify-between border-b border-[rgb(212_218_245_/10%)] px-4 py-2">
-        <span className="text-xs font-medium text-[var(--color-text-tertiary)]">{language}</span>
+    <div className="overflow-hidden rounded-xl border border-border bg-zinc-950">
+      <div className="flex items-center justify-between border-b border-white/10 px-4 py-2">
+        <span className="text-xs font-medium text-zinc-400">{language}</span>
         {filename ? (
-          <span className="text-xs font-medium text-[var(--color-text-tertiary)]">{filename}</span>
+          <span className="text-xs font-medium text-zinc-400">{filename}</span>
         ) : null}
       </div>
       <div className="overflow-x-auto p-4">
@@ -118,11 +118,11 @@ function CodeSnippetBlock({
             {lines.map((line, idx) => (
               <div key={idx} className="flex">
                 {showLineNumbers ? (
-                  <span className="mr-4 inline-block w-8 select-none text-right text-[var(--color-text-tertiary)]">
+                  <span className="mr-4 inline-block w-8 select-none text-right text-zinc-600">
                     {idx + 1}
                   </span>
                 ) : null}
-                <span className="text-[var(--color-text-secondary)]">{line || " "}</span>
+                <span className="text-zinc-300">{line || " "}</span>
               </div>
             ))}
           </code>
@@ -145,17 +145,17 @@ function CalloutBlock({
   const Icon = style.icon;
   return (
     <div
-      className={`rounded-r-xl border-l-4 ${style.border} ${style.bg} px-5 py-4`}
+      className={`rounded-r-lg border-l-4 ${style.border} ${style.bg} px-5 py-4`}
     >
       <div className="flex items-center gap-2">
         <Icon className={`size-4 ${style.iconColor}`} />
         {title ? (
-          <span className="text-sm font-semibold text-[var(--color-text-primary)]">{title}</span>
+          <span className="text-sm font-semibold text-foreground">{title}</span>
         ) : (
-          <span className="text-sm font-semibold capitalize text-[var(--color-text-primary)]">{tone}</span>
+          <span className="text-sm font-semibold capitalize text-foreground">{tone}</span>
         )}
       </div>
-      <div className="mt-2 text-sm leading-6 text-[var(--color-text-secondary)]">{content}</div>
+      <div className="mt-2 text-sm leading-6 text-muted-foreground">{content}</div>
     </div>
   );
 }

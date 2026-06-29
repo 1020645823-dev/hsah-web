@@ -1,6 +1,7 @@
-import { render } from "@testing-library/react";
 import "@testing-library/jest-dom/vitest";
 import { describe, expect, it, vi } from "vitest";
+
+import { render } from "@/test-utils";
 
 import { PublicAssetDetailClient } from "./public-asset-detail-client";
 

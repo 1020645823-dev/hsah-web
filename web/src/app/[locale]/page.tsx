@@ -20,7 +20,7 @@ export default async function Home({
 
   return (
     <PublicSiteShell ctaHref="/auth/login" ctaLabel={t("ctaLabel")}>
-      <div className="space-y-10">
+      <div className="space-y-12">
         <PublicSectionHero
           eyebrow={t("heroEyebrow")}
           title={t("heroTitle")}
@@ -29,14 +29,14 @@ export default async function Home({
             <>
               <Link
                 href="/assets"
-                className="group inline-flex h-12 items-center justify-center gap-2 rounded-md bg-primary px-7 text-sm font-semibold text-primary-foreground transition-all duration-200 hover:gap-3 hover:bg-primary/90"
+                className="group inline-flex h-12 items-center justify-center gap-2 rounded-lg bg-primary px-7 text-sm font-semibold text-primary-foreground transition-all duration-200 hover:gap-3 hover:bg-primary/90 active:translate-y-px"
               >
                 {t("primaryCta")}
                 <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
               </Link>
               <Link
                 href="/about"
-                className="inline-flex h-12 items-center justify-center rounded-md border border-border bg-background px-7 text-sm font-medium text-foreground transition-all duration-200 hover:bg-muted"
+                className="inline-flex h-12 items-center justify-center rounded-lg border border-border bg-background px-7 text-sm font-medium text-foreground transition-all duration-200 hover:bg-muted active:translate-y-px"
               >
                 {t("secondaryCta")}
               </Link>
@@ -57,30 +57,29 @@ export default async function Home({
 
         <HomepageFeaturedAssets />
 
-        <div className="rounded-2xl border border-border bg-card p-7 shadow-[var(--shadow-card)] md:p-8">
+        <div className="rounded-2xl border border-border bg-card p-7 shadow-[var(--shadow-card)] md:p-9">
           <div className="grid gap-6 md:grid-cols-[1.3fr_0.9fr] md:items-center">
             <div>
-              <div className="text-xs font-medium tracking-[0.18em] text-primary">{t("valueEyebrow")}</div>
-              <h2 className="mt-3 text-3xl font-semibold tracking-[-0.02em] text-foreground">
+              <h2 className="text-2xl font-semibold tracking-[-0.02em] text-foreground md:text-3xl">
                 {t("valueTitle")}
               </h2>
-              <p className="mt-3 max-w-2xl text-sm leading-6 text-muted-foreground">
+              <p className="mt-3 max-w-2xl text-sm leading-7 text-muted-foreground md:text-base">
                 {t("valueSummary")}
               </p>
             </div>
             <div className="flex flex-col gap-3">
               <Link
-                href="/assets"
-                className="group inline-flex h-11 items-center justify-center gap-2 rounded-md bg-primary px-6 text-sm font-medium text-primary-foreground transition-all duration-150 hover:gap-3 hover:bg-primary/90"
+                href="/scenarios"
+                className="group inline-flex h-11 items-center justify-center gap-2 rounded-lg bg-primary px-6 text-sm font-medium text-primary-foreground transition-all duration-150 hover:gap-3 hover:bg-primary/90 active:translate-y-px"
               >
-                {t("goToLibrary")}
+                {t("browseScenarios")}
                 <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
               </Link>
               <Link
-                href="/scenarios"
-                className="inline-flex h-11 items-center justify-center rounded-md border border-border px-6 text-sm font-medium text-foreground transition-colors hover:bg-muted"
+                href="/community"
+                className="inline-flex h-11 items-center justify-center rounded-lg border border-border px-6 text-sm font-medium text-foreground transition-colors hover:bg-muted active:translate-y-px"
               >
-                {t("browseScenarios")}
+                {t("joinCommunity")}
               </Link>
             </div>
           </div>

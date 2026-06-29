@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import { LockKeyhole, ShieldCheck } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { ContentBlockRenderer } from "@/components/content-block-renderer";
 import { normalizeContentAudience, type ContentBlock } from "@/lib/admin-content-blocks";
@@ -38,23 +39,19 @@ function hasDeliveryBlocks(blocks: ContentBlock[]) {
   return blocks.some((block) => normalizeContentAudience(block.audience) === "delivery");
 }
 
-function resolveDeliveryAccessCopy(access: DeliveryAccess) {
+function resolveDeliveryAccessConfig(access: DeliveryAccess) {
   if (access === "signin_required") {
     return {
-      title: "Delivery implementation access",
-      description:
-        "Sign in with an approved role to review runbooks, deployment steps, and delivery notes.",
-      actionHref: "/auth/login",
-      actionLabel: "Sign in",
+      href: "/auth/login",
+      labelKey: "signIn" as const,
+      descriptionKey: "signinRequiredDescription" as const,
     };
   }
 
   return {
-    title: "Delivery implementation access",
-    description:
-      "Request delivery access to review runbooks, deployment steps, and delivery notes.",
-    actionHref: "mailto:hsah.admin@example.com?subject=Delivery%20access%20request",
-    actionLabel: "Request access",
+    href: "mailto:hsah.admin@example.com?subject=Delivery%20access%20request",
+    labelKey: "requestAccess" as const,
+    descriptionKey: "requestAccessDescription" as const,
   };
 }
 
@@ -85,26 +82,30 @@ function ModeButton({
 }
 
 function DeliveryAccessPanel({ access }: { access: Exclude<DeliveryAccess, "granted"> }) {
-  const copy = resolveDeliveryAccessCopy(access);
+  const t = useTranslations("AssetDetail");
+  const tCommon = useTranslations("Common");
+  const config = resolveDeliveryAccessConfig(access);
 
   return (
     <section className="rounded-2xl border border-border bg-card p-6 shadow-[var(--shadow-card)] md:p-8">
       <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
         <div className="space-y-3">
-          <div className="inline-flex items-center gap-2 rounded-md border border-border bg-secondary px-3 py-1 text-xs font-medium tracking-[0.12em] text-secondary-foreground uppercase">
+          <div className="inline-flex items-center gap-2 text-xs font-medium tracking-[0.18em] text-primary uppercase">
             <LockKeyhole className="size-3.5" />
-            Controlled delivery content
+            {t("controlledDeliveryContent")}
           </div>
           <div>
-            <h2 className="text-2xl font-semibold text-foreground">{copy.title}</h2>
-            <p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground">{copy.description}</p>
+            <h2 className="text-2xl font-semibold text-foreground">{t("deliveryAccessTitle")}</h2>
+            <p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground">
+              {t(config.descriptionKey)}
+            </p>
           </div>
         </div>
         <Link
-          href={copy.actionHref}
+          href={config.href}
           className="inline-flex min-h-11 items-center justify-center rounded-lg border border-border bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-muted"
         >
-          {copy.actionLabel}
+          {tCommon(config.labelKey)}
         </Link>
       </div>
     </section>
@@ -122,10 +123,10 @@ function DetailSection({
 
   return (
     <section className="rounded-2xl border border-border bg-card p-6 shadow-[var(--shadow-card)]">
-      <h3 className="text-sm font-semibold tracking-[0.12em] text-muted-foreground uppercase">{title}</h3>
+      <h3 className="text-sm font-semibold tracking-[0.18em] text-muted-foreground uppercase">{title}</h3>
       <div className="mt-4 flex flex-wrap gap-2">
         {items.map((item) => (
-          <span key={item} className="rounded-full border border-border bg-background px-3 py-1 text-sm text-foreground">
+          <span key={item} className="rounded-md border border-border bg-muted/40 px-2.5 py-1 text-sm text-foreground">
             {item}
           </span>
         ))}
@@ -139,6 +140,7 @@ function SharedDetailPanel({
 }: {
   sharedFields: NonNullable<AssetDetailViewProps["sharedFields"]>;
 }) {
+  const t = useTranslations("AssetDetail");
   const useCases = sharedFields.useCases ?? [];
   const hasContent =
     Boolean(sharedFields.introduction) ||
@@ -153,17 +155,17 @@ function SharedDetailPanel({
     <section className="rounded-2xl border border-border bg-card p-6 shadow-[var(--shadow-card)] md:p-8">
       <div className="space-y-4">
         <div>
-          <div className="text-xs font-medium tracking-[0.14em] text-primary uppercase">Shared context</div>
+          <div className="text-xs font-medium tracking-[0.18em] text-primary uppercase">{t("sharedContext")}</div>
           {sharedFields.introduction ? (
             <p className="mt-3 max-w-3xl text-sm leading-7 text-muted-foreground">{sharedFields.introduction}</p>
           ) : null}
         </div>
         {useCases.length > 0 ? (
           <div>
-            <h3 className="text-sm font-semibold text-foreground">Use cases</h3>
+            <h3 className="text-sm font-semibold text-foreground">{t("useCases")}</h3>
             <div className="mt-3 flex flex-wrap gap-2">
               {useCases.map((item) => (
-                <span key={item} className="rounded-full border border-border bg-background px-3 py-1 text-sm text-foreground">
+                <span key={item} className="rounded-md border border-border bg-muted/40 px-2.5 py-1 text-sm text-foreground">
                   {item}
                 </span>
               ))}
@@ -179,7 +181,7 @@ function SharedDetailPanel({
                 rel="noreferrer"
                 className="inline-flex min-h-11 items-center justify-center rounded-lg border border-border bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-muted"
               >
-                Watch demo video
+                {t("watchDemoVideo")}
               </Link>
             ) : null}
             {sharedFields.liveDemoUrl ? (
@@ -187,9 +189,9 @@ function SharedDetailPanel({
                 href={sharedFields.liveDemoUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex min-h-11 items-center justify-center rounded-lg border border-primary bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:opacity-90"
+                className="inline-flex min-h-11 items-center justify-center rounded-lg border border-primary bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
               >
-                Open live demo
+                {t("openLiveDemo")}
               </Link>
             ) : null}
           </div>
@@ -204,6 +206,7 @@ function SalesDetailPanel({
 }: {
   salesFields: NonNullable<AssetDetailViewProps["salesFields"]>;
 }) {
+  const t = useTranslations("AssetDetail");
   const differentiators = salesFields.differentiators ?? [];
   const outcomes = salesFields.outcomes ?? [];
   const hasContent = Boolean(salesFields.valueSummary) || differentiators.length > 0 || outcomes.length > 0;
@@ -214,12 +217,12 @@ function SalesDetailPanel({
     <div className="space-y-4">
       {salesFields.valueSummary ? (
         <section className="rounded-2xl border border-border bg-card p-6 shadow-[var(--shadow-card)]">
-          <h3 className="text-sm font-semibold tracking-[0.12em] text-muted-foreground uppercase">Sales value</h3>
+          <h3 className="text-sm font-semibold tracking-[0.18em] text-muted-foreground uppercase">{t("salesValue")}</h3>
           <p className="mt-3 text-sm leading-7 text-muted-foreground">{salesFields.valueSummary}</p>
         </section>
       ) : null}
-      <DetailSection title="Differentiators" items={differentiators} />
-      <DetailSection title="Outcomes" items={outcomes} />
+      <DetailSection title={t("differentiators")} items={differentiators} />
+      <DetailSection title={t("outcomes")} items={outcomes} />
     </div>
   );
 }
@@ -229,6 +232,7 @@ function DeliveryDetailPanel({
 }: {
   deliveryFields: NonNullable<AssetDetailViewProps["deliveryFields"]>;
 }) {
+  const t = useTranslations("AssetDetail");
   const prerequisites = deliveryFields.prerequisites ?? [];
   const rolloutSteps = deliveryFields.rolloutSteps ?? [];
   const hasContent =
@@ -240,12 +244,12 @@ function DeliveryDetailPanel({
     <div className="space-y-4">
       {deliveryFields.implementationSummary ? (
         <section className="rounded-2xl border border-border bg-card p-6 shadow-[var(--shadow-card)]">
-          <h3 className="text-sm font-semibold tracking-[0.12em] text-muted-foreground uppercase">Implementation</h3>
+          <h3 className="text-sm font-semibold tracking-[0.18em] text-muted-foreground uppercase">{t("implementation")}</h3>
           <p className="mt-3 text-sm leading-7 text-muted-foreground">{deliveryFields.implementationSummary}</p>
         </section>
       ) : null}
-      <DetailSection title="Prerequisites" items={prerequisites} />
-      <DetailSection title="Rollout steps" items={rolloutSteps} />
+      <DetailSection title={t("prerequisites")} items={prerequisites} />
+      <DetailSection title={t("rolloutSteps")} items={rolloutSteps} />
     </div>
   );
 }
@@ -257,6 +261,7 @@ export function AssetDetailView({
   salesFields = {},
   deliveryFields = null,
 }: AssetDetailViewProps) {
+  const t = useTranslations("AssetDetail");
   const [mode, setMode] = useState<AssetMode>("sales");
   const showDeliveryMode = useMemo(
     () => hasDeliveryBlocks(blocks) || deliveryAccess === "granted" || Boolean(deliveryFields),
@@ -285,18 +290,16 @@ export function AssetDetailView({
       <section className="rounded-2xl border border-border bg-card p-5 shadow-[var(--shadow-card)] md:p-6">
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div className="space-y-1">
-            <div className="inline-flex items-center gap-2 text-xs font-medium tracking-[0.14em] text-primary uppercase">
+            <div className="inline-flex items-center gap-2 text-xs font-medium tracking-[0.18em] text-primary uppercase">
               <ShieldCheck className="size-3.5" />
-              View mode
+              {t("viewMode")}
             </div>
-            <h2 className="text-xl font-semibold text-foreground">Choose the lens for this asset</h2>
-            <p className="text-sm leading-6 text-muted-foreground">
-              Sales focuses on value framing. Delivery reveals implementation guidance when access is granted.
-            </p>
+            <h2 className="text-xl font-semibold text-foreground">{t("chooseLens")}</h2>
+            <p className="text-sm leading-6 text-muted-foreground">{t("lensSummary")}</p>
           </div>
-          <div className="inline-flex gap-2 rounded-xl border border-border bg-muted/35 p-1">
-            <ModeButton active={mode === "sales"} label="Sales" onClick={() => setMode("sales")} />
-            <ModeButton active={mode === "delivery"} label="Delivery" onClick={() => setMode("delivery")} />
+          <div className="inline-flex gap-2 rounded-xl border border-border bg-muted/40 p-1">
+            <ModeButton active={mode === "sales"} label={t("sales")} onClick={() => setMode("sales")} />
+            <ModeButton active={mode === "delivery"} label={t("delivery")} onClick={() => setMode("delivery")} />
           </div>
         </div>
       </section>
