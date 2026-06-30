@@ -44,7 +44,7 @@ export function ThemeToggle({ className, variant = "icon" }: ThemeToggleProps) {
       onClick={() => setTheme(nextTheme)}
       aria-label={label}
       className={cn(
-        "inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border border-border/70 transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+        "inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border border-border/70 transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring active:scale-[0.96]",
         variant === "icon" && "size-11 hover:bg-muted",
         variant === "ghost" && "px-3 py-2 hover:bg-muted text-muted-foreground hover:text-foreground",
         variant === "default" && "px-3 py-2 bg-primary text-primary-foreground hover:bg-primary/90",

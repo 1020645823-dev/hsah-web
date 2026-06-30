@@ -13,7 +13,6 @@ export type Asset = {
   visibility: string;
   created_at?: string;
   updated_at?: string;
-  content_blocks: Array<Record<string, unknown>>;
   shared_fields: {
     introduction?: string;
     use_cases?: string[];
@@ -33,9 +32,4 @@ export type Asset = {
     differentiators?: string[];
     outcomes?: string[];
   };
-  delivery_fields: {
-    implementation_summary?: string;
-    prerequisites?: string[];
-    rollout_steps?: string[];
-  } | null;
 };

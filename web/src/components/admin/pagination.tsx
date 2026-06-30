@@ -50,7 +50,7 @@ export function Pagination({
           <select
             value={pageSize}
             onChange={(e) => onPageSizeChange(Number(e.target.value))}
-            className="rounded-md border border-[rgb(212_218_245_/12%)] bg-[rgb(18_18_26_/70%)] px-2 py-1 text-xs text-[var(--color-text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--color-electric-purple)]/50"
+            className="rounded-md border border-border bg-muted px-2 py-1 text-xs text-[var(--color-text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--color-electric-purple)]/50"
           >
             {[10, 20, 50].map((size) => (
               <option key={size} value={size}>
@@ -66,7 +66,7 @@ export function Pagination({
           type="button"
           onClick={() => onPageChange(safePage - 1)}
           disabled={safePage <= 1}
-          className="flex items-center gap-1 rounded-md border border-[rgb(212_218_245_/12%)] px-2 py-1 text-xs text-[var(--color-text-primary)] transition-colors duration-150 hover:bg-white/5 disabled:cursor-not-allowed disabled:opacity-40"
+          className="flex items-center gap-1 rounded-md border border-border px-2 py-1 text-xs text-[var(--color-text-primary)] transition-colors duration-150 hover:bg-white/5 disabled:cursor-not-allowed disabled:opacity-40"
         >
           <ChevronLeft className="h-3.5 w-3.5" />
           {t("pagination.previous")}
@@ -89,7 +89,7 @@ export function Pagination({
                 className={
                   item === safePage
                     ? "rounded-md bg-[var(--color-electric-purple)] px-3 py-1 text-xs font-medium text-white"
-                    : "rounded-md border border-[rgb(212_218_245_/12%)] px-3 py-1 text-xs text-[var(--color-text-primary)] transition-colors duration-150 hover:bg-white/5"
+                    : "rounded-md border border-border px-3 py-1 text-xs text-[var(--color-text-primary)] transition-colors duration-150 hover:bg-white/5"
                 }
               >
                 {item}
@@ -102,7 +102,7 @@ export function Pagination({
           type="button"
           onClick={() => onPageChange(safePage + 1)}
           disabled={safePage >= totalPages}
-          className="flex items-center gap-1 rounded-md border border-[rgb(212_218_245_/12%)] px-2 py-1 text-xs text-[var(--color-text-primary)] transition-colors duration-150 hover:bg-white/5 disabled:cursor-not-allowed disabled:opacity-40"
+          className="flex items-center gap-1 rounded-md border border-border px-2 py-1 text-xs text-[var(--color-text-primary)] transition-colors duration-150 hover:bg-white/5 disabled:cursor-not-allowed disabled:opacity-40"
         >
           {t("pagination.next")}
           <ChevronRight className="h-3.5 w-3.5" />

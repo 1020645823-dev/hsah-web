@@ -21,10 +21,10 @@ export function FilterToolbar({
   secondaryAction,
   extraControls,
 }: FilterToolbarProps) {
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(true);
 
   return (
-    <div className="sticky top-0 z-20 rounded-2xl border border-border bg-background/95 p-4 shadow-sm backdrop-blur">
+    <div className="sticky top-[73px] z-20 rounded-2xl border border-border bg-background/95 p-4 shadow-sm backdrop-blur">
       <div className="flex flex-wrap items-center justify-between gap-3 sm:hidden">
         <button
           type="button"

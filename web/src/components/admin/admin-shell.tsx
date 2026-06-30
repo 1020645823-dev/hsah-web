@@ -15,6 +15,12 @@ export function AdminShell({ pageTitle, children }: AdminShellProps) {
   const pathname = usePathname();
   const navigationItem = getAdminNavigationItem(pathname);
 
+  // Derive the topbar title from the matched navigation item so the shared
+  // admin layout always shows the correct per-page title. Pages that pass an
+  // explicit pageTitle serve only as a fallback (e.g. routes like audit-logs
+  // that have no entry in adminNavigation).
+  const resolvedTitle = navigationItem?.label ?? pageTitle;
+
   const breadcrumb =
     pathname === "/admin"
       ? undefined
@@ -26,11 +32,13 @@ export function AdminShell({ pageTitle, children }: AdminShellProps) {
 
   return (
     <div className="flex min-h-screen bg-background">
-      <AdminSidebar />
+      <div className="sticky top-0 hidden h-screen shrink-0 w-[280px] md:block">
+        <AdminSidebar />
+      </div>
       <div className="flex min-w-0 flex-1 flex-col">
-        <AdminTopbar pageTitle={pageTitle} />
+        <AdminTopbar pageTitle={resolvedTitle} />
         <main className="flex-1">
-          <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">{children}</div>
+          <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8 lg:py-12">{children}</div>
         </main>
       </div>
     </div>

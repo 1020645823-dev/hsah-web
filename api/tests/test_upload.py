@@ -6,6 +6,7 @@ import httpx
 from httpx import ASGITransport
 
 from app.main import app
+from app.services import storage
 
 
 @pytest.fixture
@@ -26,6 +27,7 @@ async def _get_auth_headers() -> dict[str, str]:
 
 @pytest.mark.anyio
 async def test_upload_image_success() -> None:
+    storage.ensure_bucket()
     headers = await _get_auth_headers()
     transport = ASGITransport(app=app)
     async with httpx.AsyncClient(transport=transport, base_url="http://test") as client:
@@ -35,8 +37,9 @@ async def test_upload_image_success() -> None:
         res = await client.post("/api/v1/admin/assets/images", headers=headers, files=files)
         assert res.status_code == 200
         assert "url" in res.json()
-        assert res.json()["url"].startswith("/uploads/images/")
-        assert res.json()["url"].endswith(".png")
+        # MinIO presigned URL is an absolute http(s) URL, not a local path.
+        assert res.json()["url"].startswith("http")
+        assert ".png" in res.json()["url"]
 
 
 @pytest.mark.anyio

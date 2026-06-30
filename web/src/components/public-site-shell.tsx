@@ -74,9 +74,9 @@ export function PublicSiteShell({
   locale?: string;
 }) {
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-[100dvh] bg-background text-foreground">
       <PublicHeader ctaHref={ctaHref} ctaLabel={ctaLabel} locale={locale ?? "en"} />
-      <div className="mx-auto flex min-h-[calc(100vh-73px)] w-full max-w-7xl flex-col px-6 py-10 md:px-8">
+      <div className="mx-auto flex w-full max-w-7xl flex-col px-6 py-10 md:px-8 md:py-12">
         <main className="flex-1">{children}</main>
       </div>
       <PublicFooter />
@@ -96,10 +96,9 @@ export function PublicSectionHero({
       <div className="absolute inset-x-0 top-0 h-px bg-primary/15" />
       <div className="relative px-7 py-12 md:px-12 md:py-16">
         <div className={cn("space-y-5", align === "center" && "mx-auto max-w-3xl")}>
-          <div className="inline-flex items-center gap-2 rounded-md border border-border bg-secondary px-3 py-1.5 text-[11px] font-semibold tracking-[0.14em] text-secondary-foreground uppercase">
-            <span className="inline-block size-1.5 rounded-full bg-primary" />
+          <p className="text-xs font-medium tracking-[0.18em] text-primary uppercase">
             {eyebrow}
-          </div>
+          </p>
           <h1 className="max-w-4xl text-4xl font-bold leading-[1.08] tracking-[-0.03em] text-foreground md:text-6xl lg:text-7xl">
             {title}
           </h1>
@@ -131,7 +130,7 @@ export function PublicContentCard({ href, eyebrow, title, summary, meta, tags }:
   return (
     <Link
       href={href}
-      className="group rounded-2xl border border-border bg-card p-6 shadow-[var(--shadow-card)] transition-colors duration-200 hover:border-primary/30"
+      className="group rounded-2xl border border-border bg-card p-6 shadow-[var(--shadow-card)] transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-[var(--shadow-card-hover)] active:translate-y-px"
     >
       <div className="flex items-start justify-between gap-4">
         <div className="text-xs font-medium tracking-[0.18em] text-primary">{eyebrow}</div>
@@ -172,9 +171,9 @@ export function PublicDetailHero({
       <div className="space-y-4">
         <Link
           href={backHref}
-          className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground"
+          className="group inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
         >
-          <ArrowRight className="size-4 rotate-180" />
+          <ArrowRight className="size-4 rotate-180 transition-transform group-hover:-translate-x-0.5" />
           {backLabel}
         </Link>
         <div className="text-xs font-medium tracking-[0.18em] text-primary">{eyebrow}</div>
@@ -218,9 +217,9 @@ export function PublicProseSection({
   return (
     <GlassPanel className="px-6 py-6 md:px-8">
       <div className="text-lg font-semibold text-foreground">{title}</div>
-      <div className="mt-5 space-y-5">
+      <div className="mt-5 space-y-4">
         {items.map((item) => (
-          <div key={item.title} className="rounded-xl border border-border bg-muted/35 p-5">
+          <div key={item.title} className="rounded-lg border border-border bg-muted/40 p-5">
             <div className="text-sm font-medium text-foreground">{item.title}</div>
             <div className="mt-2 text-sm leading-6 text-muted-foreground">{item.description}</div>
           </div>
@@ -244,7 +243,7 @@ export function PublicBulletSection({
         {items.map((item) => (
           <div
             key={item}
-            className="rounded-xl border border-border bg-muted/35 px-4 py-4 text-sm leading-6 text-muted-foreground"
+            className="rounded-lg border border-border bg-muted/40 px-4 py-3.5 text-sm leading-6 text-foreground/80"
           >
             {item}
           </div>
@@ -269,7 +268,7 @@ export function PublicRelatedLinks({
           <Link
             key={item.href}
             href={item.href}
-            className="rounded-xl border border-border bg-muted/35 p-5 transition-colors hover:border-primary/30"
+            className="group/link rounded-lg border border-border bg-muted/40 p-5 transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/30 hover:bg-muted/60 hover:shadow-[var(--shadow-card)] active:translate-y-px"
           >
             <div className="inline-flex items-center gap-2 text-sm font-medium text-foreground">
               {item.label}

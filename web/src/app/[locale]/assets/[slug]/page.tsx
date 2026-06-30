@@ -1,9 +1,25 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 
 import { PublicSiteShell, PublicDetailHero } from "@/components/public-site-shell";
 import { PublicAssetDetailClient } from "@/components/public-asset-detail-client";
 import { fetchPublicAssetDetail } from "@/lib/public-assets";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string; locale: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const assetResult = await fetchPublicAssetDetail(slug);
+  if (!assetResult.ok) return {};
+  const asset = assetResult.data;
+  return {
+    title: asset.title,
+    description: asset.subtitle || asset.short_description,
+  };
+}
 
 export default async function AssetDetailPage({
   params,

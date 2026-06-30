@@ -1,24 +1,23 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
-import { LockKeyhole, ShieldCheck } from "lucide-react";
+import { ExternalLink, FileText, Film } from "lucide-react";
+import { useTranslations } from "next-intl";
 
-import { ContentBlockRenderer } from "@/components/content-block-renderer";
-import { normalizeContentAudience, type ContentBlock } from "@/lib/admin-content-blocks";
-import { cn } from "@/lib/utils";
+import { Tabs, TabsList, TabsTrigger, TabsPanel } from "@/components/ui/tabs";
 import { AssetVideoPlayer, type VideoItem } from "@/components/asset-video-player";
-
-type AssetMode = "sales" | "delivery";
-type DeliveryAccess = "granted" | "signin_required" | "request_access";
+import { RelatedAssets } from "@/components/public/related-assets";
+import { AssetFeedbackForm } from "@/components/public/asset-feedback-form";
+import { AssetEngagementBar } from "@/components/public/asset-engagement-bar";
 
 type AssetDetailViewProps = {
-  blocks: ContentBlock[];
-  deliveryAccess?: DeliveryAccess;
+  slug: string;
+  assetId?: string;
+  authToken?: string | null;
   sharedFields?: {
     introduction?: string;
     useCases?: string[];
-    demoVideoUrl?: string;
     liveDemoUrl?: string;
     videos?: VideoItem[];
   };
@@ -27,89 +26,7 @@ type AssetDetailViewProps = {
     differentiators?: string[];
     outcomes?: string[];
   };
-  deliveryFields?: {
-    implementationSummary?: string;
-    prerequisites?: string[];
-    rolloutSteps?: string[];
-  } | null;
 };
-
-function hasDeliveryBlocks(blocks: ContentBlock[]) {
-  return blocks.some((block) => normalizeContentAudience(block.audience) === "delivery");
-}
-
-function resolveDeliveryAccessCopy(access: DeliveryAccess) {
-  if (access === "signin_required") {
-    return {
-      title: "Delivery implementation access",
-      description:
-        "Sign in with an approved role to review runbooks, deployment steps, and delivery notes.",
-      actionHref: "/auth/login",
-      actionLabel: "Sign in",
-    };
-  }
-
-  return {
-    title: "Delivery implementation access",
-    description:
-      "Request delivery access to review runbooks, deployment steps, and delivery notes.",
-    actionHref: "mailto:hsah.admin@example.com?subject=Delivery%20access%20request",
-    actionLabel: "Request access",
-  };
-}
-
-function ModeButton({
-  active,
-  label,
-  onClick,
-}: {
-  active: boolean;
-  label: string;
-  onClick: () => void;
-}) {
-  return (
-    <button
-      type="button"
-      aria-pressed={active}
-      onClick={onClick}
-      className={cn(
-        "rounded-lg border px-4 py-2 text-sm font-medium transition-colors",
-        active
-          ? "border-primary bg-primary text-primary-foreground"
-          : "border-border bg-background text-muted-foreground hover:bg-muted hover:text-foreground",
-      )}
-    >
-      {label}
-    </button>
-  );
-}
-
-function DeliveryAccessPanel({ access }: { access: Exclude<DeliveryAccess, "granted"> }) {
-  const copy = resolveDeliveryAccessCopy(access);
-
-  return (
-    <section className="rounded-2xl border border-border bg-card p-6 shadow-[var(--shadow-card)] md:p-8">
-      <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
-        <div className="space-y-3">
-          <div className="inline-flex items-center gap-2 rounded-md border border-border bg-secondary px-3 py-1 text-xs font-medium tracking-[0.12em] text-secondary-foreground uppercase">
-            <LockKeyhole className="size-3.5" />
-            Controlled delivery content
-          </div>
-          <div>
-            <h2 className="text-2xl font-semibold text-foreground">{copy.title}</h2>
-            <p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground">{copy.description}</p>
-          </div>
-        </div>
-        <Link
-          href={copy.actionHref}
-          className="inline-flex min-h-11 items-center justify-center rounded-lg border border-border bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-muted"
-        >
-          {copy.actionLabel}
-        </Link>
-      </div>
-    </section>
-  );
-}
 
 function DetailSection({
   title,
@@ -122,10 +39,10 @@ function DetailSection({
 
   return (
     <section className="rounded-2xl border border-border bg-card p-6 shadow-[var(--shadow-card)]">
-      <h3 className="text-sm font-semibold tracking-[0.12em] text-muted-foreground uppercase">{title}</h3>
+      <h3 className="text-sm font-semibold tracking-[0.18em] text-muted-foreground uppercase">{title}</h3>
       <div className="mt-4 flex flex-wrap gap-2">
         {items.map((item) => (
-          <span key={item} className="rounded-full border border-border bg-background px-3 py-1 text-sm text-foreground">
+          <span key={item} className="rounded-md border border-border bg-muted/40 px-2.5 py-1 text-sm text-foreground">
             {item}
           </span>
         ))}
@@ -139,11 +56,11 @@ function SharedDetailPanel({
 }: {
   sharedFields: NonNullable<AssetDetailViewProps["sharedFields"]>;
 }) {
+  const t = useTranslations("AssetDetail");
   const useCases = sharedFields.useCases ?? [];
   const hasContent =
     Boolean(sharedFields.introduction) ||
     useCases.length > 0 ||
-    Boolean(sharedFields.demoVideoUrl) ||
     Boolean(sharedFields.liveDemoUrl) ||
     (sharedFields.videos && sharedFields.videos.length > 0);
 
@@ -153,45 +70,33 @@ function SharedDetailPanel({
     <section className="rounded-2xl border border-border bg-card p-6 shadow-[var(--shadow-card)] md:p-8">
       <div className="space-y-4">
         <div>
-          <div className="text-xs font-medium tracking-[0.14em] text-primary uppercase">Shared context</div>
+          <div className="text-xs font-medium tracking-[0.18em] text-primary uppercase">{t("sharedContext")}</div>
           {sharedFields.introduction ? (
             <p className="mt-3 max-w-3xl text-sm leading-7 text-muted-foreground">{sharedFields.introduction}</p>
           ) : null}
         </div>
         {useCases.length > 0 ? (
           <div>
-            <h3 className="text-sm font-semibold text-foreground">Use cases</h3>
+            <h3 className="text-sm font-semibold text-foreground">{t("useCases")}</h3>
             <div className="mt-3 flex flex-wrap gap-2">
               {useCases.map((item) => (
-                <span key={item} className="rounded-full border border-border bg-background px-3 py-1 text-sm text-foreground">
+                <span key={item} className="rounded-md border border-border bg-muted/40 px-2.5 py-1 text-sm text-foreground">
                   {item}
                 </span>
               ))}
             </div>
           </div>
         ) : null}
-        {(sharedFields.demoVideoUrl || sharedFields.liveDemoUrl) ? (
-          <div className="flex flex-wrap gap-3">
-            {sharedFields.demoVideoUrl ? (
-              <Link
-                href={sharedFields.demoVideoUrl}
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex min-h-11 items-center justify-center rounded-lg border border-border bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-muted"
-              >
-                Watch demo video
-              </Link>
-            ) : null}
-            {sharedFields.liveDemoUrl ? (
-              <Link
-                href={sharedFields.liveDemoUrl}
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex min-h-11 items-center justify-center rounded-lg border border-primary bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:opacity-90"
-              >
-                Open live demo
-              </Link>
-            ) : null}
+        {sharedFields.liveDemoUrl ? (
+          <div>
+            <Link
+              href={sharedFields.liveDemoUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex min-h-11 items-center justify-center rounded-lg border border-primary bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+            >
+              {t("openLiveDemo")}
+            </Link>
           </div>
         ) : null}
       </div>
@@ -204,6 +109,7 @@ function SalesDetailPanel({
 }: {
   salesFields: NonNullable<AssetDetailViewProps["salesFields"]>;
 }) {
+  const t = useTranslations("AssetDetail");
   const differentiators = salesFields.differentiators ?? [];
   const outcomes = salesFields.outcomes ?? [];
   const hasContent = Boolean(salesFields.valueSummary) || differentiators.length > 0 || outcomes.length > 0;
@@ -214,105 +120,137 @@ function SalesDetailPanel({
     <div className="space-y-4">
       {salesFields.valueSummary ? (
         <section className="rounded-2xl border border-border bg-card p-6 shadow-[var(--shadow-card)]">
-          <h3 className="text-sm font-semibold tracking-[0.12em] text-muted-foreground uppercase">Sales value</h3>
+          <h3 className="text-sm font-semibold tracking-[0.18em] text-muted-foreground uppercase">{t("salesValue")}</h3>
           <p className="mt-3 text-sm leading-7 text-muted-foreground">{salesFields.valueSummary}</p>
         </section>
       ) : null}
-      <DetailSection title="Differentiators" items={differentiators} />
-      <DetailSection title="Outcomes" items={outcomes} />
+      <DetailSection title={t("differentiators")} items={differentiators} />
+      <DetailSection title={t("outcomes")} items={outcomes} />
     </div>
   );
 }
 
-function DeliveryDetailPanel({
-  deliveryFields,
-}: {
-  deliveryFields: NonNullable<AssetDetailViewProps["deliveryFields"]>;
-}) {
-  const prerequisites = deliveryFields.prerequisites ?? [];
-  const rolloutSteps = deliveryFields.rolloutSteps ?? [];
-  const hasContent =
-    Boolean(deliveryFields.implementationSummary) || prerequisites.length > 0 || rolloutSteps.length > 0;
+type PublicAttachment = {
+  id: string;
+  file_name: string;
+  content_type: string;
+  size_bytes: number;
+  kind: "image" | "video" | "document";
+  download_url: string;
+};
 
-  if (!hasContent) return null;
+function MediaPanel({ slug, videos }: { slug: string; videos?: VideoItem[] }) {
+  const t = useTranslations("AssetDetail");
+  const [attachments, setAttachments] = useState<PublicAttachment[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL ?? ""}/api/v1/assets/${slug}/attachments`)
+      .then((res) => (res.ok ? res.json() : []))
+      .then((data: PublicAttachment[]) => {
+        if (cancelled) return;
+        setAttachments(Array.isArray(data) ? data : []);
+      })
+      .catch(() => {
+        if (cancelled) return;
+        setAttachments([]);
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [slug]);
+
+  const documents = attachments.filter((a) => a.kind === "document");
+
+  function formatSize(bytes: number) {
+    if (bytes < 1024) return `${bytes} B`;
+    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(0)} KB`;
+    return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+  }
 
   return (
-    <div className="space-y-4">
-      {deliveryFields.implementationSummary ? (
-        <section className="rounded-2xl border border-border bg-card p-6 shadow-[var(--shadow-card)]">
-          <h3 className="text-sm font-semibold tracking-[0.12em] text-muted-foreground uppercase">Implementation</h3>
-          <p className="mt-3 text-sm leading-7 text-muted-foreground">{deliveryFields.implementationSummary}</p>
-        </section>
-      ) : null}
-      <DetailSection title="Prerequisites" items={prerequisites} />
-      <DetailSection title="Rollout steps" items={rolloutSteps} />
-    </div>
+    <Tabs defaultValue="videos">
+      <TabsList>
+        <TabsTrigger value="videos">{t("mediaVideos")}</TabsTrigger>
+        <TabsTrigger value="documents">{t("mediaDocuments")}</TabsTrigger>
+      </TabsList>
+
+      <TabsPanel value="videos">
+        {videos && videos.length > 0 ? (
+          <AssetVideoPlayer videos={videos} />
+        ) : (
+          <div className="rounded-2xl border border-border bg-card p-6 text-sm text-muted-foreground">
+            {t("noVideos")}
+          </div>
+        )}
+      </TabsPanel>
+
+      <TabsPanel value="documents">
+        {loading ? (
+          <div className="grid gap-3">
+            {[0, 1].map((i) => (
+              <div key={i} className="h-16 animate-pulse rounded-2xl border border-border bg-card" />
+            ))}
+          </div>
+        ) : documents.length === 0 ? (
+          <div className="rounded-2xl border border-border bg-card p-6 text-sm text-muted-foreground">
+            {t("noDocuments")}
+          </div>
+        ) : (
+          <div className="grid gap-3">
+            {documents.map((doc) => {
+              const isPdf = doc.content_type === "application/pdf";
+              return (
+                <a
+                  key={doc.id}
+                  href={doc.download_url}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="group flex items-center gap-4 rounded-2xl border border-border bg-card p-4 transition-colors hover:bg-muted/40"
+                >
+                  <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                    {isPdf ? <FileText className="size-5" /> : <Film className="size-5" />}
+                  </span>
+                  <div className="min-w-0 flex-1 space-y-0.5">
+                    <p className="truncate text-sm font-medium text-foreground">{doc.file_name}</p>
+                    <p className="text-xs text-muted-foreground">{formatSize(doc.size_bytes)}</p>
+                  </div>
+                  <ExternalLink className="size-4 shrink-0 text-muted-foreground transition-colors group-hover:text-foreground" />
+                </a>
+              );
+            })}
+          </div>
+        )}
+      </TabsPanel>
+    </Tabs>
   );
 }
 
 export function AssetDetailView({
-  blocks,
-  deliveryAccess = "request_access",
+  slug,
+  assetId,
+  authToken,
   sharedFields = {},
   salesFields = {},
-  deliveryFields = null,
 }: AssetDetailViewProps) {
-  const [mode, setMode] = useState<AssetMode>("sales");
-  const showDeliveryMode = useMemo(
-    () => hasDeliveryBlocks(blocks) || deliveryAccess === "granted" || Boolean(deliveryFields),
-    [blocks, deliveryAccess, deliveryFields],
-  );
-
-  if (!showDeliveryMode) {
-    return (
-      <div className="space-y-6">
-        <SharedDetailPanel sharedFields={sharedFields} />
-        {sharedFields.videos && sharedFields.videos.length > 0 && (
-          <AssetVideoPlayer videos={sharedFields.videos} />
-        )}
-        <SalesDetailPanel salesFields={salesFields} />
-        <ContentBlockRenderer blocks={blocks} mode="sales" />
-      </div>
-    );
-  }
+  const EngagementSection = assetId ? (
+    <div className="space-y-6 border-t border-border/60 pt-6">
+      <AssetEngagementBar assetId={assetId} token={authToken} />
+      <AssetFeedbackForm assetId={assetId} token={authToken} />
+      <RelatedAssets assetId={assetId} />
+    </div>
+  ) : null;
 
   return (
     <div className="space-y-6">
       <SharedDetailPanel sharedFields={sharedFields} />
-      {sharedFields.videos && sharedFields.videos.length > 0 && (
-        <AssetVideoPlayer videos={sharedFields.videos} />
-      )}
-      <section className="rounded-2xl border border-border bg-card p-5 shadow-[var(--shadow-card)] md:p-6">
-        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-          <div className="space-y-1">
-            <div className="inline-flex items-center gap-2 text-xs font-medium tracking-[0.14em] text-primary uppercase">
-              <ShieldCheck className="size-3.5" />
-              View mode
-            </div>
-            <h2 className="text-xl font-semibold text-foreground">Choose the lens for this asset</h2>
-            <p className="text-sm leading-6 text-muted-foreground">
-              Sales focuses on value framing. Delivery reveals implementation guidance when access is granted.
-            </p>
-          </div>
-          <div className="inline-flex gap-2 rounded-xl border border-border bg-muted/35 p-1">
-            <ModeButton active={mode === "sales"} label="Sales" onClick={() => setMode("sales")} />
-            <ModeButton active={mode === "delivery"} label="Delivery" onClick={() => setMode("delivery")} />
-          </div>
-        </div>
-      </section>
-
-      {mode === "delivery" && deliveryAccess !== "granted" ? (
-        <DeliveryAccessPanel access={deliveryAccess} />
-      ) : (
-        <div className="space-y-6">
-          {mode === "sales" ? (
-            <SalesDetailPanel salesFields={salesFields} />
-          ) : deliveryFields ? (
-            <DeliveryDetailPanel deliveryFields={deliveryFields} />
-          ) : null}
-          <ContentBlockRenderer blocks={blocks} mode={mode} />
-        </div>
-      )}
+      <SalesDetailPanel salesFields={salesFields} />
+      <MediaPanel slug={slug} videos={sharedFields.videos} />
+      {EngagementSection}
     </div>
   );
 }

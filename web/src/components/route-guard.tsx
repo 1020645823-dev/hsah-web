@@ -2,6 +2,7 @@
 
 import { useEffect, type ReactNode } from "react";
 import { usePathname, useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { useAuth } from "@/hooks/use-auth";
 import { AuthRedirectPanel } from "@/components/auth/auth-redirect-panel";
 
@@ -15,6 +16,7 @@ export function RouteGuard({
   const { user, isLoading } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
+  const t = useTranslations("RouteGuard");
 
   useEffect(() => {
     if (!isLoading && requireAuth && !user) {
@@ -25,12 +27,12 @@ export function RouteGuard({
 
   if (isLoading) {
     return (
-      <AuthRedirectPanel message="Checking your session before loading admin tools." />
+      <AuthRedirectPanel message={t("checkingMessage")} />
     );
   }
 
   if (requireAuth && !user) {
-    return <AuthRedirectPanel message="You need to sign in before accessing admin routes." />;
+    return <AuthRedirectPanel message={t("signinRequired")} />;
   }
 
   return <>{children}</>;

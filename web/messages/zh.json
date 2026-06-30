@@ -69,10 +69,11 @@
       }
     },
     "valueEyebrow": "平台价值",
-    "valueTitle": "先对齐利益相关方，再进入实施细节。",
-    "valueSummary": "首页现在阐明产品定位、展示真实精选资产，并在用户进入资产库前将每个角色引导到最相关的内容通道。",
+    "valueTitle": "在深入实施细节前先对齐利益相关方",
+    "valueSummary": "从业务成果出发，走通场景，再落到可复用架构，最后才打开资产库。",
     "goToLibrary": "前往资产库",
     "browseScenarios": "浏览场景",
+    "joinCommunity": "加入社区",
     "ctaLabel": "Sign in"
   },
   "Assets": {
@@ -103,7 +104,12 @@
     "technology": "技术",
     "assetType": "资产类型",
     "published": "已发布",
-    "draft": "草稿"
+    "draft": "草稿",
+    "collectionsTitle": "专题集合",
+    "collectionsSummary": "按主题、行业或方案领域策划的资产分组。",
+    "collectionItemCount": "{count} 个资产",
+    "recommendedTitle": "推荐资产",
+    "collectionEmpty": "该专题暂无可展示的已发布资产。"
   },
   "AssetDetail": {
     "sharedContext": "共享上下文",
@@ -124,7 +130,40 @@
     "controlledDeliveryContent": "受控交付内容",
     "deliveryAccessTitle": "交付实施访问权限",
     "signinRequiredDescription": "使用获批角色登录以查看运行手册、部署步骤和交付说明。",
-    "requestAccessDescription": "申请交付访问权限以查看运行手册、部署步骤和交付说明。"
+    "requestAccessDescription": "申请交付访问权限以查看运行手册、部署步骤和交付说明。",
+    "relatedAssets": "相关资产",
+    "feedbackType": "反馈类型",
+    "feedbackTypeQuestion": "咨询",
+    "feedbackTypeProblem": "问题",
+    "feedbackTypePraise": "好评",
+    "feedbackTypeOther": "其他",
+    "feedbackMessage": "内容",
+    "feedbackSubmit": "提交反馈",
+    "feedbackSubmitted": "感谢反馈，我们已收到。",
+    "accessRequestTitle": "申请访问交付内容",
+    "accessRequestPurpose": "你将如何使用？",
+    "accessRequestRole": "你的角色",
+    "accessRequestSubmit": "申请访问",
+    "accessRequestSubmitted": "访问申请已提交，我们会尽快处理。",
+    "accessRequestApproved": "访问已通过，现在可以查看交付内容。",
+    "accessRequestSignIn": "请先登录后再申请访问。",
+    "accessRequestSignInLink": "登录",
+    "favorite": "收藏",
+    "favorited": "已收藏",
+    "favoriteSignIn": "请登录后再收藏该资产。",
+    "share": "分享",
+    "shared": "链接已复制",
+    "shareFailed": "复制链接失败，请手动复制。",
+    "myRequestsEyebrow": "访问申请",
+    "myRequestsTitle": "我的访问申请",
+    "myRequestsSummary": "查看你对交付内容访问申请的处理状态。",
+    "myRequestsEmpty": "你还没有提交任何访问申请。",
+    "myRequestsSignIn": "请登录后查看你的访问申请。",
+    "myRequestsLink": "查看我的申请",
+    "mediaVideos": "在线视频",
+    "mediaDocuments": "文件附件",
+    "noVideos": "暂无视频。",
+    "noDocuments": "暂无文件附件。"
   },
   "VideoPlayer": {
     "demoVideo": "演示视频",
@@ -244,9 +283,12 @@
     "assetLibrary": "Asset Library",
     "sections": "SECTIONS",
     "signIn": "Sign in",
-    "startHere": "START HERE"
+    "startHere": "START HERE",
+    "rights": "© 2026 Hyperscaler Asset Hub. 保留所有权利。",
+    "builtWith": "Next.js · FastAPI · PostgreSQL"
   },
   "ContentLanes": {
+    "browseAll": "浏览全部",
     "eyebrow": "内容通道",
     "title": "从你的角色需要出发",
     "summary": "四条内容通道帮助团队从业务问题推进到可复用实施资产。",
@@ -303,8 +345,8 @@
     "redirecting": "正在跳转到登录页",
     "protectedRoute": "受保护路由",
     "adminRequired": "需要后台访问权限才能继续。",
-    "checkingMessage": "Checking your session before loading admin tools.",
-    "signinRequired": "You need to sign in before accessing admin routes."
+    "checkingMessage": "正在加载后台工具前检查您的会话。",
+    "signinRequired": "访问后台路由前需要先登录。"
   },
   "PublicSite": {
     "skipToContent": "跳到正文",
@@ -317,7 +359,9 @@
       "details": "详情",
       "related": "相关内容"
     },
-    "brandTagline": "AI delivery content platform"
+    "brandTagline": "AI 交付内容平台",
+    "openMenu": "打开菜单",
+    "closeMenu": "关闭菜单"
   },
   "FilterToolbar": {
     "filters": "筛选",
@@ -346,6 +390,9 @@
     "businessOutcome": "业务成果",
     "industry": "行业",
     "phases": "阶段",
+    "phasesPerScenario": "阶段/场景",
+    "industriesServed": "覆盖行业",
+    "outcomesTracked": "可量化成果",
     "items": {
       "intelligentCustomerOperations": {
         "slug": "intelligent-customer-operations",
@@ -495,6 +542,9 @@
     "layers": "层级",
     "governance": "治理",
     "deploymentNotes": "部署说明",
+    "aboutPlatform": "关于平台",
+    "industriesCovered": "覆盖行业",
+    "focusAreas": "控制域",
     "items": {
       "agenticServiceMesh": {
         "slug": "agentic-service-mesh",
@@ -680,6 +730,10 @@
     "keyPoints": "关键要点",
     "published": "发布日期",
     "readTime": "阅读时间",
+    "joinCommunity": "加入社区",
+    "topicsCovered": "覆盖主题",
+    "readTimeLabel": "分钟/篇",
+    "keyPointsPerInsight": "要点/篇",
     "items": {
       "fromPrototypesToGovernedAiProducts": {
         "slug": "from-prototypes-to-governed-ai-products",
@@ -776,6 +830,9 @@
     "audience": "适合人群",
     "location": "地点",
     "format": "形式",
+    "formatsOffered": "项目形式",
+    "deliveryModes": "交付模式",
+    "cadence": "频次",
     "items": {
       "buildersRoundtableQ3": {
         "slug": "builders-roundtable-q3",
@@ -884,19 +941,63 @@
       "title": "运营概览",
       "summary": "在一个工作区监控内容健康、近期工作和访问控制界面。"
     },
+    "access": {
+      "eyebrow": "访问控制",
+      "title": "访问矩阵",
+      "summary": "在一个视图里查看用户、角色、策略与权限矩阵。",
+      "tabMatrix": "矩阵",
+      "tabUsers": "用户",
+      "tabRoles": "角色",
+      "tabPolicies": "策略",
+      "matrixDescription": "根据当前角色定义计算的权限矩阵。",
+      "role": "角色",
+      "allowed": "允许",
+      "denied": "拒绝",
+      "noRoles": "尚未定义角色。",
+      "users": {
+        "title": "用户",
+        "total": "用户总数",
+        "empty": "暂无用户。"
+      },
+      "roles": {
+        "title": "角色",
+        "total": "角色总数",
+        "empty": "暂无角色。",
+        "permissions": "权限数",
+        "created": "创建时间"
+      },
+      "policies": {
+        "title": "策略",
+        "total": "策略总数",
+        "empty": "暂无策略。",
+        "effect": "效果",
+        "created": "创建时间"
+      },
+      "createUser": "新建用户",
+      "createRole": "新建角色",
+      "createPolicy": "新建策略",
+      "edit": "编辑",
+      "delete": "删除",
+      "editUser": "编辑用户",
+      "editRole": "编辑角色",
+      "editPolicy": "编辑策略",
+      "builtin": "内置",
+      "anyRole": "任意角色",
+      "roleNamesHint": "留空则匹配任意角色。",
+      "add": "添加",
+      "deleteFailed": "删除失败",
+      "confirmDelete": "确认删除",
+      "confirmDeleteMessage": "确定要删除「{name}」吗？此操作不可撤销。"
+    },
     "quickAction": {
       "title": "快捷操作",
       "createAsset": {
         "title": "创建资产",
         "description": "启动新资产草稿并进入内容治理流程。"
       },
-      "manageTemplates": {
-        "title": "管理模板",
-        "description": "更新可复用模板，统一结构与块级基线。"
-      },
-      "policySimulator": {
-        "title": "策略模拟器",
-        "description": "快速验证一条鉴权请求在当前策略下的结果。"
+      "accessMatrix": {
+        "title": "访问矩阵",
+        "description": "在一个视图里查看用户、角色、策略与权限矩阵。"
       }
     },
     "recentDrafts": {
@@ -906,15 +1007,15 @@
         "description": "集中处理待发布资产、补齐元数据并推进上线。",
         "cta": "审阅资产"
       },
-      "templateBaselineRefresh": {
-        "title": "模板基线刷新",
-        "description": "确保新资产默认继承统一模板与内容块结构。",
-        "cta": "打开模板"
-      },
       "policyReviewWindow": {
         "title": "策略审阅窗口",
         "description": "联动角色与策略页面，收敛访问控制变更风险。",
         "cta": "检查策略"
+      },
+      "accessReview": {
+        "title": "权限复核",
+        "description": "审计角色与策略，收紧权限范围。",
+        "cta": "复核权限"
       }
     },
     "kpi": {
@@ -1065,31 +1166,6 @@
       "userDeleted": "User deleted successfully",
       "userUpdated": "User updated successfully"
     },
-    "templates": {
-      "title": "模板",
-      "description": "模板库、结构复用与内容基线。",
-      "backToAdmin": "Back",
-      "blockCount": "{count} content blocks",
-      "builtin": "Built-in",
-      "cancel": "Cancel",
-      "contentTemplates": "Content templates",
-      "createFailed": "Failed to create",
-      "createFromCurrent": "Create from current content",
-      "createSuccess": "Template created",
-      "deleteFailed": "Failed to delete",
-      "deleteSuccess": "Template deleted",
-      "descriptionLong": "Manage content templates for quickly creating asset content blocks.",
-      "descriptionPlaceholder": "Description (optional)",
-      "loadFailed": "Failed to load",
-      "loading": "Loading...",
-      "noTemplates": "No templates yet",
-      "save": "Save",
-      "saveAsTemplate": "Save as template",
-      "saving": "Saving...",
-      "templateName": "Template name",
-      "updateFailed": "Failed to update",
-      "updateSuccess": "Template updated"
-    },
     "policies": {
       "title": "策略",
       "description": "访问规则、条件组合与执行口径。",
@@ -1191,27 +1267,6 @@
       "rows": "Rows",
       "selectCellHint": "Select a cell to view matching policies"
     },
-    "simulator": {
-      "title": "模拟器",
-      "description": "鉴权请求验证与策略回放。",
-      "action": "Action",
-      "allowed": "Allowed",
-      "backToAdmin": "Back",
-      "conditions": "Conditions",
-      "denied": "Denied",
-      "descriptionLong": "Test authorization requests against current policies in real time. Adjust inputs to observe how role, resource, and condition combinations resolve to Allow or Deny.",
-      "errorDescription": "The simulation could not be completed. Check the request format and try again.",
-      "errorTitle": "Simulation error",
-      "matchedPolicies": "Matched policies",
-      "noMatchedPolicies": "No policies matched this request.",
-      "noResult": "No result yet. Build a request and run the simulation.",
-      "requestBuilder": "Request Builder",
-      "resource": "Resource",
-      "result": "Result",
-      "runSimulation": "Run simulation",
-      "simulating": "Simulating...",
-      "subject": "Subject"
-    },
     "assetEditor": {
       "title": "资产编辑器",
       "description": "编辑资产元数据、内容块、销售与交付信息。",
@@ -1257,7 +1312,9 @@
       "salesLens": "Sales lens",
       "saveDraft": "Save draft",
       "unpublishAsset": "Unpublish asset",
-      "videos": "Videos"
+      "videos": "Videos",
+      "eyebrow": "资产管理",
+      "summary": "编辑资产元数据、标签、销售与交付信息、内容块与视频。"
     },
     "videoManager": {
       "title": "视频管理",
@@ -1280,6 +1337,7 @@
       "ariaLabel": "后台模块",
       "overview": "概览",
       "assets": "资产",
+      "access": "访问矩阵",
       "templates": "模板",
       "users": "用户",
       "roles": "角色",
@@ -1288,7 +1346,8 @@
       "simulator": "模拟器",
       "navLabel": "Admin modules",
       "workspaceDescription": "Continuously manage assets, templates, identities, and access controls.",
-      "workspaceTitle": "Operations workspace"
+      "workspaceTitle": "Operations workspace",
+      "brand": "HSAH"
     },
     "topbar": {
       "workspaceLabel": "后台工作区",
@@ -1300,7 +1359,11 @@
       "login": "Login",
       "logout": "Logout",
       "mobileMenuPlaceholder": "Menu",
-      "toggleMenu": "Toggle menu"
+      "toggleMenu": "Toggle menu",
+      "adminHome": "管理后台",
+      "accessRequests": "访问申请",
+      "analytics": "运营指标",
+      "auditLogs": "审计日志"
     },
     "layout": {
       "defaultTitle": "后台",
@@ -1308,10 +1371,9 @@
       "contentLabel": "后台内容"
     },
     "assetEditorForm": {
-      "title": "资产编辑器",
-      "slug": "Slug",
+      "title": "标题",
+      "slug": "URL 标识",
       "slugPlaceholder": "例如 my-asset-slug",
-      "titleLabel": "标题",
       "titlePlaceholder": "输入资产标题",
       "subtitle": "副标题",
       "subtitlePlaceholder": "输入副标题",
@@ -1363,7 +1425,40 @@
       "cancel": "取消",
       "save": "保存",
       "saving": "保存中...",
-      "required": "必填"
+      "required": "必填",
+      "cloudProviders": "云平台",
+      "cloudProvidersPlaceholder": "选择云平台",
+      "industries": "行业",
+      "industriesPlaceholder": "选择行业",
+      "technologies": "技术",
+      "technologiesPlaceholder": "选择技术",
+      "typeAndStatus": "类型与状态",
+      "accessControl": "访问控制",
+      "allowedRoles": "允许的角色",
+      "allowedRolesPlaceholder": "添加允许访问的角色",
+      "allowedUsers": "允许的用户",
+      "allowedUsersPlaceholder": "添加允许访问的用户",
+      "sharedDetail": "共享详情",
+      "introduction": "简介",
+      "introductionPlaceholder": "简要介绍该资产的核心价值",
+      "liveDemoUrl": "在线演示 URL",
+      "videoManagement": "视频管理",
+      "salesDetail": "销售详情",
+      "valueSummary": "价值概要",
+      "valueSummaryPlaceholder": "概括该资产带来的业务价值",
+      "deliveryDetail": "交付详情",
+      "implementationSummary": "实施概要",
+      "implementationSummaryPlaceholder": "概述实施方式与关键步骤",
+      "deliveryAllowedRoles": "交付允许的角色",
+      "deliveryAllowedRolesPlaceholder": "添加交付时允许的角色",
+      "deliveryAllowedUsers": "交付允许的用户",
+      "deliveryAllowedUsersPlaceholder": "添加交付时允许的用户",
+      "loading": "加载中…",
+      "unsavedChangesConfirm": "有未保存的更改，确定要离开吗？",
+      "slugHint": "用于详情页地址，如 /assets/your-slug，仅限小写字母、数字与连字符。",
+      "mediaLabel": "视频与附件",
+      "mediaVideos": "在线视频",
+      "mediaAttachments": "文件附件"
     },
     "assetVideoManager": {
       "title": "视频管理",
@@ -1377,30 +1472,32 @@
       "videoTitle": "标题",
       "videoDescription": "描述",
       "noVideos": "尚未添加视频。",
-      "dragToReorder": "拖动以重新排序"
+      "dragToReorder": "拖动以重新排序",
+      "titlePlaceholder": "视频标题",
+      "posterUrlPlaceholder": "https://example.com/poster.jpg",
+      "description": "描述",
+      "descriptionPlaceholder": "视频简介",
+      "or": "或",
+      "upload": "上传",
+      "uploadHint": "支持 MP4/WebM/MOV，最大 500 MB。",
+      "uploadedFrom": "已上传",
+      "invalidType": "不支持的视频类型，请使用 MP4/WebM/MOV。",
+      "tooLarge": "视频超过 500 MB 限制。",
+      "uploadFailed": "上传失败，请重试。"
     },
-    "templateManager": {
-      "title": "模板",
-      "createFromCurrent": "从当前内容创建",
-      "loading": "加载中...",
-      "empty": "暂无模板",
-      "builtin": "内置",
-      "blockCount": "{count} 个内容块",
-      "save": "保存",
-      "saving": "保存中...",
-      "cancel": "取消",
-      "templateName": "模板名称",
-      "descriptionPlaceholder": "描述（可选）",
-      "cancelDelete": "Cancel",
-      "confirmDelete": "Confirm delete",
-      "createFailed": "Failed to create template",
-      "delete": "Delete",
-      "deleteFailed": "Failed to delete template",
-      "edit": "Edit",
-      "loadFailed": "Failed to load templates",
-      "namePlaceholder": "Template name",
-      "saveAsTemplate": "Save as template",
-      "updateFailed": "Failed to update template"
+    "assetAttachments": {
+      "title": "附件",
+      "dropOrClick": "拖拽文件到此处，或点击选择",
+      "supportedHint": "支持图片、视频及 PDF / PPT / Word 文档",
+      "uploading": "上传中…",
+      "loading": "加载附件…",
+      "empty": "暂无附件，上传后将显示在此处。",
+      "download": "下载",
+      "delete": "删除",
+      "deleteConfirm": "确定要删除附件「{name}」吗？",
+      "unsupportedType": "不支持的文件类型：{name}",
+      "tooLarge": "文件「{name}」超出大小限制",
+      "saveFirstHint": "请先保存资产后再上传附件。"
     },
     "permissionMatrix": {
       "permissionHeader": "权限",
@@ -1451,30 +1548,147 @@
     "tagInput": {
       "removeTag": "移除 {tag}"
     },
-    "templateSelector": {
-      "title": "选择模板",
-      "loading": "加载中...",
-      "empty": "暂无可用模板",
-      "apply": "应用",
-      "builtin": "内置",
-      "blockCount": "{count} 个内容块"
+    "operations": {
+      "totalAssets": "资产总数",
+      "publishedAssets": "已发布",
+      "reviewingAssets": "审核中",
+      "lowQualityAssets": "低质量",
+      "pendingAccessRequests": "待处理访问申请",
+      "taskQueueLabel": "工作队列",
+      "taskQueue": "待处理任务",
+      "noTasks": "暂无待处理任务，一切就绪。",
+      "recentActivityLabel": "动态",
+      "recentActivity": "近期运营动态",
+      "noActivity": "暂无近期动态。",
+      "taskCount": "显示 {shown} / {total} 项任务"
+    },
+    "accessRequests": {
+      "eyebrow": "访问申请",
+      "title": "访问申请队列",
+      "summary": "审核并处理用户对受限交付内容的访问申请。",
+      "empty": "当前视图没有访问申请。",
+      "approve": "通过",
+      "reject": "拒绝",
+      "reasonRequired": "拒绝申请时必须填写原因。",
+      "status": "状态",
+      "purpose": "用途",
+      "role": "角色",
+      "requestedAt": "申请时间"
+    },
+    "analytics": {
+      "eyebrow": "数据分析",
+      "title": "运营指标看板",
+      "summary": "内容、体验、流程、质量与治理运营指标。",
+      "contentSection": "内容",
+      "experienceSection": "体验",
+      "workflowSection": "流程",
+      "qualitySection": "质量",
+      "governanceSection": "治理",
+      "loading": "正在加载指标…",
+      "noData": "暂无数据。"
+    },
+    "audit": {
+      "eyebrow": "审计日志",
+      "title": "审计日志",
+      "summary": "摘要",
+      "empty": "没有符合当前筛选的审计记录。",
+      "action": "动作",
+      "resourceType": "资源",
+      "actor": "操作人",
+      "timestamp": "时间",
+      "pageIndicator": "第 {currentPage} / {totalPages} 页",
+      "previous": "上一页",
+      "next": "下一页"
+    },
+    "quality": {
+      "label": "内容质量",
+      "title": "发布就绪检查",
+      "score": "分数",
+      "bandReady": "就绪",
+      "bandNeedsWork": "需完善",
+      "bandBlocked": "不达标",
+      "missing": "缺失项",
+      "warnings": "建议",
+      "refresh": "重新检查",
+      "noMissing": "核心要求已全部满足。"
+    },
+    "reviewActions": {
+      "submitReview": "提交审核",
+      "approve": "通过",
+      "reject": "驳回",
+      "publish": "发布",
+      "unpublish": "下线",
+      "archive": "归档",
+      "rejectReasonPrompt": "驳回原因",
+      "confirmReject": "驳回资产"
+    },
+    "common": {
+      "unauthorized": "您没有权限访问此页面，请使用管理员账号登录。"
+    },
+    "newAsset": {
+      "eyebrow": "资产管理",
+      "title": "新建资产",
+      "summary": "创建一个新的资产条目，填写基本信息、标签、访问控制、销售与交付详情，以及内容块。"
+    },
+    "taxonomy": {
+      "cloud": {
+        "aws": "AWS",
+        "azure": "Microsoft Azure",
+        "gcp": "Google Cloud",
+        "aliyun": "阿里云",
+        "huaweicloud": "华为云",
+        "tencentcloud": "腾讯云",
+        "baidubce": "百度智能云",
+        "oracle": "Oracle Cloud",
+        "ibm-cloud": "IBM Cloud",
+        "volcengine": "火山引擎"
+      },
+      "industry": {
+        "financial-services": "金融服务",
+        "healthcare": "医疗健康",
+        "manufacturing": "制造",
+        "retail": "零售",
+        "telecommunications": "电信",
+        "energy": "能源",
+        "public-sector": "政府与公共服务",
+        "consumer-goods": "消费品",
+        "transportation-logistics": "交通物流",
+        "high-tech": "高科技",
+        "media": "媒体",
+        "education": "教育",
+        "natural-resources": "自然资源"
+      },
+      "technology": {
+        "genai": "GenAI",
+        "ai-ml": "AI / 机器学习",
+        "kubernetes": "Kubernetes",
+        "cloud-native": "云原生",
+        "microservices": "微服务",
+        "serverless": "Serverless",
+        "data-platform": "数据中台",
+        "big-data": "大数据",
+        "observability": "可观测性",
+        "security-compliance": "安全合规",
+        "iot": "物联网",
+        "blockchain": "区块链"
+      }
     }
   },
   "Auth": {
-    "authentication": "Authentication",
-    "goToPublicLibrary": "Go to public library",
-    "libraryReturnPath": "Library return path",
-    "libraryReturnPathDesc": "You can always return to the public library after authentication.",
-    "publicLibraryAvailable": "Public library remains available for discovery.",
-    "redirectingToSignIn": "Redirecting to sign in",
-    "workspaceContext": "Workspace context",
-    "workspaceContextDesc": "Keep the current workspace in focus while the session is restored."
+    "authentication": "身份认证",
+    "goToPublicLibrary": "前往公共资产库",
+    "libraryReturnPath": "资产库返回路径",
+    "libraryReturnPathDesc": "完成身份认证后，您随时可以返回公共资产库。",
+    "publicLibraryAvailable": "公共资产库仍可用于内容发现。",
+    "redirectingToSignIn": "正在跳转到登录页",
+    "workspaceContext": "工作区上下文",
+    "workspaceContextDesc": "在会话恢复期间保持当前工作区焦点。"
   },
   "ErrorBoundary": {
-    "backToHome": "Back to home",
-    "errorDetails": "Error details",
-    "reloadPage": "Reload page",
-    "somethingWentWrong": "Something went wrong",
-    "unexpectedError": "An unexpected error occurred. Please try reloading the page or return home."
+    "backToHome": "返回首页",
+    "errorDetails": "错误详情",
+    "reloadPage": "重新加载页面",
+    "somethingWentWrong": "出错了",
+    "unexpectedError": "发生了意外错误。请重新加载页面或返回首页。"
   }
 }

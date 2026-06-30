@@ -97,7 +97,7 @@ describe("EmptyState", () => {
       />
     );
 
-    const iconContainer = document.querySelector("div[class*='rounded-2xl']");
+    const iconContainer = document.querySelector("div[class*='rounded-lg']");
     expect(iconContainer).toBeInTheDocument();
     expect(iconContainer).toHaveClass("bg-muted");
   });

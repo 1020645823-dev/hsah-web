@@ -28,13 +28,13 @@ export default async function CommunityPage({
             <>
               <Link
                 href="/insights"
-                className="inline-flex h-11 items-center justify-center rounded-md bg-primary px-6 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
+                className="inline-flex h-11 items-center justify-center rounded-lg bg-primary px-6 text-sm font-semibold text-primary-foreground transition-all hover:bg-primary/90 active:translate-y-px"
               >
                 {t("readInsights")}
               </Link>
               <Link
                 href="/scenarios"
-                className="inline-flex h-11 items-center justify-center rounded-md border border-border bg-background px-6 text-sm font-medium text-foreground transition-colors hover:bg-muted"
+                className="inline-flex h-11 items-center justify-center rounded-lg border border-border bg-background px-6 text-sm font-medium text-foreground transition-all hover:bg-muted active:translate-y-px"
               >
                 {t("exploreScenarios")}
               </Link>
@@ -45,9 +45,9 @@ export default async function CommunityPage({
         <PublicMetricStrip
           items={[
             { value: `${communitySlugs.length}`, label: t("allPrograms") },
-            { value: t("agenda"), label: t("resources") },
-            { value: t("audience"), label: t("location") },
-            { value: t("format"), label: t("agenda") },
+            { value: "3", label: t("formatsOffered") },
+            { value: "2", label: t("deliveryModes") },
+            { value: "Monthly", label: t("cadence") },
           ]}
         />
 

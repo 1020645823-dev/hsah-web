@@ -2,6 +2,7 @@
 
 import type { ApiErrorInfo } from "@/lib/api-errors";
 import { AlertTriangle, WifiOff, Lock, ShieldAlert, RotateCcw } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 export type ErrorAlertProps = {
   error: ApiErrorInfo;
@@ -23,36 +24,37 @@ const categoryStyles: Record<
   network: {
     border: "border-amber-500/30",
     bg: "bg-amber-500/10",
-    text: "text-amber-400",
+    text: "text-amber-600 dark:text-amber-400",
   },
   server: {
     border: "border-red-500/30",
     bg: "bg-red-500/10",
-    text: "text-red-400",
+    text: "text-red-600 dark:text-red-400",
   },
   auth: {
     border: "border-blue-500/30",
     bg: "bg-blue-500/10",
-    text: "text-blue-400",
+    text: "text-blue-600 dark:text-blue-400",
   },
   forbidden: {
     border: "border-orange-500/30",
     bg: "bg-orange-500/10",
-    text: "text-orange-400",
+    text: "text-orange-600 dark:text-orange-400",
   },
   client: {
     border: "border-red-500/30",
     bg: "bg-red-500/10",
-    text: "text-red-400",
+    text: "text-red-600 dark:text-red-400",
   },
   unknown: {
     border: "border-red-500/30",
     bg: "bg-red-500/10",
-    text: "text-red-400",
+    text: "text-red-600 dark:text-red-400",
   },
 };
 
 export function ErrorAlert({ error, onRetry, onDismiss }: ErrorAlertProps) {
+  const tCommon = useTranslations("Common");
   const styles = categoryStyles[error.category];
   const Icon = iconMap[error.iconName] || AlertTriangle;
 
@@ -74,21 +76,21 @@ export function ErrorAlert({ error, onRetry, onDismiss }: ErrorAlertProps) {
           <button
             type="button"
             onClick={onRetry}
-            className={`inline-flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs font-medium ${styles.text} hover:bg-white/5 transition-colors`}
-            aria-label="重试"
+            className={`inline-flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs font-medium ${styles.text} hover:bg-foreground/5 transition-colors`}
+            aria-label={tCommon("retry")}
           >
             <RotateCcw className="h-3.5 w-3.5" />
-            重试
+            {tCommon("retry")}
           </button>
         ) : null}
         {onDismiss ? (
           <button
             type="button"
             onClick={onDismiss}
-            className="text-xs text-muted-foreground hover:text-foreground transition-colors"
-            aria-label="关闭"
+            className="text-xs text-muted-foreground transition-colors hover:text-foreground"
+            aria-label={tCommon("dismiss")}
           >
-            关闭
+            {tCommon("dismiss")}
           </button>
         ) : null}
       </div>

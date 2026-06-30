@@ -109,7 +109,7 @@ export function TagInput({
       <div
         className={cn(
           "flex min-h-[36px] flex-wrap items-center gap-1.5 rounded-lg border px-2.5 py-1.5",
-          "border-[rgb(212_218_245_/12%)] bg-[rgb(255_255_255_/5%)] text-[var(--color-text-primary)]",
+          "border-border bg-input/40 text-[var(--color-text-primary)]",
           "focus-within:border-[var(--color-periwinkle)]/50 focus-within:ring-1 focus-within:ring-[var(--color-periwinkle)]/30",
         )}
         onClick={() => inputRef.current?.focus()}
@@ -154,7 +154,7 @@ export function TagInput({
           data-testid="tag-suggestions"
           className={cn(
             "absolute z-50 mt-1 max-h-48 w-full overflow-auto rounded-lg border py-1",
-            "bg-[rgb(18_18_26_/95%)] border-[rgb(212_218_245_/12%)]",
+            "bg-card border-border",
           )}
         >
           {filteredSuggestions.map((s) => (

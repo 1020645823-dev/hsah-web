@@ -6,16 +6,20 @@ from sqlalchemy.orm import Session
 
 from app.api.v1.auth import get_current_user
 from app.core.db import get_db
+from app.core.permissions import require_permission
 from app.models.asset import Asset
+from app.models.asset_review import AssetReviewRecord
 from app.models.user import User
-from app.schemas.asset import (
-    AssetCreateRequest,
-    BlockSearchResponse,
-    DeliveryAssetFields,
-    SalesAssetFields,
-    SharedAssetFields,
+from app.schemas.asset import AssetCreateRequest, SalesAssetFields, SharedAssetFields
+from app.schemas.asset_quality import QualityCheckResponse
+from app.schemas.asset_review import AssetReviewRecordResponse, ReviewActionRequest
+from app.services.asset_quality import evaluate_quality, missing_requirements
+from app.services.asset_review import (
+    InvalidTransitionError,
+    MissingRequirementsError,
+    record_transition,
 )
-from app.services.content_blocks import ContentBlockValidationError, normalize_blocks
+from app.services.audit_log import write as write_audit_log
 
 router = APIRouter(prefix="/admin/assets", tags=["admin-assets"])
 
@@ -36,155 +40,11 @@ def _validate_and_normalize_videos(shared_fields: dict) -> dict:
 
 
 # ---------------------------------------------------------------------------
-# Search helpers
-# ---------------------------------------------------------------------------
-
-
-def _block_matches_keyword(block: dict, keyword: str) -> bool:
-    """Return True if any searchable field in the block contains the keyword (case-insensitive)."""
-    kw = keyword.lower()
-    block_type = block.get("type", "").lower()
-    config = block.get("config", {}) if isinstance(block.get("config"), dict) else {}
-
-    if block_type == "text":
-        content = config.get("markdown", "") or config.get("html", "") or block.get("content", "") or block.get("text", "")
-        return kw in content.lower()
-
-    if block_type == "stat_card":
-        stats = config.get("stats", [])
-        if stats:
-            for stat in stats:
-                if isinstance(stat, dict) and (
-                    kw in stat.get("label", "").lower()
-                    or kw in stat.get("value", "").lower()
-                    or kw in stat.get("description", "").lower()
-                ):
-                    return True
-            return False
-        # Fallback: flat stat_card fields
-        return (
-            kw in block.get("label", "").lower()
-            or kw in block.get("value", "").lower()
-            or kw in block.get("description", "").lower()
-        )
-
-    if block_type == "image":
-        return kw in str(config.get("alt", "") or block.get("alt", "")).lower() or kw in str(
-            config.get("caption", "") or block.get("caption", "")
-        ).lower()
-
-    if block_type == "code_snippet":
-        return kw in str(config.get("code", "") or block.get("code", "")).lower() or kw in str(
-            config.get("language", "") or block.get("language", "")
-        ).lower()
-
-    if block_type == "callout":
-        return kw in str(config.get("content", "") or block.get("content", "")).lower() or kw in str(
-            config.get("title", "") or block.get("title", "")
-        ).lower()
-
-    # Fallback: search all string values in the block dict
-    for value in block.values():
-        if isinstance(value, str) and kw in value.lower():
-            return True
-        if isinstance(value, list):
-            for item in value:
-                if isinstance(item, str) and kw in item.lower():
-                    return True
-                if isinstance(item, dict):
-                    for v in item.values():
-                        if isinstance(v, str) and kw in v.lower():
-                            return True
-    return False
-
-
-def _get_matched_field(block: dict, keyword: str) -> str:
-    """Return the first field name inside the block whose value contains the keyword."""
-    kw = keyword.lower()
-    block_type = block.get("type", "").lower()
-    config = block.get("config", {}) if isinstance(block.get("config"), dict) else {}
-
-    if block_type == "text":
-        if kw in str(config.get("markdown", "")).lower():
-            return "config.markdown"
-        if kw in str(config.get("html", "")).lower():
-            return "config.html"
-        if kw in block.get("content", "").lower():
-            return "content"
-        if kw in block.get("text", "").lower():
-            return "text"
-
-    elif block_type == "stat_card":
-        stats = config.get("stats", [])
-        if stats:
-            for stat in stats:
-                if isinstance(stat, dict):
-                    if kw in stat.get("label", "").lower():
-                        return "config.stats.label"
-                    if kw in stat.get("value", "").lower():
-                        return "config.stats.value"
-                    if kw in stat.get("description", "").lower():
-                        return "config.stats.description"
-        # Fallback: flat stat_card fields
-        if kw in block.get("label", "").lower():
-            return "label"
-        if kw in block.get("value", "").lower():
-            return "value"
-        if kw in block.get("description", "").lower():
-            return "description"
-
-    elif block_type == "image":
-        if kw in str(config.get("alt", "")).lower():
-            return "config.alt"
-        if kw in str(config.get("caption", "")).lower():
-            return "config.caption"
-        if kw in block.get("alt", "").lower():
-            return "alt"
-        if kw in block.get("caption", "").lower():
-            return "caption"
-
-    elif block_type == "code_snippet":
-        if kw in str(config.get("code", "")).lower():
-            return "config.code"
-        if kw in str(config.get("language", "")).lower():
-            return "config.language"
-        if kw in block.get("code", "").lower():
-            return "code"
-        if kw in block.get("language", "").lower():
-            return "language"
-
-    elif block_type == "callout":
-        if kw in str(config.get("content", "")).lower():
-            return "config.content"
-        if kw in str(config.get("title", "")).lower():
-            return "config.title"
-        if kw in block.get("content", "").lower():
-            return "content"
-        if kw in block.get("title", "").lower():
-            return "title"
-
-    # Fallback: scan all string values
-    for key, value in block.items():
-        if isinstance(value, str) and kw in value.lower():
-            return key
-        if isinstance(value, list):
-            for item in value:
-                if isinstance(item, str) and kw in item.lower():
-                    return key
-                if isinstance(item, dict):
-                    for v in item.values():
-                        if isinstance(v, str) and kw in v.lower():
-                            return key
-    return "unknown"
-
-
-# ---------------------------------------------------------------------------
 # Response helpers
 # ---------------------------------------------------------------------------
 
 
 def _to_detail(asset: Asset) -> dict:
-    normalized = normalize_blocks(asset.content_blocks or [], asset.content_schema_version)
     return {
         "id": str(asset.id),
         "slug": asset.slug,
@@ -196,8 +56,6 @@ def _to_detail(asset: Asset) -> dict:
         "technologies": asset.technologies,
         "asset_type": asset.asset_type,
         "status": asset.status,
-        "content_schema_version": normalized.asset_schema_version,
-        "content_blocks": normalized.blocks,
         "visibility": asset.visibility,
         "shared_fields": SharedAssetFields.model_validate(asset.shared_fields or {}).model_dump(
             exclude_defaults=True,
@@ -207,14 +65,6 @@ def _to_detail(asset: Asset) -> dict:
             exclude_defaults=True,
             exclude_none=True,
         ),
-        "delivery_fields": DeliveryAssetFields.model_validate(asset.delivery_fields or {}).model_dump(
-            exclude_defaults=True,
-            exclude_none=True,
-        ),
-        "delivery_allowed_roles": asset.delivery_allowed_roles,
-        "delivery_allowed_users": asset.delivery_allowed_users,
-        "allowed_roles": asset.allowed_roles,
-        "allowed_users": asset.allowed_users,
     }
 
 
@@ -245,74 +95,15 @@ def _commit_and_refresh_asset(asset: Asset, db: Session) -> dict:
     return _to_detail(asset)
 
 
-def _validate_publishable(asset: Asset) -> list[str]:
-    fields: list[str] = []
-    if not asset.slug.strip():
-        fields.append("slug")
-    if not asset.title.strip():
-        fields.append("title")
-    if not asset.short_description.strip():
-        fields.append("short_description")
-    if not asset.cloud_providers:
-        fields.append("cloud_providers")
-
-    visible_blocks = [
-        block
-        for block in asset.content_blocks or []
-        if isinstance(block, dict) and block.get("visible", True)
-    ]
-    if not visible_blocks:
-        fields.append("content_blocks")
-
-    return fields
+def _normalize_shared_fields(payload: AssetCreateRequest) -> None:
+    """Validate video primary selection and write the normalized shared_fields back."""
+    normalized_shared = _validate_and_normalize_videos(payload.shared_fields.model_dump())
+    payload.shared_fields = SharedAssetFields(**normalized_shared)
 
 
 # ---------------------------------------------------------------------------
 # Endpoints
 # ---------------------------------------------------------------------------
-
-
-@router.get("/search-blocks", response_model=BlockSearchResponse)
-async def search_blocks(
-    q: str | None = None,
-    type: str | None = None,
-    limit: int = 20,
-    offset: int = 0,
-    db: Session = Depends(get_db),
-    user: User = Depends(get_current_user),
-) -> BlockSearchResponse:
-    """Search across all assets' content_blocks for blocks matching the keyword."""
-    assets = db.scalars(select(Asset)).all()
-    results = []
-    kw_lower = q.lower() if q else None
-
-    for asset in assets:
-        for block in asset.content_blocks or []:
-            block_type = block.get("type")
-            if type is not None and block_type != type:
-                continue
-            if kw_lower is None or _block_matches_keyword(block, kw_lower):
-                results.append(
-                    {
-                        "asset_id": str(asset.id),
-                        "asset_name": asset.title,
-                        "asset_slug": asset.slug,
-                        "block": block,
-                        "matched_field": _get_matched_field(block, kw_lower) if kw_lower else "unknown",
-                    }
-                )
-
-    total = len(results)
-    paginated = results[offset : offset + limit]
-
-    return BlockSearchResponse(
-        query=q,
-        type_filter=type,
-        limit=limit,
-        offset=offset,
-        total=total,
-        results=paginated,
-    )
 
 
 @router.get("/{asset_id}")
@@ -337,84 +128,190 @@ def create_asset(
             detail={"code": "slug_already_exists", "message": "Slug already exists"},
         )
 
-    try:
-        normalized = normalize_blocks(payload.content_blocks, payload.content_schema_version)
-    except ContentBlockValidationError as exc:
-        raise HTTPException(
-            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-            detail={
-                "code": "content_block_validation_failed",
-                "message": "One or more content blocks are invalid",
-                "errors": exc.errors,
-            },
-        ) from exc
-
-    normalized_shared = _validate_and_normalize_videos(payload.shared_fields.model_dump())
-    payload.shared_fields = SharedAssetFields(**normalized_shared)
-
-    asset_data = payload.model_dump()
-    asset_data["content_schema_version"] = normalized.asset_schema_version
-    asset_data["content_blocks"] = normalized.blocks
-    asset = Asset(**asset_data)
+    _normalize_shared_fields(payload)
+    asset = Asset(**payload.model_dump())
     db.add(asset)
     db.commit()
     db.refresh(asset)
     return _to_detail(asset)
 
 
-@router.post("/{asset_id}/publish")
-def publish_asset(
-    asset_id: str,
-    db: Session = Depends(get_db),
-    _user: User = Depends(get_current_user),
-) -> dict:
-    asset = _get_asset_or_404(asset_id, db)
-    fields = _validate_publishable(asset)
-    if fields:
-        raise HTTPException(
+def _handle_transition_error(action: str, asset: Asset, exc: Exception) -> HTTPException:
+    if isinstance(exc, InvalidTransitionError):
+        return HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail={
+                "code": "invalid_transition",
+                "message": f"Action '{action}' not allowed from status '{asset.status}'",
+            },
+        )
+    if isinstance(exc, MissingRequirementsError):
+        return HTTPException(
             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
             detail={
                 "code": "publish_validation_failed",
                 "message": "Asset is not ready to publish",
-                "fields": fields,
+                "fields": exc.fields,
             },
         )
+    if isinstance(exc, ValueError) and str(exc) == "reason_required":
+        return HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail={"code": "reason_required", "message": "A reason is required for this action"},
+        )
+    return HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="transition_failed")
 
-    asset.status = "published"
+
+def _perform_transition(
+    action: str,
+    asset_id: str,
+    db: Session,
+    user: User,
+    *,
+    reason: str = "",
+    require_publishable: bool = False,
+) -> dict:
+    asset = _get_asset_or_404(asset_id, db)
+    if require_publishable:
+        missing = missing_requirements(asset)
+        if missing:
+            raise HTTPException(
+                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                detail={
+                    "code": "publish_validation_failed",
+                    "message": "Asset is not ready to publish",
+                    "fields": missing,
+                },
+            )
+    try:
+        record_transition(
+            db, asset, action, actor_user_id=user.id, reason=reason
+        )
+    except (InvalidTransitionError, MissingRequirementsError, ValueError) as exc:
+        raise _handle_transition_error(action, asset, exc) from exc
+
+    write_audit_log(
+        db,
+        action=f"asset.{action}",
+        resource_type="asset",
+        actor_user_id=user.id,
+        resource_id=str(asset.id),
+        summary=f"{action}: {asset.title}",
+        details={"from_status": asset.status, "reason": reason} if reason else {},
+    )
     return _commit_and_refresh_asset(asset, db)
+
+
+@router.get("/{asset_id}/quality-check", response_model=QualityCheckResponse)
+def quality_check(
+    asset_id: str,
+    db: Session = Depends(get_db),
+    _user: User = Depends(get_current_user),
+) -> QualityCheckResponse:
+    asset = _get_asset_or_404(asset_id, db)
+    result = evaluate_quality(asset)
+    return QualityCheckResponse(
+        asset_id=str(asset.id),
+        score=result.score,
+        band=result.band,
+        missing=result.missing,
+        warnings=result.warnings,
+        is_publishable=result.is_publishable,
+    )
+
+
+@router.post("/{asset_id}/submit-review")
+def submit_review(
+    asset_id: str,
+    db: Session = Depends(get_db),
+    user: User = Depends(require_permission("asset:submit_review")),
+) -> dict:
+    return _perform_transition("submit_review", asset_id, db, user)
+
+
+@router.post("/{asset_id}/approve")
+def approve_asset(
+    asset_id: str,
+    payload: ReviewActionRequest | None = None,
+    db: Session = Depends(get_db),
+    user: User = Depends(require_permission("asset:approve")),
+) -> dict:
+    return _perform_transition(
+        "approve", asset_id, db, user, require_publishable=True, reason=(payload.reason if payload else "")
+    )
+
+
+@router.post("/{asset_id}/reject")
+def reject_asset(
+    asset_id: str,
+    payload: ReviewActionRequest,
+    db: Session = Depends(get_db),
+    user: User = Depends(require_permission("asset:reject")),
+) -> dict:
+    return _perform_transition("reject", asset_id, db, user, reason=payload.reason)
+
+
+@router.post("/{asset_id}/publish")
+def publish_asset(
+    asset_id: str,
+    db: Session = Depends(get_db),
+    user: User = Depends(require_permission("asset:publish")),
+) -> dict:
+    return _perform_transition("publish", asset_id, db, user, require_publishable=True)
 
 
 @router.post("/{asset_id}/unpublish")
 def unpublish_asset(
     asset_id: str,
     db: Session = Depends(get_db),
-    _user: User = Depends(get_current_user),
+    user: User = Depends(require_permission("asset:archive")),
 ) -> dict:
-    asset = _get_asset_or_404(asset_id, db)
-    asset.status = "draft"
-    return _commit_and_refresh_asset(asset, db)
+    return _perform_transition("unpublish", asset_id, db, user)
 
 
 @router.post("/{asset_id}/archive")
 def archive_asset(
     asset_id: str,
     db: Session = Depends(get_db),
-    _user: User = Depends(get_current_user),
+    user: User = Depends(require_permission("asset:archive")),
 ) -> dict:
-    asset = _get_asset_or_404(asset_id, db)
-    asset.status = "archived"
-    return _commit_and_refresh_asset(asset, db)
+    return _perform_transition("archive", asset_id, db, user)
 
 
 @router.post("/{asset_id}/restore")
 def restore_asset(
     asset_id: str,
     db: Session = Depends(get_db),
-    _user: User = Depends(get_current_user),
+    user: User = Depends(require_permission("asset:archive")),
 ) -> dict:
+    return _perform_transition("restore", asset_id, db, user)
+
+
+@router.get("/{asset_id}/review-history", response_model=list[AssetReviewRecordResponse])
+def review_history(
+    asset_id: str,
+    db: Session = Depends(get_db),
+    _user: User = Depends(get_current_user),
+) -> list[AssetReviewRecordResponse]:
     asset = _get_asset_or_404(asset_id, db)
-    asset.status = "draft"
-    return _commit_and_refresh_asset(asset, db)
+    records = db.scalars(
+        select(AssetReviewRecord)
+        .where(AssetReviewRecord.asset_id == asset.id)
+        .order_by(AssetReviewRecord.created_at.desc(), AssetReviewRecord.id.desc())
+    ).all()
+    return [
+        AssetReviewRecordResponse(
+            id=str(r.id),
+            asset_id=str(r.asset_id),
+            actor_user_id=str(r.actor_user_id) if r.actor_user_id else None,
+            action=r.action,
+            from_status=r.from_status,
+            to_status=r.to_status,
+            reason=r.reason,
+            created_at=r.created_at,
+        )
+        for r in records
+    ]
 
 
 @router.put("/{asset_id}")
@@ -434,26 +331,9 @@ def update_asset(
             detail={"code": "slug_already_exists", "message": "Slug already exists"},
         )
 
-    try:
-        normalized = normalize_blocks(payload.content_blocks, payload.content_schema_version)
-    except ContentBlockValidationError as exc:
-        raise HTTPException(
-            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-            detail={
-                "code": "content_block_validation_failed",
-                "message": "One or more content blocks are invalid",
-                "errors": exc.errors,
-            },
-        ) from exc
+    _normalize_shared_fields(payload)
 
-    normalized_shared = _validate_and_normalize_videos(payload.shared_fields.model_dump())
-    payload.shared_fields = SharedAssetFields(**normalized_shared)
-
-    payload_data = payload.model_dump()
-    payload_data["content_schema_version"] = normalized.asset_schema_version
-    payload_data["content_blocks"] = normalized.blocks
-
-    for key, value in payload_data.items():
+    for key, value in payload.model_dump().items():
         setattr(asset, key, value)
 
     db.commit()

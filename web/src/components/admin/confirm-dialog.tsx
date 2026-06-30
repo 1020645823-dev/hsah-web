@@ -18,7 +18,7 @@ export function ConfirmDialog({ isOpen, title, message, onConfirm, onCancel }: C
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-      <div className="w-full max-w-md rounded-2xl border border-[rgb(255_255_255_/10%)] bg-[rgb(18_18_26_/95%)] p-6 shadow-2xl">
+      <div className="w-full max-w-md rounded-2xl border border-border/80 bg-card p-6 shadow-2xl">
         <div className="flex items-start gap-4">
           <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-amber-500/10">
             <AlertTriangle className="h-5 w-5 text-amber-500" />
@@ -32,7 +32,7 @@ export function ConfirmDialog({ isOpen, title, message, onConfirm, onCancel }: C
           <button
             type="button"
             onClick={onCancel}
-            className="rounded-lg border border-[rgb(212_218_245_/12%)] px-4 py-2 text-sm font-medium text-[var(--color-text-primary)] hover:bg-white/5"
+            className="rounded-lg border border-border px-4 py-2 text-sm font-medium text-[var(--color-text-primary)] hover:bg-white/5"
           >
             {t("assets.cancel")}
           </button>

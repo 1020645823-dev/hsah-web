@@ -28,7 +28,7 @@ export function HomepageFeaturedAssets() {
             <Link
               key={slug}
               href={`/architecture/${slug}`}
-              className="group rounded-2xl border border-border bg-card p-6 text-foreground shadow-[var(--shadow-card)] transition-colors duration-150 hover:border-primary/30"
+              className="group rounded-2xl border border-border bg-card p-6 text-foreground shadow-[var(--shadow-card)] transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-[var(--shadow-card-hover)] active:translate-y-px"
             >
               <div className="flex flex-wrap items-center gap-3 text-xs tracking-[0.18em] text-muted-foreground">
                 <span>{item.eyebrow as string}</span>

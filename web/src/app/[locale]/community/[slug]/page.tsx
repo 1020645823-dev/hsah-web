@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 
@@ -8,6 +9,21 @@ import {
   PublicSiteShell,
 } from "@/components/public-site-shell";
 import { getMessageItemKey } from "@/lib/public-content";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string; locale: string }>;
+}): Promise<Metadata> {
+  const { slug, locale } = await params;
+  const t = await getTranslations({ locale, namespace: "Community" });
+  const item = t.raw(`items.${getMessageItemKey(slug)}`) as Record<string, unknown> | undefined;
+  if (!item) return {};
+  return {
+    title: item.title as string,
+    description: item.summary as string,
+  };
+}
 
 export default async function CommunityDetailPage({
   params,
@@ -26,7 +42,7 @@ export default async function CommunityDetailPage({
   const resources = (item.resources as { label: string; href: string }[]) || [];
 
   return (
-    <PublicSiteShell ctaHref="/about" ctaLabel={t("readInsights")}>
+    <PublicSiteShell ctaHref="/insights" ctaLabel={t("readInsights")}>
       <div className="space-y-8">
         <PublicDetailHero
           backHref="/community"

@@ -22,7 +22,7 @@ export function EmptyState({ icon: Icon, title, description, action, actions }: 
 
   return (
     <div className="flex flex-col items-center gap-5 px-6 py-16">
-      <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-muted">
+      <div className="flex h-16 w-16 items-center justify-center rounded-lg bg-muted">
         <Icon
           className="h-8 w-8 text-muted-foreground"
           strokeWidth={1.5}

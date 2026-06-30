@@ -2,12 +2,13 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { ArrowRight, FileText, LayoutTemplate, Package, ShieldCheck, User } from "lucide-react";
+import { ArrowRight, FileText, Package, ShieldCheck, User } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import { PageHeader } from "@/components/product/page-header";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ErrorAlert } from "@/components/error-alert";
+import { OperationsWorkbench } from "@/components/admin/operations-workbench";
 import { adminRequest, getStoredAdminToken } from "@/lib/admin";
 import { parseApiError, type ApiErrorInfo } from "@/lib/api-errors";
 import { adminNavigation } from "@/lib/admin-navigation";
@@ -46,21 +47,15 @@ export default function AdminPage() {
 
   const quickActions = [
     {
-      href: "/admin/assets/new",
+      href: "/admin/assets",
       title: t("quickAction.createAsset.title"),
       description: t("quickAction.createAsset.description"),
       icon: Package,
     },
     {
-      href: "/admin/templates",
-      title: t("quickAction.manageTemplates.title"),
-      description: t("quickAction.manageTemplates.description"),
-      icon: LayoutTemplate,
-    },
-    {
-      href: "/admin/simulator",
-      title: t("quickAction.policySimulator.title"),
-      description: t("quickAction.policySimulator.description"),
+      href: "/admin/access",
+      title: t("quickAction.accessMatrix.title"),
+      description: t("quickAction.accessMatrix.description"),
       icon: ShieldCheck,
     },
   ] as const;
@@ -73,16 +68,16 @@ export default function AdminPage() {
       cta: t("recentDrafts.assetDraftsQueue.cta"),
     },
     {
-      href: "/admin/templates",
-      title: t("recentDrafts.templateBaselineRefresh.title"),
-      description: t("recentDrafts.templateBaselineRefresh.description"),
-      cta: t("recentDrafts.templateBaselineRefresh.cta"),
+      href: "/admin/access",
+      title: t("recentDrafts.accessReview.title"),
+      description: t("recentDrafts.accessReview.description"),
+      cta: t("recentDrafts.accessReview.cta"),
     },
     {
-      href: "/admin/policies",
-      title: t("recentDrafts.policyReviewWindow.title"),
-      description: t("recentDrafts.policyReviewWindow.description"),
-      cta: t("recentDrafts.policyReviewWindow.cta"),
+      href: "/admin/access",
+      title: t("recentDrafts.accessReview.title"),
+      description: t("recentDrafts.accessReview.description"),
+      cta: t("recentDrafts.accessReview.cta"),
     },
   ] as const;
 
@@ -233,6 +228,8 @@ export default function AdminPage() {
           </Card>
         </div>
       </section>
+
+      {token ? <OperationsWorkbench token={token} /> : null}
     </div>
   );
 }

@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useTranslations } from "next-intl";
 
 const inputClass =
-  "w-full rounded-lg border border-[rgb(212_218_245_/12%)] bg-[rgb(255_255_255_/5%)] px-3 py-2 text-sm text-[var(--color-text-primary)] focus:border-[var(--color-electric-purple)] focus:outline-none focus:ring-2 focus:ring-[var(--color-electric-purple)]/50";
+  "w-full rounded-lg border border-border bg-input/40 px-3 py-2 text-sm text-[var(--color-text-primary)] focus:border-[var(--color-electric-purple)] focus:outline-none focus:ring-2 focus:ring-[var(--color-electric-purple)]/50";
 
 type UserFormData = {
   email: string;
@@ -68,7 +68,7 @@ export function UserFormModal({ isOpen, mode, initialData, onSubmit, onCancel, s
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-      <div className="mx-4 w-full max-w-full rounded-2xl border border-[rgb(255_255_255_/10%)] bg-[rgb(18_18_26_/95%)] p-6 shadow-2xl md:max-w-md">
+      <div className="mx-4 w-full max-w-full rounded-2xl border border-border/80 bg-card p-6 shadow-2xl md:max-w-md">
         <h3 className="mb-4 text-base font-semibold text-[var(--color-text-primary)]">
           {mode === "create" ? t("userFormModal.createUser") : t("userFormModal.editUser")}
         </h3>
@@ -109,7 +109,7 @@ export function UserFormModal({ isOpen, mode, initialData, onSubmit, onCancel, s
               type="checkbox"
               checked={form.is_active}
               onChange={(e) => updateField("is_active", e.target.checked)}
-              className="h-4 w-4 rounded border-[rgb(212_218_245_/12%)] bg-[rgb(255_255_255_/5%)] text-[var(--color-electric-purple)] focus:ring-[var(--color-electric-purple)]"
+              className="h-4 w-4 rounded border-border bg-input/40 text-[var(--color-electric-purple)] focus:ring-[var(--color-electric-purple)]"
             />
             <label htmlFor="is_active" className="text-sm text-[var(--color-text-primary)]">
               {t("userFormModal.enableAccount")}
@@ -122,7 +122,7 @@ export function UserFormModal({ isOpen, mode, initialData, onSubmit, onCancel, s
               type="checkbox"
               checked={form.is_2fa_enabled}
               onChange={(e) => updateField("is_2fa_enabled", e.target.checked)}
-              className="h-4 w-4 rounded border-[rgb(212_218_245_/12%)] bg-[rgb(255_255_255_/5%)] text-[var(--color-electric-purple)] focus:ring-[var(--color-electric-purple)]"
+              className="h-4 w-4 rounded border-border bg-input/40 text-[var(--color-electric-purple)] focus:ring-[var(--color-electric-purple)]"
             />
             <label htmlFor="is_2fa_enabled" className="text-sm text-[var(--color-text-primary)]">
               {t("userFormModal.enable2FA")}
@@ -139,7 +139,7 @@ export function UserFormModal({ isOpen, mode, initialData, onSubmit, onCancel, s
             <button
               type="button"
               onClick={onCancel}
-              className="rounded-lg border border-[rgb(212_218_245_/12%)] px-4 py-2 text-sm font-medium text-[var(--color-text-primary)] transition-colors duration-150 hover:bg-white/5 focus:outline-none focus:ring-2 focus:ring-[var(--color-electric-purple)]/50"
+              className="rounded-lg border border-border px-4 py-2 text-sm font-medium text-[var(--color-text-primary)] transition-colors duration-150 hover:bg-white/5 focus:outline-none focus:ring-2 focus:ring-[var(--color-electric-purple)]/50"
             >
               {t("userFormModal.cancel")}
             </button>

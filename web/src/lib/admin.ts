@@ -197,11 +197,32 @@ export async function updatePolicy(
   });
 }
 
+export async function createPolicy(
+  token: string,
+  data: {
+    name: string;
+    effect: "allow" | "deny";
+    permissions: string[];
+    role_names?: string[];
+    resource_type?: string | null;
+    resource_visibility?: string | null;
+  },
+) {
+  return adminRequest("/api/v1/admin/policies", token, {
+    method: "POST",
+    body: JSON.stringify(data),
+  });
+}
+
 export async function deletePolicy(token: string, policyId: string) {
   return adminRequest(`/api/v1/admin/policies/${policyId}`, token, { method: "DELETE" });
 }
 
-export async function updateRole(token: string, roleId: string, data: { name: string; description?: string; user_ids?: string[] }) {
+export async function createRole(token: string, data: { name: string; description?: string | null; user_ids?: string[] }) {
+  return adminRequest("/api/v1/admin/roles", token, { method: "POST", body: JSON.stringify(data) });
+}
+
+export async function updateRole(token: string, roleId: string, data: { name: string; description?: string | null; user_ids?: string[] }) {
   return adminRequest(`/api/v1/admin/roles/${roleId}`, token, { method: "PUT", body: JSON.stringify(data) });
 }
 

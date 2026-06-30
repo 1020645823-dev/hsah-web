@@ -48,6 +48,34 @@ describe("parseApiError", () => {
     expect(error.message).toBe("Nested error");
   });
 
+  it("extracts structured publish validation error message", () => {
+    const error = parseApiError(
+      {
+        detail: {
+          code: "publish_validation_failed",
+          message: "Asset is not ready to publish",
+          fields: ["short_description", "cloud_providers"],
+        },
+      },
+      422,
+    );
+    expect(error.message).toBe("Asset is not ready to publish");
+    expect(error.category).toBe("client");
+  });
+
+  it("extracts structured invalid transition error message", () => {
+    const error = parseApiError(
+      {
+        detail: {
+          code: "invalid_transition",
+          message: "Action 'approve' not allowed from status 'draft'",
+        },
+      },
+      422,
+    );
+    expect(error.message).toContain("not allowed from status 'draft'");
+  });
+
   it("extracts string detail", () => {
     const error = parseApiError({ detail: "Plain detail" }, 422);
     expect(error.message).toBe("Plain detail");

@@ -4,9 +4,10 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { TagInput } from "./tag-input";
-import { ContentBlockEditor } from "./content-blocks/content-block-editor";
+import { MultiSelect } from "./multi-select";
+import { Tabs, TabsList, TabsTrigger, TabsPanel } from "@/components/ui/tabs";
 import { AssetVideoManager } from "./asset-video-manager";
-import type { ContentBlock } from "@/lib/admin-content-blocks";
+import { AssetAttachmentsManager } from "./asset-attachments-manager";
 import type { AssetVideoDraft } from "@/lib/admin-asset-editor";
 import {
   AssetEditorDraft,
@@ -19,23 +20,29 @@ import {
   ASSET_STATUS_OPTIONS,
   ASSET_VISIBILITY_OPTIONS,
 } from "@/lib/admin-asset-editor";
-import { adminRequest, parseContentBlockValidationErrors } from "@/lib/admin";
-import type { BlockFieldError } from "@/lib/content-block-errors";
+import { adminRequest } from "@/lib/admin";
+import {
+  CLOUD_PROVIDER_OPTIONS,
+  INDUSTRY_OPTIONS,
+  TECHNOLOGY_OPTIONS,
+} from "@/lib/asset-taxonomy";
 
 type AssetEditorFormProps = {
   mode: "create" | "edit";
   assetId?: string;
   token: string;
+  /** Called after a successful create when rendered outside the full-page flow (e.g. a drawer). */
+  onCreated?: () => void;
 };
 
 const inputClass =
-  "w-full rounded-lg border border-[rgb(212_218_245_/12%)] bg-[rgb(255_255_255_/5%)] px-3 py-2 text-sm text-[var(--color-text-primary)] focus:border-[var(--color-electric-purple)] focus:outline-none";
+  "w-full rounded-lg border border-border bg-input/40 px-3 py-2 text-sm text-[var(--color-text-primary)] focus:border-[var(--color-electric-purple)] focus:outline-none";
 
 const selectClass =
-  "w-full rounded-lg border border-[rgb(212_218_245_/12%)] bg-[rgb(18_18_26_/90%)] px-3 py-2 text-sm text-[var(--color-text-primary)] focus:border-[var(--color-electric-purple)] focus:outline-none";
+  "w-full rounded-lg border border-border bg-muted px-3 py-2 text-sm text-[var(--color-text-primary)] focus:border-[var(--color-electric-purple)] focus:outline-none";
 
 const cardClass =
-  "rounded-2xl border border-[rgb(212_218_245_/12%)] bg-[rgb(18_18_26_/70%)] p-6 backdrop-blur-[24px]";
+  "rounded-2xl border border-border bg-muted p-6 backdrop-blur-[24px]";
 
 function Label({ children, required }: { children: React.ReactNode; required?: boolean }) {
   return (
@@ -51,18 +58,16 @@ function FieldError({ message }: { message?: string }) {
   return <p className="mt-1 text-xs text-red-500">{message}</p>;
 }
 
-export function AssetEditorForm({ mode, assetId, token }: AssetEditorFormProps) {
+export function AssetEditorForm({ mode, assetId, token, onCreated }: AssetEditorFormProps) {
   const t = useTranslations("Admin");
   const router = useRouter();
   const [draft, setDraft] = useState<AssetEditorDraft>(INITIAL_DRAFT);
   const [initialDraft, setInitialDraft] = useState<AssetEditorDraft>(INITIAL_DRAFT);
   const [errors, setErrors] = useState<Partial<Record<keyof AssetEditorDraft, string>>>({});
-  const [blockErrors, setBlockErrors] = useState<BlockFieldError[]>([]);
   const [submitError, setSubmitError] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [loading, setLoading] = useState(mode === "edit");
   const [loadError, setLoadError] = useState("");
-  const [roleSuggestions, setRoleSuggestions] = useState<string[]>([]);
 
   const isDirty = !areDraftsEqual(draft, initialDraft);
 
@@ -79,7 +84,6 @@ export function AssetEditorForm({ mode, assetId, token }: AssetEditorFormProps) 
         const parsed = parseAssetToDraft(res.data);
         setDraft(parsed);
         setInitialDraft(parsed);
-        setBlockErrors([]);
       } else {
         setLoadError(res.message);
       }
@@ -92,17 +96,6 @@ export function AssetEditorForm({ mode, assetId, token }: AssetEditorFormProps) 
   }, [mode, assetId, token]);
 
   useEffect(() => {
-    adminRequest<Record<string, unknown>[]>("/api/v1/admin/roles", token).then((res) => {
-      if (res.ok && Array.isArray(res.data)) {
-        const names = res.data
-          .map((r) => (typeof r.name === "string" ? r.name : ""))
-          .filter(Boolean);
-        setRoleSuggestions(names);
-      }
-    });
-  }, [token]);
-
-  useEffect(() => {
     if (!isDirty) return;
     const handler = (e: BeforeUnloadEvent) => {
       e.preventDefault();
@@ -113,9 +106,6 @@ export function AssetEditorForm({ mode, assetId, token }: AssetEditorFormProps) 
 
   function updateField<K extends keyof AssetEditorDraft>(key: K, value: AssetEditorDraft[K]) {
     setDraft((prev) => ({ ...prev, [key]: value }));
-    if (key === "contentBlocks") {
-      setBlockErrors([]);
-    }
     setErrors((prev) => {
       if (!prev[key]) return prev;
       const next = { ...prev };
@@ -127,7 +117,6 @@ export function AssetEditorForm({ mode, assetId, token }: AssetEditorFormProps) 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setSubmitError("");
-    setBlockErrors([]);
     const { valid, errors: validationErrors } = validateDraft(draft);
     setErrors(validationErrors);
     if (!valid) return;
@@ -147,8 +136,11 @@ export function AssetEditorForm({ mode, assetId, token }: AssetEditorFormProps) 
 
     setSubmitting(false);
     if (!res.ok) {
-      setBlockErrors(parseContentBlockValidationErrors(res.data));
       setSubmitError((res as { message: string }).message);
+      return;
+    }
+    if (!isEdit && onCreated) {
+      onCreated();
       return;
     }
     router.push("/admin/assets");
@@ -180,6 +172,7 @@ export function AssetEditorForm({ mode, assetId, token }: AssetEditorFormProps) 
               onChange={(e) => updateField("slug", e.target.value)}
               placeholder={t("assetEditorForm.slugPlaceholder")}
             />
+            <p className="mt-1 text-xs text-[var(--color-text-tertiary)]">{t("assetEditorForm.slugHint")}</p>
             <FieldError message={errors.slug} />
           </div>
           <div>
@@ -221,27 +214,33 @@ export function AssetEditorForm({ mode, assetId, token }: AssetEditorFormProps) 
         <div className="space-y-4">
           <div>
             <Label required>{t("assetEditorForm.cloudProviders")}</Label>
-            <TagInput
+            <MultiSelect
+              options={CLOUD_PROVIDER_OPTIONS}
               value={draft.cloudProviders}
-              onChange={(v) => updateField("cloudProviders", v as AssetEditorDraft["cloudProviders"])}
+              onChange={(v) => updateField("cloudProviders", v)}
+              getLabel={(o) => t(`taxonomy.${o.labelKey}`)}
               placeholder={t("assetEditorForm.cloudProvidersPlaceholder")}
             />
             <FieldError message={errors.cloudProviders} />
           </div>
           <div>
             <Label>{t("assetEditorForm.industries")}</Label>
-            <TagInput
+            <MultiSelect
+              options={INDUSTRY_OPTIONS}
               value={draft.industries}
-              onChange={(v) => updateField("industries", v as AssetEditorDraft["industries"])}
+              onChange={(v) => updateField("industries", v)}
+              getLabel={(o) => t(`taxonomy.${o.labelKey}`)}
               placeholder={t("assetEditorForm.industriesPlaceholder")}
             />
             <FieldError message={errors.industries} />
           </div>
           <div>
             <Label>{t("assetEditorForm.technologies")}</Label>
-            <TagInput
+            <MultiSelect
+              options={TECHNOLOGY_OPTIONS}
               value={draft.technologies}
-              onChange={(v) => updateField("technologies", v as AssetEditorDraft["technologies"])}
+              onChange={(v) => updateField("technologies", v)}
+              getLabel={(o) => t(`taxonomy.${o.labelKey}`)}
               placeholder={t("assetEditorForm.technologiesPlaceholder")}
             />
             <FieldError message={errors.technologies} />
@@ -301,31 +300,6 @@ export function AssetEditorForm({ mode, assetId, token }: AssetEditorFormProps) 
       </div>
 
       <div className={cardClass}>
-        <h3 className="mb-4 text-base font-semibold text-[var(--color-text-primary)]">{t("assetEditorForm.accessControl")}</h3>
-        <div className="space-y-4">
-          <div>
-            <Label required>{t("assetEditorForm.allowedRoles")}</Label>
-            <TagInput
-              value={draft.allowedRoles}
-              onChange={(v) => updateField("allowedRoles", v as AssetEditorDraft["allowedRoles"])}
-              suggestions={roleSuggestions}
-              placeholder={t("assetEditorForm.allowedRolesPlaceholder")}
-            />
-            <FieldError message={errors.allowedRoles} />
-          </div>
-          <div>
-            <Label required>{t("assetEditorForm.allowedUsers")}</Label>
-            <TagInput
-              value={draft.allowedUsers}
-              onChange={(v) => updateField("allowedUsers", v as AssetEditorDraft["allowedUsers"])}
-              placeholder={t("assetEditorForm.allowedUsersPlaceholder")}
-            />
-            <FieldError message={errors.allowedUsers} />
-          </div>
-        </div>
-      </div>
-
-      <div className={cardClass}>
         <h3 className="mb-4 text-base font-semibold text-[var(--color-text-primary)]">{t("assetEditorForm.sharedDetail")}</h3>
         <div className="space-y-4">
           <div>
@@ -370,16 +344,35 @@ export function AssetEditorForm({ mode, assetId, token }: AssetEditorFormProps) 
             </div>
           </div>
           <div>
-            <Label>{t("assetEditorForm.videoManagement")}</Label>
+            <Label>{t("assetEditorForm.mediaLabel")}</Label>
             <div className="mt-2">
-              <AssetVideoManager
-                videos={draft.sharedFields.videos}
-                onChange={(videos: AssetVideoDraft[]) =>
-                  updateField("sharedFields", {
-                    ...draft.sharedFields,
-                    videos,
-                  })}
-              />
+              <Tabs defaultValue="videos">
+                <TabsList>
+                  <TabsTrigger value="videos">{t("assetEditorForm.mediaVideos")}</TabsTrigger>
+                  <TabsTrigger value="attachments">{t("assetEditorForm.mediaAttachments")}</TabsTrigger>
+                </TabsList>
+                <TabsPanel value="videos">
+                  <AssetVideoManager
+                    videos={draft.sharedFields.videos}
+                    onChange={(videos: AssetVideoDraft[]) =>
+                      updateField("sharedFields", {
+                        ...draft.sharedFields,
+                        videos,
+                      })
+                    }
+                    token={token}
+                  />
+                </TabsPanel>
+                <TabsPanel value="attachments">
+                  {mode === "edit" && assetId ? (
+                    <AssetAttachmentsManager assetId={assetId} token={token} />
+                  ) : (
+                    <p className="text-sm text-[var(--color-text-secondary)]">
+                      {t("assetAttachments.saveFirstHint")}
+                    </p>
+                  )}
+                </TabsPanel>
+              </Tabs>
             </div>
           </div>
         </div>
@@ -429,76 +422,6 @@ export function AssetEditorForm({ mode, assetId, token }: AssetEditorFormProps) 
         </div>
       </div>
 
-      <div className={cardClass}>
-        <h3 className="mb-4 text-base font-semibold text-[var(--color-text-primary)]">{t("assetEditorForm.deliveryDetail")}</h3>
-        <div className="space-y-4">
-          <div>
-            <Label>{t("assetEditorForm.implementationSummary")}</Label>
-            <textarea
-              className={inputClass}
-              rows={4}
-              value={draft.deliveryFields.implementationSummary}
-              onChange={(e) =>
-                updateField("deliveryFields", {
-                  ...draft.deliveryFields,
-                  implementationSummary: e.target.value,
-                })}
-              placeholder={t("assetEditorForm.implementationSummaryPlaceholder")}
-            />
-          </div>
-          <div>
-            <Label>{t("assetEditorForm.prerequisites")}</Label>
-            <TagInput
-              value={draft.deliveryFields.prerequisites}
-              onChange={(v) =>
-                updateField("deliveryFields", {
-                  ...draft.deliveryFields,
-                  prerequisites: v as string[],
-                })}
-              placeholder={t("assetEditorForm.prerequisitesPlaceholder")}
-            />
-          </div>
-          <div>
-            <Label>{t("assetEditorForm.rolloutSteps")}</Label>
-            <TagInput
-              value={draft.deliveryFields.rolloutSteps}
-              onChange={(v) =>
-                updateField("deliveryFields", {
-                  ...draft.deliveryFields,
-                  rolloutSteps: v as string[],
-                })}
-              placeholder={t("assetEditorForm.rolloutStepsPlaceholder")}
-            />
-          </div>
-          <div>
-            <Label>{t("assetEditorForm.deliveryAllowedRoles")}</Label>
-            <TagInput
-              value={draft.deliveryAllowedRoles}
-              onChange={(v) => updateField("deliveryAllowedRoles", v as string[])}
-              suggestions={roleSuggestions}
-              placeholder={t("assetEditorForm.deliveryAllowedRolesPlaceholder")}
-            />
-          </div>
-          <div>
-            <Label>{t("assetEditorForm.deliveryAllowedUsers")}</Label>
-            <TagInput
-              value={draft.deliveryAllowedUsers}
-              onChange={(v) => updateField("deliveryAllowedUsers", v as string[])}
-              placeholder={t("assetEditorForm.deliveryAllowedUsersPlaceholder")}
-            />
-          </div>
-        </div>
-      </div>
-
-      <div className={cardClass}>
-        <h3 className="mb-4 text-base font-semibold text-[var(--color-text-primary)]">{t("assetEditorForm.contentBlocks")}</h3>
-        <ContentBlockEditor
-          blocks={draft.contentBlocks}
-          onChange={(blocks: ContentBlock[]) => updateField("contentBlocks", blocks)}
-          errors={blockErrors}
-        />
-      </div>
-
       {submitError && (
         <div className="rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-500">
           {submitError}
@@ -509,7 +432,7 @@ export function AssetEditorForm({ mode, assetId, token }: AssetEditorFormProps) 
         <button
           type="button"
           onClick={handleCancel}
-          className="rounded-lg border border-[rgb(212_218_245_/12%)] px-6 py-2 text-sm font-medium text-[var(--color-text-primary)] hover:bg-white/5"
+          className="rounded-lg border border-border px-6 py-2 text-sm font-medium text-[var(--color-text-primary)] hover:bg-white/5"
         >
           {t("assetEditorForm.cancel")}
         </button>

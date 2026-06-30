@@ -1,17 +1,3 @@
-import {
-  type ContentBlock,
-  validateBlock,
-  LATEST_CONTENT_BLOCK_VERSION,
-} from "./admin-content-blocks";
-
-export type BlockSearchResult = {
-  asset_id: number;
-  asset_name: string;
-  asset_slug: string;
-  block: ContentBlock;
-  matched_field: string;
-};
-
 export type AssetVideoDraft = {
   id: string;
   title: string;
@@ -32,12 +18,9 @@ export type AssetEditorDraft = {
   assetType: string;
   status: string;
   visibility: string;
-  allowedRoles: string[];
-  allowedUsers: string[];
   sharedFields: {
     introduction: string;
     useCases: string[];
-    demoVideoUrl: string;
     liveDemoUrl: string;
     videos: AssetVideoDraft[];
   };
@@ -46,15 +29,6 @@ export type AssetEditorDraft = {
     differentiators: string[];
     outcomes: string[];
   };
-  deliveryFields: {
-    implementationSummary: string;
-    prerequisites: string[];
-    rolloutSteps: string[];
-  };
-  deliveryAllowedRoles: string[];
-  deliveryAllowedUsers: string[];
-  contentSchemaVersion: number;
-  contentBlocks: ContentBlock[];
 };
 
 export const INITIAL_DRAFT: AssetEditorDraft = {
@@ -68,12 +42,9 @@ export const INITIAL_DRAFT: AssetEditorDraft = {
   assetType: "solution",
   status: "draft",
   visibility: "public",
-  allowedRoles: [],
-  allowedUsers: [],
   sharedFields: {
     introduction: "",
     useCases: [],
-    demoVideoUrl: "",
     liveDemoUrl: "",
     videos: [],
   },
@@ -82,15 +53,6 @@ export const INITIAL_DRAFT: AssetEditorDraft = {
     differentiators: [],
     outcomes: [],
   },
-  deliveryFields: {
-    implementationSummary: "",
-    prerequisites: [],
-    rolloutSteps: [],
-  },
-  deliveryAllowedRoles: [],
-  deliveryAllowedUsers: [],
-  contentSchemaVersion: LATEST_CONTENT_BLOCK_VERSION,
-  contentBlocks: [],
 };
 
 export const ASSET_TYPE_OPTIONS = ["solution", "whitepaper", "demo", "reference-architecture"] as const;
@@ -160,12 +122,9 @@ export function buildPayload(draft: AssetEditorDraft) {
     asset_type: draft.assetType,
     status: draft.status,
     visibility: draft.visibility,
-    allowed_roles: dedupeStrs(draft.allowedRoles),
-    allowed_users: dedupeStrs(draft.allowedUsers),
     shared_fields: {
       introduction: draft.sharedFields.introduction.trim(),
       use_cases: dedupeStrs(draft.sharedFields.useCases),
-      demo_video_url: draft.sharedFields.demoVideoUrl.trim() || null,
       live_demo_url: draft.sharedFields.liveDemoUrl.trim() || null,
       videos: draft.sharedFields.videos.map((v) => ({
         id: v.id,
@@ -181,18 +140,6 @@ export function buildPayload(draft: AssetEditorDraft) {
       differentiators: dedupeStrs(draft.salesFields.differentiators),
       outcomes: dedupeStrs(draft.salesFields.outcomes),
     },
-    delivery_fields: {
-      implementation_summary: draft.deliveryFields.implementationSummary.trim(),
-      prerequisites: dedupeStrs(draft.deliveryFields.prerequisites),
-      rollout_steps: dedupeStrs(draft.deliveryFields.rolloutSteps),
-    },
-    delivery_allowed_roles: dedupeStrs(draft.deliveryAllowedRoles),
-    delivery_allowed_users: dedupeStrs(draft.deliveryAllowedUsers),
-    content_schema_version: draft.contentSchemaVersion,
-    content_blocks: draft.contentBlocks
-      .filter(block => block.visible)
-      .sort((a, b) => a.order - b.order)
-      .map(block => validateBlock(block)),
   };
 }
 
@@ -202,7 +149,6 @@ export function parseAssetToDraft(asset: Record<string, unknown>): AssetEditorDr
   const record = (v: unknown): Record<string, unknown> => (typeof v === "object" && v !== null && !Array.isArray(v) ? v as Record<string, unknown> : {});
   const sharedFields = record(asset.shared_fields);
   const salesFields = record(asset.sales_fields);
-  const deliveryFields = record(asset.delivery_fields);
 
   return {
     slug: str(asset.slug),
@@ -215,12 +161,9 @@ export function parseAssetToDraft(asset: Record<string, unknown>): AssetEditorDr
     assetType: str(asset.asset_type) || INITIAL_DRAFT.assetType,
     status: str(asset.status) || INITIAL_DRAFT.status,
     visibility: str(asset.visibility) || INITIAL_DRAFT.visibility,
-    allowedRoles: strArr(asset.allowed_roles),
-    allowedUsers: strArr(asset.allowed_users),
     sharedFields: {
       introduction: str(sharedFields.introduction),
       useCases: strArr(sharedFields.use_cases),
-      demoVideoUrl: str(sharedFields.demo_video_url),
       liveDemoUrl: str(sharedFields.live_demo_url),
       videos: Array.isArray(sharedFields.videos)
         ? (sharedFields.videos as Array<Record<string, unknown>>).map((v) => ({
@@ -238,58 +181,7 @@ export function parseAssetToDraft(asset: Record<string, unknown>): AssetEditorDr
       differentiators: strArr(salesFields.differentiators),
       outcomes: strArr(salesFields.outcomes),
     },
-    deliveryFields: {
-      implementationSummary: str(deliveryFields.implementation_summary),
-      prerequisites: strArr(deliveryFields.prerequisites),
-      rolloutSteps: strArr(deliveryFields.rollout_steps),
-    },
-    deliveryAllowedRoles: strArr(asset.delivery_allowed_roles),
-    deliveryAllowedUsers: strArr(asset.delivery_allowed_users),
-    contentSchemaVersion:
-      typeof asset.content_schema_version === "number" && Number.isInteger(asset.content_schema_version)
-        ? asset.content_schema_version
-        : INITIAL_DRAFT.contentSchemaVersion,
-    contentBlocks: parseContentBlocks(asset.content_blocks),
   };
-}
-
-function parseContentBlocks(raw: unknown): ContentBlock[] {
-  if (!Array.isArray(raw)) return [];
-  return raw
-    .map((item) => {
-      if (typeof item !== "object" || item === null) return null;
-      const block = item as Record<string, unknown>;
-      if (
-        block.type !== "text" &&
-        block.type !== "stat_card" &&
-        block.type !== "image" &&
-        block.type !== "code_snippet" &&
-        block.type !== "callout"
-      ) {
-        return null;
-      }
-      try {
-        return validateBlock(item);
-      } catch {
-        return null;
-      }
-    })
-    .filter((b): b is ContentBlock => b !== null);
-}
-
-export async function searchBlocks(
-  token: string,
-  keyword: string,
-  type?: string
-): Promise<BlockSearchResult[]> {
-  const params = new URLSearchParams();
-  params.set("q", keyword);
-  if (type) params.set("type", type);
-  const res = await fetch(`/api/v1/admin/assets/search-blocks?${params.toString()}`, {
-    headers: { Authorization: `Bearer ${token}` },
-  });
-  if (!res.ok) throw new Error("Search failed");
-  return res.json();
 }
 
 export function areDraftsEqual(a: AssetEditorDraft, b: AssetEditorDraft): boolean {
@@ -299,9 +191,6 @@ export function areDraftsEqual(a: AssetEditorDraft, b: AssetEditorDraft): boolea
     const vb = b[key];
     if (Array.isArray(va) && Array.isArray(vb)) {
       if (va.length !== vb.length) return false;
-      if (key === "contentBlocks") {
-        return JSON.stringify(va) === JSON.stringify(vb);
-      }
       return va.every((item, i) => item === vb[i]);
     }
     if (typeof va === "object" && va !== null && typeof vb === "object" && vb !== null) {

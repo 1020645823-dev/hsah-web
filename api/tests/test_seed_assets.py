@@ -20,11 +20,7 @@ def test_seed_assets_upserts_complete_public_sample_asset(db_session: Session) -
     assert asset.technologies == ["genai", "kubernetes", "service-mesh", "observability"]
     assert asset.shared_fields["live_demo_url"] == "https://example.com/demos/agentic-service-mesh"
     assert asset.sales_fields["value_summary"].startswith("Position a reusable")
-    assert asset.delivery_fields["implementation_summary"].startswith("Provide delivery teams")
-    assert asset.delivery_allowed_roles == ["delivery-engineer", "platform-lead"]
-    assert len(asset.content_blocks) >= 5
-    assert {block["type"] for block in asset.content_blocks} >= {"text", "stat_card", "callout", "code_snippet"}
-    assert {block.get("audience") for block in asset.content_blocks if block["type"] == "code_snippet"} == {"delivery"}
+    assert "demo_video_url" not in asset.shared_fields
 
     assert "videos" in asset.shared_fields
     assert len(asset.shared_fields["videos"]) >= 2

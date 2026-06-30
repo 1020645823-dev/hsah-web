@@ -32,11 +32,9 @@ export type PublicAssetSummary = {
 
 export type PublicAssetDetail = PublicAssetSummary & {
   visibility: string;
-  content_blocks: Array<Record<string, unknown>>;
   shared_fields: {
     introduction?: string;
     use_cases?: string[];
-    demo_video_url?: string | null;
     live_demo_url?: string | null;
     videos?: Array<{
       id: string;
@@ -52,12 +50,6 @@ export type PublicAssetDetail = PublicAssetSummary & {
     differentiators?: string[];
     outcomes?: string[];
   };
-  delivery_fields: {
-    implementation_summary?: string;
-    prerequisites?: string[];
-    rollout_steps?: string[];
-  } | null;
-  delivery_access?: "granted" | "signin_required" | "request_access" | null;
 };
 
 export type PublicAssetListResponse = {
@@ -247,6 +239,87 @@ export async function fetchPublicAssetDetail(
     }
 
     const data = (await res.json()) as PublicAssetDetail;
+    return { ok: true, data };
+  } catch {
+    return { ok: false, error: parseApiError(null, undefined) };
+  }
+}
+
+export type PublicCollectionSummary = {
+  id: string;
+  slug: string;
+  title: string;
+  summary: string;
+  cover_url: string | null;
+  item_count: number;
+};
+
+export type PublicCollectionListResult =
+  | { ok: true; data: PublicCollectionSummary[] }
+  | { ok: false; error: ApiErrorInfo };
+
+export async function fetchPublicCollections(): Promise<PublicCollectionListResult> {
+  try {
+    const res = await fetch(`${API_BASE_URL}/api/v1/assets/collections`, { cache: "no-store" });
+    if (!res.ok) {
+      const data = await res.json().catch(() => null);
+      return { ok: false, error: parseApiError(data, res.status) };
+    }
+    const data = (await res.json()) as PublicCollectionSummary[];
+    return { ok: true, data };
+  } catch {
+    return { ok: false, error: parseApiError(null, undefined) };
+  }
+}
+
+export type PublicRecommendedAssetsResult =
+  | { ok: true; data: PublicAssetSummary[] }
+  | { ok: false; error: ApiErrorInfo };
+
+export type PublicCollectionDetail = {
+  id: string;
+  slug: string;
+  title: string;
+  summary: string;
+  cover_url: string | null;
+  items: Array<{
+    id: string;
+    slug: string;
+    title: string;
+    subtitle: string | null;
+    short_description: string;
+    cloud_providers: string[];
+    asset_type: string;
+    position: number;
+  }>;
+};
+
+export type PublicCollectionDetailResult =
+  | { ok: true; data: PublicCollectionDetail }
+  | { ok: false; error: ApiErrorInfo };
+
+export async function fetchPublicCollectionDetail(slug: string): Promise<PublicCollectionDetailResult> {
+  try {
+    const res = await fetch(`${API_BASE_URL}/api/v1/assets/collections/${slug}`, { cache: "no-store" });
+    if (!res.ok) {
+      const data = await res.json().catch(() => null);
+      return { ok: false, error: parseApiError(data, res.status) };
+    }
+    const data = (await res.json()) as PublicCollectionDetail;
+    return { ok: true, data };
+  } catch {
+    return { ok: false, error: parseApiError(null, undefined) };
+  }
+}
+
+export async function fetchRecommendedAssets(): Promise<PublicRecommendedAssetsResult> {
+  try {
+    const res = await fetch(`${API_BASE_URL}/api/v1/assets/recommended`, { cache: "no-store" });
+    if (!res.ok) {
+      const data = await res.json().catch(() => null);
+      return { ok: false, error: parseApiError(data, res.status) };
+    }
+    const data = (await res.json()) as PublicAssetSummary[];
     return { ok: true, data };
   } catch {
     return { ok: false, error: parseApiError(null, undefined) };

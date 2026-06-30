@@ -28,9 +28,6 @@ def _asset_payload(slug: str | None = None) -> dict:
         "asset_type": "solution",
         "status": "draft",
         "visibility": "public",
-        "allowed_roles": [],
-        "allowed_users": [],
-        "content_blocks": [],
     }
 
 
@@ -60,6 +57,8 @@ def test_get_asset_success() -> None:
     assert body["id"] == asset_id
     assert body["slug"] == payload["slug"]
     assert body["title"] == payload["title"]
+    assert "content_blocks" not in body
+    assert "delivery_fields" not in body
 
 
 def test_create_asset_success() -> None:
@@ -74,9 +73,10 @@ def test_create_asset_success() -> None:
     assert body["slug"] == payload["slug"]
     assert body["title"] == payload["title"]
     assert "id" in body
+    assert "content_blocks" not in body
 
 
-def test_create_asset_persists_detail_fields_and_delivery_audience() -> None:
+def test_create_asset_persists_detail_fields() -> None:
     client = TestClient(app)
     token = _get_token(client)
     headers = {"Authorization": f"Bearer {token}"}
@@ -85,7 +85,6 @@ def test_create_asset_persists_detail_fields_and_delivery_audience() -> None:
     payload["shared_fields"] = {
         "introduction": "Shared overview for both sales and delivery teams.",
         "use_cases": ["customer onboarding", "agent operations"],
-        "demo_video_url": "https://example.com/demo.mp4",
         "live_demo_url": "https://example.com/live",
     }
     payload["sales_fields"] = {
@@ -93,35 +92,15 @@ def test_create_asset_persists_detail_fields_and_delivery_audience() -> None:
         "differentiators": ["reusable playbooks", "packaged architecture"],
         "outcomes": ["shorter presales cycle"],
     }
-    payload["delivery_fields"] = {
-        "implementation_summary": "Deployment checklist for project teams.",
-        "prerequisites": ["Kubernetes", "Secrets manager"],
-        "rollout_steps": ["Provision cluster", "Connect LLM gateway"],
-    }
-    payload["delivery_allowed_roles"] = ["delivery-engineer"]
-    payload["delivery_allowed_users"] = ["lead@example.com"]
-    payload["content_blocks"] = [
-        {
-            "id": "delivery-text-1",
-            "type": "text",
-            "version": 2,
-            "order": 0,
-            "visible": True,
-            "audience": "delivery",
-            "config": {"markdown": "Delivery-only notes", "html": ""},
-        }
-    ]
 
     res = client.post("/api/v1/admin/assets", json=payload, headers=headers)
 
     assert res.status_code == 201
     body = res.json()
-    assert body["shared_fields"] == payload["shared_fields"]
-    assert body["sales_fields"] == payload["sales_fields"]
-    assert body["delivery_fields"] == payload["delivery_fields"]
-    assert body["delivery_allowed_roles"] == ["delivery-engineer"]
-    assert body["delivery_allowed_users"] == ["lead@example.com"]
-    assert body["content_blocks"][0]["audience"] == "delivery"
+    assert body["shared_fields"]["introduction"] == "Shared overview for both sales and delivery teams."
+    assert body["shared_fields"]["use_cases"] == ["customer onboarding", "agent operations"]
+    assert body["shared_fields"]["live_demo_url"] == "https://example.com/live"
+    assert body["sales_fields"]["value_summary"] == "Business-ready accelerators for hyperscaler deals."
 
 
 def test_create_asset_slug_conflict() -> None:
@@ -157,6 +136,7 @@ def test_update_asset_success() -> None:
     body = res.json()
     assert body["id"] == asset_id
     assert body["title"] == "Updated Title"
+    assert "content_blocks" not in body
 
 
 def test_update_asset_slug_conflict() -> None:
@@ -179,199 +159,21 @@ def test_update_asset_slug_conflict() -> None:
     assert res.json()["detail"]["code"] == "slug_already_exists"
 
 
-def test_get_asset_normalizes_legacy_blocks_and_returns_content_schema_version() -> None:
+def test_delete_asset_success() -> None:
     client = TestClient(app)
     token = _get_token(client)
     headers = {"Authorization": f"Bearer {token}"}
 
     payload = _asset_payload()
-    payload["content_blocks"] = [
-        {
-            "block_id": "legacy-text-1",
-            "block_type": "text",
-            "content": "Legacy content",
-        }
-    ]
     res = client.post("/api/v1/admin/assets", json=payload, headers=headers)
     assert res.status_code == 201
     asset_id = res.json()["id"]
 
+    res = client.delete(f"/api/v1/admin/assets/{asset_id}", headers=headers)
+    assert res.status_code == 204
+
     res = client.get(f"/api/v1/admin/assets/{asset_id}", headers=headers)
-
-    assert res.status_code == 200
-    body = res.json()
-    assert body["content_schema_version"] == 2
-    assert body["content_blocks"] == [
-        {
-            "id": "legacy-text-1",
-            "type": "text",
-            "version": 2,
-            "order": 0,
-            "visible": True,
-            "config": {
-                "markdown": "Legacy content",
-                "html": "",
-            },
-        }
-    ]
-
-
-def test_update_asset_returns_structured_block_errors_for_invalid_image() -> None:
-    client = TestClient(app)
-    token = _get_token(client)
-    headers = {"Authorization": f"Bearer {token}"}
-
-    create_res = client.post("/api/v1/admin/assets", json=_asset_payload(), headers=headers)
-    assert create_res.status_code == 201
-    asset_id = create_res.json()["id"]
-
-    payload = _asset_payload(slug=f"updated-{uuid.uuid4().hex[:8]}")
-    payload["content_schema_version"] = 1
-    payload["content_blocks"] = [
-        {
-            "id": "img-1",
-            "type": "image",
-            "version": 1,
-            "order": 0,
-            "visible": True,
-            "config": {"src": "https://example.com/a.png", "alt": "", "caption": ""},
-        }
-    ]
-    res = client.put(f"/api/v1/admin/assets/{asset_id}", json=payload, headers=headers)
-
-    assert res.status_code == 422
-    assert res.json()["detail"] == {
-        "code": "content_block_validation_failed",
-        "message": "One or more content blocks are invalid",
-        "errors": [
-            {
-                "block_id": "img-1",
-                "block_type": "image",
-                "field": "config.alt",
-                "message": "Alt text is required",
-            }
-        ],
-    }
-
-
-def test_update_asset_writes_latest_content_schema_and_block_versions() -> None:
-    client = TestClient(app)
-    token = _get_token(client)
-    headers = {"Authorization": f"Bearer {token}"}
-
-    create_res = client.post("/api/v1/admin/assets", json=_asset_payload(), headers=headers)
-    assert create_res.status_code == 201
-    asset_id = create_res.json()["id"]
-
-    payload = _asset_payload(slug=f"updated-{uuid.uuid4().hex[:8]}")
-    payload["content_schema_version"] = 1
-    payload["content_blocks"] = [
-        {
-            "block_id": "legacy-callout-1",
-            "block_type": "callout",
-            "title": "Heads up",
-            "content": "Upgrade complete",
-        }
-    ]
-    res = client.put(f"/api/v1/admin/assets/{asset_id}", json=payload, headers=headers)
-
-    assert res.status_code == 200
-    body = res.json()
-    assert body["content_schema_version"] == 2
-    assert body["content_blocks"] == [
-        {
-            "id": "legacy-callout-1",
-            "type": "callout",
-            "version": 2,
-            "order": 0,
-            "visible": True,
-            "config": {
-                "title": "Heads up",
-                "content": "Upgrade complete",
-                "tone": "info",
-            },
-        }
-    ]
-
-
-def test_update_asset_persists_delivery_access_lists() -> None:
-    client = TestClient(app)
-    token = _get_token(client)
-    headers = {"Authorization": f"Bearer {token}"}
-
-    create_res = client.post("/api/v1/admin/assets", json=_asset_payload(), headers=headers)
-    assert create_res.status_code == 201
-    asset_id = create_res.json()["id"]
-
-    payload = _asset_payload(slug=f"delivery-access-{uuid.uuid4().hex[:8]}")
-    payload["shared_fields"] = {"introduction": "Updated intro"}
-    payload["sales_fields"] = {"value_summary": "Updated sales narrative"}
-    payload["delivery_fields"] = {"implementation_summary": "Updated delivery narrative"}
-    payload["delivery_allowed_roles"] = ["delivery-engineer", "platform-lead"]
-    payload["delivery_allowed_users"] = ["owner@example.com"]
-    payload["content_blocks"] = [
-        {
-            "id": "shared-text-1",
-            "type": "text",
-            "version": 2,
-            "order": 0,
-            "visible": True,
-            "audience": "shared",
-            "config": {"markdown": "Shared notes", "html": ""},
-        }
-    ]
-
-    res = client.put(f"/api/v1/admin/assets/{asset_id}", json=payload, headers=headers)
-
-    assert res.status_code == 200
-    body = res.json()
-    assert body["delivery_allowed_roles"] == ["delivery-engineer", "platform-lead"]
-    assert body["delivery_allowed_users"] == ["owner@example.com"]
-    assert body["shared_fields"] == {"introduction": "Updated intro"}
-    assert body["sales_fields"] == {"value_summary": "Updated sales narrative"}
-    assert body["delivery_fields"] == {"implementation_summary": "Updated delivery narrative"}
-    assert body["content_blocks"][0]["audience"] == "shared"
-
-
-# ---------------------------------------------------------------------------
-# Search blocks tests
-# ---------------------------------------------------------------------------
-
-
-def _asset_payload_with_blocks(slug: str | None = None, blocks: list | None = None) -> dict:
-    payload = _asset_payload(slug=slug)
-    payload["content_blocks"] = blocks or []
-    return payload
-
-
-def _publishable_asset_payload(slug: str | None = None) -> dict:
-    return _asset_payload_with_blocks(
-        slug=slug,
-        blocks=[
-            {
-                "type": "text",
-                "text": "Visible content for publishing",
-                "visible": True,
-            }
-        ],
-    )
-
-
-def test_publish_asset_requires_visible_content_block() -> None:
-    client = TestClient(app)
-    token = _get_token(client)
-    headers = {"Authorization": f"Bearer {token}"}
-
-    create_res = client.post("/api/v1/admin/assets", json=_asset_payload(), headers=headers)
-    assert create_res.status_code == 201
-    asset_id = create_res.json()["id"]
-
-    publish_res = client.post(f"/api/v1/admin/assets/{asset_id}/publish", headers=headers)
-
-    assert publish_res.status_code == 422
-    detail = publish_res.json()["detail"]
-    assert detail["code"] == "publish_validation_failed"
-    assert "content_blocks" in detail["fields"]
+    assert res.status_code == 404
 
 
 def test_asset_status_transitions() -> None:
@@ -379,7 +181,7 @@ def test_asset_status_transitions() -> None:
     token = _get_token(client)
     headers = {"Authorization": f"Bearer {token}"}
 
-    create_res = client.post("/api/v1/admin/assets", json=_publishable_asset_payload(), headers=headers)
+    create_res = client.post("/api/v1/admin/assets", json=_asset_payload(), headers=headers)
     assert create_res.status_code == 201
     asset_id = create_res.json()["id"]
 
@@ -400,73 +202,25 @@ def test_asset_status_transitions() -> None:
     assert restore_res.json()["status"] == "draft"
 
 
-def test_search_blocks_success() -> None:
+def test_publish_asset_requires_missing_fields() -> None:
+    """An asset missing core fields (cloud_providers) cannot be published."""
     client = TestClient(app)
     token = _get_token(client)
     headers = {"Authorization": f"Bearer {token}"}
 
-    blocks = [
-        {"type": "text", "text": "This is a unique keyword phrase for testing search."},
-        {"type": "stat_card", "label": "Users", "value": "1,000", "description": "Monthly active users"},
-    ]
-    payload = _asset_payload_with_blocks(blocks=blocks)
-    res = client.post("/api/v1/admin/assets", json=payload, headers=headers)
-    assert res.status_code == 201
+    payload = _asset_payload()
+    payload["cloud_providers"] = []
+    create_res = client.post("/api/v1/admin/assets", json=payload, headers=headers)
+    assert create_res.status_code == 201
+    asset_id = create_res.json()["id"]
 
-    res = client.get("/api/v1/admin/assets/search-blocks?q=unique+keyword+phrase", headers=headers)
-    assert res.status_code == 200
-    body = res.json()
-    assert body["total"] >= 1
-    assert any(r["asset_name"] == payload["title"] for r in body["results"])
-    matched = next(r for r in body["results"] if r["asset_name"] == payload["title"])
-    assert matched["matched_field"] == "config.markdown"
-    assert matched["block"]["type"] == "text"
+    publish_res = client.post(f"/api/v1/admin/assets/{asset_id}/publish", headers=headers)
 
-
-def test_search_blocks_no_results() -> None:
-    client = TestClient(app)
-    token = _get_token(client)
-    headers = {"Authorization": f"Bearer {token}"}
-
-    res = client.get("/api/v1/admin/assets/search-blocks?q=nonexistent_xyz_12345", headers=headers)
-    assert res.status_code == 200
-    body = res.json()
-    assert body["total"] == 0
-    assert body["results"] == []
-
-
-def test_search_blocks_requires_auth() -> None:
-    client = TestClient(app)
-    res = client.get("/api/v1/admin/assets/search-blocks?q=test")
-    assert res.status_code == 401
-
-
-def test_search_blocks_with_type_filter() -> None:
-    client = TestClient(app)
-    token = _get_token(client)
-    headers = {"Authorization": f"Bearer {token}"}
-
-    blocks = [
-        {"type": "text", "text": "Alpha beta gamma delta."},
-        {"type": "stat_card", "label": "Alpha metric", "value": "99", "description": "Alpha description"},
-    ]
-    payload = _asset_payload_with_blocks(blocks=blocks)
-    res = client.post("/api/v1/admin/assets", json=payload, headers=headers)
-    assert res.status_code == 201
-
-    # Search without type filter should return both blocks
-    res = client.get("/api/v1/admin/assets/search-blocks?q=Alpha", headers=headers)
-    assert res.status_code == 200
-    body = res.json()
-    assert body["total"] >= 2
-
-    # Search with type filter should return only stat_card blocks
-    res = client.get("/api/v1/admin/assets/search-blocks?q=Alpha&type=stat_card", headers=headers)
-    assert res.status_code == 200
-    body = res.json()
-    assert body["total"] >= 1
-    for r in body["results"]:
-        assert r["block"]["type"] == "stat_card"
+    assert publish_res.status_code == 422
+    detail = publish_res.json()["detail"]
+    assert detail["code"] == "publish_validation_failed"
+    assert "cloud_providers" in detail["fields"]
+    assert "content_blocks" not in detail["fields"]
 
 
 # ---------------------------------------------------------------------------

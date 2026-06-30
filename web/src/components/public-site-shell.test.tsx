@@ -18,6 +18,6 @@ describe("PublicSectionHero", () => {
     expect(screen.getByText("Move from discovery to reuse through shared public shell.")).toHaveClass(
       "text-muted-foreground",
     );
-    expect(screen.getByText("HSAH PLATFORM")).toHaveClass("text-secondary-foreground");
+    expect(screen.getByText("HSAH PLATFORM")).toHaveClass("text-primary");
   });
 });

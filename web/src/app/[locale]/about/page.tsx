@@ -29,13 +29,13 @@ export default async function AboutPage({
             <>
               <Link
                 href="/assets"
-                className="inline-flex h-11 items-center justify-center rounded-md bg-primary px-6 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
+                className="inline-flex h-11 items-center justify-center rounded-lg bg-primary px-6 text-sm font-semibold text-primary-foreground transition-all hover:bg-primary/90 active:translate-y-px"
               >
                 {t("exploreAssets")}
               </Link>
               <Link
                 href="/insights"
-                className="inline-flex h-11 items-center justify-center rounded-md border border-border bg-background px-6 text-sm font-medium text-foreground transition-colors hover:bg-muted"
+                className="inline-flex h-11 items-center justify-center rounded-lg border border-border bg-background px-6 text-sm font-medium text-foreground transition-all hover:bg-muted active:translate-y-px"
               >
                 {t("readInsights")}
               </Link>

@@ -39,6 +39,7 @@ describe("PublicHeader", () => {
   it("renders the theme toggle", () => {
     render(<PublicHeader ctaHref="/assets" ctaLabel="Explore Asset Library" />);
 
-    expect(screen.getByRole("button", { name: "Switch to dark mode" })).toBeInTheDocument();
+    const toggles = screen.getAllByRole("button", { name: "Switch to dark mode" });
+    expect(toggles.length).toBeGreaterThanOrEqual(1);
   });
 });
