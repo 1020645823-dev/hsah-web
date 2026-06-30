@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
-import { Menu, X, LogOut } from "lucide-react";
+import { Menu, X, LogOut, LayoutGrid } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { getStoredAdminToken, clearStoredAdminToken } from "@/lib/admin";
@@ -48,6 +48,13 @@ export function AdminTopbar({ pageTitle }: { pageTitle: string }) {
         </div>
 
         <div className="flex items-center gap-3">
+          <Link
+            href={`/${locale}/assets`}
+            className="hidden items-center gap-2 rounded-lg border border-border/70 bg-background px-3 py-1.5 text-sm font-medium text-muted-foreground transition-all hover:bg-muted hover:text-foreground sm:inline-flex"
+          >
+            <LayoutGrid className="h-4 w-4" />
+            {t("topbar.openLibrary")}
+          </Link>
           {token ? (
             <Button
               variant="outline"
@@ -79,6 +86,7 @@ export function AdminTopbar({ pageTitle }: { pageTitle: string }) {
               { href: `/${locale}/admin/access-requests`, label: t("topbar.accessRequests") },
               { href: `/${locale}/admin/analytics`, label: t("topbar.analytics") },
               { href: `/${locale}/admin/audit-logs`, label: t("topbar.auditLogs") },
+              { href: `/${locale}/assets`, label: t("topbar.openLibrary") },
             ].map((item) => (
               <Link
                 key={item.href}
